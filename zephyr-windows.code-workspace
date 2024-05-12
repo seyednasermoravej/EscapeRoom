@@ -1,0 +1,129 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		// Hush CMake
+		"cmake.configureOnOpen": false,
+
+		// IntelliSense
+		"C_Cpp.default.compilerPath": "${userHome}/zephyr-sdk-0.16.5/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc",
+		"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+
+		// File Associations
+		"files.associations": {
+			"usart.h": "c",
+			"leds.h": "c",
+			"adcs.h": "c",
+			"kernel.h": "c",
+			"pwms.h": "c",
+			"compare": "c",
+			"main.h": "c",
+			"queues.h": "c",
+			"device.h": "c",
+			"opalib_control_pid.h": "c",
+			"controllers.h": "c",
+			"stdint.h": "c"
+		},
+		"mcu-debug.rtos-views.showRTOS": true,
+		"nrf-connect.toolchain.path": "${nrf-connect.toolchain:2.5.2}"
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "West Build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+                "command": "${userHome}/zephyrproject/.venv/Scripts/west",	
+				"args": [
+					"build",
+					"-p",
+					"auto",
+					"-b",
+					// "w5500_evb_pico"
+					"stm32f4_disco"
+					// "nrf52840dk_nrf52840"
+					// "rpi_pico"
+				],
+				"problemMatcher": [
+					"$gcc"
+				],
+			},
+			{
+				"label": "West Configurable Build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+				},
+                "command": "${userHome}/zephyrproject/.venv/Scripts/west",	
+				"args": [
+					"build",
+					"-p",
+					"${input:pristine}",
+					"-b",
+					"${input:board}"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			},
+			{
+				"label": "West Flash",
+				"type": "shell",
+                "command": "${userHome}/zephyrproject/.venv/Scripts/west",	
+				"args": [
+					"flash"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			},
+			{
+				"label": "buildFlash",
+				"dependsOrder": "sequence",
+				"dependsOn":[
+					"West Build",
+					"West Flash"
+				]
+			}
+		],
+		"inputs": [
+			{
+				"id": "board",
+				"type": "promptString",
+				// "default": "nrf52840dk_nrf52840",
+				"default": "stm32f4_disco",
+				// "default": "w5500_evb_pico",
+				"description": "See https://docs.zephyrproject.org/latest/boards/index.html"
+			},
+			{
+				"id": "pristine",
+				"type": "pickString",
+				"description": "Choose when to run a pristine build",
+				"default": "auto",
+				"options": [
+					"auto",
+					"always",
+					"never"
+				]
+			}
+		]
+	},
+	
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools-extension-pack",
+			"ms-python.python",
+			"ms-vscode.vscode-embedded-tools",
+			"ms-vscode.vscode-serial-monitor",
+			"marus25.cortex-debug",
+			"donjayamanne.python-environment-manager"
+		]
+	}
+}

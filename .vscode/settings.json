@@ -1,0 +1,27 @@
+{
+        // Hush CMake
+		// "cortex-debug.openocdPath": "C:\\Program Files\\OpenOCD\\bin",
+		"cmake.configureOnOpen": false,
+
+		// IntelliSense
+		"C_Cpp.default.compilerPath": "${userHome}/zephyr-sdk-0.16.5/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc.exe",
+		"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+
+		// File Associations
+		"files.associations": {
+			"modbus.h": "c",
+			"kernel.h": "c",
+			"adcs.h": "c",
+			"gpio.h": "c",
+			"main.h": "c",
+			"hrtim.h": "c",
+			"usart.h": "c",
+			"adc.h": "c",
+			"pwms.h": "c",
+			"sections.h": "c",
+			"mqttconnection.h": "c",
+			"socket.h": "c",
+			"messagequeues.h": "c",
+			"mqtt.h": "c"
+		}
+}

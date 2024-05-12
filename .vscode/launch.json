@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+ 
+        {
+            "name": "Launch",
+            "cwd": "${workspaceFolder}",
+            "executable": "build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "gdbPath": "${userHome}/zephyr-sdk-0.16.5/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "preLaunchTask": "buildFlash",
+            "interface": "swd",
+            "configFiles": [ "interface/ftdi/minimodule-swd.cfg", "target\\rp2040.cfg"],
+            "showDevDebugOutput": "raw",
+            "rtos": "Zephyr",
+            // "breakAfterReset": true
+        },
+        {
+            "name": "LaunchF",
+            "cwd": "${workspaceFolder}",
+            "executable": "build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "gdbPath": "${userHome}/zephyr-sdk-0.16.5/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "preLaunchTask": "buildFlash",
+            "interface": "swd",
+            "configFiles": [ "interface\\stlink.cfg", "target\\stm32f4x.cfg"],
+            "showDevDebugOutput": "raw",
+            "rtos": "Zephyr",
+            // "breakAfterReset": true
+        },
+   
+ 
+    ]
+}
