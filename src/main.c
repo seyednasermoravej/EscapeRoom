@@ -13,10 +13,11 @@ int main()
     //performing new update on firmware
 
     messageQueueInit();
-    threadsCreation();
     dhcpClient();
     //http request for getting DFU
-    while(!success);
+    sem_wait(&dhcpActive);
+    sem_destroy(&dhcpActive); 
+    threadsCreation();
     while(1)
     {
         mqttConnection();

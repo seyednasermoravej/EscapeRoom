@@ -16,26 +16,6 @@ LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
 
 
 
-
-
-/* The devicetree node identifier for the "led0" alias. */
-#define LED0_NODE DT_ALIAS(led0)
-
-/*
- * A build error on this line means your board is unsupported.
- * See the sample documentation for information on how to fix this.
- */
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-
-
-
-
-
-
-
-
-
-
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
 K_APPMEM_PARTITION_DEFINE(app_partition);
@@ -50,6 +30,9 @@ struct k_mem_domain app_domain;
 /* Buffers for MQTT client. */
 static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
 static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
+
+static int publisher(const char * message);
+
 
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
 /* Making RX buffer large enough that the full IPv6 packet can fit into it */
@@ -308,7 +291,7 @@ static char *get_mqtt_topic(void)
 #endif
 }
 
-static int publish(struct mqtt_client *client, enum mqtt_qos qos, char * )
+static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char * message)
 {
 	struct mqtt_publish_param param;
 
@@ -316,7 +299,8 @@ static int publish(struct mqtt_client *client, enum mqtt_qos qos, char * )
 	param.message.topic.topic.utf8 = (uint8_t *)get_mqtt_topic();
 	param.message.topic.topic.size =
 			strlen(param.message.topic.topic.utf8);
-	param.message.payload.data = get_mqtt_payload(qos);
+	param.message.payload.data = (uint8_t *)message;
+	// param.message.payload.data = get_mqtt_payload(qos);
 	param.message.payload.len =
 			strlen(param.message.payload.data);
 	param.message_id = sys_rand32_get();
@@ -500,7 +484,7 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 #define SUCCESS_OR_EXIT(rc) { if (rc != 0) { return 1; } }
 #define SUCCESS_OR_BREAK(rc) { if (rc != 0) { break; } }
 
-static int publisher(void)
+static int publisher(const char *message)
 {
 	int i, rc, r = 0;
 
@@ -510,24 +494,6 @@ static int publisher(void)
 	SUCCESS_OR_EXIT(rc);
 
 	i = 0;
-
-
-	if (!gpio_is_ready_dt(&led)) {
-		return 0;
-	}
-
-	int ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_INACTIVE);
-	if (ret < 0) {
-		return 0;
-	}
-
-
-
-
-
-
-
-
 	while (i++ < CONFIG_NET_SAMPLE_APP_MAX_ITERATIONS && connected) {
 		r = -1;
 
@@ -538,32 +504,12 @@ static int publisher(void)
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 		SUCCESS_OR_BREAK(rc);
 
-		rc = publish(&client_ctx, MQTT_QOS_0_AT_MOST_ONCE);
+		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message);
 		PRINT_RESULT("mqtt_publish", rc);
 		SUCCESS_OR_BREAK(rc);
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 		SUCCESS_OR_BREAK(rc);
-
-		rc = publish(&client_ctx, MQTT_QOS_1_AT_LEAST_ONCE);
-		PRINT_RESULT("mqtt_publish", rc);
-		SUCCESS_OR_BREAK(rc);
-
-		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
-		SUCCESS_OR_BREAK(rc);
-
-		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE);
-		PRINT_RESULT("mqtt_publish", rc);
-		SUCCESS_OR_BREAK(rc);
-
-		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
-		SUCCESS_OR_BREAK(rc);
-
-        gpio_pin_set_dt(&led, command);
-
-
-
-
 		r = 0;
 	}
 
@@ -574,23 +520,6 @@ static int publisher(void)
 
 	return r;
 }
-
-static int start_app(void)
-{
-	int r = 0, i = 0;
-
-	while (!CONFIG_NET_SAMPLE_APP_MAX_CONNECTIONS ||
-	       i++ < CONFIG_NET_SAMPLE_APP_MAX_CONNECTIONS) {
-		r = publisher();
-
-		if (!CONFIG_NET_SAMPLE_APP_MAX_CONNECTIONS) {
-			k_sleep(K_MSEC(5000));
-		}
-	}
-
-	return r;
-}
-
 #if defined(CONFIG_USERSPACE)
 #define STACK_SIZE 2048
 
@@ -615,29 +544,12 @@ int mqttConnection(void)
 	rc = tls_init();
 	PRINT_RESULT("tls_init", rc);
 #endif
-
-#if defined(CONFIG_USERSPACE)
-	int ret;
-
-	struct k_mem_partition *parts[] = {
-#if Z_LIBC_PARTITION_EXISTS
-		&z_libc_partition,
-#endif
-		&app_partition
-	};
-
-	ret = k_mem_domain_init(&app_domain, ARRAY_SIZE(parts), parts);
-	__ASSERT(ret == 0, "k_mem_domain_init() failed %d", ret);
-	ARG_UNUSED(ret);
-
-	k_mem_domain_add_thread(&app_domain, app_thread);
-	k_thread_heap_assign(app_thread, &app_mem_pool);
-
-	k_thread_start(app_thread);
-	k_thread_join(app_thread, K_FOREVER);
-#else
-	LOG_ERR("Print allah");
-	exit(start_app());
-#endif
+	char publishMessage[100];
+	struct mq_attr attr = {0};
+	memset(publishMessage, 0, 100);
+	while(mq_receive(msqSendToMQTT, publishMessage, attr.mq_msgsize, NULL))
+	{
+		publisher(publishMessage);
+	}
 	return 0;
 }

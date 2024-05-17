@@ -12,13 +12,13 @@
 #include <zephyr/net/net_core.h>
 #include <zephyr/net/net_context.h>
 #include <zephyr/net/net_mgmt.h>
+#include <semaphore.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 #define DHCP_OPTION_NTP (42)
-
-extern bool success;
+extern sem_t dhcpActive;
 int dhcpClient();
 
 #ifdef __cplusplus

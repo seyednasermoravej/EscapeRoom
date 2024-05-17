@@ -11,7 +11,7 @@
 
 LOG_MODULE_REGISTER(net_dhcpv4_client, LOG_LEVEL_DBG);
 
-bool success = false;
+sem_t dhcpActive;
 
 static uint8_t ntp_server[4];
 
@@ -60,7 +60,7 @@ static void handler(struct net_mgmt_event_callback *cb,
 						 buf, sizeof(buf)));
 		LOG_INF("Lease time[%d]: %u seconds", net_if_get_by_iface(iface),
 			iface->config.dhcpv4.lease_time);
-		success = true;
+		sem_post(&dhcpActive);
 	}
 }
 
@@ -79,7 +79,7 @@ int dhcpClient(void)
 {
 	LOG_INF("Run dhcpv4 client");
 	printk("Run2 dhcpv4 client");
-
+	sem_init(&dhcpActive, 0, 0);
 	net_mgmt_init_event_callback(&mgmt_cb, handler,
 				     NET_EVENT_IPV4_ADDR_ADD);
 	net_mgmt_add_event_callback(&mgmt_cb);
