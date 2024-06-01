@@ -3,6 +3,7 @@
 
 #include <zephyr/logging/log.h>
 
+
 #include <zephyr/kernel.h>
 #include <zephyr/linker/sections.h>
 #include <errno.h>

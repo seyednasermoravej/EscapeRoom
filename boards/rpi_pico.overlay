@@ -1,3 +1,4 @@
+
 &spi0 {
 	clock-frequency = <DT_FREQ_M(8)>;
 	status = "okay";

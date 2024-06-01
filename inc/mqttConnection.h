@@ -20,7 +20,11 @@ extern "C" {
 #endif
 extern bool command;
 
-int mqttConnection();
+#define MQTT_STACK_SIZE     1024 * 2 
+#define MQTT_PRIORITY       8
+extern void mqttThreadCreate();
+
+extern void mqttEntryPoint(void *, void *, void *);
 
 #ifdef __cplusplus
 }

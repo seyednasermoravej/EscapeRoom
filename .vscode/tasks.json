@@ -9,7 +9,7 @@
 				"isDefault": true
 			},
 			"linux": {
-				"command": "${userHome}/.local/bin/west"
+				"command": "${userHome}/zephyrproject/.venv/bin/west"
 			},
 			"windows": {
 				"command": "${userHome}/zephyrproject/.venv/Scripts/west.exe"
@@ -27,7 +27,14 @@
 				"rpi_pico",
 				"--",
 				// "-DRPI_PICO_DEBUG_ADAPTER=jlink"
-				"-DRPI_PICO_DEBUG_ADAPTER=ftdi/minimodule-swd"
+				"-DRPI_PICO_DEBUG_ADAPTER=minimodule-swd",
+				"-DOPENOCD=~/openocd/src/openocd",
+				// "-DOPENOCD=~/zephyr-sdk-0.16.5-1/sysroots/x86_64-pokysdk-linux/usr/bin/openocd",
+				"-DOPENOCD_DEFAULT_PATH=~/openocd/tcl",
+				// "-DOPENOCD_DEFAULT_PATH=~/zephyr-sdk-0.16.5-1/sysroots/x86_64-pokysdk-linux/usr/share/openocd/scripts",
+				"-DCONF_FILE=prj.conf"
+				// "-DCONF_FILE=prj.conf overlay-tunnel.conf overlay-netusb.conf overlay-log.conf overlay-vlan.conf overlay-debug.conf"
+			
 			],
 			"problemMatcher": [
 				"$gcc"
@@ -37,7 +44,7 @@
 			"label": "West Flash",
 			"type": "shell",
 			"linux": {
-				"command": "${userHome}/.local/bin/west"
+				"command": "${userHome}/zephyrproject/.venv/bin/west"
 			},
 			"windows": {
 				"command": "${userHome}/zephyrproject/.venv/Scripts/west.exe"

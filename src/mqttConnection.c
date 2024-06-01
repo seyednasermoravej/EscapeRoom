@@ -536,7 +536,7 @@ K_THREAD_DEFINE(app_thread, STACK_SIZE,
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
 
-int mqttConnection(void)
+void mqttEntryPoint(void *, void *, void *)
 {
 #if defined(CONFIG_MQTT_LIB_TLS)
 	int rc;
@@ -544,12 +544,28 @@ int mqttConnection(void)
 	rc = tls_init();
 	PRINT_RESULT("tls_init", rc);
 #endif
-	char publishMessage[100];
-	struct mq_attr attr = {0};
-	memset(publishMessage, 0, 100);
-	while(mq_receive(msqSendToMQTT, publishMessage, attr.mq_msgsize, NULL))
+	char publishMessage[MESSAGE_QUEUE_LEN];
+	while(1)
 	{
+		memset(publishMessage, 0, MESSAGE_QUEUE_LEN);
+		k_msgq_get(&msqSendToMQTT, publishMessage, K_FOREVER);
+		
 		publisher(publishMessage);
+		
+		k_msleep(1000);	
 	}
-	return 0;
+
+}
+
+
+K_THREAD_STACK_DEFINE(mqttStackArea, MQTT_STACK_SIZE);
+
+struct k_thread mqttThread;
+
+void mqttThreadCreate()
+{
+	k_tid_t mqtt = k_thread_create(&mqttThread, mqttStackArea,
+									K_THREAD_STACK_SIZEOF(mqttStackArea),
+									mqttEntryPoint, NULL, NULL, NULL,
+									MQTT_PRIORITY, 0, K_NO_WAIT);
 }

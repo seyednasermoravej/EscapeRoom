@@ -14,19 +14,20 @@ enum messageTypes
     ADD_PUB_TOP,
     REMOVE_SUB_TOP,
     REMOVE_PUB_TOP,
+    HINT,
+    RFID,
+    ACTION,
+    STATUS_REQUEST,
+    BUILT_IN_LED,
 };
 
 
-struct Data
-{
-
-};
 
 struct Message
 {
     int timestamp;
     int type;
-    struct Data data;
+    // struct Data data;
 };
 
 
