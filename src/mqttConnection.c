@@ -486,39 +486,27 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 
 static int publisher(const char *message)
 {
-	int i, rc, r = 0;
+	int rc = 0;
 
 	LOG_INF("attempting to connect: ");
 	rc = try_to_connect(&client_ctx);
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);
 
-	i = 0;
-	while (i++ < CONFIG_NET_SAMPLE_APP_MAX_ITERATIONS && connected) {
-		r = -1;
+	if (connected) {
 
-		rc = mqtt_ping(&client_ctx);
-		PRINT_RESULT("mqtt_ping", rc);
-		SUCCESS_OR_BREAK(rc);
+		// rc = mqtt_ping(&client_ctx);
+		// PRINT_RESULT("mqtt_ping", rc);
+		// SUCCESS_OR_BREAK(rc);
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
-		SUCCESS_OR_BREAK(rc);
 
 		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message);
 		PRINT_RESULT("mqtt_publish", rc);
-		SUCCESS_OR_BREAK(rc);
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
-		SUCCESS_OR_BREAK(rc);
-		r = 0;
 	}
 
-	rc = mqtt_disconnect(&client_ctx);
-	PRINT_RESULT("mqtt_disconnect", rc);
-
-	LOG_INF("Bye!");
-
-	return r;
 }
 #if defined(CONFIG_USERSPACE)
 #define STACK_SIZE 2048

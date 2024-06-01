@@ -28,7 +28,7 @@ int main()
         strcat(send, itoa(counter, buf, 10));
         counter++;
         int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
-        k_msleep(6000);
+        k_msleep(2000);
     }
     // return 0;
 }
