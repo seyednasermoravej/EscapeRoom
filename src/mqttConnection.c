@@ -6,15 +6,11 @@
 
 #include "mqttConnection.h"
 
-
 #include "zephyr/drivers/gpio.h"
-
 
 bool command = false;
 
 LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
-
-
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -31,8 +27,7 @@ struct k_mem_domain app_domain;
 static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
 static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
 
-static int publisher(const char * message);
-
+static int publisher(const char *message);
 
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
 /* Making RX buffer large enough that the full IPv6 packet can fit into it */
@@ -62,15 +57,15 @@ static APP_BMEM bool connected;
 #include "test_certs.h"
 
 #define TLS_SNI_HOSTNAME "localhost"
-#define APP_CA_CERT_TAG 1
-#define APP_PSK_TAG 2
+#define APP_CA_CERT_TAG  1
+#define APP_PSK_TAG      2
 
 static APP_DMEM sec_tag_t m_sec_tags[] = {
 #if defined(MBEDTLS_X509_CRT_PARSE_C) || defined(CONFIG_NET_SOCKETS_OFFLOAD)
-		APP_CA_CERT_TAG,
+	APP_CA_CERT_TAG,
 #endif
 #if defined(MBEDTLS_KEY_EXCHANGE_SOME_PSK_ENABLED)
-		APP_PSK_TAG,
+	APP_PSK_TAG,
 #endif
 };
 
@@ -79,8 +74,8 @@ static int tls_init(void)
 	int err = -EINVAL;
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C) || defined(CONFIG_NET_SOCKETS_OFFLOAD)
-	err = tls_credential_add(APP_CA_CERT_TAG, TLS_CREDENTIAL_CA_CERTIFICATE,
-				 ca_certificate, sizeof(ca_certificate));
+	err = tls_credential_add(APP_CA_CERT_TAG, TLS_CREDENTIAL_CA_CERTIFICATE, ca_certificate,
+				 sizeof(ca_certificate));
 	if (err < 0) {
 		LOG_ERR("Failed to register public certificate: %d", err);
 		return err;
@@ -88,15 +83,14 @@ static int tls_init(void)
 #endif
 
 #if defined(MBEDTLS_KEY_EXCHANGE_SOME_PSK_ENABLED)
-	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK,
-				 client_psk, sizeof(client_psk));
+	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK, client_psk, sizeof(client_psk));
 	if (err < 0) {
 		LOG_ERR("Failed to register PSK: %d", err);
 		return err;
 	}
 
-	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK_ID,
-				 client_psk_id, sizeof(client_psk_id) - 1);
+	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK_ID, client_psk_id,
+				 sizeof(client_psk_id) - 1);
 	if (err < 0) {
 		LOG_ERR("Failed to register PSK ID: %d", err);
 	}
@@ -110,21 +104,18 @@ static int tls_init(void)
 static int subscribe(struct mqtt_client *const c)
 {
 	struct mqtt_topic subscribe_topic = {
-		.topic = {
+		.topic =
+			{
 
-			.utf8 = "subscribe/escapeRoom",
-			// .utf8 = CONFIG_MQTT_SUB_TOPIC,
-			.size = strlen("subscribe/escapeRoom")
-			// .size = strlen(CONFIG_MQTT_SUB_TOPIC)
-		},
-		.qos = MQTT_QOS_1_AT_LEAST_ONCE
-	};
+				.utf8 = "subscribe/escapeRoom",
+				// .utf8 = CONFIG_MQTT_SUB_TOPIC,
+				.size = strlen("subscribe/escapeRoom")
+				// .size = strlen(CONFIG_MQTT_SUB_TOPIC)
+			},
+		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = &subscribe_topic,
-		.list_count = 1,
-		.message_id = 1234
-	};
+		.list = &subscribe_topic, .list_count = 1, .message_id = 1234};
 
 	LOG_INF("Subscribing to: %s len %u", CONFIG_MQTT_SUB_TOPIC,
 		(unsigned int)strlen(CONFIG_MQTT_SUB_TOPIC));
@@ -165,11 +156,10 @@ static int wait(int timeout)
 	return ret;
 }
 
-void mqtt_evt_handler(struct mqtt_client *const client,
-		      const struct mqtt_evt *evt)
+void mqtt_evt_handler(struct mqtt_client *const client, const struct mqtt_evt *evt)
 {
 	int err;
-
+	char *payload = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
 	switch (evt->type) {
 	case MQTT_EVT_CONNACK:
 		if (evt->result != 0) {
@@ -217,9 +207,8 @@ void mqtt_evt_handler(struct mqtt_client *const client,
 
 		LOG_INF("PUBREC packet id: %u", evt->param.pubrec.message_id);
 
-		const struct mqtt_pubrel_param rel_param = {
-			.message_id = evt->param.pubrec.message_id
-		};
+		const struct mqtt_pubrel_param rel_param = {.message_id =
+								    evt->param.pubrec.message_id};
 
 		err = mqtt_publish_qos2_release(client, &rel_param);
 		if (err != 0) {
@@ -234,8 +223,7 @@ void mqtt_evt_handler(struct mqtt_client *const client,
 			break;
 		}
 
-		LOG_INF("PUBCOMP packet id: %u",
-			evt->param.pubcomp.message_id);
+		LOG_INF("PUBCOMP packet id: %u", evt->param.pubcomp.message_id);
 
 		break;
 
@@ -244,30 +232,22 @@ void mqtt_evt_handler(struct mqtt_client *const client,
 		break;
 
 	case MQTT_EVT_PUBLISH:
-		char payload[2];
-		mqtt_read_publish_payload(client, payload, 2);
-		if(payload[0] == '0')
-			command = false;
-		else
-			command = true;
+		memset(payload, 0, MESSAGE_QUEUE_LEN);
+		mqtt_read_publish_payload(client, payload, MESSAGE_QUEUE_LEN);
+		// err = k_msgq_put(&msqSendToMQTT, payload, K_NO_WAIT);
+		err = k_msgq_put(&msqReceivedFromMQTT, payload, K_NO_WAIT);
+		break;
 	default:
 		break;
 	}
 }
-
-
-
-
-
-
 
 static char *get_mqtt_payload(enum mqtt_qos qos)
 {
 #if APP_BLUEMIX_TOPIC
 	static APP_BMEM char payload[30];
 
-	snprintk(payload, sizeof(payload), "{d:{temperature:%d}}",
-		 (uint8_t)sys_rand32_get());
+	snprintk(payload, sizeof(payload), "{d:{temperature:%d}}", (uint8_t)sys_rand32_get());
 #else
 	static int counter = 0;
 	char buff[10];
@@ -284,25 +264,23 @@ static char *get_mqtt_payload(enum mqtt_qos qos)
 static char *get_mqtt_topic(void)
 {
 #if APP_BLUEMIX_TOPIC
-	return "iot-2/type/"BLUEMIX_DEVTYPE"/id/"BLUEMIX_DEVID
-	       "/evt/"BLUEMIX_EVENT"/fmt/"BLUEMIX_FORMAT;
+	return "iot-2/type/" BLUEMIX_DEVTYPE "/id/" BLUEMIX_DEVID "/evt/" BLUEMIX_EVENT
+	       "/fmt/" BLUEMIX_FORMAT;
 #else
 	return "publish/escapeRoom";
 #endif
 }
 
-static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char * message)
+static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *message)
 {
 	struct mqtt_publish_param param;
 
 	param.message.topic.qos = qos;
 	param.message.topic.topic.utf8 = (uint8_t *)get_mqtt_topic();
-	param.message.topic.topic.size =
-			strlen(param.message.topic.topic.utf8);
+	param.message.topic.topic.size = strlen(param.message.topic.topic.utf8);
 	param.message.payload.data = (uint8_t *)message;
 	// param.message.payload.data = get_mqtt_payload(qos);
-	param.message.payload.len =
-			strlen(param.message.payload.data);
+	param.message.payload.len = strlen(param.message.payload.data);
 	param.message_id = sys_rand32_get();
 	param.dup_flag = 0U;
 	param.retain_flag = 0U;
@@ -312,8 +290,7 @@ static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char * m
 
 #define RC_STR(rc) ((rc) == 0 ? "OK" : "ERROR")
 
-#define PRINT_RESULT(func, rc) \
-	LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
+#define PRINT_RESULT(func, rc) LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
 
 static void broker_init(void)
 {
@@ -401,16 +378,14 @@ static void client_init(struct mqtt_client *client)
 	client->transport.websocket.config.host = SERVER_ADDR;
 	client->transport.websocket.config.url = "/mqtt";
 	client->transport.websocket.config.tmp_buf = temp_ws_rx_buf;
-	client->transport.websocket.config.tmp_buf_len =
-						sizeof(temp_ws_rx_buf);
+	client->transport.websocket.config.tmp_buf_len = sizeof(temp_ws_rx_buf);
 	client->transport.websocket.timeout = 5 * MSEC_PER_SEC;
 #endif
 
 #if defined(CONFIG_SOCKS)
 	mqtt_client_set_proxy(client, &socks5_proxy,
-			      socks5_proxy.sa_family == AF_INET ?
-			      sizeof(struct sockaddr_in) :
-			      sizeof(struct sockaddr_in6));
+			      socks5_proxy.sa_family == AF_INET ? sizeof(struct sockaddr_in)
+								: sizeof(struct sockaddr_in6));
 #endif
 }
 
@@ -481,8 +456,18 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 	return 0;
 }
 
-#define SUCCESS_OR_EXIT(rc) { if (rc != 0) { return 1; } }
-#define SUCCESS_OR_BREAK(rc) { if (rc != 0) { break; } }
+#define SUCCESS_OR_EXIT(rc)                                                                        \
+	{                                                                                          \
+		if (rc != 0) {                                                                     \
+			return 1;                                                                  \
+		}                                                                                  \
+	}
+#define SUCCESS_OR_BREAK(rc)                                                                       \
+	{                                                                                          \
+		if (rc != 0) {                                                                     \
+			break;                                                                     \
+		}                                                                                  \
+	}
 
 static int publisher(const char *message)
 {
@@ -506,7 +491,6 @@ static int publisher(const char *message)
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 	}
-
 }
 #if defined(CONFIG_USERSPACE)
 #define STACK_SIZE 2048
@@ -517,9 +501,7 @@ static int publisher(const char *message)
 #define THREAD_PRIORITY K_PRIO_PREEMPT(8)
 #endif
 
-K_THREAD_DEFINE(app_thread, STACK_SIZE,
-		start_app, NULL, NULL, NULL,
-		THREAD_PRIORITY, K_USER, -1);
+K_THREAD_DEFINE(app_thread, STACK_SIZE, start_app, NULL, NULL, NULL, THREAD_PRIORITY, K_USER, -1);
 
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
@@ -533,18 +515,15 @@ void mqttEntryPoint(void *, void *, void *)
 	PRINT_RESULT("tls_init", rc);
 #endif
 	char publishMessage[MESSAGE_QUEUE_LEN];
-	while(1)
-	{
+	while (1) {
 		memset(publishMessage, 0, MESSAGE_QUEUE_LEN);
-		k_msgq_get(&msqSendToMQTT, publishMessage, K_FOREVER);
-		
-		publisher(publishMessage);
-		
-		k_msleep(1000);	
+		if (k_msgq_get(&msqSendToMQTT, publishMessage, K_NO_WAIT) == 0) {
+			publisher(publishMessage);
+		}
+
+		k_msleep(1000);
 	}
-
 }
-
 
 K_THREAD_STACK_DEFINE(mqttStackArea, MQTT_STACK_SIZE);
 
@@ -552,8 +531,7 @@ struct k_thread mqttThread;
 
 void mqttThreadCreate()
 {
-	k_tid_t mqtt = k_thread_create(&mqttThread, mqttStackArea,
-									K_THREAD_STACK_SIZEOF(mqttStackArea),
-									mqttEntryPoint, NULL, NULL, NULL,
-									MQTT_PRIORITY, 0, K_NO_WAIT);
+	k_tid_t mqtt =
+		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),
+				mqttEntryPoint, NULL, NULL, NULL, MQTT_PRIORITY, 0, K_NO_WAIT);
 }

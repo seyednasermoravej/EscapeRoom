@@ -6,7 +6,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 int threadsCreation();
 
-
+extern void puzzleThreadCreate();
 
 int main()
 { 
@@ -25,8 +25,8 @@ int main()
     int counter = 0;
     while(1)
     {
-        strcat(send, itoa(counter, buf, 10));
-        counter++;
+        // strcat(send, itoa(counter, buf, 10));
+        // counter++;
         int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
         k_msleep(2000);
     }
@@ -37,4 +37,5 @@ int main()
 int threadsCreation()
 {
     mqttThreadCreate();
+    puzzleThreadCreate();
 }

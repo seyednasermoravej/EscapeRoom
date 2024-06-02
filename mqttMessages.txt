@@ -1,0 +1,18 @@
+
+welcome packet    
+{
+    "timestamp": 1234,
+    "puzzleType": 3434,
+    "pubTopic": "safsdflsdf",
+    "subTopic": "asfdljasf"
+}
+
+
+message:
+{
+    "timestamp": 234324,
+    "type": 8,
+    "command": {
+        "servos":[1, 2]
+    }
+}
