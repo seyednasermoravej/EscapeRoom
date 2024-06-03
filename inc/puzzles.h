@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <zephyr/data/json.h>
 #include <zephyr/drivers/pwm.h>
+#include <zephyr/device.h>
 
 enum PuzzleTypes
 {

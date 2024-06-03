@@ -1,11 +1,14 @@
 /{
-	servo: servo{
+	motors{
+		servos: servos{
 		compatible = "pwm-servo";
-			pwms = <&pwm 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>;//, <&pwm 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 9 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+					<&pwm 10 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 11 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			min-pulse = <PWM_USEC(700)>;
 			max-pulse = <PWM_USEC(2500)>;
 			status ="okay";
 		// zephyr,deferred-init;
+		};
 	};
 	// servo1: servo
 	// {
@@ -51,15 +54,15 @@ pico_spi: &spi0 {};
 
 // 	divider-int-0 = <133>;
 
-	divider-int-1 = <133>;
+	// divider-int-1 = <133>;
 
 // 	divider-int-2 = <133>;
 
 // 	divider-int-3 = <133>;
 
-	// divider-int-4 = <133>;
+	divider-int-4 = <133>;
 
-// 	divider-int-5 = <133>;
+	divider-int-5 = <133>;
 
 // 	divider-int-6 = <133>;
 
@@ -71,7 +74,7 @@ pico_spi: &spi0 {};
 	pwm_pins: pwm_pins
 	{
 		group1{
-			pinmux = <PWM_1A_P2>, <PWM_1B_P3>;
+			pinmux = <PWM_4A_P8>, <PWM_4B_P9>, <PWM_5A_P26>, <PWM_5B_P27>;
 		};
 	};
 };

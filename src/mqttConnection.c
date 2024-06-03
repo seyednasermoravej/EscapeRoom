@@ -107,9 +107,9 @@ static int subscribe(struct mqtt_client *const c)
 		.topic =
 			{
 
-				.utf8 = "subscribe/escapeRoom",
+				.utf8 = "sub/escapeRoom",
 				// .utf8 = CONFIG_MQTT_SUB_TOPIC,
-				.size = strlen("subscribe/escapeRoom")
+				.size = strlen("sub/escapeRoom")
 				// .size = strlen(CONFIG_MQTT_SUB_TOPIC)
 			},
 		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
@@ -267,7 +267,7 @@ static char *get_mqtt_topic(void)
 	return "iot-2/type/" BLUEMIX_DEVTYPE "/id/" BLUEMIX_DEVID "/evt/" BLUEMIX_EVENT
 	       "/fmt/" BLUEMIX_FORMAT;
 #else
-	return "publish/escapeRoom";
+	return "pub/escapeRoom";
 #endif
 }
 

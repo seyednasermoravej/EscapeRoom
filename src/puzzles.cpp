@@ -2,11 +2,14 @@
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
-
+#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
+	PWM_DT_SPEC_GET_BY_IDX(node_id, idx),
 struct k_thread puzzleThread;
-// static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(servo0), min_pulse);
-// static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(servo0), max_pulse);
-static const struct pwm_dt_spec servo = PWM_DT_SPEC_GET(DT_NODELABEL(servo));
+static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(servos), min_pulse);
+static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(servos), max_pulse);
+static const struct pwm_dt_spec allServos[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(servos), pwms, DT_SPEC_AND_COMMA)
+};
 Puzzle::Puzzle() {
     // Implementation
     // ...
@@ -36,9 +39,12 @@ void Puzzle:: mqttInMessageHandler(char *data)
     {
         while(1)
         {
-        int ret = pwm_set_pulse_dt(&servo, STEP);
-        // int ret = pwm_set_pulse_dt(&servo, STEP * ((message->servos[0] % 10) + 9));
-        k_msleep(1000);
+            for(uint8_t i = 0; i < message->numOfServos; i++)
+            {
+                int val = ((((message->servos[i] / 10) + 9) * STEP) + servoMinPulse);
+                ret = pwm_set_pulse_dt(&allServos[i], val);
+            }
+            k_msleep(1000);
         }
 
         // for(uint8_t i = 0; i < message->numOfServos; i++)
@@ -50,20 +56,15 @@ void Puzzle:: mqttInMessageHandler(char *data)
 }
 int deviceInit()
 {
-    if (!pwm_is_ready_dt(&servo)) {
-		printk("Error: PWM device %s is not ready\n", servo.dev->name);
-		return 0;
-	}
-    else
-    {
-        while(1)
-        {
-        int ret = pwm_set_pulse_dt(&servo, STEP);
-        // int ret = pwm_set_pulse_dt(&servo, STEP * ((message->servos[0] % 10) + 9));
-        k_msleep(1000);
+	/* Configure channels individually prior to sampling. */
+	for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
+        if (!pwm_is_ready_dt(&allServos[i])) {
+            printk("Error: servo device %s is not ready\n",
+                allServos[i].dev->name);
+            return 1;
         }
     }
-        return 1;
+    return 0;
 }
 void puzzleEntryPoint(void *, void *, void *)
 {
