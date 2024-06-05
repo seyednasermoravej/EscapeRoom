@@ -10,6 +10,14 @@
 		// zephyr,deferred-init;
 		};
 	};
+	buttons
+	{
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			label = "Push button switch 0";
+		};
+	};
 	// servo1: servo
 	// {
 	// 	compatible = "pwm-servo";
@@ -23,6 +31,9 @@
 			// max-pulse = <PWM_USEC(2500)>;
 		// zephyr,deferred-init;
 	// };
+	aliases{
+		hintbutton = &button0;
+	};
 };
 
 
@@ -77,4 +88,45 @@ pico_spi: &spi0 {};
 			pinmux = <PWM_4A_P8>, <PWM_4B_P9>, <PWM_5A_P26>, <PWM_5B_P27>;
 		};
 	};
+};
+
+&i2c1_default {
+	group1 {
+		pinmux = <I2C1_SDA_P2>, <I2C1_SCL_P3>;
+
+	};
+
+  };
+
+&i2c1{
+	status = "okay";
+	pinctrl-0 = <&i2c1_default>;
+		lcdin: pcf857x@20{
+		compatible = "nxp,pcf857x";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+	};
+		lcdout: pcf857x@21 {
+		compatible = "nxp,pcf857x";
+		status = "okay";
+		reg = <0x21>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+  };
+		expander: pcf857x@22 {
+		compatible = "nxp,pcf857x";
+		status = "okay";
+		reg = <0x22>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+  };
+  		inreader: mfrc522@28{
+			compatible = "i2c-device";
+			reg = <0x28>;
+			lable = "MFRC522";
+		};
 };

@@ -10,7 +10,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -103,19 +103,27 @@ static int tls_init(void)
 
 static int subscribe(struct mqtt_client *const c)
 {
-	struct mqtt_topic subscribe_topic = {
+	struct mqtt_topic servo_topic = {
 		.topic =
 			{
 
-				.utf8 = "sub/escapeRoom",
-				// .utf8 = CONFIG_MQTT_SUB_TOPIC,
-				.size = strlen("sub/escapeRoom")
-				// .size = strlen(CONFIG_MQTT_SUB_TOPIC)
+				.utf8 = "sub/servo",
+				.size = strlen("sub/servo")
 			},
 		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+	struct mqtt_topic k3_topic = {
+		.topic =
+			{
 
+				.utf8 = "sub/k3",
+				.size = strlen("sub/k3")
+			},
+		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+	struct mqtt_topic mqttLists[100] = {0};
+	mqttLists[0] = servo_topic;
+	mqttLists[1] = k3_topic;
 	const struct mqtt_subscription_list subscription_list = {
-		.list = &subscribe_topic, .list_count = 1, .message_id = 1234};
+		.list = mqttLists, .list_count = 2, .message_id = 34};
 
 	LOG_INF("Subscribing to: %s len %u", CONFIG_MQTT_SUB_TOPIC,
 		(unsigned int)strlen(CONFIG_MQTT_SUB_TOPIC));
@@ -156,7 +164,7 @@ static int wait(int timeout)
 	return ret;
 }
 
-void mqtt_evt_handler(struct mqtt_client *const client, const struct mqtt_evt *evt)
+void mqtt_evt_handler(struct mqtt_client *const client, struct mqtt_evt *evt)
 {
 	int err;
 	char *payload = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
@@ -235,7 +243,24 @@ void mqtt_evt_handler(struct mqtt_client *const client, const struct mqtt_evt *e
 		memset(payload, 0, MESSAGE_QUEUE_LEN);
 		mqtt_read_publish_payload(client, payload, MESSAGE_QUEUE_LEN);
 		// err = k_msgq_put(&msqSendToMQTT, payload, K_NO_WAIT);
-		err = k_msgq_put(&msqReceivedFromMQTT, payload, K_NO_WAIT);
+		// char *topicName = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
+		// memset(topicName, 0, MESSAGE_QUEUE_LEN);
+		char topicName[MESSAGE_QUEUE_LEN] = {0};
+		strncpy(topicName, evt->param.publish.message.topic.topic.utf8, evt->param.publish.message.topic.topic.size);
+		if(!strcmp("sub/servo", topicName))
+		{
+			LOG_WRN("servo");
+			LOG_WRN("%s",payload);
+		}
+		if(!strcmp("sub/k3", topicName))
+		{
+			LOG_WRN("k3");
+			LOG_WRN("%s", payload);
+		}
+		// k_free(topicName);
+		// LOG_INF(topicName);
+		// err = k_msgq_put(&msqReceivedFromMQTT, payload, K_NO_WAIT);
+
 		break;
 	default:
 		break;

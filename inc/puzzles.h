@@ -13,14 +13,18 @@
 #include <zephyr/data/json.h>
 #include <zephyr/drivers/pwm.h>
 #include <zephyr/device.h>
-
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/sys/util.h>
 enum PuzzleTypes
 {
     SERVO_DEVICE = 0,
 
 };
 
-
+#define HINT_NODE	DT_ALIAS(hintbutton)
+#if !DT_NODE_HAS_STATUS(HINT_NODE, okay)
+#error "Unsupported board: HINT devicetree alias is not defined"
+#endif
 
 enum MessageTypes
 {
@@ -70,6 +74,12 @@ struct MessageToServer
     int timestamp;
 };
 
+struct HintMessage
+{
+    int timestamp;
+    int type;
+    bool status;
+};
 
 class Puzzle
 {
