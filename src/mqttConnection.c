@@ -8,6 +8,8 @@
 
 #include "zephyr/drivers/gpio.h"
 
+#include "topics.h"
+
 bool command = false;
 
 LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
@@ -27,7 +29,7 @@ struct k_mem_domain app_domain;
 static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
 static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
 
-static int publisher(const char *message);
+static int publisher(const char *message, const char *topic);
 
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
 /* Making RX buffer large enough that the full IPv6 packet can fit into it */
@@ -103,22 +105,7 @@ static int tls_init(void)
 
 static int subscribe(struct mqtt_client *const c)
 {
-	struct mqtt_topic servo_topic = {
-		.topic =
-			{
 
-				.utf8 = "sub/servo",
-				.size = strlen("sub/servo")
-			},
-		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-	struct mqtt_topic k3_topic = {
-		.topic =
-			{
-
-				.utf8 = "sub/k3",
-				.size = strlen("sub/k3")
-			},
-		.qos = MQTT_QOS_1_AT_LEAST_ONCE};
 	struct mqtt_topic mqttLists[100] = {0};
 	mqttLists[0] = servo_topic;
 	mqttLists[1] = k3_topic;
@@ -164,7 +151,7 @@ static int wait(int timeout)
 	return ret;
 }
 
-void mqtt_evt_handler(struct mqtt_client *const client, struct mqtt_evt *evt)
+void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 {
 	int err;
 	char *payload = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
@@ -245,21 +232,11 @@ void mqtt_evt_handler(struct mqtt_client *const client, struct mqtt_evt *evt)
 		// err = k_msgq_put(&msqSendToMQTT, payload, K_NO_WAIT);
 		// char *topicName = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
 		// memset(topicName, 0, MESSAGE_QUEUE_LEN);
-		char topicName[MESSAGE_QUEUE_LEN] = {0};
-		strncpy(topicName, evt->param.publish.message.topic.topic.utf8, evt->param.publish.message.topic.topic.size);
-		if(!strcmp("sub/servo", topicName))
-		{
-			LOG_WRN("servo");
-			LOG_WRN("%s",payload);
-		}
-		if(!strcmp("sub/k3", topicName))
-		{
-			LOG_WRN("k3");
-			LOG_WRN("%s", payload);
-		}
-		// k_free(topicName);
-		// LOG_INF(topicName);
-		// err = k_msgq_put(&msqReceivedFromMQTT, payload, K_NO_WAIT);
+		struct MqttMsg msg;
+		memset(&msg, 0, sizeof(struct MqttMsg));
+		strncpy(msg.topic, evt->param.publish.message.topic.topic.utf8, evt->param.publish.message.topic.topic.size);
+		strcpy(msg.msg, payload);
+		err = k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
 
 		break;
 	default:
@@ -296,12 +273,12 @@ static char *get_mqtt_topic(void)
 #endif
 }
 
-static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *message)
+static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *message, const char *topic)
 {
 	struct mqtt_publish_param param;
 
 	param.message.topic.qos = qos;
-	param.message.topic.topic.utf8 = (uint8_t *)get_mqtt_topic();
+	param.message.topic.topic.utf8 = (uint8_t *)topic;
 	param.message.topic.topic.size = strlen(param.message.topic.topic.utf8);
 	param.message.payload.data = (uint8_t *)message;
 	// param.message.payload.data = get_mqtt_payload(qos);
@@ -494,7 +471,7 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 		}                                                                                  \
 	}
 
-static int publisher(const char *message)
+static int publisher(const char *message, const char *topic)
 {
 	int rc = 0;
 
@@ -511,7 +488,7 @@ static int publisher(const char *message)
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 
-		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message);
+		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		PRINT_RESULT("mqtt_publish", rc);
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
@@ -539,11 +516,11 @@ void mqttEntryPoint(void *, void *, void *)
 	rc = tls_init();
 	PRINT_RESULT("tls_init", rc);
 #endif
-	char publishMessage[MESSAGE_QUEUE_LEN];
+	struct MqttMsg msg;
 	while (1) {
-		memset(publishMessage, 0, MESSAGE_QUEUE_LEN);
-		if (k_msgq_get(&msqSendToMQTT, publishMessage, K_NO_WAIT) == 0) {
-			publisher(publishMessage);
+		memset(&msg, 0, sizeof(struct MqttMsg));
+		if (k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
+			publisher(msg.msg, msg.topic);
 		}
 
 		k_msleep(1000);

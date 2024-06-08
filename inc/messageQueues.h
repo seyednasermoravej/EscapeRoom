@@ -19,6 +19,14 @@ extern struct k_msgq msqRfid730;
 extern struct k_msgq msqRfidRc;
 extern struct k_msgq msqLcd;
 #define         MESSAGE_QUEUE_LEN       128
+#define         TOPIC_LEN               128
+
+struct MqttMsg
+{
+    char topic[TOPIC_LEN];
+    char msg[MESSAGE_QUEUE_LEN];
+};
+
 // int messageQueueInit();
 
 #ifdef __cplusplus

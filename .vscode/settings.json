@@ -23,7 +23,8 @@
 			"socket.h": "c",
 			"messagequeues.h": "c",
 			"mqtt.h": "c",
-			"config.h": "c"
+			"config.h": "c",
+			"puzzles.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

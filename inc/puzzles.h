@@ -21,6 +21,9 @@ enum PuzzleTypes
 
 };
 
+
+
+
 #define HINT_NODE	DT_ALIAS(hintbutton)
 #if !DT_NODE_HAS_STATUS(HINT_NODE, okay)
 #error "Unsupported board: HINT devicetree alias is not defined"
@@ -85,7 +88,7 @@ class Puzzle
 {
 public:
     Puzzle();
-    void mqttInMessageHandler(char *message);
+    void mqttInMessageHandler(struct MqttMsg *msg);
 
 
 private:

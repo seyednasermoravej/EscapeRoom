@@ -88,6 +88,7 @@ pico_spi: &spi0 {};
 			pinmux = <PWM_4A_P8>, <PWM_4B_P9>, <PWM_5A_P26>, <PWM_5B_P27>;
 		};
 	};
+
 };
 
 &i2c1_default {
@@ -124,9 +125,5 @@ pico_spi: &spi0 {};
 		#gpio-cells = <2>;
 		ngpios = <8>;
   };
-  		inreader: mfrc522@28{
-			compatible = "i2c-device";
-			reg = <0x28>;
-			lable = "MFRC522";
-		};
+
 };

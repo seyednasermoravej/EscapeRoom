@@ -1,4 +1,5 @@
 #include "puzzles.h"
+#include "topics.h"
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
@@ -62,29 +63,20 @@ Puzzle::Puzzle() {
 Puzzle *puzzle = nullptr;
 
 
-void Puzzle:: mqttInMessageHandler(char *data)
+void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
 {
-    struct MessageFromServer *message = (struct MessageFromServer *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
-    memset(message, 0, sizeof(struct MessageFromServer));
-    int ret = json_obj_parse(data, strlen(data), messageFromServerDescr, ARRAY_SIZE(messageFromServerDescr), message);
-    if(message->numOfServos)
+    int ret;
+    if(strcpy(msg->topic, SERVO0_TOPIC))
     {
-        while(1)
-        {
-            for(uint8_t i = 0; i < message->numOfServos; i++)
-            {
-                int val = ((((message->servos[i] / 10) + 9) * STEP) + servoMinPulse);
-                ret = pwm_set_pulse_dt(&allServos[i], val);
-            }
-            k_msleep(1000);
-        }
+        int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
+        ret = pwm_set_pulse_dt(&allServos[0], val);
+    }
 
         // for(uint8_t i = 0; i < message->numOfServos; i++)
         // {
 
         // }
 
-    }
 }
 int deviceInit()
 {
@@ -129,10 +121,9 @@ void puzzleEntryPoint(void *, void *, void *)
 {
     // char *buffer = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
     // while(k_msgq_get(&msqReceivedFromMQTT, buffer, K_FOREVER) != 0);
-    char *mqttBuffer = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
+    struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
-    memset(mqttBuffer, 0, MESSAGE_QUEUE_LEN);
-    mqttBuffer[0] = '\0';
+    memset(msg, 0, sizeof(struct MqttMsg));
     PuzzleTypes puzzleType = SERVO_DEVICE;
     puzzle = new Puzzle;
     deviceInit();
@@ -140,14 +131,14 @@ void puzzleEntryPoint(void *, void *, void *)
     // {
         // puzzle->servo0 = PWM_DT_SPEC_GET(DT_NODELABEL(servo));
     // }
-
+    
     while(1)
     {
-        if(k_msgq_get(&msqReceivedFromMQTT, mqttBuffer, K_NO_WAIT) == 0)
+        if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            puzzle -> mqttInMessageHandler(mqttBuffer);
-            memset(mqttBuffer, 0, MESSAGE_QUEUE_LEN);
-            mqttBuffer[0] = '\0';
+            puzzle -> mqttInMessageHandler(msg);
+            memset(msg, 0, sizeof(struct MqttMsg));
+           
         }
         k_msleep(1000);
     }
