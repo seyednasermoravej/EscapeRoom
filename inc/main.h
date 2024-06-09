@@ -6,7 +6,8 @@
 #include "mqttConnection.h"
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
+#include <zephyr/drivers/i2c.h>
 
-
+#define ADDR_NODE	DT_ALIAS(addr)
 #endif
 
