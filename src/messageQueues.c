@@ -12,6 +12,7 @@ struct k_msgq msqLcd;
 
 K_MSGQ_DEFINE(msqReceivedFromMQTT, sizeof(struct MqttMsg), 8, 4);
 K_MSGQ_DEFINE(msqSendToMQTT, sizeof(struct MqttMsg), 8, 4);
+K_MSGQ_DEFINE(msqLcd, sizeof(char) * MESSAGE_QUEUE_LEN, 8, 4);
 
 // int messageQueueInit()
 // {

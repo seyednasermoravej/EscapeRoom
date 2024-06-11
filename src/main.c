@@ -1,7 +1,7 @@
 #include "main.h"
 #include <stdlib.h>
 #include <zephyr/drivers/i2c.h>
-
+#include "lcd.h"
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 // #define DT_SPEC_AND_COMMA(node_id, prop, idx) \
@@ -31,10 +31,10 @@ int main()
     // messageQueueInit();
     
 
-    dhcpClient();
-    //http request for getting DFU
-    sem_wait(&dhcpActive);
-    sem_destroy(&dhcpActive);
+    // dhcpClient();
+    // //http request for getting DFU
+    // sem_wait(&dhcpActive);
+    // sem_destroy(&dhcpActive);
 
 
     const struct device *i2c_dev;
@@ -67,7 +67,7 @@ int main()
 //     }
 //     k_msleep(1000);
 // }
-
+    lcdInit();
 
 
 
