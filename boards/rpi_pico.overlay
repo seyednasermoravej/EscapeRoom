@@ -121,7 +121,6 @@ pico_spi: &spi0 {};
 &i2c1{
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
-	label = "I2C_1";
 	clock-frequency = <I2C_BITRATE_STANDARD>;
 		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";

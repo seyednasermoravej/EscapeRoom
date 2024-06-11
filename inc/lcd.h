@@ -1,6 +1,6 @@
 #ifndef __LCD__H__
 #define __LCD__H__
-void lcdInit();
+
 // /*
 //  * SPDX-License-Identifier: Apache-2.0
 //  */
@@ -53,7 +53,7 @@ void lcdInit();
 //  * "
 //  *     *********************
 //  *     Arduino Due
-//  *     20x4 LCD Display
+//  *     16x2 LCD Display
 //  *     *********************
 //  *
 //  *      ------------------
@@ -67,101 +67,139 @@ void lcdInit();
 //  *	--------------------
 //  */
 
-// #include <zephyr/kernel.h>
+#include <zephyr/kernel.h>
 
-// #include <zephyr/sys/printk.h>
-// #include <zephyr/drivers/gpio.h>
-// #include <string.h>
+#include <zephyr/sys/printk.h>
+#include <zephyr/drivers/gpio.h>
+#include <string.h>
 
-
-// /* Commands */
-// #define LCD_CLEAR_DISPLAY		0x01
-// #define LCD_RETURN_HOME			0x02
-// #define LCD_ENTRY_MODE_SET		0x04
-// #define LCD_DISPLAY_CONTROL		0x08
-// #define LCD_CURSOR_SHIFT		0x10
-// #define LCD_FUNCTION_SET		0x20
-// #define LCD_SET_CGRAM_ADDR		0x40
-// #define LCD_SET_DDRAM_ADDR		0x80
-
-// /* Display entry mode */
-// #define LCD_ENTRY_RIGHT			0x00
-// #define LCD_ENTRY_LEFT			0x02
-// #define LCD_ENTRY_SHIFT_INCREMENT	0x01
-// #define LCD_ENTRY_SHIFT_DECREMENT	0x00
-
-// /* Display on/off control */
-// #define LCD_DISPLAY_ON			0x04
-// #define LCD_DISPLAY_OFF			0x00
-// #define LCD_CURSOR_ON			0x02
-// #define LCD_CURSOR_OFF			0x00
-// #define LCD_BLINK_ON			0x01
-// #define LCD_BLINK_OFF			0x00
-
-// /* Display/cursor shift */
-// #define LCD_DISPLAY_MOVE		0x08
-// #define LCD_CURSOR_MOVE			0x00
-// #define LCD_MOVE_RIGHT			0x04
-// #define LCD_MOVE_LEFT			0x00
-
-// /* Function set */
-// #define LCD_8BIT_MODE			0x10
-// #define LCD_4BIT_MODE			0x00
-// #define LCD_2_LINE			0x08
-// #define LCD_1_LINE			0x00
-// #define LCD_5x10_DOTS			0x04
-// #define LCD_5x8_DOTS			0x00
-
-// /* Define some device constants */
-// #define LCD_WIDTH			20	/* Max char per line */
-// #define HIGH				1
-// #define LOW				0
-// /* in millisecond */
-// #define	ENABLE_DELAY			10
+#define LCD_IN_NODE DT_NODELABEL(lcdin)
 
 
-// #define GPIO_PIN_WR(dev, pin, bit)						\
-// 	do {									\
-// 		if (gpio_pin_set_raw((dev), (pin), (bit))) {			\
-// 			printk("Err set " GPIO_NAME "%d! %x\n", (pin), (bit));	\
-// 		}								\
-// 	} while (0)								\
+#define LCD_PRIORITY            8
+#define LCD_STACK_SIZE       1024
 
 
-// #define GPIO_PIN_CFG(dev, pin, dir)						\
-// 	do {									\
-// 		if (gpio_pin_configure((dev), (pin), (dir))) {			\
-// 			printk("Err cfg " GPIO_NAME "%d! %x\n", (pin), (dir));	\
-// 		}								\
-// 	} while (0)
+// #define GPIO_PIN_PC24_D4		4	/* PC24 - pin 6 */
+// #define GPIO_PIN_PC23_D5		5	/* PC23 - pin 7 */
+// #define GPIO_PIN_PC22_D6		6	/* PC22 - pin 8 */
+// #define GPIO_PIN_PC21_D7		7	/* PC21 - pin 9 */
+// #define GPIO_PIN_PC28_RS		0	/* PC28 - pin 3 */
+// #define GPIO_PIN_PC24_BL		3	/* PC24 - pin 6 */
+// #define GPIO_PIN_PC25_E			2	/* PC25 - pin 5 */
+#define GPIO_NAME			"GPIO_"
 
 
-// struct pi_lcd_data {
-// 	uint8_t	disp_func;	/* Display Function */
-// 	uint8_t	disp_cntl;	/* Display Control */
-// 	uint8_t disp_mode;	/* Display Mode */
-// 	uint8_t	cfg_rows;
-// 	uint8_t	row_offsets[4];
-// };
+/* Commands */
+#define LCD_CLEAR_DISPLAY		0x01
+#define LCD_RETURN_HOME			0x02
+#define LCD_ENTRY_MODE_SET		0x04
+#define LCD_DISPLAY_CONTROL		0x08
+#define LCD_CURSOR_SHIFT		0x10
+#define LCD_FUNCTION_SET		0x20
+#define LCD_SET_CGRAM_ADDR		0x40
+#define LCD_SET_DDRAM_ADDR		0x80
 
-// /* Default Configuration - User can update */
-// struct pi_lcd_data lcd_data = {
-// 	.disp_func = LCD_4BIT_MODE | LCD_1_LINE | LCD_5x8_DOTS,
-// 	.disp_cntl = 0,
-// 	.disp_mode = 0,
-// 	.cfg_rows = 0,
-// 	.row_offsets = {0x00, 0x00, 0x00, 0x00}
-// };
+/* Display entry mode */
+#define LCD_ENTRY_RIGHT			0x00
+#define LCD_ENTRY_LEFT			0x02
+#define LCD_ENTRY_SHIFT_INCREMENT	0x01
+#define LCD_ENTRY_SHIFT_DECREMENT	0x00
+
+/* Display on/off control */
+#define LCD_DISPLAY_ON			0x04
+#define LCD_DISPLAY_OFF			0x00
+#define LCD_CURSOR_ON			0x02
+#define LCD_CURSOR_OFF			0x00
+#define LCD_BLINK_ON			0x01
+#define LCD_BLINK_OFF			0x00
+
+/* Display/cursor shift */
+#define LCD_DISPLAY_MOVE		0x08
+#define LCD_CURSOR_MOVE			0x00
+#define LCD_MOVE_RIGHT			0x04
+#define LCD_MOVE_LEFT			0x00
+
+/* Function set */
+#define LCD_8BIT_MODE			0x10
+#define LCD_4BIT_MODE			0x00
+#define LCD_2_LINE			0x08
+#define LCD_1_LINE			0x00
+#define LCD_5x10_DOTS			0x04
+#define LCD_5x8_DOTS			0x00
+
+/* Define some device constants */
+#define LCD_WIDTH			16	/* Max char per line */
+#define HIGH				1
+#define LOW				0
+/* in millisecond */
+#define	ENABLE_DELAY			10
+
+
+#define GPIO_PIN_WR(dev, pin, bit)						\
+	do {									\
+		if (gpio_pin_set_raw((dev), (pin), (bit))) {			\
+			printk("Err set " GPIO_NAME "%d! %x\n", (pin), (bit));	\
+		}								\
+	} while (0)								\
+
+
+#define GPIO_PIN_CFG(dev, pin, dir)						\
+	do {									\
+		if (gpio_pin_configure((dev), (pin), (dir))) {			\
+			printk("Err cfg " GPIO_NAME "%d! %x\n", (pin), (dir));	\
+		}								\
+	} while (0)
+
+
+struct pi_lcd_data {
+	uint8_t	disp_func;	/* Display Function */
+	uint8_t	disp_cntl;	/* Display Control */
+	uint8_t disp_mode;	/* Display Mode */
+	uint8_t	cfg_rows;
+	uint8_t	row_offsets[4];
+};
+
+/* Default Configuration - User can update */
 
 
 
-// class Lcd()
-// {
-//     public:
 
-//     private:
+class Lcd
+{
+    public:
+    Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
 
-// }
+    private:
+    uint8_t GPIO_PIN_E, GPIO_PIN_RS, GPIO_PIN_BL, GPIO_PIN_D4, GPIO_PIN_D5, GPIO_PIN_D6, GPIO_PIN_D7;
+    struct pi_lcd_data lcd_data;
+    const struct device *const gpio_dev;
+    // const struct device *const gpio_dev = DEVICE_DT_GET(GPIO_NODE);
+  
+    void _set_row_offsets(int8_t row0, int8_t row1, int8_t row2, int8_t row3);
+    void _pi_lcd_toggle_enable(const struct device *gpio_dev);
+    void _pi_lcd_4bits_wr(const struct device *gpio_dev, uint8_t bits);
+    void _pi_lcd_data(const struct device *gpio_dev, uint8_t bits);
+    void _pi_lcd_command(const struct device *gpio_dev, uint8_t bits);
+    void _pi_lcd_write(const struct device *gpio_dev, uint8_t bits);
+    void pi_lcd_home(const struct device *gpio_dev);
+    void pi_lcd_set_cursor(const struct device *gpio_dev, uint8_t col, uint8_t row);
+    void pi_lcd_clear(const struct device *gpio_dev);
+    void pi_lcd_display_on(const struct device *gpio_dev);
+    void pi_lcd_display_off(const struct device *gpio_dev);
+    void pi_lcd_cursor_off(const struct device *gpio_dev);
+    void pi_lcd_cursor_on(const struct device *gpio_dev);
+    void pi_lcd_blink_off(const struct device *gpio_dev);
+    void pi_lcd_blink_on(const struct device *gpio_dev);
+    void pi_lcd_scroll_left(const struct device *gpio_dev);
+    void pi_lcd_scroll_right(const struct device *gpio_dev);
+    void pi_lcd_left_to_right(const struct device *gpio_dev);
+    void pi_lcd_right_to_left(const struct device *gpio_dev);
+    void pi_lcd_auto_scroll_right(const struct device *gpio_dev);
+    void pi_lcd_auto_scroll_left(const struct device *gpio_dev);
+    void pi_lcd_string(const struct device *gpio_dev, char *msg);
+    void pi_lcd_init(const struct device *gpio_dev, uint8_t cols, uint8_t rows, uint8_t dotsize);
+};
 
 
 

@@ -1,7 +1,7 @@
 #include "main.h"
 #include <stdlib.h>
 #include <zephyr/drivers/i2c.h>
-#include "lcd.h"
+
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 // #define DT_SPEC_AND_COMMA(node_id, prop, idx) \
@@ -23,31 +23,31 @@ static const struct gpio_dt_spec address = GPIO_DT_SPEC_GET_OR(ADDR_NODE, gpios,
 int threadsCreation();
 
 extern void puzzleThreadCreate();
+extern void lcdThreadCreate();
 
 int main()
 { 
     //performing new update on firmware
 
-    // messageQueueInit();
     
 
-    // dhcpClient();
-    // //http request for getting DFU
-    // sem_wait(&dhcpActive);
-    // sem_destroy(&dhcpActive);
+    dhcpClient();
+    //http request for getting DFU
+    sem_wait(&dhcpActive);
+    sem_destroy(&dhcpActive);
 
 
     const struct device *i2c_dev;
     uint8_t addr;
     int ret;
 
-    i2c_dev = device_get_binding("I2C_1");
-    if (!i2c_dev) {
-        printf("Error: I2C device not found\n");
-        return;
-    }
+    // i2c_dev = device_get_binding("I2C_1");
+    // if (!i2c_dev) {
+    //     printf("Error: I2C device not found\n");
+    //     return;
+    // }
 
-    printf("Scanning I2C bus...\n");
+    // printf("Scanning I2C bus...\n");
 // while (1)
 // {
 
@@ -67,7 +67,6 @@ int main()
 //     }
 //     k_msleep(1000);
 // }
-    lcdInit();
 
 
 
@@ -98,37 +97,37 @@ int main()
 	// 	       ret, allAddress[1].port->name, allAddress[1].pin);
 	// 	return 0;
 	// }
-    	if (!gpio_is_ready_dt(&address)) {
-		printk("Error: address device %s is not ready\n",
-		       address.port->name);
-		return 0;
-	}
-    	ret = gpio_pin_configure_dt(&address, GPIO_INPUT);
-	if (ret != 0) {
-		printk("Error %d: failed to configure %s pin %d\n",
-		       ret, address.port->name, address.pin);
-		return 0;
-	}
+    // 	if (!gpio_is_ready_dt(&address)) {
+	// 	printk("Error: address device %s is not ready\n",
+	// 	       address.port->name);
+	// 	return 0;
+	// }
+    // 	ret = gpio_pin_configure_dt(&address, GPIO_INPUT);
+	// if (ret != 0) {
+	// 	printk("Error %d: failed to configure %s pin %d\n",
+	// 	       ret, address.port->name, address.pin);
+	// 	return 0;
+	// }
 
-	if (!gpio_is_ready_dt(&led00)) {
-		return;
-	}
-    	ret = gpio_pin_configure_dt(&led00, GPIO_OUTPUT_ACTIVE);
-	if (ret < 0) {
-		return;
-	}
+	// if (!gpio_is_ready_dt(&led00)) {
+	// 	return;
+	// }
+    // 	ret = gpio_pin_configure_dt(&led00, GPIO_OUTPUT_ACTIVE);
+	// if (ret < 0) {
+	// 	return;
+	// }
 
-    while (1)
-    {
-        // uint8_t addr = gpio_pin_get_dt(&address);
-        // // uint8_t addr = gpio_pin_get_dt(&allAddress[1]);
-        // LOG_INF("address 0 value: %d", addr);
-        		ret = gpio_pin_toggle_dt(&led00);
-		if (ret < 0) {
-			return;
-		}
-        k_msleep(1000);
-    }
+    // while (1)
+    // {
+    //     // uint8_t addr = gpio_pin_get_dt(&address);
+    //     // // uint8_t addr = gpio_pin_get_dt(&allAddress[1]);
+    //     // LOG_INF("address 0 value: %d", addr);
+    //     		ret = gpio_pin_toggle_dt(&led00);
+	// 	if (ret < 0) {
+	// 		return;
+	// 	}
+    //     k_msleep(1000);
+    // }
     threadsCreation();
     char *send = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
     memset(send, 0, MESSAGE_QUEUE_LEN);
@@ -150,4 +149,5 @@ int threadsCreation()
 {
     mqttThreadCreate();
     puzzleThreadCreate();
+    lcdThreadCreate();
 }

@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
