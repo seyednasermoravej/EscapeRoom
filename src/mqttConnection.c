@@ -109,11 +109,15 @@ static int subscribe(struct mqtt_client *const c)
 	struct mqtt_topic mqttLists[100] = {0};
 	mqttLists[0] = servo_topic;
 	mqttLists[1] = k3_topic;
+	mqttLists[2] = lcd_topic;
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 2, .message_id = 34};
+		.list = mqttLists, .list_count = 3, .message_id = 34};
+	for(uint8_t i = 0; i < subscription_list.list_count; i++)
+	{
+	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,
+		(unsigned int)strlen(subscription_list.list[i].topic.utf8));
 
-	LOG_INF("Subscribing to: %s len %u", CONFIG_MQTT_SUB_TOPIC,
-		(unsigned int)strlen(CONFIG_MQTT_SUB_TOPIC));
+	}
 
 	return mqtt_subscribe(c, &subscription_list);
 }
@@ -517,10 +521,11 @@ void mqttEntryPoint(void *, void *, void *)
 	PRINT_RESULT("tls_init", rc);
 #endif
 	struct MqttMsg msg;
+	memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
-		memset(&msg, 0, sizeof(struct MqttMsg));
 		if (k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
 			publisher(msg.msg, msg.topic);
+			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
 
 		k_msleep(1000);

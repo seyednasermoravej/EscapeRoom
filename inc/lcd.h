@@ -72,8 +72,10 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/drivers/gpio.h>
 #include <string.h>
+#include "messageQueues.h"
 
 #define LCD_IN_NODE DT_NODELABEL(lcdin)
+#define LCD_OUT_NODE DT_NODELABEL(lcdout)
 
 
 #define LCD_PRIORITY            8
@@ -168,14 +170,13 @@ struct pi_lcd_data {
 class Lcd
 {
     public:
-    Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
+    Lcd(const struct device *const gpioDev, struct k_msgq *_queue, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
 
     private:
     uint8_t GPIO_PIN_E, GPIO_PIN_RS, GPIO_PIN_BL, GPIO_PIN_D4, GPIO_PIN_D5, GPIO_PIN_D6, GPIO_PIN_D7;
     struct pi_lcd_data lcd_data;
     const struct device *const gpio_dev;
-    // const struct device *const gpio_dev = DEVICE_DT_GET(GPIO_NODE);
-  
+    struct k_msgq *queue;
     void _set_row_offsets(int8_t row0, int8_t row1, int8_t row2, int8_t row3);
     void _pi_lcd_toggle_enable(const struct device *gpio_dev);
     void _pi_lcd_4bits_wr(const struct device *gpio_dev, uint8_t bits);

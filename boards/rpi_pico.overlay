@@ -130,17 +130,17 @@ pico_spi: &spi0 {};
 		#gpio-cells = <2>;
 		ngpios = <8>;
   };
-		lcdout: pcf857x@21 {
+		lcdout: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
-		reg = <0x21>;
+		reg = <0x27>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
   };
-		lcdin: pcf857x@27{
+		lcdin: pcf857x@21{
 		compatible = "nxp,pcf857x";
-		reg = <0x27>;
+		reg = <0x21>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;

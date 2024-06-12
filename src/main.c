@@ -129,9 +129,10 @@ int main()
     //     k_msleep(1000);
     // }
     threadsCreation();
-    char *send = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
-    memset(send, 0, MESSAGE_QUEUE_LEN);
-    strcpy(send, "allah");
+    struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
+    memset(send, 0, sizeof(struct MqttMsg));
+    strcpy(send->topic, "publish/escape");
+    strcpy(send->msg, "allah");
     char buf[4];
     int counter = 0;
     while(1)

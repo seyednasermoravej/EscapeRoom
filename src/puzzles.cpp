@@ -66,7 +66,7 @@ Puzzle *puzzle = nullptr;
 void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
 {
     int ret;
-    if(strcpy(msg->topic, SERVO0_TOPIC))
+    if(strcmp(msg->topic, SERVO0_TOPIC) == 0)
     {
         int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
         ret = pwm_set_pulse_dt(&allServos[0], val);
@@ -76,7 +76,13 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
         // {
 
         // }
-
+    if(strcmp(msg->topic, LCD_TOPIC) == 0)
+    {
+        struct LcdMsg lcd = {0};
+        strcpy(lcd.firstLine, msg->msg);
+        k_msgq_put(&msqLcdIn, &lcd, K_NO_WAIT);
+        k_msgq_put(&msqLcdOut, &lcd, K_NO_WAIT);
+    }
 }
 int deviceInit()
 {
