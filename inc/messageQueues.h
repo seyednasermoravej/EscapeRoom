@@ -15,13 +15,13 @@ extern "C" {
 
 extern struct k_msgq msqReceivedFromMQTT;
 extern struct k_msgq msqSendToMQTT;
-extern struct k_msgq msqRfid730;
-extern struct k_msgq msqRfidRc;
+extern struct k_msgq msqRfidOut;
+extern struct k_msgq msqRfidIn;
 extern struct k_msgq msqLcdIn;
 extern struct k_msgq msqLcdOut;
 #define         MESSAGE_QUEUE_LEN       128
 #define         TOPIC_LEN               128
-
+#define         UUID_LEN                7
 struct MqttMsg
 {
     char topic[TOPIC_LEN];
@@ -33,6 +33,13 @@ struct LcdMsg
     char firstLine[MESSAGE_QUEUE_LEN];
     char secondLine[MESSAGE_QUEUE_LEN];
 };
+
+
+// struct RfidMsg
+// {
+//     char topic[TOPIC_LEN];
+//     char uuid[UUID_LEN];
+// };
 
 // int messageQueueInit();
 

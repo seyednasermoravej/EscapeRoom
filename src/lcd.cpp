@@ -452,4 +452,5 @@ extern "C" void lcdThreadCreate()
 									K_THREAD_STACK_SIZEOF(lcdOutStackArea),
 									lcdEntryPointLcdOut, NULL, NULL, NULL,
 									LCD_PRIORITY, 0, K_NO_WAIT);
+	k_thread_name_set(lcdTidOut, "LCD IN");
 }

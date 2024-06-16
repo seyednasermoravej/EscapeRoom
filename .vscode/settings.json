@@ -24,7 +24,16 @@
 			"messagequeues.h": "c",
 			"mqtt.h": "c",
 			"config.h": "c",
-			"puzzles.h": "c"
+			"puzzles.h": "c",
+			"rfidin.h": "c",
+			"bitset": "c",
+			"memory": "c",
+			"random": "c",
+			"optional": "c",
+			"*.tcc": "c",
+			"sstream": "cpp",
+			"util.h": "c",
+			"random.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

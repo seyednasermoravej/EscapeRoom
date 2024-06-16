@@ -1,5 +1,5 @@
-#ifndef __730D2__H__
-#define __730D2__H__
+#ifndef __RFID_OUT__H__
+#define __RFID_OUT__H__
 
 
 #ifdef __cplusplus

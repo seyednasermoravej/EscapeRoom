@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_NONE);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -541,4 +541,5 @@ void mqttThreadCreate()
 	k_tid_t mqtt =
 		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),
 				mqttEntryPoint, NULL, NULL, NULL, MQTT_PRIORITY, 0, K_NO_WAIT);
+	k_thread_name_set(mqtt, "mqtt");
 }

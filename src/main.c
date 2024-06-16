@@ -12,18 +12,19 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 //     DT_FOREACH_PROP_ELEM(DT_NODELABEL(address), gpios, DT_SPEC_AND_COMMA)
 // };
 #define LED2_NODE DT_ALIAS(led2)
-static const struct gpio_dt_spec led00 = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
+// static const struct gpio_dt_spec led00 = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
 
 
 
 
-static const struct gpio_dt_spec address = GPIO_DT_SPEC_GET_OR(ADDR_NODE, gpios,
-							      {0});
+// static const struct gpio_dt_spec address = GPIO_DT_SPEC_GET_OR(ADDR_NODE, gpios,
+// 							      {0});
 
 int threadsCreation();
 
 extern void puzzleThreadCreate();
 extern void lcdThreadCreate();
+extern void rfidInThreadCreate();
 
 int main()
 { 
@@ -37,17 +38,17 @@ int main()
     sem_destroy(&dhcpActive);
 
 
-    const struct device *i2c_dev;
-    uint8_t addr;
-    int ret;
+    // const struct device *i2c_dev;
+    // uint8_t addr;
+    // int ret;
 
-    // i2c_dev = device_get_binding("I2C_1");
-    // if (!i2c_dev) {
-    //     printf("Error: I2C device not found\n");
-    //     return;
-    // }
+//     i2c_dev = device_get_binding("I2C_0");
+//     if (!i2c_dev) {
+//         printf("Error: I2C device not found\n");
+//         return;
+//     }
 
-    // printf("Scanning I2C bus...\n");
+//     printf("Scanning I2C bus...\n");
 // while (1)
 // {
 
@@ -135,11 +136,12 @@ int main()
     strcpy(send->msg, "allah");
     char buf[4];
     int counter = 0;
+    int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
         // strcat(send, itoa(counter, buf, 10));
         // counter++;
-        int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+        // int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
         k_msleep(2000);
     }
     // return 0;
@@ -151,4 +153,5 @@ int threadsCreation()
     mqttThreadCreate();
     puzzleThreadCreate();
     lcdThreadCreate();
+    rfidInThreadCreate();
 }

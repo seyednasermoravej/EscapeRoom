@@ -1,0 +1,19 @@
+description: I2C driver for PN532 NFC and RFID module.
+
+compatible: "nxp,pn532"
+
+include: [i2c-device.yaml]
+
+properties:
+  int-gpios:
+    required: true
+    type: phandle-array
+    description: |
+      GPIO connected to the controller IRQ pin. This pin is active-low.
+
+  reset-gpios:
+    required: true
+    type: phandle-array
+    description: |
+      GPIO connected to the controller RST pin. This pin is active-low.
+      

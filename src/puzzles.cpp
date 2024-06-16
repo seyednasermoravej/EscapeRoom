@@ -156,6 +156,7 @@ extern "C" void puzzleThreadCreate()
 									K_THREAD_STACK_SIZEOF(puzzleStackArea),
 									puzzleEntryPoint, NULL, NULL, NULL,
 									PUZZLE_PRIORITY, 0, K_NO_WAIT);
+    k_thread_name_set(puzzleTid, "puzzle");
 }
 
 

@@ -4,9 +4,8 @@
 
 struct k_msgq msqReceivedFromMQTT;
 struct k_msgq msqSendToMQTT;
-struct k_msgq msqRfid730;
-struct k_msgq msqRfidRc;
 struct k_msgq msqLcdIn;
+struct k_msgq msqLcdOut;
 
 
 
