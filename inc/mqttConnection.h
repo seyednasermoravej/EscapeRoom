@@ -21,7 +21,7 @@ extern "C" {
 extern bool command;
 
 #define MQTT_STACK_SIZE     1024 * 4 
-#define MQTT_PRIORITY      7 
+#define MQTT_PRIORITY      8 
 extern void mqttThreadCreate();
 
 extern void mqttEntryPoint(void *, void *, void *);

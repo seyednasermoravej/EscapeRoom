@@ -73,6 +73,7 @@
 #include <zephyr/drivers/gpio.h>
 #include <string.h>
 #include "messageQueues.h"
+#include <zephyr/logging/log.h>
 
 #define LCD_IN_NODE DT_NODELABEL(lcdin)
 #define LCD_OUT_NODE DT_NODELABEL(lcdout)

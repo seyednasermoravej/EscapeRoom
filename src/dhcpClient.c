@@ -60,7 +60,7 @@ static void handler(struct net_mgmt_event_callback *cb,
 						 buf, sizeof(buf)));
 		LOG_INF("Lease time[%d]: %u seconds", net_if_get_by_iface(iface),
 			iface->config.dhcpv4.lease_time);
-			struct in_addr gateway_addr = {192, 0, 2, 2};
+			struct in_addr gateway_addr = {192, 168, 1, 1};
 		net_if_ipv4_set_gw(iface, &gateway_addr);
 		sem_post(&dhcpActive);
 	}

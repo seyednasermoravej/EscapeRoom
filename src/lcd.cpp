@@ -4,6 +4,9 @@
 K_THREAD_STACK_DEFINE(lcdInStackArea, LCD_STACK_SIZE);
 K_THREAD_STACK_DEFINE(lcdOutStackArea, LCD_STACK_SIZE);
 
+
+LOG_MODULE_REGISTER(lcd, LOG_LEVEL_INF);
+
 void Lcd:: _set_row_offsets(int8_t row0, int8_t row1, int8_t row2, int8_t row3)
 {
 	lcd_data.row_offsets[0] = row0;
@@ -415,7 +418,8 @@ Lcd:: Lcd(const struct device *const gpioDev, struct k_msgq *_queue, uint8_t RS,
 		memset(&msg, 0, sizeof(struct LcdMsg));
 
 	}
-	k_msleep(2000);
+	LOG_INF("IN LCD");
+	k_msleep(1000);
 	}
 }
 

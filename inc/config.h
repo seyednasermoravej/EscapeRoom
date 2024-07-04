@@ -20,8 +20,8 @@
 #define ZEPHYR_ADDR		"2001:db8::1"
 #define SERVER_ADDR		"2001:db8::2"
 #else
-#define ZEPHYR_ADDR		"192.168.1.101"
-#define SERVER_ADDR		"192.168.1.10"
+// #define ZEPHYR_ADDR		"192.168.1.101"
+// #define SERVER_ADDR		"192.168.1.10"
 #endif
 #endif
 
@@ -49,9 +49,9 @@
 
 #define APP_CONNECT_TRIES	10
 
-#define APP_MQTT_BUFFER_SIZE	128
+#define APP_MQTT_BUFFER_SIZE    256	
 
-#define MQTT_CLIENTID		"escape_room7"
+#define MQTT_CLIENTID		"escape_room18"
 
 /* Set the following to 1 to enable the Bluemix topic format */
 #define APP_BLUEMIX_TOPIC	0

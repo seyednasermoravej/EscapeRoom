@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_NONE);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -490,9 +490,10 @@ static int publisher(const char *message, const char *topic)
 		// PRINT_RESULT("mqtt_ping", rc);
 		// SUCCESS_OR_BREAK(rc);
 
-		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
+		// rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 
-		rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
+		rc = publish(&client_ctx, MQTT_QOS_1_AT_LEAST_ONCE, message, topic);
+		// rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		PRINT_RESULT("mqtt_publish", rc);
 
 		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
@@ -523,7 +524,7 @@ void mqttEntryPoint(void *, void *, void *)
 	struct MqttMsg msg;
 	memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
-		if (k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
+		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
 			publisher(msg.msg, msg.topic);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
