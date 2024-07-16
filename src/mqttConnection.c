@@ -528,7 +528,17 @@ void mqttEntryPoint(void *, void *, void *)
 			publisher(msg.msg, msg.topic);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
+		int rc = 0;
 
+		LOG_INF("attempting to connect: ");
+		rc = try_to_connect(&client_ctx);
+		PRINT_RESULT("try_to_connect", rc);
+		SUCCESS_OR_EXIT(rc);
+		if(connected)
+		{
+
+			rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
+		}
 		k_msleep(1000);
 	}
 }
