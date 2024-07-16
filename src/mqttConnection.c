@@ -110,8 +110,9 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[0] = servo_topic;
 	mqttLists[1] = k3_topic;
 	mqttLists[2] = lcd_topic;
+	mqttLists[3] = builtInLed_topic;
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 3, .message_id = 34};
+		.list = mqttLists, .list_count = 4, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,
@@ -319,7 +320,7 @@ static void broker_init(void)
 
 	broker4->sin_family = AF_INET;
 	broker4->sin_port = htons(SERVER_PORT);
-	zsock_inet_pton(AF_INET, "91.121.93.94", &broker4->sin_addr);
+	zsock_inet_pton(AF_INET, SERVER_IP_ADDRESS, &broker4->sin_addr);
 	// zsock_inet_pton(AF_INET, SERVER_ADDR, &broker4->sin_addr);
 #if defined(CONFIG_SOCKS)
 	struct sockaddr_in *proxy4 = (struct sockaddr_in *)&socks5_proxy;

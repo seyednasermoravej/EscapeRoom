@@ -46,6 +46,7 @@
 		addr = &address;
 		led2 = &test;
 
+		built-in-led = &led0;
 	};
 };
 

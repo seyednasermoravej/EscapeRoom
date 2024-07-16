@@ -22,6 +22,10 @@ static const struct pwm_dt_spec allServos[] = {
 static const struct gpio_dt_spec hintButton = GPIO_DT_SPEC_GET_OR(HINT_NODE, gpios,
 							      {0});
 
+
+static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
+							      {0});
+
 static const struct json_obj_descr messageFromServerDescr[] = 
 {
     JSON_OBJ_DESCR_PRIM(struct MessageFromServer, timestamp, JSON_TOK_NUMBER),
@@ -83,9 +87,42 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
         k_msgq_put(&msqLcdIn, &lcd, K_NO_WAIT);
         k_msgq_put(&msqLcdOut, &lcd, K_NO_WAIT);
     }
+
+    if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
+    {   
+        int ret;
+        if(strncmp("0", msg->msg, 1) == 0)
+        {
+            ret = gpio_pin_set_dt(&builtInLed, 0);
+            LOG_INF("Built in led deactivate");
+        }
+        else if(strncmp("1", msg->msg, 1) == 0)
+        {
+            ret = gpio_pin_set_dt(&builtInLed, 1);
+            LOG_INF("Built in led activate");
+        }
+        else
+        {
+            LOG_INF("Command is not recognized");
+        }
+    }
 }
 int deviceInit()
 {
+
+    int ret;
+	if (!gpio_is_ready_dt(&builtInLed)) {
+		printk("Error: button device %s is not ready\n",
+		       builtInLed.port->name);
+		return 0;
+	}
+    ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_ACTIVE);
+
+	if (ret != 0) {
+		printk("Error %d: failed to configure %s pin %d\n",
+		       ret, builtInLed.port->name, builtInLed.pin);
+		return 0;
+	}
 	/* Configure channels individually prior to sampling. */
 	for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
         if (!pwm_is_ready_dt(&allServos[i])) {
@@ -95,7 +132,6 @@ int deviceInit()
         }
     }
 
-    	int ret;
 
 	if (!gpio_is_ready_dt(&hintButton)) {
 		printk("Error: button device %s is not ready\n",
