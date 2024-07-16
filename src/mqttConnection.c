@@ -111,8 +111,9 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[1] = k3_topic;
 	mqttLists[2] = lcd_topic;
 	mqttLists[3] = builtInLed_topic;
+	mqttLists[4] = puzzleType_topic;
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 4, .message_id = 34};
+		.list = mqttLists, .list_count = 5, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

@@ -70,44 +70,64 @@ Puzzle *puzzle = nullptr;
 void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
 {
     int ret;
-    if(strcmp(msg->topic, SERVO0_TOPIC) == 0)
+    if(!deviceSpecified)
     {
-        int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        ret = pwm_set_pulse_dt(&allServos[0], val);
+        if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
+        {
+            if(strcmp(msg->msg, "servos") == 0)
+            {
+                puzzleType = SERVOS_DEVICE;
+                deviceSpecified = true;
+                LOG_INF("Device type is Servos");
+            }
+        }
     }
-
-        // for(uint8_t i = 0; i < message->numOfServos; i++)
-        // {
-
-        // }
-    if(strcmp(msg->topic, LCD_TOPIC) == 0)
+    else
     {
-        struct LcdMsg lcd = {0};
-        strcpy(lcd.firstLine, msg->msg);
-        k_msgq_put(&msqLcdIn, &lcd, K_NO_WAIT);
-        k_msgq_put(&msqLcdOut, &lcd, K_NO_WAIT);
+        if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
+        {   
+            int ret;
+            if(strncmp("0", msg->msg, 1) == 0)
+            {
+                ret = gpio_pin_set_dt(&builtInLed, 0);
+                LOG_INF("Built in led deactivate");
+            }
+            else if(strncmp("1", msg->msg, 1) == 0)
+            {
+                ret = gpio_pin_set_dt(&builtInLed, 1);
+                LOG_INF("Built in led activate");
+            }
+            else
+            {
+                LOG_INF("Command is not recognized");
+            }
+        }
+        if(puzzleType == SERVOS_DEVICE)
+        {
+            if(strcmp(msg->topic, SERVO0_TOPIC) == 0)
+            {
+                int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
+                ret = pwm_set_pulse_dt(&allServos[0], val);
+            }
+
+        }
+
+            // for(uint8_t i = 0; i < message->numOfServos; i++)
+            // {
+
+            // }
+        if(strcmp(msg->topic, LCD_TOPIC) == 0)
+        {
+            struct LcdMsg lcd = {0};
+            strcpy(lcd.firstLine, msg->msg);
+            k_msgq_put(&msqLcdIn, &lcd, K_NO_WAIT);
+            k_msgq_put(&msqLcdOut, &lcd, K_NO_WAIT);
+        }
+
     }
 
-    if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
-    {   
-        int ret;
-        if(strncmp("0", msg->msg, 1) == 0)
-        {
-            ret = gpio_pin_set_dt(&builtInLed, 0);
-            LOG_INF("Built in led deactivate");
-        }
-        else if(strncmp("1", msg->msg, 1) == 0)
-        {
-            ret = gpio_pin_set_dt(&builtInLed, 1);
-            LOG_INF("Built in led activate");
-        }
-        else
-        {
-            LOG_INF("Command is not recognized");
-        }
-    }
 }
-int deviceInit()
+int deviceInit(PuzzleTypes puzzleType)
 {
 
     int ret;
@@ -123,14 +143,20 @@ int deviceInit()
 		       ret, builtInLed.port->name, builtInLed.pin);
 		return 0;
 	}
-	/* Configure channels individually prior to sampling. */
-	for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
-        if (!pwm_is_ready_dt(&allServos[i])) {
-            printk("Error: servo device %s is not ready\n",
-                allServos[i].dev->name);
-            return 1;
+
+
+    if(puzzleType == SERVOS_DEVICE)
+    {
+        for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
+            if (!pwm_is_ready_dt(&allServos[i])) {
+                printk("Error: servo device %s is not ready\n",
+                    allServos[i].dev->name);
+                return 1;
+            }
         }
+
     }
+	/* Configure channels individually prior to sampling. */
 
 
 	if (!gpio_is_ready_dt(&hintButton)) {
@@ -166,9 +192,19 @@ void puzzleEntryPoint(void *, void *, void *)
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
-    PuzzleTypes puzzleType = SERVO_DEVICE;
     puzzle = new Puzzle;
-    deviceInit();
+    while(!puzzle->deviceSpecified)
+    {
+        if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
+        {
+            puzzle -> mqttInMessageHandler(msg);
+            memset(msg, 0, sizeof(struct MqttMsg));
+           
+        }
+        k_msleep(1000);
+
+    }
+    deviceInit(puzzle->puzzleType);
     // if(welcomeMessage.puzzleType == SERVO_DEVICE)
     // {
         // puzzle->servo0 = PWM_DT_SPEC_GET(DT_NODELABEL(servo));

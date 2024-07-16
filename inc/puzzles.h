@@ -17,7 +17,8 @@
 #include <zephyr/sys/util.h>
 enum PuzzleTypes
 {
-    SERVO_DEVICE = 0,
+    UNSPECIFIED = 0,
+    SERVOS_DEVICE,
 
 };
 
@@ -93,10 +94,11 @@ class Puzzle
 public:
     Puzzle();
     void mqttInMessageHandler(struct MqttMsg *msg);
+    bool deviceSpecified = false;
+    PuzzleTypes puzzleType = UNSPECIFIED;
 
 
 private:
-    PuzzleTypes puzzleType;
 
 
 };
