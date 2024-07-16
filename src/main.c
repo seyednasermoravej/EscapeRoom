@@ -132,7 +132,7 @@ int main()
     threadsCreation();
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
-    strcpy(send->topic, "publish/escape");
+    strcpy(send->topic, "pub/escape");
     strcpy(send->msg, "allah");
     char buf[4];
     int counter = 0;

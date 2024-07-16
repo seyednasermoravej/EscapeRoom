@@ -137,7 +137,7 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, struct k_msgq *_
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };	// Buffer to store the returned UID
   uint8_t uidLength;				// Length of the UID (4 or 7 bytes depending on ISO14443A card type)
   struct MqttMsg message = {0};
-  strcpy(message.topic, "RFID IN.");
+  strcpy(message.topic, "pub/rfidIn");
   while(1)
   {
 
