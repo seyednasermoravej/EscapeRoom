@@ -17,8 +17,8 @@ extern struct k_msgq msqReceivedFromMQTT;
 extern struct k_msgq msqSendToMQTT;
 extern struct k_msgq msqRfidOut;
 extern struct k_msgq msqRfidIn;
-extern struct k_msgq msqLcdIn;
-extern struct k_msgq msqLcdOut;
+extern struct k_msgq msqLcd1;
+extern struct k_msgq msqLcd2;
 #define         MESSAGE_QUEUE_LEN       128
 #define         TOPIC_LEN               128
 #define         UUID_LEN                7

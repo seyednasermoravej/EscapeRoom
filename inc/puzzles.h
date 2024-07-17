@@ -18,7 +18,9 @@
 enum PuzzleTypes
 {
     UNSPECIFIED = 0,
-    SERVOS_DEVICE,
+    SERVOS_PUZZLE,
+    GATE_PUZZLE,
+    CONFIG_DEVICE_PUZZLE,
 
 };
 
@@ -61,6 +63,10 @@ enum MessageTypes
 #define PUZZLE_STACK_SIZE                   2048
 #define PUZZLE_PRIORITY                     8
 #define STEP PWM_USEC(100)
+
+
+extern void lcdThreadCreate();
+extern void rfidInThreadCreate();
 struct MessageFromServer
 {
     uint32_t timestamp;
@@ -96,10 +102,17 @@ public:
     void mqttInMessageHandler(struct MqttMsg *msg);
     bool deviceSpecified = false;
     PuzzleTypes puzzleType = UNSPECIFIED;
-
+    int deviceInit();
 
 private:
+    int servosPuzzleInit();
+    int gatePuzzleInit();
+    int configDevicePuzzleInit();
+    int hintButtonInit();
 
+    int builtIntLedInit();
+
+    void puzzleTypeSelection(char *type);
 
 };
 

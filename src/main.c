@@ -23,8 +23,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 int threadsCreation();
 
 extern void puzzleThreadCreate();
-extern void lcdThreadCreate();
-extern void rfidInThreadCreate();
+extern void mqttThreadCreate();
 
 int main()
 { 
@@ -152,6 +151,4 @@ int threadsCreation()
 {
     mqttThreadCreate();
     puzzleThreadCreate();
-    lcdThreadCreate();
-    rfidInThreadCreate();
 }

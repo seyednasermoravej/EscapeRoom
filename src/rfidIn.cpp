@@ -1896,7 +1896,7 @@ void rfidInEntryPoint(void *, void *, void *)
 
 
 
-extern "C" void rfidInThreadCreate()
+void rfidInThreadCreate()
 {
     k_tid_t rfidInTid = k_thread_create(&rfidInThread, rfidInStackArea,
 									K_THREAD_STACK_SIZEOF(rfidInStackArea),

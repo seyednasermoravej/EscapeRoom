@@ -75,8 +75,8 @@
 #include "messageQueues.h"
 #include <zephyr/logging/log.h>
 
-#define LCD_IN_NODE DT_NODELABEL(lcdin)
-#define LCD_OUT_NODE DT_NODELABEL(lcdout)
+#define LCD1_NODE DT_NODELABEL(lcd1)
+#define LCD2_NODE DT_NODELABEL(lcd2)
 
 
 #define LCD_PRIORITY            8

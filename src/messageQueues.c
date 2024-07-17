@@ -4,15 +4,15 @@
 
 struct k_msgq msqReceivedFromMQTT;
 struct k_msgq msqSendToMQTT;
-struct k_msgq msqLcdIn;
-struct k_msgq msqLcdOut;
+struct k_msgq msqLcd1;
+struct k_msgq msqLcd2;
 
 
 
 K_MSGQ_DEFINE(msqReceivedFromMQTT, sizeof(struct MqttMsg), 8, 4);
 K_MSGQ_DEFINE(msqSendToMQTT, sizeof(struct MqttMsg), 8, 4);
-K_MSGQ_DEFINE(msqLcdIn, sizeof(struct LcdMsg), 8, 4);
-K_MSGQ_DEFINE(msqLcdOut, sizeof(struct LcdMsg), 8, 4);
+K_MSGQ_DEFINE(msqLcd1, sizeof(struct LcdMsg), 8, 4);
+K_MSGQ_DEFINE(msqLcd2, sizeof(struct LcdMsg), 8, 4);
 
 // int messageQueueInit()
 // {

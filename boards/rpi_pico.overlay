@@ -76,7 +76,6 @@ pico_spi: &spi0 {};
 &pwm{
 	status = "okay";
 	pinctrl-0 = <&pwm_pins>;
-
 // 	divider-int-0 = <133>;
 
 	// divider-int-1 = <133>;
@@ -92,6 +91,8 @@ pico_spi: &spi0 {};
 // 	divider-int-6 = <133>;
 
 // 	divider-int-7 = <133>;
+
+	zephyr,deferred-init;
 
 };
 
@@ -133,7 +134,7 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
-		expander: pcf857x@20 {
+		lcd1: pcf857x@20 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
 		reg = <0x20>;
@@ -141,20 +142,20 @@ pico_spi: &spi0 {};
 		#gpio-cells = <2>;
 		ngpios = <8>;
   };
-		lcdout: pcf857x@27 {
-		compatible = "nxp,pcf857x";
-		status = "okay";
-		reg = <0x27>;
-		gpio-controller;
-		#gpio-cells = <2>;
-		ngpios = <8>;
-  };
-		lcdin: pcf857x@21{
+		lcd2: pcf857x@21{
 		compatible = "nxp,pcf857x";
 		reg = <0x21>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
 	};
+		expander: pcf857x@22 {
+		compatible = "nxp,pcf857x";
+		status = "okay";
+		reg = <0x22>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+  };
 
 };
