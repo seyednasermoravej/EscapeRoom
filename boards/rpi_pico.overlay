@@ -42,7 +42,7 @@
 	relayslocks
 	{
 		compatible = "gpio-keys";
-		relays-check: relays_check
+		relayscheck: relays_check
 		{
 			gpios = <&gpio0 22 (GPIO_ACTIVE_LOW)>;
 		};
@@ -59,7 +59,7 @@
 	relay
 	{
 		compatible = "gpio-leds";
-		relay-control: relay_control
+		relaycontrol: relay_control
 		{
 			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
 		};
