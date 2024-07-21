@@ -4,7 +4,7 @@
 
 #include <zephyr/net/mqtt.h>
 #define SERVO0_TOPIC            "sub/servo0"
-#define K3_TOPIC                "sub/k3"
+#define K3_TOPIC                "sub/relaysControl"
 #define LCD_TOPIC               "sub/lcd"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "sub/puzzleType"

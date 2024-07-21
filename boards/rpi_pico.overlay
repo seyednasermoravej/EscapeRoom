@@ -39,12 +39,34 @@
 			label = "Device address";
 		};
 	};
+	relayslocks
+	{
+		compatible = "gpio-keys";
+		relays-check: relays_check
+		{
+			gpios = <&gpio0 22 (GPIO_ACTIVE_LOW)>;
+		};
+		maglocks: maglocks
+		{
+			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
+		};
+	};
 	inrfidirq
 	{
 		compatible = "gpio-keys";
 		
 	};
+	relay
+	{
+		compatible = "gpio-leds";
+		relay-control: relay_control
+		{
+			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+		};
+	};
 
+	// transisotr
+	// ws
 
 	aliases{
 		hintbutton = &button0;
