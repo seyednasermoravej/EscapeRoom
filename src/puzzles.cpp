@@ -3,74 +3,17 @@
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
-#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
-	PWM_DT_SPEC_GET_BY_IDX(node_id, idx),
-
-
 
 struct k_thread puzzleThread;
-
-
-
-static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(servos), min_pulse);
-static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(servos), max_pulse);
-static const struct pwm_dt_spec allServos[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(servos), pwms, DT_SPEC_AND_COMMA)
-};
-
-
-
-#define DT_SPEC_AND_COMMA1(node_id, prop, idx) \
- 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-
-
-//  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
-static const struct gpio_dt_spec addresses[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA1)
-};
-
-
-static const struct gpio_dt_spec hintButton = GPIO_DT_SPEC_GET_OR(HINT_NODE, gpios,
-							      {0});
-
 
 static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
 							      {0});
 
-static const struct json_obj_descr messageFromServerDescr[] = 
-{
-    JSON_OBJ_DESCR_PRIM(struct MessageFromServer, timestamp, JSON_TOK_NUMBER),
-    // JSON_OBJ_DESCR_PRIM(struct Message, type, JSON_TOK_NUMBER),
-    // JSON_OBJ_DESCR_PRIM(struct WelcomeMessage, pubTopic, JSON_TOK_STRING),
-    // JSON_OBJ_DESCR_PRIM(struct WelcomeMessage, subTopic, JSON_TOK_STRING),
-    JSON_OBJ_DESCR_ARRAY(struct MessageFromServer, servos, MAX_NUMBER_OF_SERVO_MOTORS, numOfServos, JSON_TOK_NUMBER),
-};
-
-static const struct json_obj_descr hintMessageDescr[] = 
-{
-    JSON_OBJ_DESCR_PRIM(struct HintMessage, timestamp, JSON_TOK_NUMBER),
-    JSON_OBJ_DESCR_PRIM(struct HintMessage, type, JSON_TOK_NUMBER),
-    JSON_OBJ_DESCR_PRIM(struct HintMessage, status, JSON_TOK_TRUE),
-};
-
-static struct gpio_callback hintButton_cb_data;
-void hintPressed(const struct device *dev, struct gpio_callback *cb,
-		    uint32_t pins)
-{
-	printk("Button pressed at %" PRIu32 "\n", k_cycle_get_32());
-    struct HintMessage *message = (struct HintMessage*)k_malloc(sizeof(struct HintMessage));
-    char *buf = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
-    message->status = true;
-    message->timestamp = k_cycle_get_32();
-    message->type = HINT;
-    json_obj_encode_buf(hintMessageDescr, ARRAY_SIZE(hintMessageDescr), message, buf, MESSAGE_QUEUE_LEN);
-    k_msgq_put(&msqSendToMQTT, buf, K_NO_WAIT);
 
 
-}
 Puzzle::Puzzle() {
-    // Implementation
-    // ...
+
+    builtIntLedInit();
 }
 
 
@@ -80,16 +23,18 @@ Puzzle *puzzle = nullptr;
 void Puzzle:: puzzleTypeSelection(char *type)
 {
     deviceSpecified = true;
-    sendDevAddrVal();
+
     
     if(strcmp(type, "servos") == 0)
     {
         puzzleType = SERVOS_PUZZLE;
+        servos = new Servos;
         LOG_INF("Puzzle type is Servos");
     }
     else if(strcmp(type, "gate") == 0)
     {
         puzzleType = GATE_PUZZLE;
+        gate = new Gate;
         LOG_INF("Puzzle type is Gate");
     }
     else if(strcmp(type, "config") == 0)
@@ -104,19 +49,6 @@ void Puzzle:: puzzleTypeSelection(char *type)
 
 }
 
-void Puzzle:: sendDevAddrVal()
-{
-    int dev_address = 0;
-    char dev_addr_char[5];
-    dev_address=addrKeysVal();
-    sprintf(dev_addr_char,"%d",dev_address);
-    printk("The Device Address is %d\n\r",dev_address);
-    struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
-    memset(send, 0, sizeof(struct MqttMsg));
-    strcpy(send->topic, "sub/devAddr");
-    strcpy(send->msg, dev_addr_char);
-    k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
-}
 
 void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
 {
@@ -130,7 +62,6 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
     }
     else
     {
-        sendDevAddrVal();
         
         if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
         {   
@@ -150,115 +81,33 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
                 LOG_INF("Command is not recognized");
             }
         }
-
-        if(strcmp(msg->topic, SERVO0_TOPIC) == 0)
+        else
         {
-            int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-            ret = pwm_set_pulse_dt(&allServos[0], val);
+            
+            switch (puzzle->puzzleType)
+            {
+            case GATE_PUZZLE:
+                gate -> messageHandler(msg);
+                break;
+            
+            case SERVOS_PUZZLE:
+                servos -> messageHandler(msg);
+                break;
+
+            case CONFIG_DEVICE_PUZZLE:
+                configDevice -> messageHandler(msg);
+                break;
+
+            default:
+                break;
+            }
         }
 
-        if(strcmp(msg->topic, LCD_TOPIC) == 0)
-        {
-            struct LcdMsg lcd = {0};
-            strcpy(lcd.firstLine, msg->msg);
-            k_msgq_put(&msqLcd1, &lcd, K_NO_WAIT);
-            k_msgq_put(&msqLcd2, &lcd, K_NO_WAIT);
-        }
 
     }
 
 }
 
-int Puzzle:: servosPuzzleInit()
-{
-    device_init(allServos->dev);
-    for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
-        if (!pwm_is_ready_dt(&allServos[i])) {
-            printk("Error: servo device %s is not ready\n",
-                allServos[i].dev->name);
-            return 1;
-        }
-    }
-}
-
-int Puzzle:: addrKeysVal()
-{
-    int addr1=0;
-    int addr2=0;
-    int addr4=0;
-    int addr8=0;
-    int addr16=0;
-    int addr32=0;
-    int address_integrated=0;
-    addr1=gpio_pin_get_dt(&addresses[0]);
-    // printk("The Device Addr1 is %d\n\r",addr1);
-    addr2=gpio_pin_get_dt(&addresses[1]);
-    // printk("The Device Addr2 is %d\n\r",addr2);
-    addr4=gpio_pin_get_dt(&addresses[2]);
-    // printk("The Device Addr4 is %d\n\r",addr4);
-    addr8=gpio_pin_get_dt(&addresses[3]);
-    // printk("The Device Addr8 is %d\n\r",addr8);
-    addr16=gpio_pin_get_dt(&addresses[4]);
-    // printk("The Device Addr16 is %d\n\r",addr16);
-    addr32=gpio_pin_get_dt(&addresses[5]);
-    // printk("The Device Addr32 is %d\n\r",addr32);
-    address_integrated = addr1 + (addr2*2) + (addr4*4) + (addr8*8) + (addr16*16) + (addr32*32);
-    return address_integrated;
-}
-
-int Puzzle:: addrKeysInit()
-{
-    int ret;
-
-    for(int i=0; i<6; i++){
-        if (!device_is_ready(addresses[i].port)) {
-		    return -1;
-	    }
-        ret = gpio_pin_configure_dt(&addresses[i], GPIO_INPUT);
-	    if (ret < 0) {
-		    return -1;
-	    }
-    }
-}
-
-int Puzzle:: hintButtonInit()
-{
-
-    int ret;
-	if (!gpio_is_ready_dt(&hintButton)) {
-		printk("Error: button device %s is not ready\n",
-		       hintButton.port->name);
-		return 0;
-	}
-
-	ret = gpio_pin_configure_dt(&hintButton, GPIO_INPUT);
-	if (ret != 0) {
-		printk("Error %d: failed to configure %s pin %d\n",
-		       ret, hintButton.port->name, hintButton.pin);
-		return 0;
-	}
-
-	ret = gpio_pin_interrupt_configure_dt(&hintButton,
-					      GPIO_INT_EDGE_TO_ACTIVE);
-	if (ret != 0) {
-		printk("Error %d: failed to configure interrupt on %s pin %d\n",
-			ret, hintButton.port->name, hintButton.pin);
-		return 0;
-	}
-
-	gpio_init_callback(&hintButton_cb_data, hintPressed, BIT(hintButton.pin));
-	gpio_add_callback(hintButton.port, &hintButton_cb_data);
-	printk("Set up button at %s pin %d\n", hintButton.port->name, hintButton.pin);
-}
-
-int Puzzle:: gatePuzzleInit()
-{
-    hintButtonInit();
-    lcdThreadCreate();
-    rfidInThreadCreate();
-    return 0;
-
-}
 
 int Puzzle:: builtIntLedInit()
 {
@@ -278,38 +127,8 @@ int Puzzle:: builtIntLedInit()
 
 }
 
-int Puzzle:: deviceInit()
-{
-
-    int ret;
-
-    builtIntLedInit();
-
-    if(puzzleType == SERVOS_PUZZLE)
-    {
-        servosPuzzleInit();
-    }
-    else if(puzzleType == GATE_PUZZLE)
-    {
-        gatePuzzleInit();
-    }
-    else if (puzzleType == CONFIG_DEVICE_PUZZLE)
-    {
-        configDevicePuzzleInit();
-    }
-
-}
-
-int Puzzle:: configDevicePuzzleInit()
-{
-    lcdThreadCreate();
-}
-
-
 void puzzleEntryPoint(void *, void *, void *)
 {
-    // char *buffer = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
-    // while(k_msgq_get(&msqReceivedFromMQTT, buffer, K_FOREVER) != 0);
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
@@ -325,11 +144,6 @@ void puzzleEntryPoint(void *, void *, void *)
         k_msleep(1000);
 
     }
-    puzzle -> deviceInit();
-    // if(welcomeMessage.puzzleType == SERVO_DEVICE)
-    // {
-        // puzzle->servo0 = PWM_DT_SPEC_GET(DT_NODELABEL(servo));
-    // }
     
     while(1)
     {

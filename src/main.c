@@ -133,8 +133,6 @@ int main()
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/escape");
     strcpy(send->msg, "allah");
-    char buf[4];
-    int counter = 0;
     int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {

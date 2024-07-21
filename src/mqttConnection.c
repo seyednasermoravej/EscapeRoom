@@ -250,34 +250,34 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 	}
 }
 
-static char *get_mqtt_payload(enum mqtt_qos qos)
-{
-#if APP_BLUEMIX_TOPIC
-	static APP_BMEM char payload[30];
+// static char *get_mqtt_payload(enum mqtt_qos qos)
+// {
+// #if APP_BLUEMIX_TOPIC
+// 	static APP_BMEM char payload[30];
 
-	snprintk(payload, sizeof(payload), "{d:{temperature:%d}}", (uint8_t)sys_rand32_get());
-#else
-	static int counter = 0;
-	char buff[10];
-	memset(buff, 0, 10);
-	static APP_DMEM char payload[40];
-	memset(payload, 0, 40);
-	sprintf(payload, "Hi Bram: %d", counter);
-	counter++;
-#endif
+// 	snprintk(payload, sizeof(payload), "{d:{temperature:%d}}", (uint8_t)sys_rand32_get());
+// #else
+// 	static int counter = 0;
+// 	char buff[10];
+// 	memset(buff, 0, 10);
+// 	static APP_DMEM char payload[40];
+// 	memset(payload, 0, 40);
+// 	sprintf(payload, "Hi Bram: %d", counter);
+// 	counter++;
+// #endif
 
-	return payload;
-}
+// 	return payload;
+// }
 
-static char *get_mqtt_topic(void)
-{
-#if APP_BLUEMIX_TOPIC
-	return "iot-2/type/" BLUEMIX_DEVTYPE "/id/" BLUEMIX_DEVID "/evt/" BLUEMIX_EVENT
-	       "/fmt/" BLUEMIX_FORMAT;
-#else
-	return "pub/escapeRoom";
-#endif
-}
+// static char *get_mqtt_topic(void)
+// {
+// #if APP_BLUEMIX_TOPIC
+// 	return "iot-2/type/" BLUEMIX_DEVTYPE "/id/" BLUEMIX_DEVID "/evt/" BLUEMIX_EVENT
+// 	       "/fmt/" BLUEMIX_FORMAT;
+// #else
+// 	return "pub/escapeRoom";
+// #endif
+// }
 
 static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *message, const char *topic)
 {
@@ -467,7 +467,7 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 #define SUCCESS_OR_EXIT(rc)                                                                        \
 	{                                                                                          \
 		if (rc != 0) {                                                                     \
-			return 1;                                                                  \
+			return;                                                                  \
 		}                                                                                  \
 	}
 #define SUCCESS_OR_BREAK(rc)                                                                       \

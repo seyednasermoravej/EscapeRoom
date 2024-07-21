@@ -18,10 +18,13 @@
 			label = "Push button switch 0";
 		};
 	};
-	leds
+	out-rfid	
 	{
 		compatible = "gpio-leds";
-		test: test
+		rfidled: rfid_led {
+			gpios = <&expander 6 (GPIO_ACTIVE_HIGH)>;
+		};
+		rfidbuzzer: buzzer
 		{
 			gpios = <&expander 7 (GPIO_ACTIVE_HIGH)>;
 		};
@@ -45,8 +48,6 @@
 
 	aliases{
 		hintbutton = &button0;
-		led2 = &test;
-
 		built-in-led = &led0;
 	};
 };
