@@ -15,6 +15,7 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
+#include <zephyr/devicetree.h>
 enum PuzzleTypes
 {
     UNSPECIFIED = 0,
@@ -112,6 +113,9 @@ private:
 
     int builtIntLedInit();
 
+    int addrKeysInit();
+    int addrKeysVal();
+    void sendDevAddrVal();
     void puzzleTypeSelection(char *type);
 
 };

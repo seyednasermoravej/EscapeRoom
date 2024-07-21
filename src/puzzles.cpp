@@ -19,6 +19,17 @@ static const struct pwm_dt_spec allServos[] = {
 };
 
 
+
+#define DT_SPEC_AND_COMMA1(node_id, prop, idx) \
+ 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
+
+
+//  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
+static const struct gpio_dt_spec addresses[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA1)
+};
+
+
 static const struct gpio_dt_spec hintButton = GPIO_DT_SPEC_GET_OR(HINT_NODE, gpios,
 							      {0});
 
@@ -69,6 +80,8 @@ Puzzle *puzzle = nullptr;
 void Puzzle:: puzzleTypeSelection(char *type)
 {
     deviceSpecified = true;
+    sendDevAddrVal();
+    
     if(strcmp(type, "servos") == 0)
     {
         puzzleType = SERVOS_PUZZLE;
@@ -91,6 +104,20 @@ void Puzzle:: puzzleTypeSelection(char *type)
 
 }
 
+void Puzzle:: sendDevAddrVal()
+{
+    int dev_address = 0;
+    char dev_addr_char[5];
+    dev_address=addrKeysVal();
+    sprintf(dev_addr_char,"%d",dev_address);
+    printk("The Device Address is %d\n\r",dev_address);
+    struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
+    memset(send, 0, sizeof(struct MqttMsg));
+    strcpy(send->topic, "sub/devAddr");
+    strcpy(send->msg, dev_addr_char);
+    k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+}
+
 void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
 {
     int ret;
@@ -103,6 +130,8 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
     }
     else
     {
+        sendDevAddrVal();
+        
         if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
         {   
             int ret;
@@ -149,6 +178,46 @@ int Puzzle:: servosPuzzleInit()
                 allServos[i].dev->name);
             return 1;
         }
+    }
+}
+
+int Puzzle:: addrKeysVal()
+{
+    int addr1=0;
+    int addr2=0;
+    int addr4=0;
+    int addr8=0;
+    int addr16=0;
+    int addr32=0;
+    int address_integrated=0;
+    addr1=gpio_pin_get_dt(&addresses[0]);
+    // printk("The Device Addr1 is %d\n\r",addr1);
+    addr2=gpio_pin_get_dt(&addresses[1]);
+    // printk("The Device Addr2 is %d\n\r",addr2);
+    addr4=gpio_pin_get_dt(&addresses[2]);
+    // printk("The Device Addr4 is %d\n\r",addr4);
+    addr8=gpio_pin_get_dt(&addresses[3]);
+    // printk("The Device Addr8 is %d\n\r",addr8);
+    addr16=gpio_pin_get_dt(&addresses[4]);
+    // printk("The Device Addr16 is %d\n\r",addr16);
+    addr32=gpio_pin_get_dt(&addresses[5]);
+    // printk("The Device Addr32 is %d\n\r",addr32);
+    address_integrated = addr1 + (addr2*2) + (addr4*4) + (addr8*8) + (addr16*16) + (addr32*32);
+    return address_integrated;
+}
+
+int Puzzle:: addrKeysInit()
+{
+    int ret;
+
+    for(int i=0; i<6; i++){
+        if (!device_is_ready(addresses[i].port)) {
+		    return -1;
+	    }
+        ret = gpio_pin_configure_dt(&addresses[i], GPIO_INPUT);
+	    if (ret < 0) {
+		    return -1;
+	    }
     }
 }
 

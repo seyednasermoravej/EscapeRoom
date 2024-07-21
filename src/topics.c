@@ -42,3 +42,12 @@ struct mqtt_topic puzzleType_topic = {
             .size = strlen(PUZZLE_TYPE_TOPIC)
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic devAddr_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)DEV_ADDR_TOPIC,
+            .size = strlen(DEV_ADDR_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};

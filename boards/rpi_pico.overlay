@@ -23,14 +23,16 @@
 		compatible = "gpio-leds";
 		test: test
 		{
-			gpios = <&expander 6 (GPIO_ACTIVE_HIGH)>;
+			gpios = <&expander 7 (GPIO_ACTIVE_HIGH)>;
 		};
 	};
 	dipswitch
 	{
 		compatible = "gpio-keys";
-		address: switchs{
-			gpios = <&expander 7 (GPIO_ACTIVE_LOW)>;
+		addresses: switchs{
+			gpios = <&expander 0 (GPIO_ACTIVE_LOW)>, <&expander 1 (GPIO_ACTIVE_LOW)>, 
+			<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
+			<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
 			label = "Device address";
 		};
 	};
@@ -43,7 +45,6 @@
 
 	aliases{
 		hintbutton = &button0;
-		addr = &address;
 		led2 = &test;
 
 		built-in-led = &led0;
@@ -149,10 +150,10 @@ pico_spi: &spi0 {};
 		#gpio-cells = <2>;
 		ngpios = <8>;
 	};
-		expander: pcf857x@22 {
+		expander: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
-		reg = <0x22>;
+		reg = <0x27>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;

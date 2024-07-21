@@ -8,6 +8,7 @@
 #define LCD_TOPIC               "sub/lcd"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "sub/puzzleType"
+#define DEV_ADDR_TOPIC          "sub/devAddr"
 #ifdef __cplusplus
 extern "C" {
 #endif
