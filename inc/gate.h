@@ -28,6 +28,8 @@ private:
     int addrKeysInit();
     int addrKeysVal();
     int hintButtonInit();
+    int magLocksInit();
+    int relaysCheckInit();
 
 };
 

@@ -51,11 +51,6 @@
 			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
 		};
 	};
-	inrfidirq
-	{
-		compatible = "gpio-keys";
-		
-	};
 	relay
 	{
 		compatible = "gpio-leds";
