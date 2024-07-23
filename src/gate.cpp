@@ -83,12 +83,11 @@ void Gate:: sendDevAddrVal()
     char dev_addr_char[5];
     dev_address=addrKeysVal();
     sprintf(dev_addr_char,"%d",dev_address);
-    printk("The Device Address is %d\n\r",dev_address);
-    struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
-    memset(send, 0, sizeof(struct MqttMsg));
-    strcpy(send->topic, "sub/devAddr");
-    strcpy(send->msg, dev_addr_char);
-    k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+    LOG_INF("The Device Address is %d\n\r",dev_address);
+    struct MqttMsg send = {0};
+    strcpy(send.topic, DEV_ADDR_TOPIC);
+    strcpy(send.msg, dev_addr_char);
+    k_msgq_put(&msqSendToMQTT, &send, K_NO_WAIT);
 }
 
 
@@ -135,7 +134,7 @@ int Gate:: addrKeysInit()
 
 int Gate:: hintButtonInit()
 {
-
+	device_init(hintButton.port);
     int ret;
 	if (!gpio_is_ready_dt(&hintButton)) {
 		printk("Error: button device %s is not ready\n",
@@ -180,7 +179,7 @@ void Gate:: messageHandler(struct MqttMsg *msg)
 
 int Gate:: relaysCheckInit()
 {
-
+	device_init(relaysCheck.port);
     int ret;
 	if (!gpio_is_ready_dt(&relaysCheck)) {
 		printk("Error: button device %s is not ready\n",

@@ -7,7 +7,7 @@
 			min-pulse = <PWM_USEC(700)>;
 			max-pulse = <PWM_USEC(2500)>;
 			status ="okay";
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 		};
 	};
 	buttons
@@ -17,6 +17,7 @@
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
 		};
+		zephyr,deferred-init;
 	};
 	out-rfid	
 	{
@@ -50,6 +51,7 @@
 		{
 			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
 		};
+		zephyr,deferred-init;
 	};
 	relay
 	{
