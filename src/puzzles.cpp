@@ -40,6 +40,7 @@ void Puzzle:: puzzleTypeSelection(char *type)
     else if(strcmp(type, "config") == 0)
     {
         puzzleType = CONFIG_DEVICE_PUZZLE;
+        configDevice = new ConfigDevice;
         LOG_INF("Device is configuring by user.");
     }
     else

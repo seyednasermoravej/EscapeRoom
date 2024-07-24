@@ -60,6 +60,7 @@
 		{
 			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
 		};
+		zephyr,deferred-init;
 	};
 
 	// transisotr
@@ -69,12 +70,13 @@
 		hintbutton = &button0;
 		built-in-led = &led0;
 	};
-	rotaryencoder
+	rotary-encoder
 	{
 		compatible = "gpio-keys";
-		encoderpins{
-			gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_ACTIVE_LOW)>, <&gpio0 8 (GPIO_ACTIVE_LOW)>;
+		rotaryencoder: encoderpins{
+			gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_ACTIVE_LOW)>, <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 		};
+		zephyr,deferred-init;
 	};
 };
 
@@ -193,6 +195,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
+		zephyr,deferred-init;
 	};
 		lcd2: pcf857x@21{
 		compatible = "nxp,pcf857x";
@@ -200,6 +203,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
+		zephyr,deferred-init;
 	};
 		expander: pcf857x@27 {
 		compatible = "nxp,pcf857x";
@@ -208,6 +212,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
+		zephyr,deferred-init;
 	};
   
 

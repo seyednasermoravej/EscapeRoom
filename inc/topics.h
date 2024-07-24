@@ -12,6 +12,7 @@
 
 #define DEV_ADDR_TOPIC          "pub/devAddr"
 #define RFID_IN_TOPIC           "pub/rfidIn" 
+#define ROTARY_ENCODER_TOPIC    "pub/rotaryEncoder"
 
 
 #ifdef __cplusplus

@@ -3,13 +3,13 @@
 
 LOG_MODULE_REGISTER(gate, LOG_LEVEL_INF);
 
-#define DT_SPEC_AND_COMMA1(node_id, prop, idx) \
+#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
 
 //  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
 static const struct gpio_dt_spec addresses[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA1)
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
 
@@ -120,7 +120,7 @@ int Gate:: addrKeysInit()
 {
     int ret;
 
-    for(int i=0; i<6; i++){
+    for(int i = 0; i < ARRAY_SIZE(addresses); i++){
         if (!device_is_ready(addresses[i].port)) {
 		    return -1;
 	    }

@@ -433,12 +433,14 @@ struct k_thread lcdOutThread;
 
 void lcdEntryPointLcdIn(void *, void *, void *)
 {
+	device_init(DEVICE_DT_GET(LCD1_NODE));
 	Lcd *lcd = new Lcd(DEVICE_DT_GET(LCD1_NODE), &msqLcd1, 0, 2, 3, 4, 5, 6, 7);
 
 }
 
 void lcdEntryPointLcdOut(void *, void *, void *)
 {
+	device_init(DEVICE_DT_GET(LCD2_NODE));
 	Lcd *lcd = new Lcd(DEVICE_DT_GET(LCD2_NODE), &msqLcd2, 0, 2, 3, 4, 5, 6, 7);
 
 }

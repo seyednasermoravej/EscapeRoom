@@ -8,7 +8,6 @@
 #include "messageQueues.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <zephyr/drivers/pwm.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
@@ -25,7 +24,9 @@ public:
     ConfigDevice();
     void messageHandler(struct MqttMsg *msg);
 
+
 private:
+    int inputsInit();
 };
 
 #endif
