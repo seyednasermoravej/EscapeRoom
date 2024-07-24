@@ -11,6 +11,7 @@
 
 
 #define DEV_ADDR_TOPIC          "pub/devAddr"
+#define RFID_IN_TOPIC           "pub/rfidIn" 
 
 
 #ifdef __cplusplus

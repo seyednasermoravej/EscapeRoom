@@ -69,6 +69,13 @@
 		hintbutton = &button0;
 		built-in-led = &led0;
 	};
+	rotaryencoder
+	{
+		compatible = "gpio-keys";
+		encoderpins{
+			gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_ACTIVE_LOW)>, <&gpio0 8 (GPIO_ACTIVE_LOW)>;
+		};
+	};
 };
 
 
@@ -148,6 +155,30 @@ pico_spi: &spi0 {};
 		reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
 	};
 
+	// mux0: tca9546a@77
+	// {
+	// 	compatible = "ti,tca9546a";
+	// 	reg = <0x77>;
+	// 	status = "okay";
+	// 	label = "i2c_mux";
+	// 	#address-cells = <1>;
+	// 	#size-cells = <0>;
+	// 	reset-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+	// 	mux_i2c@0
+	// 	{
+	// 		compatible = "ti,tca9546a-channel";
+	// 		reg = <0>;
+	// 		#address-cells = <1>;
+	// 		#size-cells = <0>;
+	// 		status = "okay";
+	// 		color_sensor0: tcs34725@29{
+	// 			compatible = "taos,tcs34725"
+	// 			reg = <0x29>;
+	// 		};
+			
+	// 	};
+	// };
+
 };
 
 
@@ -162,7 +193,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-  };
+	};
 		lcd2: pcf857x@21{
 		compatible = "nxp,pcf857x";
 		reg = <0x21>;
@@ -177,6 +208,9 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-  };
+	};
+  
 
 };
+
+

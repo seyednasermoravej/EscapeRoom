@@ -69,65 +69,6 @@ int main()
 // }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // int ret;
-    // 	if (!gpio_is_ready_dt(&allAddress[1])) {
-	// 	printk("Error: address device %s is not ready\n",
-	// 	       allAddress[1].port->name);
-	// 	return 0;
-	// }
-    // 	ret = gpio_pin_configure_dt(&allAddress[1], GPIO_INPUT);
-	// if (ret != 0) {
-	// 	printk("Error %d: failed to configure %s pin %d\n",
-	// 	       ret, allAddress[1].port->name, allAddress[1].pin);
-	// 	return 0;
-	// }
-    // 	if (!gpio_is_ready_dt(&address)) {
-	// 	printk("Error: address device %s is not ready\n",
-	// 	       address.port->name);
-	// 	return 0;
-	// }
-    // 	ret = gpio_pin_configure_dt(&address, GPIO_INPUT);
-	// if (ret != 0) {
-	// 	printk("Error %d: failed to configure %s pin %d\n",
-	// 	       ret, address.port->name, address.pin);
-	// 	return 0;
-	// }
-
-	// if (!gpio_is_ready_dt(&led00)) {
-	// 	return;
-	// }
-    // 	ret = gpio_pin_configure_dt(&led00, GPIO_OUTPUT_ACTIVE);
-	// if (ret < 0) {
-	// 	return;
-	// }
-
-    // while (1)
-    // {
-    //     // uint8_t addr = gpio_pin_get_dt(&address);
-    //     // // uint8_t addr = gpio_pin_get_dt(&allAddress[1]);
-    //     // LOG_INF("address 0 value: %d", addr);
-    //     		ret = gpio_pin_toggle_dt(&led00);
-	// 	if (ret < 0) {
-	// 		return;
-	// 	}
-    //     k_msleep(1000);
-    // }
     threadsCreation();
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));

@@ -1,0 +1,19 @@
+
+description: I2C driver for COLOR LIGHT-TO-DIGITAL CONVERTER with IR FILTER module.
+
+compatible: "taos,tcs34725"
+
+include: [i2c-device.yaml]
+
+properties:
+  int-gpios:
+    required: false 
+    type: phandle-array
+    description: |
+      GPIO connected to the controller IRQ pin. This pin is active-low.
+
+  led-gpios:
+    required: false 
+    type: phandle-array
+    description: |
+      GPIO connected to the controller RST pin. This pin is active-low.
