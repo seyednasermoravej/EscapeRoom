@@ -10,6 +10,7 @@
 #define LCD2_TOPIC              "sub/lcd2"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "sub/puzzleType"
+#define LED1_TOPIC              "sub/led1"
 
 
 #define DEV_ADDR_TOPIC          "pub/devAddr"
@@ -28,6 +29,7 @@ extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;
 extern struct mqtt_topic builtInLed_topic;
 extern struct mqtt_topic puzzleType_topic;
+extern struct mqtt_topic led_topic;
 
 #ifdef __cplusplus
 }

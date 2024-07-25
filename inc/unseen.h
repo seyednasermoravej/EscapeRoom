@@ -12,14 +12,14 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
-#include <zephyr/input/input_kbd_matrix.h>
+// #include <zephyr/input/input_kbd_matrix.h>
 
 class Unseen
 {
 
 public:
     Unseen();
-    void mqttInMessageHandler(struct MqttMsg *msg);
+    void messageHandler(struct MqttMsg *msg);
 
 private:
 

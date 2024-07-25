@@ -15,39 +15,73 @@ static struct gpio_callback rotaryEncoder_cb_data;
 ConfigDevice:: ConfigDevice()
 {
     inputsInit();
-    lcdThreadCreate();
+    // lcdThreadCreate();
 }
 static int prevPin5;
+static int prevPin8;
 
 void rotaryChange(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
     struct MqttMsg msg;
     strcpy(msg.topic, ROTARY_ENCODER_TOPIC);
-    if(pins == BIT(rotaryEncoder[2].pin))
+    if((pins == BIT(rotaryEncoder[0].pin) || (pins == BIT(rotaryEncoder[1].pin)) || (pins == BIT(rotaryEncoder[2].pin))))
     {
-        LOG_INF("pressed");
-        strcpy(msg.msg,"button pressed");
-    }
-    else
-    {
-        int pin5 = gpio_pin_get_dt(&rotaryEncoder[0]);
-        int pin6 = gpio_pin_get_dt(&rotaryEncoder[1]);
-        if(prevPin5 != pin5)
+        if(pins == BIT(rotaryEncoder[2].pin))
         {
-            if(pin6 != prevPin5)
+            LOG_INF("language pressed");
+            strcpy(msg.msg,"language button pressed");
+        }
+        else
+        {
+            int pin5 = gpio_pin_get_dt(&rotaryEncoder[0]);
+            int pin6 = gpio_pin_get_dt(&rotaryEncoder[1]);
+            if(prevPin5 != pin5)
             {
-                LOG_INF("counterclockwise");
-                strcpy(msg.msg, "counterclockwise");
+                if(pin6 != prevPin5)
+                {
+                    LOG_INF("language counterclockwise");
+                    strcpy(msg.msg, "language counterclockwise");
+                }
+                else
+                {
+                    LOG_INF("language clockwise");
+                    strcpy(msg.msg,"language clockwise");
+                }
             }
-            else
-            {
-                LOG_INF("clockwise");
-                strcpy(msg.msg,"clockwise");
-            }
+
+            prevPin5 = pin5;
         }
 
-        prevPin5 = pin5;
+    }
+    else if((pins == BIT(rotaryEncoder[3].pin) || (pins == BIT(rotaryEncoder[4].pin)) || (pins == BIT(rotaryEncoder[5].pin))))
+    {
+        if(pins == BIT(rotaryEncoder[5].pin))
+        {
+            LOG_INF("room pressed");
+            strcpy(msg.msg,"room button pressed");
+        }
+        else
+        {
+            int pin8 = gpio_pin_get_dt(&rotaryEncoder[3]);
+            int pin9 = gpio_pin_get_dt(&rotaryEncoder[4]);
+            if(prevPin8 != pin8)
+            {
+                if(pin9 != prevPin8)
+                {
+                    LOG_INF("room counterclockwise");
+                    strcpy(msg.msg, "room counterclockwise");
+                }
+                else
+                {
+                    LOG_INF("room clockwise");
+                    strcpy(msg.msg,"room clockwise");
+                }
+            }
+
+            prevPin8 = pin8;
+        }
+
     }
     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 }
@@ -88,8 +122,8 @@ int ConfigDevice:: inputsInit()
 {
     int ret;
     uint32_t interruptBits = 0;
+    device_init(rotaryEncoder -> port);
     for(unsigned int i = 0; i < ARRAY_SIZE(rotaryEncoder); i++){
-        device_init(rotaryEncoder[i].port);
         if (!device_is_ready(rotaryEncoder[i].port)) {
 		    return -1;
 	    }
@@ -109,5 +143,6 @@ int ConfigDevice:: inputsInit()
 	gpio_init_callback(&rotaryEncoder_cb_data, rotaryChange, interruptBits);
 	gpio_add_callback(rotaryEncoder[0].port, &rotaryEncoder_cb_data); 
     prevPin5 = gpio_pin_get_dt(&rotaryEncoder[0]);
+    prevPin8 = gpio_pin_get_dt(&rotaryEncoder[3]);
 	return ret;
 }

@@ -225,7 +225,7 @@ bool Adafruit_PN532::begin() {
   // //     ser_dev->read();
   // }
       if (!i2c_dev) {
-        printf("Error: I2C device not found\n");
+        LOG_ERR("Error: I2C device not found\n");
         return false;
     }
   // else {

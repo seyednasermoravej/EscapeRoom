@@ -21,6 +21,7 @@
 #include "servos.h"
 #include "configDevice.h"
 #include "unseen.h"
+#include "numbersGuessing.h"
 
 enum PuzzleTypes
 {
@@ -28,6 +29,8 @@ enum PuzzleTypes
     SERVOS_PUZZLE,
     GATE_PUZZLE,
     CONFIG_DEVICE_PUZZLE,
+    NUMBERS_GUESSING_PUZZLE,
+    UNSEEN_PUZZLE,
 
 };
 
@@ -53,7 +56,7 @@ class Puzzle
 {
 public:
     Puzzle();
-    void mqttInMessageHandler(struct MqttMsg *msg);
+    void messageHandler(struct MqttMsg *msg);
     bool deviceSpecified = false;
     PuzzleTypes puzzleType = UNSPECIFIED;
 
@@ -63,6 +66,7 @@ private:
     Servos *servos;
     ConfigDevice *configDevice;
     Unseen *unseen;
+    NumbersGuessing *numbersGuessing;
 
     int builtIntLedInit();
 

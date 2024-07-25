@@ -23,8 +23,7 @@ Puzzle *puzzle = nullptr;
 void Puzzle:: puzzleTypeSelection(char *type)
 {
     deviceSpecified = true;
-
-    
+ 
     gpio_pin_set_dt(&builtInLed, 1);
 
     if(strcmp(type, "servos") == 0)
@@ -37,13 +36,25 @@ void Puzzle:: puzzleTypeSelection(char *type)
     {
         puzzleType = GATE_PUZZLE;
         gate = new Gate;
-        LOG_INF("Puzzle type is Gate");
+        LOG_INF("Puzzle type is Gate.");
     }
     else if(strcmp(type, "config") == 0)
     {
         puzzleType = CONFIG_DEVICE_PUZZLE;
         configDevice = new ConfigDevice;
         LOG_INF("Device is configuring by user.");
+    }
+    else if(strcmp(type, "numbers guessing") == 0)
+    {
+        puzzleType = NUMBERS_GUESSING_PUZZLE;
+        numbersGuessing = new NumbersGuessing;
+        LOG_INF("Puzzle type is numbers guessing.");
+    }
+    else if(strcmp(type, "nuseen") == 0)
+    {
+        puzzleType = UNSEEN_PUZZLE;
+        unseen = new Unseen;
+        LOG_INF("Puzzle type is unseen.");
     }
     else
     {
@@ -55,7 +66,7 @@ void Puzzle:: puzzleTypeSelection(char *type)
 }
 
 
-void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
+void Puzzle:: messageHandler(struct MqttMsg *msg)
 {
     int ret;
     if(!deviceSpecified)
@@ -103,6 +114,14 @@ void Puzzle:: mqttInMessageHandler(struct MqttMsg *msg)
                 configDevice -> messageHandler(msg);
                 break;
 
+            case NUMBERS_GUESSING_PUZZLE:
+                numbersGuessing -> messageHandler(msg);
+                break;
+
+            case UNSEEN_PUZZLE:
+                unseen -> messageHandler(msg);
+                break;
+
             default:
                 break;
             }
@@ -142,7 +161,7 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            puzzle -> mqttInMessageHandler(msg);
+            puzzle -> messageHandler(msg);
             memset(msg, 0, sizeof(struct MqttMsg));
            
         }
@@ -154,7 +173,7 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            puzzle -> mqttInMessageHandler(msg);
+            puzzle -> messageHandler(msg);
             memset(msg, 0, sizeof(struct MqttMsg));
            
         }
