@@ -16,6 +16,7 @@
 #define RFID_IN_TOPIC           "pub/rfidIn" 
 #define ROTARY_ENCODER_TOPIC    "pub/rotaryEncoder"
 #define LOGS_TOPIC              "pub/logs"
+#define KEYPAD_TOPIC            "pub/keypad"
 
 
 #ifdef __cplusplus

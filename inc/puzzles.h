@@ -20,6 +20,7 @@
 #include "gate.h"
 #include "servos.h"
 #include "configDevice.h"
+#include "unseen.h"
 
 enum PuzzleTypes
 {
@@ -61,6 +62,7 @@ private:
     Gate *gate;
     Servos *servos;
     ConfigDevice *configDevice;
+    Unseen *unseen;
 
     int builtIntLedInit();
 
