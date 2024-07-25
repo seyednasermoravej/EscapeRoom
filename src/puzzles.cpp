@@ -25,6 +25,8 @@ void Puzzle:: puzzleTypeSelection(char *type)
     deviceSpecified = true;
 
     
+    gpio_pin_set_dt(&builtInLed, 1);
+
     if(strcmp(type, "servos") == 0)
     {
         puzzleType = SERVOS_PUZZLE;
@@ -46,6 +48,8 @@ void Puzzle:: puzzleTypeSelection(char *type)
     else
     {
         deviceSpecified = false;
+        LOG_INF("Puzzle type is not recognized.");
+        gpio_pin_set_dt(&builtInLed, 0);
     }
 
 }
@@ -118,7 +122,7 @@ int Puzzle:: builtIntLedInit()
 		       builtInLed.port->name);
 		return 0;
 	}
-    ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_ACTIVE);
+    ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_INACTIVE);
 
 	if (ret != 0) {
 		printk("Error %d: failed to configure %s pin %d\n",
