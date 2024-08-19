@@ -24,6 +24,24 @@
 		};
 		zephyr,deferred-init;
 	};
+	servos_control
+	{
+		compatible = "gpio-keys";
+		servos_zero: servos-zero{
+			gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_0>;
+		};
+		servos_home: servos-home
+		{
+			gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_HOME>;
+		};
+		servos_timer: servos-timer
+		{
+			gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_T>;
+		};
+	};
 	ledandkeys
 	{
 		compatible = "gpio-keys";
