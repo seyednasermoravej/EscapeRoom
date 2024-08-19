@@ -8,7 +8,7 @@ LOG_MODULE_REGISTER(unseen, LOG_LEVEL_INF);
 Unseen:: Unseen()
 {
     device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)));
-    keypad = new Keypad(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)), &msqSendToMQTT);
+    // keypad = new Keypad(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)), &msqSendToMQTT);
 }
 
 void Unseen:: messageHandler(struct MqttMsg *msg)

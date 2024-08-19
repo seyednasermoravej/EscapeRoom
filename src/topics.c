@@ -52,11 +52,147 @@ struct mqtt_topic puzzleType_topic = {
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
-    struct mqtt_topic led_topic = {
+    struct mqtt_topic led1_topic = {
     .topic =
         {
 
             .utf8 = (uint8_t*)LED1_TOPIC,
             .size = strlen(LED1_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic led2_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED2_TOPIC,
+            .size = strlen(LED2_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic led3_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED3_TOPIC,
+            .size = strlen(LED3_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic led4_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED4_TOPIC,
+            .size = strlen(LED4_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic led5_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED5_TOPIC,
+            .size = strlen(LED5_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic led6_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED6_TOPIC,
+            .size = strlen(LED6_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic led7_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED7_TOPIC,
+            .size = strlen(LED7_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic led8_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LED8_TOPIC,
+            .size = strlen(LED8_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+
+       struct mqtt_topic seg1_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG1_TOPIC,
+            .size = strlen(SEG1_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic seg2_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG2_TOPIC,
+            .size = strlen(SEG2_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic seg3_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG3_TOPIC,
+            .size = strlen(SEG3_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+    struct mqtt_topic seg4_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG4_TOPIC,
+            .size = strlen(SEG4_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic seg5_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG5_TOPIC,
+            .size = strlen(SEG5_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic seg6_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG6_TOPIC,
+            .size = strlen(SEG6_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic seg7_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG7_TOPIC,
+            .size = strlen(SEG7_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic seg8_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SEG8_TOPIC,
+            .size = strlen(SEG8_TOPIC)
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};

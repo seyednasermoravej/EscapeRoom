@@ -20,6 +20,7 @@ extern struct k_msgq msqRfidIn;
 extern struct k_msgq msqLcd1;
 extern struct k_msgq msqLcd2;
 extern struct k_msgq msqkeypad;
+extern struct k_msgq msqLedandKey;
 
 #define         MESSAGE_QUEUE_LEN       128
 #define         TOPIC_LEN               128

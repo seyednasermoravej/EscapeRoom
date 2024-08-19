@@ -14,14 +14,15 @@ extern "C" {
 
 
 #define delay(x)                    k_msleep(x)
+#define delayMicroseconds(x)        k_usleep(x)
 #define INPUT                       GPIO_INPUT
 #define OUTPUT                      GPIO_OUTPUT
 #define pinMode(x, y)               gpio_pin_configure_dt(x, y)
 #define digitalWrite(x, y)          gpio_pin_set_dt(x, y)
 #define digitalRead(x)              gpio_pin_get_dt(x)
 
-#define LOW                         GPIO_OUTPUT_LOW
-#define HIGH                        GPIO_OUTPUT_HIGH
+#define LOW                         0 
+#define HIGH                        1 
 
 // #define i2c_dev->write(buf, n)      i2c_write_dt(i2c_dev, buf, n)
 

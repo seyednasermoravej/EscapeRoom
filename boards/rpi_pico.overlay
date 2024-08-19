@@ -24,6 +24,27 @@
 		};
 		zephyr,deferred-init;
 	};
+	ledandkeys
+	{
+		compatible = "gpio-keys";
+		tmstb: tm_stb {
+			gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH)>;
+			label = "tm1638 stb pin";
+			zephyr,code = <INPUT_KEY_0>;
+		};				
+		tmclk: tm_clk {
+			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
+			label = "tm1638 clock pin";
+			zephyr,code = <INPUT_KEY_0>;
+		};	
+		tmdo: tm_do {
+			gpios = <&gpio0 8 (GPIO_ACTIVE_HIGH)>;
+			label = "tm1638 do pin";	
+			zephyr,code = <INPUT_KEY_0>;
+		};
+		zephyr,deferred-init;
+	};
+
 	out-rfid	
 	{
 		compatible = "gpio-leds";
