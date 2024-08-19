@@ -56,6 +56,12 @@ void Puzzle:: puzzleTypeSelection(char *type)
         unseen = new Unseen;
         LOG_INF("Puzzle type is unseen.");
     }
+    else if(strcmp(type, "laboratory") == 0)
+    {
+        puzzleType = LABORATORY_PUZZLE;
+        laboratory = new Laboratory;
+        LOG_INF("Puzzle type is laboratory.");
+    }
     else
     {
         deviceSpecified = false;
@@ -120,6 +126,9 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
             case UNSEEN_PUZZLE:
                 unseen -> messageHandler(msg);
                 break;
+
+            case LABORATORY_PUZZLE:
+                laboratory -> messageHandler(msg);
 
             default:
                 break;

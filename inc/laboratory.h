@@ -19,6 +19,8 @@ class Laboratory
 {
 public:
     Laboratory();
+    void messageHandler(struct MqttMsg *msg);
+
 
 private:
 

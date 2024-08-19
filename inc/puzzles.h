@@ -22,6 +22,7 @@
 #include "configDevice.h"
 #include "unseen.h"
 #include "numbersGuessing.h"
+#include "laboratory.h"
 
 enum PuzzleTypes
 {
@@ -31,6 +32,7 @@ enum PuzzleTypes
     CONFIG_DEVICE_PUZZLE,
     NUMBERS_GUESSING_PUZZLE,
     UNSEEN_PUZZLE,
+    LABORATORY_PUZZLE,
 
 };
 
@@ -67,6 +69,7 @@ private:
     ConfigDevice *configDevice;
     Unseen *unseen;
     NumbersGuessing *numbersGuessing;
+    Laboratory *laboratory;
 
     int builtIntLedInit();
 
