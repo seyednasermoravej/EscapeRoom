@@ -1,3 +1,7 @@
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/input/keymap.h>
+
+
 /{
 	motors{
 		servos: servos{
@@ -16,6 +20,7 @@
 		button0: button_0 {
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -38,6 +43,7 @@
 			<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
 			<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
 			label = "Device address";
+			zephyr,code = <INPUT_KEY_0>;
 		};
 	};
 	relayslocks
@@ -46,10 +52,12 @@
 		relayscheck: relays_check
 		{
 			gpios = <&gpio0 22 (GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		maglocks: maglocks
 		{
 			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -59,6 +67,7 @@
 		relaycontrol: relay_control
 		{
 			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+			
 		};
 		zephyr,deferred-init;
 	};
@@ -78,25 +87,45 @@
 		rotaryencoder: encoderpins{
 			gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_ACTIVE_LOW)>, <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 					<&gpio0 9 (GPIO_ACTIVE_LOW)>, <&gpio0 10 (GPIO_ACTIVE_LOW)>, <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 			
 		zephyr,deferred-init;
 	};
-	keypad: kbd-matrix{
+		kbd_matrix: kbd-matrix {
 		compatible = "gpio-kbd-matrix";
-		row-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-					<&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-					<&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-					<&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-					// <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-		col-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>,
-					<&gpio0 12 (GPIO_ACTIVE_LOW)>,
-					<&gpio0 13 (GPIO_ACTIVE_LOW)>,
-					<&gpio0 14 (GPIO_ACTIVE_LOW)>;
-					// <&gpio0 15 (GPIO_ACTIVE_LOW)>,
-		zephyr,deferred-init;
+		row-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			
+		col-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>,
+			    <&gpio0 6 GPIO_ACTIVE_LOW>;
+		// zephyr-code = <0 1 2 4>;		
+		// no-ghostkey-check;
+		keymap{
+			compatible = "input-keymap";
+			keymap = <
+			        MATRIX_KEY(0, 0, INPUT_KEY_1)
+					MATRIX_KEY(0, 1, INPUT_KEY_2)
+					// MATRIX_KEY(0, 2, INPUT_KEY_3)
+					MATRIX_KEY(1, 0, INPUT_KEY_4)
+					MATRIX_KEY(1, 1, INPUT_KEY_5)
+					// MATRIX_KEY(1, 2, INPUT_KEY_6)
+					// MATRIX_KEY(2, 0, INPUT_KEY_7)
+					// MATRIX_KEY(2, 1, INPUT_KEY_8)
+					// MATRIX_KEY(2, 2, INPUT_KEY_9)
+			>;
+			row-size = <2>;
+			col-size = <2>;
+		};
+		// zephyr,deferred-init;
+		debounce-down-ms = <80>;
+		debounce-up-ms = <40>;
+		// poll-timeout-ms = <500>;
+		// idle-mode = "interrupt";
 
 	};
+
+
 };
 
 
@@ -167,7 +196,6 @@ pico_spi: &spi0 {};
 &i2c0{
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
-	label = "I2C_0";
 	rfidin: pn532@24{
 		compatible = "nxp,pn532";
 		status = "okay";

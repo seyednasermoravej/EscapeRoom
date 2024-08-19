@@ -120,7 +120,7 @@ int Gate:: addrKeysInit()
 {
     int ret;
 
-    for(int i = 0; i < ARRAY_SIZE(addresses); i++){
+    for(unsigned int i = 0; i < ARRAY_SIZE(addresses); i++){
         if (!device_is_ready(addresses[i].port)) {
 		    return -1;
 	    }

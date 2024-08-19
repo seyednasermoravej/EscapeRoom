@@ -6,7 +6,7 @@ struct k_msgq msqReceivedFromMQTT;
 struct k_msgq msqSendToMQTT;
 struct k_msgq msqLcd1;
 struct k_msgq msqLcd2;
-
+struct k_msgq msqKeypad;
 
 
 K_MSGQ_DEFINE(msqReceivedFromMQTT, sizeof(struct MqttMsg), 8, 4);

@@ -33,7 +33,14 @@
 			"*.tcc": "c",
 			"sstream": "cpp",
 			"util.h": "c",
-			"random.h": "c"
+			"random.h": "c",
+			"device.h": "c",
+			"system_error": "cpp",
+			"input_keymap.h": "c",
+			"cstddef": "cpp",
+			"limits": "cpp",
+			"version": "cpp",
+			"input_kbd_matrix.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

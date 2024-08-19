@@ -1,5 +1,6 @@
 menu "Escape Room"
-
+config INPUT_KBD_DRIVE_COLUMN_HOOK
+	default y
 
 config MQTT_SUB_TOPIC
 	string "MQTT subscribe topic"

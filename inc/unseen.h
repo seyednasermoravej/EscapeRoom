@@ -8,11 +8,8 @@
 #include "messageQueues.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <zephyr/device.h>
-#include <zephyr/drivers/gpio.h>
-#include <zephyr/sys/util.h>
-#include <zephyr/devicetree.h>
-// #include <zephyr/input/input_kbd_matrix.h>
+#include "keypad.h"
+
 
 class Unseen
 {
@@ -22,7 +19,7 @@ public:
     void messageHandler(struct MqttMsg *msg);
 
 private:
-
+    Keypad *keypad;
 
 };
 

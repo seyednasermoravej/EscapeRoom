@@ -3,14 +3,16 @@
 
 LOG_MODULE_REGISTER(unseen, LOG_LEVEL_INF);
 
-// static const struct device *matrixDev = INPUT_KBD_MATRIX_DT_DEFINE_ROW_COL(DT_NODELABEL(keypad), 4, 4)
+#define KEYPAD_NODE DT_NODELABEL(kbd_matrix)
 
 Unseen:: Unseen()
 {
-    // device_init(matrixDev);
+    device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)));
+    keypad = new Keypad(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)), &msqSendToMQTT);
 }
 
 void Unseen:: messageHandler(struct MqttMsg *msg)
 {
 
 }
+

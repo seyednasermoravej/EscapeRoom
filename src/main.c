@@ -5,7 +5,7 @@
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
-int threadsCreation();
+void threadsCreation();
 void i2cScanner();
 
 extern void puzzleThreadCreate();
@@ -27,7 +27,7 @@ int main()
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/escape");
     strcpy(send->msg, "allah");
-    int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+    k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
         // strcat(send, itoa(counter, buf, 10));
@@ -39,7 +39,7 @@ int main()
 }
 
 
-int threadsCreation()
+void threadsCreation()
 {
     mqttThreadCreate();
     puzzleThreadCreate();

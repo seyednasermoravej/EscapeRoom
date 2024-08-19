@@ -68,7 +68,6 @@ void Puzzle:: puzzleTypeSelection(char *type)
 
 void Puzzle:: messageHandler(struct MqttMsg *msg)
 {
-    int ret;
     if(!deviceSpecified)
     {
         if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
@@ -148,7 +147,7 @@ int Puzzle:: builtIntLedInit()
 		       ret, builtInLed.port->name, builtInLed.pin);
 		return 0;
 	}
-
+    return ret;
 }
 
 void puzzleEntryPoint(void *, void *, void *)
