@@ -4,14 +4,22 @@
 
 /{
 	motors{
-		servos: servos{
-		compatible = "pwm-servo";
+		servos: servos
+		{
+			compatible = "pwm-servo";
 			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 9 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
 					<&pwm 10 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 11 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			min-pulse = <PWM_USEC(700)>;
 			max-pulse = <PWM_USEC(2500)>;
 			status ="okay";
-		zephyr,deferred-init;
+			zephyr,deferred-init;
+		};
+		disc: disc
+		{
+			compatible = "aasd-servo";
+			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			pd-gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+			pp-gpios = <&gpio0 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 12 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
 		};
 	};
 	buttons

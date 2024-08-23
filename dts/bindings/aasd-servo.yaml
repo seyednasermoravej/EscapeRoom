@@ -1,0 +1,23 @@
+
+description: PWM-driven AASD motor driver.
+
+compatible: "aasd-servo"
+
+include: base.yaml
+
+properties:
+  pwms:
+    required: true
+    type: phandle-array
+    description: PWM specifier driving the servo motor.
+
+  pd-gpios:
+    required: true
+    type: phandle-array
+    description: |
+      GPIOs connected to the controller direction pins. The first index corresponds to PD+ and the second one corresponds to the PD-.
+  pp-gpios:
+    required: true
+    type: phandle-array
+    description: |
+      GPIOs connected to the puls pins. The first index corresponds to PP+ and the second one corresponds to the PP-.
