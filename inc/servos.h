@@ -13,7 +13,7 @@
 #include <zephyr/devicetree.h>
 
 #include "topics.h"
-
+#include "utils.h"
 
 
 #define STEP PWM_USEC(100)

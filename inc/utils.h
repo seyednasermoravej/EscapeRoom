@@ -13,6 +13,7 @@
 #include <errno.h>
 
 #include <zephyr/sys/util.h>
+#include <zephyr/drivers/pwm.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +22,8 @@ extern "C" {
 void hex2stringMac(const uint8_t *hex, int length, char *buf);
 
 void gpioInit(const struct gpio_dt_spec *gpio, char *message);
+
+void servoInit(const struct pwm_dt_spec *pwm, char *message);
 
 #ifdef __cplusplus
 }

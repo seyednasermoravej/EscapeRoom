@@ -27,3 +27,16 @@ void gpioInit(const struct gpio_dt_spec *gpio, char *message)
 	}
     
 }
+
+void servoInit(const struct pwm_dt_spec *pwm, char *message)
+{
+    device_init(pwm->dev);
+    char buf[200];
+    strcpy(buf, message);
+    strcat(buf, pwm->dev->name);
+    if (!pwm_is_ready_dt(pwm)) {
+        LOG_ERR("%s\n", buf);
+    }
+
+}
+

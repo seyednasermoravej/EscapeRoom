@@ -58,29 +58,11 @@ void Aasd:: servoInit()
 
 void Aasd:: gpiosInit()
 {
-    device_init(ppP->port);
-	if (!gpio_is_ready_dt(ppP)) {
-		LOG_ERR("Error: PP+ %s is not ready\n",
-		       ppP->port->name);
-	}
+    gpioInit(ppP, "Error: PP+ is not ready\n");
+    gpioInit(ppN, "Error: PP- is not ready\n");
+    gpioInit(pdP, "Error: PD+ is not ready\n");
+    gpioInit(pdN, "Error: PD- is not ready\n");
 
-    device_init(ppN->port);
-	if (!gpio_is_ready_dt(ppN)) {
-		LOG_ERR("Error: PP- %s is not ready\n",
-		       ppN->port->name);
-	}
-
-    device_init(pdP->port);
-	if (!gpio_is_ready_dt(pdP)) {
-		LOG_ERR("Error: PD+ %s is not ready\n",
-		       pdP->port->name);
-	}
-
-    device_init(pdN->port);
-	if (!gpio_is_ready_dt(pdN)) {
-		LOG_ERR("Error: PD- %s is not ready\n",
-		       pdN->port->name);
-	}
     // device_init(ppP->port)
 
 }
