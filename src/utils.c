@@ -1,5 +1,6 @@
-#include "util.h"
+#include "utils.h"
 
+LOG_MODULE_REGISTER(utils, LOG_LEVEL_ERR);
 void hex2stringMac(const uint8_t *hex, int length, char *buf)
 {
     for(int i = 0; i < length - 1; i++)
@@ -11,4 +12,18 @@ void hex2stringMac(const uint8_t *hex, int length, char *buf)
     hex2char(*(hex + (length - 1)) >> 4, (buf + (3 * (length - 1))));
     hex2char(*(hex + (length - 1)) & 0xf, (buf + (3 * (length - 1) + 1)));
     *(buf + (3 * (length - 1) + 2)) = '\0';
+}
+
+
+void gpioInit(const struct gpio_dt_spec *gpio, char *message)
+{
+    device_init(gpio->port);
+    char buf[200];
+    strcpy(buf, message);
+    strcat(buf, gpio->port->name);
+	if (!gpio_is_ready_dt(gpio))
+    {
+		LOG_ERR("%s", buf);
+	}
+    
 }

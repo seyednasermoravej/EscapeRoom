@@ -1,5 +1,5 @@
-#ifndef __UTIL_H__
-#define __UTIL__H__
+#ifndef __UTILS__H__
+#define __UTILS__H__
 
 #include <zephyr/logging/log.h>
 
@@ -7,6 +7,7 @@
 #include <zephyr/net/socket.h>
 #include <zephyr/net/mqtt.h>
 #include <zephyr/random/random.h>
+#include <zephyr/drivers/gpio.h>
 
 #include <string.h>
 #include <errno.h>
@@ -17,8 +18,9 @@
 extern "C" {
 #endif
 
-extern void hex2stringMac(const uint8_t *hex, int length, char *buf);
+void hex2stringMac(const uint8_t *hex, int length, char *buf);
 
+void gpioInit(const struct gpio_dt_spec *gpio, char *message);
 
 #ifdef __cplusplus
 }

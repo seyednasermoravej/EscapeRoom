@@ -4,7 +4,7 @@
 #include <zephyr/kernel.h>
 #include "myArduino.h"
 #include <zephyr/logging/log.h>
-#include "util.h"
+#include "utils.h"
 #include "topics.h"
 #include "messageQueues.h"
 

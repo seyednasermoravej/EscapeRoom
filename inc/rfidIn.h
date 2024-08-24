@@ -24,7 +24,7 @@
 #include "myArduino.h"
 #include "messageQueues.h"
 #include <zephyr/logging/log.h>
-#include "util.h"
+#include "utils.h"
 #include "topics.h"
 // here i'm porint arduino to zephyr APIs 
 

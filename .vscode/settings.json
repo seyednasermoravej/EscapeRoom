@@ -40,7 +40,9 @@
 			"cstddef": "cpp",
 			"limits": "cpp",
 			"version": "cpp",
-			"input_kbd_matrix.h": "c"
+			"input_kbd_matrix.h": "c",
+			"i2c.h": "c",
+			"stdlib.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

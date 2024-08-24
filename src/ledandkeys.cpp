@@ -66,20 +66,20 @@ void ledandkeys:: ledandkeysinit()
 
   device_init(clkpin.port);
 	if (!gpio_is_ready_dt(&clkpin)) {
-		printk("Error: button device %s is not ready\n",
+		LOG_INF("Error: button device %s is not ready\n",
 		       clkpin.port->name);
 	}
 
   device_init(stbpin.port);
 	if (!gpio_is_ready_dt(&stbpin)) {
-		printk("Error: button device %s is not ready\n",
+		LOG_INF("Error: button device %s is not ready\n",
 		       stbpin.port->name);
 	}
 
 
   device_init(diopin.port);
 	if (!gpio_is_ready_dt(&diopin)) {
-		printk("Error: button device %s is not ready\n",
+		LOG_INF("Error: button device %s is not ready\n",
 		       diopin.port->name);
 	}
 

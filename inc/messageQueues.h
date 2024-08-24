@@ -3,6 +3,7 @@
 
 // #include <mqueue.h>
 #include "zephyr/kernel.h"
+#include "aasdDriver.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +22,8 @@ extern struct k_msgq msqLcd1;
 extern struct k_msgq msqLcd2;
 extern struct k_msgq msqkeypad;
 extern struct k_msgq msqLedandKey;
+extern struct k_msgq msqAasdIn;
+extern struct k_msgq msqAasdOut;
 
 #define         MESSAGE_QUEUE_LEN       128
 #define         TOPIC_LEN               128
