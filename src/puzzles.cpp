@@ -14,6 +14,11 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 Puzzle::Puzzle() {
 
     builtIntLedInit();
+    Disc *disc = new Disc;
+    while (1)
+    {
+        k_msleep(11110);
+    }
 }
 
 

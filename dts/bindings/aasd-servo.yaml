@@ -16,8 +16,45 @@ properties:
     type: phandle-array
     description: |
       GPIOs connected to the controller direction pins. The first index corresponds to PD+ and the second one corresponds to the PD-.
-  pp-gpios:
+
+  enable-gpios:
     required: true
     type: phandle-array
     description: |
-      GPIOs connected to the puls pins. The first index corresponds to PP+ and the second one corresponds to the PP-.
+      GPIO connectedto the enable pins.
+  
+  set-zero-speed-gpios:
+    required: false
+    type: phandle-array
+    description: |
+      GPIO force the servo to stop.
+  
+  read-zero-speed-gpios:
+    required: false
+    type: phandle-array
+    description: |
+      GPIO indicating full servo stop.
+
+  ready-gpios:
+    required: false
+    type: phandle-array
+    description: |
+      when the servo is ready, this pin gets high.
+  
+  pulse-round:
+    required: true
+    type: int
+    description: Number of pulses per round.
+  
+  max-frequency:
+    required: true
+    type: int
+    description: Maximum frequency in Hz.
+  min-frequency:
+    required: true
+    type: int
+    description: Minimum frequency in Hz.
+  pulse-width:
+    required: true
+    type: int
+    description: Minimum pulse width in each period in nanosecond.

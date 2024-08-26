@@ -19,7 +19,11 @@
 			compatible = "aasd-servo";
 			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			pd-gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-			pp-gpios = <&gpio0 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 12 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+			enable-gpios = <&gpio0 13 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+			pulse-round = <2500>;
+			max-frequency = <200000>;
+			min-frequency = <100>;
+			pulse-width = <PWM_MSEC(1)>;
 			zephyr,deferred-init;
 		};
 	};

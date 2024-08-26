@@ -23,18 +23,19 @@ void gpioInit(const struct gpio_dt_spec *gpio, char *message)
     strcat(buf, gpio->port->name);
 	if (!gpio_is_ready_dt(gpio))
     {
-		LOG_ERR("%s", buf);
+		LOG_ERR("%s\n", buf);
 	}
     
 }
 
-void servoInit(const struct pwm_dt_spec *pwm, char *message)
+void pwmInit(const struct pwm_dt_spec *pwm, char *message)
 {
     device_init(pwm->dev);
     char buf[200];
     strcpy(buf, message);
     strcat(buf, pwm->dev->name);
-    if (!pwm_is_ready_dt(pwm)) {
+    if (!pwm_is_ready_dt(pwm)) 
+    {
         LOG_ERR("%s\n", buf);
     }
 

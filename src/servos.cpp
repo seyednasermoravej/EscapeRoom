@@ -31,7 +31,7 @@ static const struct gpio_dt_spec timer = GPIO_DT_SPEC_GET_OR(SERVOS_TIMER_NODE, 
 Servos:: Servos()
 {
     for (size_t i = 0; i < ARRAY_SIZE(allServos); i++) {
-        servoInit(&allServos[i], "Error: PWM channel %i is not ready");
+        pwmInit(&allServos[i], "Error: PWM channel %i is not ready.");
     }
 }
 

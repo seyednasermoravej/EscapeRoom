@@ -142,7 +142,7 @@
 #define GPIO_PIN_WR(dev, pin, bit)						\
 	do {									\
 		if (gpio_pin_set_raw((dev), (pin), (bit))) {			\
-			printk("Err set " GPIO_NAME "%d! %x\n", (pin), (bit));	\
+			LOG_ERR("Err set " GPIO_NAME "%d! %x\n", (pin), (bit));	\
 		}								\
 	} while (0)								\
 
@@ -150,7 +150,7 @@
 #define GPIO_PIN_CFG(dev, pin, dir)						\
 	do {									\
 		if (gpio_pin_configure((dev), (pin), (dir))) {			\
-			printk("Err cfg " GPIO_NAME "%d! %x\n", (pin), (dir));	\
+			LOG_ERR("Err cfg " GPIO_NAME "%d! %x\n", (pin), (dir));	\
 		}								\
 	} while (0)
 

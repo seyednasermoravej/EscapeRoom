@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <zephyr/drivers/i2c.h>
 
-
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 void threadsCreation();
 void i2cScanner();
+void test();
 
 extern void puzzleThreadCreate();
 extern void mqttThreadCreate();
@@ -15,7 +15,8 @@ int main()
 { 
     //performing new update on firmware
 
-    
+    // test();
+
 
     dhcpClient();
     //http request for getting DFU
@@ -78,4 +79,10 @@ void i2cScanner()
         }
         k_msleep(1000);
     }
+}
+
+
+void test()
+{
+    puzzleThreadCreate();
 }

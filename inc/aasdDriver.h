@@ -29,6 +29,8 @@ struct AasdMsg
     uint16_t speed;
 };
 
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -38,29 +40,48 @@ struct AasdMsg
 class Aasd 
 {
 public:
-    Aasd(struct k_msgq *_queueIn, struct k_msgq *_queueOut, const struct pwm_dt_spec *_servo, const struct gpio_dt_spec *_pdP, 
-    const struct gpio_dt_spec *_pdN, const struct gpio_dt_spec *_ppP, 
-    const struct gpio_dt_spec *_ppN);
-    void messageHandler(struct AasdMsg *msg);
+    Aasd( 
+    // Aasd(struct k_msgq *_queueIn, struct k_msgq *_queueOut, 
+    const struct pwm_dt_spec *_ppP,
+    const struct gpio_dt_spec *_pdP, 
+    const struct gpio_dt_spec *_pdN, 
+    const struct gpio_dt_spec *_setZeroSpeedPin,
+    const struct gpio_dt_spec *_readZeroSpeedPin,
+    const struct gpio_dt_spec *_enable,
+    const struct gpio_dt_spec *_servoReady,
+    const uint16_t _pr, const uint32_t _maxPulseFreq, const uint32_t _minPulseFreq,
+    const uint32_t _minPulseWidth);
 
-private:
-    const struct pwm_dt_spec *servo;
-    const struct gpio_dt_spec *pdP;
-    const struct gpio_dt_spec *pdN;
-    const struct gpio_dt_spec *ppP;
-    const struct gpio_dt_spec *ppN;
-    struct k_msgq *queueIn;
-    struct k_msgq *queueOut;
+    Aasd(
+    const struct pwm_dt_spec *_ppP,
+    const struct gpio_dt_spec *_pdP, 
+    const struct gpio_dt_spec *_pdN, 
+    const struct gpio_dt_spec *_enable,
+    const uint16_t _pr, const uint32_t _maxPulseFreq, const uint32_t _minPulseFreq,
+    const uint32_t _minPulseWidth);
+
+    void setZeroPosition();
+    void setSpeed(float speed);
     int getPosition();
     void setPosition(int pos);
-    void setDirection(int8_t dir);
-    int position = 0;
-    void setZeroPosition();
-    void setSpeed(uint16_t speed);
-    void deviceInit();
-    void servoInit();
-    void gpiosInit();
 
+private:
+    const struct pwm_dt_spec *ppP;
+    const struct gpio_dt_spec *pdP;
+    const struct gpio_dt_spec *pdN;
+    const struct gpio_dt_spec *setZeroSpeedPin, *readZeroSpeedPin, *enable, *servoReady;
+    struct k_msgq *queueIn;
+    struct k_msgq *queueOut;
+    void setDirection(bool dir);
+    int position = 0;
+    bool direction = true;
+    void servoInit();
+    void commonGpiosInit();
+    void aasdGpioInit();
+    uint16_t pr;
+    uint32_t maxPulseFreq, minPulseFreq, minPulseWidth, deviationInSmoothStart;
+    void smoothStart(bool dir);
+    struct k_timer rampTimer;
 };
 #endif
 #endif

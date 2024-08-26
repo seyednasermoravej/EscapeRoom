@@ -23,6 +23,7 @@
 #include "unseen.h"
 #include "numbersGuessing.h"
 #include "laboratory.h"
+#include "disc.h"
 
 enum PuzzleTypes
 {
