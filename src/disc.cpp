@@ -1,5 +1,6 @@
 #include "disc.h"
 
+LOG_MODULE_REGISTER(disc, LOG_LEVEL_INF);
 
 static const struct pwm_dt_spec _ppP = PWM_DT_SPEC_GET(DT_NODELABEL(disc));
 static const struct gpio_dt_spec _pdP = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(disc), pd_gpios, 0);
@@ -13,6 +14,11 @@ static const uint32_t _pulseWidth = DT_PROP(DT_NODELABEL(disc), pulse_width);
 
 Disc:: Disc()
 {
+    LOG_INF("puse width %u", _pulseWidth);
     aasd = new Aasd(&_ppP, &_pdP, &_pdN, &_enable, _pr, _maxFreq, _minFreq, _pulseWidth);
-    aasd->setSpeed(1000);
+    while(1)
+    {
+    aasd->setSpeed(1000000);
+    // k_msleep(1000);
+    }
 }

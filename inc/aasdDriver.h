@@ -14,9 +14,8 @@
 
 #include "topics.h"
 
+#define RAMP_DURATION_MS 5000  
 
-
-#define STEP PWM_USEC(100)
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -64,6 +63,10 @@ public:
     void setSpeed(float speed);
     int getPosition();
     void setPosition(int pos);
+    static void rampHandler(struct k_timer *timer);
+
+    static Aasd *instance;
+    struct k_timer rampTimer;
 
 private:
     const struct pwm_dt_spec *ppP;
@@ -80,8 +83,10 @@ private:
     void aasdGpioInit();
     uint16_t pr;
     uint32_t maxPulseFreq, minPulseFreq, minPulseWidth, deviationInSmoothStart;
-    void smoothStart(bool dir);
-    struct k_timer rampTimer;
+    float currentPulseFreq;
+    void commonInits();
+    bool stop = false;
+    uint32_t minStepFreq;
 };
 #endif
 #endif

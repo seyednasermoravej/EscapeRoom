@@ -15,7 +15,7 @@ int main()
 { 
     //performing new update on firmware
 
-    // test();
+    test();
 
 
     dhcpClient();

@@ -24,7 +24,7 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 	ARG_UNUSED(user_data);
 
 	LOG_INF("Start on %s: index=%d", net_if_get_device(iface)->name,
-		net_if_get_by_iface(iface));
+	net_if_get_by_iface(iface));
 	net_dhcpv4_start(iface);
 }
 

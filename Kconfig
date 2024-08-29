@@ -23,6 +23,7 @@ config NET_SAMPLE_APP_MAX_CONNECTIONS
 	  send NET_SAMPLE_APP_MAX_ITERATIONS amount of MQTT sample messages.
 	  A value of zero means to continue forever.
 
+
 endmenu
 
 source "Kconfig.zephyr"

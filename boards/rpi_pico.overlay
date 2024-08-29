@@ -21,9 +21,9 @@
 			pd-gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
 			enable-gpios = <&gpio0 13 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
 			pulse-round = <2500>;
-			max-frequency = <200000>;
-			min-frequency = <100>;
-			pulse-width = <PWM_MSEC(1)>;
+			max-frequency = <100000>;
+			min-frequency = <2000>;
+			pulse-width = <PWM_USEC(2)>;// nano seconds
 			zephyr,deferred-init;
 		};
 	};
@@ -129,6 +129,29 @@
 	// chosen{
 	// 	zephyr,keyboard-scan = &keypad;
 	// };
+	chosen{
+		zephyr,display = &display;
+	};
+
+
+	tftlcd
+	{
+		compatible = "zephyr,mipi-dbi-spi";
+		dc-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
+		spi-dev = <&spi1>;
+		write-only;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		display: ili9488@0{
+			compatible = "ilitek,ili9488";
+			reg = <0x0>;
+			width = <480>;
+			height = <320>;
+			mipi-max-frequency = <25000000>;
+		};
+	};
 	aliases{
 		hintbutton = &button0;
 		built-in-led = &led0;
@@ -202,6 +225,17 @@
 };
 
 
+&spi1 {
+	clock-frequency = <DT_FREQ_M(20)>;
+	status = "okay";
+	pinctrl-0 = <&spi1_pins>;
+	pinctrl-names = "default";
+	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+
+};
+
+
+
 pico_spi: &spi0 {};
 &pwm{
 	status = "okay";
@@ -231,6 +265,15 @@ pico_spi: &spi0 {};
 	{
 		group1{
 			pinmux = <PWM_4A_P8>, <PWM_4B_P9>, <PWM_5A_P26>, <PWM_5B_P27>;
+		};
+	};
+	spi1_pins: spi1_pins {
+		group1 {
+			pinmux = <SPI1_CSN_P13>, <SPI1_SCK_P10>, <SPI1_TX_P11>;
+		};
+		group2 {
+			pinmux = <SPI1_RX_P12>;
+			input-enable;
 		};
 	};
 

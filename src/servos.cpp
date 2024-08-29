@@ -38,7 +38,6 @@ Servos:: Servos()
 
 void Servos:: messageHandler(struct MqttMsg *msg)
 {
-
     if(strcmp(msg->topic, SERVO0_TOPIC) == 0)
     {
         int val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;

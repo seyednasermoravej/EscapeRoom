@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "keypad.h"
+#include "tftLcd.h"
 
 
 class Unseen
@@ -20,6 +21,7 @@ public:
 
 private:
     Keypad *keypad;
+
 
 };
 
