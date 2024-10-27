@@ -15,11 +15,11 @@ int main()
 { 
     //performing new update on firmware
 
-    test();
+    // test();
 
-
+    LOG_INF("besme allah");
     dhcpClient();
-    //http request for getting DFU
+    // //http request for getting DFU
     sem_wait(&dhcpActive);
     sem_destroy(&dhcpActive);
 
@@ -31,12 +31,8 @@ int main()
     k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
-        // strcat(send, itoa(counter, buf, 10));
-        // counter++;
-        // int ret = k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
         k_msleep(2000);
     }
-    // return 0;
 }
 
 
@@ -84,5 +80,12 @@ void i2cScanner()
 
 void test()
 {
+    while(1)
+    {
+        LOG_INF("inf");
+        LOG_DBG("dbg");
+        LOG_ERR("error");
+        k_msleep(1000);
+    }
     puzzleThreadCreate();
 }

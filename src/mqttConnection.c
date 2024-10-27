@@ -120,9 +120,11 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[10] = led6_topic;
 	mqttLists[11] = led7_topic;
 	mqttLists[12] = led8_topic;
+	mqttLists[13] = aasdPosition_topic;
+	mqttLists[14] = aasdSpeed_topic;
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 13, .message_id = 34};
+		.list = mqttLists, .list_count = 15, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

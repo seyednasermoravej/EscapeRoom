@@ -29,7 +29,6 @@ struct AasdMsg
 };
 
 
-
 #ifdef __cplusplus
 }
 #endif
@@ -62,11 +61,14 @@ public:
     void setZeroPosition();
     void setSpeed(float speed);
     int getPosition();
+    int getSpeed();
     void setPosition(int pos);
-    static void rampHandler(struct k_timer *timer);
+    static void positionHandler(struct k_timer *timer);
+    void forceSpeedZero();
 
     static Aasd *instance;
-    struct k_timer rampTimer;
+    struct k_timer positionTimer;
+    struct k_timer speedTimer;
 
 private:
     const struct pwm_dt_spec *ppP;
@@ -76,6 +78,8 @@ private:
     struct k_msgq *queueIn;
     struct k_msgq *queueOut;
     void setDirection(bool dir);
+    void setDirection(int difPos);
+    bool getDirection();
     int position = 0;
     bool direction = true;
     void servoInit();
@@ -83,10 +87,13 @@ private:
     void aasdGpioInit();
     uint16_t pr;
     uint32_t maxPulseFreq, minPulseFreq, minPulseWidth, deviationInSmoothStart;
-    float currentPulseFreq;
+    int currentPulseFreq;
     void commonInits();
     bool stop = false;
     uint32_t minStepFreq;
+    uint32_t stepNum = 0;
+    void movePositionStep(uint32_t timeMS, int movement);
+    void accelStep(uint32_t timerDelay, int speedChange, bool forward);
 };
 #endif
 #endif

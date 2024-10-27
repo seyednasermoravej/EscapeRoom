@@ -43,7 +43,8 @@
 			"input_kbd_matrix.h": "c",
 			"i2c.h": "c",
 			"stdlib.h": "c",
-			"utils.h": "c"
+			"utils.h": "c",
+			"eth_w6100_priv.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

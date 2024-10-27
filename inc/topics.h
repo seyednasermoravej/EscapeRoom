@@ -35,6 +35,12 @@
 #define LOGS_TOPIC              "pub/logs"
 #define KEYPAD_TOPIC            "pub/keypad"
 
+#define SET_AASD_SPEED          "sub/aasdSpeed"
+#define SET_AASD_POSITION       "sub/aasdPosition"
+#define GET_AASD_SPEED          "pub/aasdSpeed" 
+#define GET_AASD_POSITION       "pub/aasdPosition"             
+
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,6 +59,8 @@ extern struct mqtt_topic led5_topic;
 extern struct mqtt_topic led6_topic;
 extern struct mqtt_topic led7_topic;
 extern struct mqtt_topic led8_topic;
+extern struct mqtt_topic aasdSpeed_topic;
+extern struct mqtt_topic aasdPosition_topic;
 
 #ifdef __cplusplus
 }

@@ -196,3 +196,21 @@ struct mqtt_topic puzzleType_topic = {
             .size = strlen(SEG8_TOPIC)
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic aasdPosition_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SET_AASD_POSITION,
+            .size = strlen(SET_AASD_POSITION)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+        struct mqtt_topic aasdSpeed_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)SET_AASD_SPEED,
+            .size = strlen(SET_AASD_SPEED)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};

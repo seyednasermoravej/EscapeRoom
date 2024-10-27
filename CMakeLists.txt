@@ -18,3 +18,6 @@ add_library(set-app-flags INTERFACE)
 target_compile_options(set-app-flags INTERFACE -O0)
 target_link_libraries(app PRIVATE set-app-flags)
 #optimizain disable end
+
+
+# list(REMOVE_ITEM app_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/unwanted_file.cpp)

@@ -34,6 +34,7 @@ enum PuzzleTypes
     NUMBERS_GUESSING_PUZZLE,
     UNSEEN_PUZZLE,
     LABORATORY_PUZZLE,
+    DISC_PUZZLE,
 
 };
 
@@ -71,6 +72,7 @@ private:
     Unseen *unseen;
     NumbersGuessing *numbersGuessing;
     Laboratory *laboratory;
+    Disc *disc;
 
     int builtIntLedInit();
 

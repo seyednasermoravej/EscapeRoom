@@ -14,11 +14,11 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 Puzzle::Puzzle() {
 
     builtIntLedInit();
-    Disc *disc = new Disc;
-    while (1)
-    {
-        k_msleep(11110);
-    }
+    // disc = new Disc;
+    // while (1)
+    // {
+    //     k_msleep(11110);
+    // }
 }
 
 
@@ -66,6 +66,12 @@ void Puzzle:: puzzleTypeSelection(char *type)
         puzzleType = LABORATORY_PUZZLE;
         laboratory = new Laboratory;
         LOG_INF("Puzzle type is laboratory.");
+    }
+    else if(strcmp(type, "disc") == 0)
+    {
+        puzzleType = DISC_PUZZLE;
+        disc = new Disc;
+        LOG_INF("Puzzle type is disc.");
     }
     else
     {
@@ -135,6 +141,8 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
             case LABORATORY_PUZZLE:
                 laboratory -> messageHandler(msg);
 
+            case DISC_PUZZLE:
+                disc -> messageHandler(msg);
             default:
                 break;
             }
@@ -170,6 +178,14 @@ void puzzleEntryPoint(void *, void *, void *)
 
     memset(msg, 0, sizeof(struct MqttMsg));
     puzzle = new Puzzle;
+    // while(1)
+    // {
+
+    //     gpio_pin_set_dt(&builtInLed, 1);
+    //     k_msleep(500);
+    //     gpio_pin_set_dt(&builtInLed, 0);
+    //     k_msleep(500);
+    // }
     while(!puzzle->deviceSpecified)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)

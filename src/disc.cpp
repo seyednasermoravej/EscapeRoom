@@ -16,9 +16,33 @@ Disc:: Disc()
 {
     LOG_INF("puse width %u", _pulseWidth);
     aasd = new Aasd(&_ppP, &_pdP, &_pdN, &_enable, _pr, _maxFreq, _minFreq, _pulseWidth);
-    while(1)
+}
+
+
+void Disc:: messageHandler(MqttMsg *msg)
+{
+    if(strcmp(msg->topic, SET_AASD_POSITION) == 0)
     {
-    aasd->setSpeed(1000000);
-    // k_msleep(1000);
+        aasd->setSpeed(atoi(msg->msg));
+    }
+    if(strcmp(msg->topic, SET_AASD_SPEED) == 0)
+    {
+        aasd->setPosition(atoi(msg->msg));
+    }
+    if(strcmp(msg->topic, GET_AASD_SPEED) == 0)
+    {
+        MqttMsg msg;
+        strcpy(msg.topic, GET_AASD_SPEED);
+        sprintf(msg.msg, "%d", aasd->getSpeed());
+        // itoa(aasd->getSpeed(), msg.msg, 10);
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    }
+    if(strcmp(msg->topic, GET_AASD_POSITION) == 0)
+    {
+        MqttMsg msg;
+        strcpy(msg.topic, GET_AASD_POSITION);
+        sprintf(msg.msg, "%d", aasd->getPosition());
+        // itoa(aasd->getPosition(), msg.msg, 10);
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
 }
