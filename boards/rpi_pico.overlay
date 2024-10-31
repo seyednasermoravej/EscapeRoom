@@ -160,7 +160,7 @@
 	{
 		compatible = "gpio-keys";
 		rotaryencoder: encoderpins{
-			gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_ACTIVE_LOW)>, <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 3 (GPIO_ACTIVE_LOW)>, <&gpio0 4 (GPIO_ACTIVE_LOW)>,
 					<&gpio0 9 (GPIO_ACTIVE_LOW)>, <&gpio0 10 (GPIO_ACTIVE_LOW)>, <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			zephyr,code = <INPUT_KEY_0>;
 		};
