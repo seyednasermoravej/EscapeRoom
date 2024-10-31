@@ -17,7 +17,7 @@ ConfigDevice:: ConfigDevice()
     inputsInit();
     // lcdThreadCreate();
 }
-static int prevPin5;
+static int prevclkA;
 static int prevPin8;
 
 void rotaryChange(const struct device *dev, struct gpio_callback *cb,
@@ -34,11 +34,11 @@ void rotaryChange(const struct device *dev, struct gpio_callback *cb,
         }
         else
         {
-            int pin5 = gpio_pin_get_dt(&rotaryEncoder[0]);
-            int pin6 = gpio_pin_get_dt(&rotaryEncoder[1]);
-            if(prevPin5 != pin5)
+            int clkA = gpio_pin_get_dt(&rotaryEncoder[1]);
+            int dtB = gpio_pin_get_dt(&rotaryEncoder[0]);
+            if(prevclkA != clkA)
             {
-                if(pin6 != prevPin5)
+                if(dtB != prevclkA)
                 {
                     LOG_INF("language counterclockwise");
                     strcpy(msg.msg, "language counterclockwise");
@@ -50,7 +50,7 @@ void rotaryChange(const struct device *dev, struct gpio_callback *cb,
                 }
             }
 
-            prevPin5 = pin5;
+            prevclkA = clkA;
         }
 
     }
@@ -142,7 +142,7 @@ int ConfigDevice:: inputsInit()
     }
 	gpio_init_callback(&rotaryEncoder_cb_data, rotaryChange, interruptBits);
 	gpio_add_callback(rotaryEncoder[0].port, &rotaryEncoder_cb_data); 
-    prevPin5 = gpio_pin_get_dt(&rotaryEncoder[0]);
+    prevclkA = gpio_pin_get_dt(&rotaryEncoder[1]);
     prevPin8 = gpio_pin_get_dt(&rotaryEncoder[3]);
 	return ret;
 }
