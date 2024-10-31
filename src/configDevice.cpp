@@ -34,8 +34,8 @@ void rotaryChange(const struct device *dev, struct gpio_callback *cb,
         }
         else
         {
-            int clkA = gpio_pin_get_dt(&rotaryEncoder[1]);
-            int dtB = gpio_pin_get_dt(&rotaryEncoder[0]);
+            int clkA = gpio_pin_get_dt(&rotaryEncoder[0]);
+            int dtB = gpio_pin_get_dt(&rotaryEncoder[1]);
             if(prevclkA != clkA)
             {
                 if(dtB != prevclkA)
@@ -142,7 +142,7 @@ int ConfigDevice:: inputsInit()
     }
 	gpio_init_callback(&rotaryEncoder_cb_data, rotaryChange, interruptBits);
 	gpio_add_callback(rotaryEncoder[0].port, &rotaryEncoder_cb_data); 
-    prevclkA = gpio_pin_get_dt(&rotaryEncoder[1]);
+    prevclkA = gpio_pin_get_dt(&rotaryEncoder[0]);
     prevPin8 = gpio_pin_get_dt(&rotaryEncoder[3]);
 	return ret;
 }
