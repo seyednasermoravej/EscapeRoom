@@ -13,8 +13,6 @@
 #include "lcd.h"
 #include "topics.h"
 
-
-extern void lcdThreadCreate();
 extern void rfidInThreadCreate();
 
 class Gate
@@ -30,6 +28,9 @@ private:
     int hintButtonInit();
     int magLocksInit();
     int relaysCheckInit();
+
+    Lcd *lcd1;
+    Lcd *lcd2;
 
 };
 

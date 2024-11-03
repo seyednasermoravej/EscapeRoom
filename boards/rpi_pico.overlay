@@ -160,8 +160,8 @@
 	{
 		compatible = "gpio-keys";
 		rotaryencoder: encoderpins{
-			gpios = <&gpio0 2 (GPIO_ACTIVE_LOW)>, <&gpio0 3 (GPIO_ACTIVE_LOW)>, <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-					<&gpio0 9 (GPIO_ACTIVE_LOW)>, <&gpio0 10 (GPIO_ACTIVE_LOW)>, <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			gpios = <&gpio0 2 (GPIO_ACTIVE_LOW)>, <&gpio0 3 (GPIO_ACTIVE_LOW)>, <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+					// <&gpio0 5 (GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			zephyr,code = <INPUT_KEY_0>;
 		};
 			
@@ -348,10 +348,10 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
-		lcd1: pcf857x@20 {
+		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
-		reg = <0x20>;
+		reg = <0x27>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
@@ -365,10 +365,10 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-		expander: pcf857x@27 {
+		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
-		reg = <0x27>;
+		reg = <0x20>;
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;

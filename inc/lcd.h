@@ -75,14 +75,6 @@
 #include "messageQueues.h"
 #include <zephyr/logging/log.h>
 
-#define LCD1_NODE DT_NODELABEL(lcd1)
-#define LCD2_NODE DT_NODELABEL(lcd2)
-
-
-#define LCD_PRIORITY            8
-#define LCD_STACK_SIZE       1024
-
-
 // #define GPIO_PIN_PC24_D4		4	/* PC24 - pin 6 */
 // #define GPIO_PIN_PC23_D5		5	/* PC23 - pin 7 */
 // #define GPIO_PIN_PC22_D6		6	/* PC22 - pin 8 */
@@ -171,13 +163,14 @@ struct pi_lcd_data {
 class Lcd
 {
     public:
-    Lcd(const struct device *const gpioDev, struct k_msgq *_queue, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
+    Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
+    void firstLine(char *firstLine);
+    void secondLine(char *secondLine);
 
     private:
     uint8_t GPIO_PIN_E, GPIO_PIN_RS, GPIO_PIN_BL, GPIO_PIN_D4, GPIO_PIN_D5, GPIO_PIN_D6, GPIO_PIN_D7;
     struct pi_lcd_data lcd_data;
     const struct device *const gpio_dev;
-    struct k_msgq *queue;
     void _set_row_offsets(int8_t row0, int8_t row1, int8_t row2, int8_t row3);
     void _pi_lcd_toggle_enable(const struct device *gpio_dev);
     void _pi_lcd_4bits_wr(const struct device *gpio_dev, uint8_t bits);
@@ -201,6 +194,7 @@ class Lcd
     void pi_lcd_auto_scroll_left(const struct device *gpio_dev);
     void pi_lcd_string(const struct device *gpio_dev, char *msg);
     void pi_lcd_init(const struct device *gpio_dev, uint8_t cols, uint8_t rows, uint8_t dotsize);
+    char clearLine[17] = "                ";
 };
 
 

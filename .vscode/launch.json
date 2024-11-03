@@ -11,7 +11,7 @@
             "runToEntryPoint": "main",
             "servertype": "openocd",
 
-            "gdbPath": "${userHome}/zephyr-sdk-0.16.8/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "gdbPath": "${userHome}/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
             "preLaunchTask": "buildFlash",
             "interface": "swd",
             "configFiles": [ "/home/naser/openocd/tcl/interface/ftdi/minimodule-swd.cfg", "/home/naser/openocd/tcl/target/rp2040.cfg"],

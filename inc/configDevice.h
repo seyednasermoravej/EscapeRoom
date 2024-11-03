@@ -16,8 +16,6 @@
 #include "topics.h"
 #include "lcd.h"
 
-extern void lcdThreadCreate();
-
 class ConfigDevice
 {
 public:
@@ -27,6 +25,8 @@ public:
 
 private:
     int inputsInit();
+    Lcd *lcd1;
+    Lcd *lcd2;
 };
 
 #endif

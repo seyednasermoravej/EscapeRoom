@@ -1,10 +1,5 @@
 #include "lcd.h"
 
-
-K_THREAD_STACK_DEFINE(lcdInStackArea, LCD_STACK_SIZE);
-K_THREAD_STACK_DEFINE(lcdOutStackArea, LCD_STACK_SIZE);
-
-
 LOG_MODULE_REGISTER(lcd, LOG_LEVEL_INF);
 
 void Lcd:: _set_row_offsets(int8_t row0, int8_t row1, int8_t row2, int8_t row3)
@@ -361,9 +356,8 @@ void Lcd:: pi_lcd_init(const struct device *gpio_dev, uint8_t cols, uint8_t rows
 	_pi_lcd_command(gpio_dev, LCD_ENTRY_MODE_SET | lcd_data.disp_mode);
 }
 
-Lcd:: Lcd(const struct device *const gpioDev, struct k_msgq *_queue, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7): gpio_dev(gpioDev)
+Lcd:: Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7): gpio_dev(gpioDev)
 {
-	queue = _queue;
 	lcd_data.disp_func = LCD_4BIT_MODE | LCD_1_LINE | LCD_5x8_DOTS;
 	lcd_data.disp_cntl = 0;
 	lcd_data.disp_mode = 0;
@@ -404,58 +398,23 @@ Lcd:: Lcd(const struct device *const gpioDev, struct k_msgq *_queue, uint8_t RS,
 
 	/* Clear display */
 	pi_lcd_clear(gpio_dev);
-	struct LcdMsg msg;
-	while(1)
-	{
-	if(k_msgq_get(queue, &msg, K_NO_WAIT) == 0) {
-		LOG_INF("first line is: %s", msg.firstLine);
-		LOG_INF("second line is: %s", msg.secondLine);
-		pi_lcd_clear(gpio_dev);
-		pi_lcd_string(gpio_dev, msg.firstLine);
-		pi_lcd_set_cursor(gpio_dev, 0, 1);
-		pi_lcd_string(gpio_dev, msg.secondLine);
-		k_msleep(MSEC_PER_SEC * 3U);
-		memset(&msg, 0, sizeof(struct LcdMsg));
-
-	}
-	k_msleep(1000);
-	}
 }
 
 
-
-
-
-struct k_thread lcdInThread;
-struct k_thread lcdOutThread;
-
-
-
-void lcdEntryPointLcdIn(void *, void *, void *)
+void Lcd:: firstLine(char *firstLine)
 {
-	device_init(DEVICE_DT_GET(LCD1_NODE));
-	Lcd *lcd = new Lcd(DEVICE_DT_GET(LCD1_NODE), &msqLcd1, 0, 2, 3, 4, 5, 6, 7);
-
+	pi_lcd_set_cursor(gpio_dev, 0, 0);
+	pi_lcd_string(gpio_dev, clearLine);
+	pi_lcd_set_cursor(gpio_dev, 0, 0);
+	pi_lcd_string(gpio_dev, firstLine);
+	k_msleep(MSEC_PER_SEC * 3U);
 }
 
-void lcdEntryPointLcdOut(void *, void *, void *)
+void Lcd:: secondLine(char *secondLine)
 {
-	device_init(DEVICE_DT_GET(LCD2_NODE));
-	Lcd *lcd = new Lcd(DEVICE_DT_GET(LCD2_NODE), &msqLcd2, 0, 2, 3, 4, 5, 6, 7);
-
-}
-
-
- void lcdThreadCreate()
-{
-	// k_tid_t lcdTidIn = k_thread_create(&lcdInThread, lcdInStackArea,
-	// 								K_THREAD_STACK_SIZEOF(lcdInStackArea),
-	// 								lcdEntryPointLcdIn, NULL, NULL, NULL,
-	// 								LCD_PRIORITY, 0, K_NO_WAIT);
-
-	k_tid_t lcdTidOut = k_thread_create(&lcdOutThread, lcdOutStackArea,
-									K_THREAD_STACK_SIZEOF(lcdOutStackArea),
-									lcdEntryPointLcdOut, NULL, NULL, NULL,
-									LCD_PRIORITY, 0, K_NO_WAIT);
-	k_thread_name_set(lcdTidOut, "LCD IN");
+	pi_lcd_set_cursor(gpio_dev, 0, 1);
+	pi_lcd_string(gpio_dev, clearLine);
+	pi_lcd_set_cursor(gpio_dev, 0, 1);
+	pi_lcd_string(gpio_dev, secondLine);
+	k_msleep(MSEC_PER_SEC * 3U);
 }

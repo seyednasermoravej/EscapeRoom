@@ -16,20 +16,18 @@ int main()
     //performing new update on firmware
 
     // test();
-
+    printk("hi");
     LOG_INF("besme allah");
     dhcpClient();
-    // //http request for getting DFU
-    sem_wait(&dhcpActive);
+    //http request for getting DFU
+    // sem_wait(&dhcpActive);
     // sem_destroy(&dhcpActive);
 
     threadsCreation();
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/escape");
-    // strcpy(send->msg, "allah");
     strcpy(send->msg, "hi Bram and Philippe");
-    // strcpy(send->msg, "hi Philippe");
     k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {

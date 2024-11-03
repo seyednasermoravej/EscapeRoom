@@ -39,6 +39,8 @@ static struct gpio_callback hintButton_cb_data;
 static struct gpio_callback relaysCheck_cb_data;
 static struct gpio_callback maglocks_cb_data;
 
+#define LCD1_NODE DT_NODELABEL(lcd1)
+#define LCD2_NODE DT_NODELABEL(lcd2)
 
 void hintPressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
@@ -68,11 +70,12 @@ void magLocksStatusChange(const struct device *dev, struct gpio_callback *cb,
 Gate:: Gate()
 {
     hintButtonInit();
-    lcdThreadCreate();
     rfidInThreadCreate();
 	addrKeysInit();
 	relaysCheckInit();
 	magLocksInit();
+	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
+	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
 }
 
 
