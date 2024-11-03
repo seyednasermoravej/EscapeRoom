@@ -36,7 +36,7 @@
 #define KEYPAD_TOPIC            "pub/keypad"
 
 #define SET_AASD_SPEED          "sub/aasdSpeed"
-#define SET_AASD_POSITION       "sub/aasdPosition"
+#define SET_STEPPER_POSITION    "sub/stepperPosition"
 #define GET_AASD_SPEED          "pub/aasdSpeed" 
 #define GET_AASD_POSITION       "pub/aasdPosition"             
 

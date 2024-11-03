@@ -54,6 +54,18 @@
 			gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			zephyr,code = <INPUT_KEY_T>;
 		};
+		stepper_enable: stepper-enable{
+			gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
+			zephyr,code = <INPUT_KEY_HOME>;
+		};
+		stepper_step: stepper-step{
+			gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
+			zephyr,code = <INPUT_KEY_HOME>;
+		};
+		stepper_direction: stepper-direction{
+			gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
+			zephyr,code = <INPUT_KEY_HOME>;
+		};
 	};
 	ledandkeys
 	{
@@ -202,10 +214,6 @@
 
 
 };
-
-
-
-
 &spi0 {
 	clock-frequency = <DT_FREQ_M(8)>;
 	status = "okay";

@@ -52,7 +52,7 @@ enum PuzzleTypes
 //     SERVO
 // }
 
-#define PUZZLE_STACK_SIZE                  4096 
+#define PUZZLE_STACK_SIZE                  8192 
 #define PUZZLE_PRIORITY                     8
 
 

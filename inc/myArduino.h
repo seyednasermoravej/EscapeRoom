@@ -5,6 +5,9 @@
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/drivers/uart.h>
 #include <zephyr/drivers/spi.h>
+#include <zephyr/kernel.h>
+#include <math.h>
+
 
 #define byte uint8_t
 
@@ -29,9 +32,16 @@ extern "C" {
 // #define ser_dev->readBytes(buf, n)  uart_rx_enable(ser_dev, buf, n, 0x100)
 // #define ser_dev->write(buf, n)      uart_tx(ser_dev, buf, n, 0x100)
 
+#define boolean                     bool
+#define YIELD                       k_yield() 
 
+// #include <zephyr.h>
 
+uint32_t micros(void);
 
+float max(float a, float b);
+
+#define constrain(x, a, b) ((x) < (a) ? (a) : ((x) > (b) ? (b) : (x)))
 
 #ifdef __cplusplus
 }

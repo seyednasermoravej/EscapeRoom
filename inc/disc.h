@@ -13,7 +13,8 @@
 #include <zephyr/devicetree.h>
 
 #include "topics.h"
-#include "aasdDriver.h"
+#include "AccelStepper.h"
+// #include "aasdDriver.h"
 
 
 class Disc
@@ -23,7 +24,8 @@ public:
     void messageHandler(struct MqttMsg *msg);
 
 private:
-    Aasd *aasd;
+    // Aasd *aasd;
+    AccelStepper *stepper;
 
 };
 

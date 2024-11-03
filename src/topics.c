@@ -201,8 +201,8 @@ struct mqtt_topic puzzleType_topic = {
     .topic =
         {
 
-            .utf8 = (uint8_t*)SET_AASD_POSITION,
-            .size = strlen(SET_AASD_POSITION)
+            .utf8 = (uint8_t*)SET_STEPPER_POSITION,
+            .size = strlen(SET_STEPPER_POSITION)
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
