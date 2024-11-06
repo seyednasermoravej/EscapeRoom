@@ -1,6 +1,7 @@
 #include "main.h"
 #include <stdlib.h>
 #include <zephyr/drivers/i2c.h>
+#include <zephyr/tracing/tracing.h>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
@@ -14,13 +15,12 @@ extern void mqttThreadCreate();
 int main()
 { 
     //performing new update on firmware
-
-    // test();
-    printk("hi");
+    // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
     dhcpClient();
+    test();
     //http request for getting DFU
-    // sem_wait(&dhcpActive);
+    sem_wait(&dhcpActive);
     // sem_destroy(&dhcpActive);
 
     threadsCreation();
@@ -84,9 +84,9 @@ void test()
     while(1)
     {
         LOG_INF("inf");
-        LOG_DBG("dbg");
-        LOG_ERR("error");
-        k_msleep(1000);
+        // LOG_DBG("dbg");
+        // LOG_ERR("error");
+        k_msleep(4000);
     }
     puzzleThreadCreate();
 }

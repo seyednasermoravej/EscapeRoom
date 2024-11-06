@@ -44,7 +44,11 @@
 			"i2c.h": "c",
 			"stdlib.h": "c",
 			"utils.h": "c",
-			"eth_w6100_priv.h": "c"
+			"eth_w6100_priv.h": "c",
+			"tracing.h": "c",
+			"mutex": "c",
+			"stop_token": "c",
+			"thread": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true
