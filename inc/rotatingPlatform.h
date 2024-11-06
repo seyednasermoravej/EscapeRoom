@@ -17,10 +17,10 @@
 // #include "aasdDriver.h"
 
 
-class Disc
+class RotatingPlatform 
 {
 public:
-    Disc();
+    RotatingPlatform();
     void messageHandler(struct MqttMsg *msg);
 
 private:

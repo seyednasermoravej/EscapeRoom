@@ -17,18 +17,6 @@
 			status ="okay";
 			zephyr,deferred-init;
 		};
-		disc: disc
-		{
-			compatible = "aasd-servo";
-			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
-			pd-gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-			enable-gpios = <&gpio0 13 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-			pulse-round = <2500>;
-			max-frequency = <100000>;
-			min-frequency = <2000>;
-			pulse-width = <PWM_USEC(2)>;// nano seconds
-			zephyr,deferred-init;
-		};
 	};
 	buttons
 	{
@@ -40,34 +28,49 @@
 		};
 		zephyr,deferred-init;
 	};
-	servos_control
+	rotating_platform
 	{
-		compatible = "gpio-keys";
-		servos_zero: servos-zero{
-			gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_0>;
-		};
-		servos_home: servos-home
+		roatating_platform_buttons
 		{
-			gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_HOME>;
+			compatible = "gpio-keys";
+			rotating_platform_buttons:buttons
+			{
+				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_KEY_HOME>;
+			};
 		};
-		servos_timer: servos-timer
+
+		roatating_platform_relays
 		{
-			gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_T>;
+			compatible = "gpio-leds";
+			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>, 
+					<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;	
 		};
-		stepper_enable: stepper-enable{
-			gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
-			zephyr,code = <INPUT_KEY_HOME>;
-		};
-		stepper_step: stepper-step{
-			gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
-			zephyr,code = <INPUT_KEY_HOME>;
-		};
-		stepper_direction: stepper-direction{
-			gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
-			zephyr,code = <INPUT_KEY_HOME>;
+		rotating_platform_servos_control
+		{
+			compatible = "gpio-keys";
+			rotating_platform_home_switch: home-switch
+			{
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_KEY_HOME>;
+			};
+			rotating_platform_calibrate_switch: calibrate-switch
+			{
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_KEY_T>;
+			};
+			rotating_platform_stepper_enable: stepper-enable{
+				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
+				zephyr,code = <INPUT_KEY_HOME>;
+			};
+			rotating_platform_stepper_step: stepper-step{
+				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
+				zephyr,code = <INPUT_KEY_HOME>;
+			};
+			rotating_platform_stepper_direction: stepper-direction{
+				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
+				zephyr,code = <INPUT_KEY_HOME>;
+			};
 		};
 	};
 	ledandkeys

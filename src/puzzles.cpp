@@ -69,9 +69,9 @@ void Puzzle:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "disc") == 0)
     {
-        puzzleType = DISC_PUZZLE;
-        disc = new Disc;
-        LOG_INF("Puzzle type is disc.");
+        puzzleType = ROTATING_PLATFORM_PUZZLE;
+        rotatingPlatform = new RotatingPlatform;
+        LOG_INF("Puzzle type is Rotating Platform.");
     }
     else
     {
@@ -141,8 +141,8 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
             case LABORATORY_PUZZLE:
                 laboratory -> messageHandler(msg);
 
-            case DISC_PUZZLE:
-                disc -> messageHandler(msg);
+            case ROTATING_PLATFORM_PUZZLE:
+                rotatingPlatform -> messageHandler(msg);
             default:
                 break;
             }

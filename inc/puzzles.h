@@ -23,7 +23,7 @@
 #include "unseen.h"
 #include "numbersGuessing.h"
 #include "laboratory.h"
-#include "disc.h"
+#include "rotatingPlatform.h"
 
 enum PuzzleTypes
 {
@@ -34,7 +34,7 @@ enum PuzzleTypes
     NUMBERS_GUESSING_PUZZLE,
     UNSEEN_PUZZLE,
     LABORATORY_PUZZLE,
-    DISC_PUZZLE,
+    ROTATING_PLATFORM_PUZZLE,
 
 };
 
@@ -72,7 +72,7 @@ private:
     Unseen *unseen;
     NumbersGuessing *numbersGuessing;
     Laboratory *laboratory;
-    Disc *disc;
+    RotatingPlatform *rotatingPlatform;
 
     int builtIntLedInit();
 

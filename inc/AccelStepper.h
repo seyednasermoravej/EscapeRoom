@@ -369,7 +369,7 @@ public:
     /// to pin 5.
     /// \param[in] enable If this is true (the default), enableOutputs() will be called to enable
     /// the output pins at construction time.
-    AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1, const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3, const struct gpio_dt_spec pin4, bool enable = true);
+    AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1, const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3, const struct gpio_dt_spec pin4, const struct gpio_dt_spec enablePin, bool enable = true);
 
     /// Alternate Constructor which will call your own functions for forward and backward steps. 
     /// You can have multiple simultaneous steppers, all moving

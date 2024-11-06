@@ -4,7 +4,6 @@
 // $Id: AccelStepper.cpp,v 1.24 2020/04/20 00:15:03 mikem Exp mikem $
 
 #include "AccelStepper.h"
-const struct gpio_dt_spec enablePin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(stepper_enable), gpios, {0});
 #if 0
 // Some debugging assistance
 void dump(uint8_t* p, int l)
@@ -189,8 +188,8 @@ boolean AccelStepper::run()
     return _speed != 0.0 || distanceToGo() != 0;
 }
 
-AccelStepper::AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1,  const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3,  const struct gpio_dt_spec pin4, bool enable):
-_pin{&pin1, &pin2, &pin2, &pin2}
+AccelStepper::AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1,  const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3,  const struct gpio_dt_spec pin4, const struct gpio_dt_spec enablePin ,bool enable):
+_pin{&pin1, &pin2, &pin2, &pin2}, _enablePin(&enablePin)
 {
     _interface = interface;
     _currentPos = 0;
@@ -201,7 +200,6 @@ _pin{&pin1, &pin2, &pin2, &pin2}
     _sqrt_twoa = 1.0;
     _stepInterval = 0;
     _minPulseWidth = 1;
-    _enablePin = &enablePin;
     _lastStepTime = 0;
     // _pin[0] = pin1;
     // _pin[1] = pin2;
