@@ -39,7 +39,7 @@ extern "C" {
 
 uint32_t micros(void);
 
-float max(float a, float b);
+double max(double a, double b);
 
 #define constrain(x, a, b) ((x) < (a) ? (a) : ((x) > (b) ? (b) : (x)))
 

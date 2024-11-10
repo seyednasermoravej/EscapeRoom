@@ -188,8 +188,9 @@ boolean AccelStepper::run()
     return _speed != 0.0 || distanceToGo() != 0;
 }
 
-AccelStepper::AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1,  const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3,  const struct gpio_dt_spec pin4, const struct gpio_dt_spec enablePin ,bool enable):
-_pin{&pin1, &pin2, &pin2, &pin2}, _enablePin(&enablePin)
+AccelStepper::AccelStepper(uint8_t interface, const struct gpio_dt_spec *pin1,  const struct gpio_dt_spec *pin2, const struct gpio_dt_spec *pin3,  const struct gpio_dt_spec *pin4, const struct gpio_dt_spec enablePin ,bool enable):
+_pin{pin1, pin2, pin2, pin2},
+_enablePin(&enablePin)
 {
     _interface = interface;
     _currentPos = 0;
@@ -201,10 +202,10 @@ _pin{&pin1, &pin2, &pin2, &pin2}, _enablePin(&enablePin)
     _stepInterval = 0;
     _minPulseWidth = 1;
     _lastStepTime = 0;
-    // _pin[0] = pin1;
-    // _pin[1] = pin2;
-    // _pin[2] = pin3;
-    // _pin[3] = pin4;
+    // _pin[0] = &pin1;
+    // _pin[1] = &pin2;
+    // _pin[2] = &pin3;
+    // _pin[3] = &pin4;
     _enableInverted = false;
     enable = true;
     // NEW
@@ -259,7 +260,7 @@ AccelStepper::AccelStepper(void (*forward)(), void (*backward)())
     setMaxSpeed(1);
 }
 
-void AccelStepper::setMaxSpeed(float speed)
+void AccelStepper::setMaxSpeed(double speed)
 {
     if (speed < 0.0)
        speed = -speed;
@@ -276,12 +277,12 @@ void AccelStepper::setMaxSpeed(float speed)
     }
 }
 
-float   AccelStepper::maxSpeed()
+double   AccelStepper::maxSpeed()
 {
     return _maxSpeed;
 }
 
-void AccelStepper::setAcceleration(float acceleration)
+void AccelStepper::setAcceleration(double acceleration)
 {
     if (acceleration == 0.0)
 	return;
@@ -298,12 +299,12 @@ void AccelStepper::setAcceleration(float acceleration)
     }
 }
 
-float   AccelStepper::acceleration()
+double   AccelStepper::acceleration()
 {
     return _acceleration;
 }
 
-void AccelStepper::setSpeed(float speed)
+void AccelStepper::setSpeed(double speed)
 {
     if (speed == _speed)
         return;
@@ -318,7 +319,7 @@ void AccelStepper::setSpeed(float speed)
     _speed = speed;
 }
 
-float AccelStepper::speed()
+double AccelStepper::speed()
 {
     return _speed;
 }
@@ -388,8 +389,11 @@ void AccelStepper::setOutputPins(uint8_t mask)
     else if (_interface == FULL3WIRE || _interface == HALF3WIRE)
 	numpins = 3;
     uint8_t i;
+
     for (i = 0; i < numpins; i++)
-	digitalWrite(_pin[i], (mask & (1 << i)) ? (HIGH ^ _pinInverted[i]) : (LOW ^ _pinInverted[i]));
+    {
+        digitalWrite(_pin[i], (mask & (1 << i)) ? (HIGH ^ _pinInverted[i]) : (LOW ^ _pinInverted[i]));
+    }
 }
 
 // 0 pin step function (ie for functional usage)
@@ -411,11 +415,15 @@ void AccelStepper::step1(long step)
 
     // _pin[0] is step, _pin[1] is direction
     setOutputPins(_direction ? 0b10 : 0b00); // Set direction first else get rogue pulses
+    // digitalWrite(_pin[1], _direction ? HIGH: LOW);
     setOutputPins(_direction ? 0b11 : 0b01); // step HIGH
+    // digitalWrite(_pin[0], LOW);
     // Caution 200ns setup time 
     // Delay the minimum allowed pulse width
-    delayMicroseconds(_minPulseWidth);
+    // delayMicroseconds(_minPulseWidth);
+    // k_sleep(K_NSEC(500));
     setOutputPins(_direction ? 0b10 : 0b00); // step LOW
+    // digitalWrite(_pin[0], HIGH);
 }
 
 
@@ -607,9 +615,9 @@ void AccelStepper::setMinPulseWidth(unsigned int minWidth)
     _minPulseWidth = minWidth;
 }
 
-void AccelStepper::setEnablePin(const struct gpio_dt_spec enablePin)
+void AccelStepper::setEnablePin(const struct gpio_dt_spec enable_pin)
 {
-    _enablePin = &enablePin;
+    _enablePin = &enable_pin;
 
     // This happens after construction, so init pin now.
     if (_enablePin != NULL)

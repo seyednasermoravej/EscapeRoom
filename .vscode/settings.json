@@ -48,7 +48,9 @@
 			"tracing.h": "c",
 			"mutex": "c",
 			"stop_token": "c",
-			"thread": "c"
+			"thread": "c",
+			"aasddriver.h": "c",
+			"dhcpclient.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

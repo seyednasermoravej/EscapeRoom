@@ -369,7 +369,7 @@ public:
     /// to pin 5.
     /// \param[in] enable If this is true (the default), enableOutputs() will be called to enable
     /// the output pins at construction time.
-    AccelStepper(uint8_t interface, const struct gpio_dt_spec pin1, const struct gpio_dt_spec pin2, const struct gpio_dt_spec pin3, const struct gpio_dt_spec pin4, const struct gpio_dt_spec enablePin, bool enable = true);
+    AccelStepper(uint8_t interface, const struct gpio_dt_spec *pin1, const struct gpio_dt_spec *pin2, const struct gpio_dt_spec *pin3, const struct gpio_dt_spec *pin4, const struct gpio_dt_spec enablePin, bool enable = true);
 
     /// Alternate Constructor which will call your own functions for forward and backward steps. 
     /// You can have multiple simultaneous steppers, all moving
@@ -415,23 +415,23 @@ public:
     /// \param[in] speed The desired maximum speed in steps per second. Must
     /// be > 0. Caution: Speeds that exceed the maximum speed supported by the processor may
     /// Result in non-linear accelerations and decelerations.
-    void    setMaxSpeed(float speed);
+    void    setMaxSpeed(double speed);
 
     /// Returns the maximum speed configured for this stepper
     /// that was previously set by setMaxSpeed();
     /// \return The currently configured maximum speed
-    float   maxSpeed();
+    double   maxSpeed();
 
     /// Sets the acceleration/deceleration rate.
     /// \param[in] acceleration The desired acceleration in steps per second
     /// per second. Must be > 0.0. This is an expensive call since it requires a square 
     /// root to be calculated. Dont call more ofthen than needed
-    void    setAcceleration(float acceleration);
+    void    setAcceleration(double acceleration);
 
     /// Returns the acceleration/deceleration rate configured for this stepper
     /// that was previously set by setAcceleration();
     /// \return The currently configured acceleration/deceleration
-    float   acceleration();
+    double   acceleration();
     
     /// Sets the desired constant speed for use with runSpeed().
     /// \param[in] speed The desired constant speed in steps per
@@ -440,11 +440,11 @@ public:
     /// once per hour, approximately. Speed accuracy depends on the Arduino
     /// crystal. Jitter depends on how frequently you call the runSpeed() function.
     /// The speed will be limited by the current value of setMaxSpeed()
-    void    setSpeed(float speed);
+    void    setSpeed(double speed);
 
     /// The most recently set speed.
     /// \return the most recent speed in steps per second
-    float   speed();
+    double   speed();
 
     /// The distance from the current position to the target position.
     /// \return the distance from the current position to the target position
@@ -520,7 +520,7 @@ public:
     /// is called.
     /// \param[in] enablePin Arduino digital pin number for motor enable
     /// \sa setPinsInverted
-    void    setEnablePin(const struct gpio_dt_spec enablePin);
+    void    setEnablePin(const struct gpio_dt_spec enable_pin);
 
     /// Sets the inversion for stepper driver pins
     /// \param[in] directionInvert True for inverted direction pin, false for non-inverted
@@ -650,6 +650,7 @@ private:
     /// Arduino pin number assignments for the 2 or 4 pins required to interface to the
     /// stepper motor or driver
     const struct gpio_dt_spec*        _pin[4];
+    // const struct gpio_dt_spec*        *_pin = (const struct gpio_dt_spec**)k_malloc(sizeof(struct gpio_dt_spec*) *4);
 
     /// Whether the _pins is inverted or not
     uint8_t        _pinInverted[4];
@@ -664,20 +665,20 @@ private:
 
     /// The current motos speed in steps per second
     /// Positive is clockwise
-    float          _speed;         // Steps per second
+    double          _speed;         // Steps per second
 
     /// The maximum permitted speed in steps per second. Must be > 0.
-    float          _maxSpeed;
+    double          _maxSpeed;
 
     /// The acceleration to use to accelerate or decelerate the motor in steps
     /// per second per second. Must be > 0
-    float          _acceleration;
-    float          _sqrt_twoa; // Precomputed sqrt(2*_acceleration)
+    double          _acceleration;
+    double          _sqrt_twoa; // Precomputed sqrt(2*_acceleration)
 
     /// The last step time in microseconds
     unsigned long  _lastStepTime;
 
-    /// The minimum allowed pulse width in microseconds
+    /// The minimum allowed pulse width in nanoseconds
     unsigned int   _minPulseWidth;
 
     /// Is the direction pin inverted?
@@ -702,13 +703,13 @@ private:
     long _n;
 
     /// Initial step size in microseconds
-    float _c0;
+    double _c0;
 
     /// Last step size in microseconds
-    float _cn;
+    double _cn;
 
     /// Min step size in microseconds based on maxSpeed
-    float _cmin; // at max speed
+    double _cmin; // at max speed
 
 };
 

@@ -15,7 +15,7 @@ void hex2stringMac(const uint8_t *hex, int length, char *buf)
 }
 
 
-void gpioInit(const struct gpio_dt_spec *gpio, char *message)
+void gpioInit(const struct gpio_dt_spec *gpio, const char *message)
 {
     device_init(gpio->port);
     char buf[200];
@@ -28,7 +28,7 @@ void gpioInit(const struct gpio_dt_spec *gpio, char *message)
     
 }
 
-void pwmInit(const struct pwm_dt_spec *pwm, char *message)
+void pwmInit(const struct pwm_dt_spec *pwm, const char *message)
 {
     device_init(pwm->dev);
     char buf[200];

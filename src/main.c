@@ -18,7 +18,7 @@ int main()
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
     dhcpClient();
-    test();
+    // test();
     //http request for getting DFU
     sem_wait(&dhcpActive);
     // sem_destroy(&dhcpActive);

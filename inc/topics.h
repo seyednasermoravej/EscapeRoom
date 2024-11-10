@@ -3,6 +3,9 @@
 
 
 #include <zephyr/net/mqtt.h>
+
+#define STATUS_TOPIC            "pub/status"
+
 #define SERVO0_TOPIC            "sub/servo0"
 #define K3_TOPIC                "sub/relaysControl"
 #define LCD_TOPIC               "sub/lcd"
@@ -35,10 +38,10 @@
 #define LOGS_TOPIC              "pub/logs"
 #define KEYPAD_TOPIC            "pub/keypad"
 
-#define SET_AASD_SPEED          "sub/aasdSpeed"
-#define SET_STEPPER_POSITION    "sub/stepperPosition"
-#define GET_AASD_SPEED          "pub/aasdSpeed" 
-#define GET_AASD_POSITION       "pub/aasdPosition"             
+#define SET_STEPPER_SPEED          "sub/stepperSpeed"
+#define SET_STEPPER_POSITION       "sub/stepperPosition"
+#define GET_STEPPER_SPEED          "pub/stepperSpeed" 
+#define GET_STEPPER_POSITION       "pub/stepperPosition"             
 
 
 
@@ -46,6 +49,7 @@
 extern "C" {
 #endif
 
+extern struct mqtt_topic status_topic;
 extern struct mqtt_topic servo_topic;
 extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;
@@ -59,8 +63,8 @@ extern struct mqtt_topic led5_topic;
 extern struct mqtt_topic led6_topic;
 extern struct mqtt_topic led7_topic;
 extern struct mqtt_topic led8_topic;
-extern struct mqtt_topic aasdSpeed_topic;
-extern struct mqtt_topic aasdPosition_topic;
+extern struct mqtt_topic stepperSpeed_topic;
+extern struct mqtt_topic stepperPosition_topic;
 
 #ifdef __cplusplus
 }

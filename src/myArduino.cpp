@@ -1,7 +1,7 @@
 #include <myArduino.h>
 
 
-float max(float a, float b) {
+double max(double a, double b) {
     return fmax(a, b);
 }
 

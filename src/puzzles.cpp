@@ -67,7 +67,7 @@ void Puzzle:: puzzleTypeSelection(char *type)
         laboratory = new Laboratory;
         LOG_INF("Puzzle type is laboratory.");
     }
-    else if(strcmp(type, "disc") == 0)
+    else if(strcmp(type, "rotating platform") == 0)
     {
         puzzleType = ROTATING_PLATFORM_PUZZLE;
         rotatingPlatform = new RotatingPlatform;

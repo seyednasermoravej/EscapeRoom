@@ -70,7 +70,7 @@ void Aasd:: setPosition(int targetPos)
     uint8_t halfNumSteps;
     int diff = targetPos - position;
     halfNumSteps = ((abs(diff / maxPulseFreq)) + 1) * 10 / 2; 
-    float resolution = (float)1/(float)(2 * halfNumSteps);
+    double resolution = (double)1/(double)(2 * halfNumSteps);
     uint32_t timeMS = 100;
     for(int i = 1; i < halfNumSteps; i++) 
     {     
@@ -123,12 +123,12 @@ void Aasd:: setDirection(int difPos)
     else
         setDirection(false);
 }
-void Aasd:: setSpeed(float speed)
+void Aasd:: setSpeed(double speed)
 {
     speed *= pr;
     int difSpeed = speed - currentPulseFreq;
     uint8_t numSteps = ((abs(difSpeed / maxPulseFreq)) + 1) * 10; 
-    float resolution = (float)1/(float)(numSteps);
+    double resolution = (double)1/(double)(numSteps);
     uint32_t timeMS = 100;
     if(speed > 0 && difSpeed > 0 && direction)
     {

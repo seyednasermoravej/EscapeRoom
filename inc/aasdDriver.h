@@ -59,7 +59,7 @@ public:
     const uint32_t _minPulseWidth);
 
     void setZeroPosition();
-    void setSpeed(float speed);
+    void setSpeed(double speed);
     int getPosition();
     int getSpeed();
     void setPosition(int pos);

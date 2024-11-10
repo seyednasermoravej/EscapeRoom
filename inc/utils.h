@@ -45,9 +45,9 @@ extern "C" {
 
 void hex2stringMac(const uint8_t *hex, int length, char *buf);
 
-void gpioInit(const struct gpio_dt_spec *gpio, char *message);
+void gpioInit(const struct gpio_dt_spec *gpio, const char *message);
 
-void pwmInit(const struct pwm_dt_spec *pwm, char *message);
+void pwmInit(const struct pwm_dt_spec *pwm, const char *message);
 
 #define HIGH    1
 #define LOW     0
