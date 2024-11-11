@@ -52,7 +52,7 @@ private:
     bool isHome = false;
     double stepsPerDegree = 0;
     void goToPosition(int pos);
-    sem_t semCalibrate;
+    bool calibrated = false;
 };
 
 

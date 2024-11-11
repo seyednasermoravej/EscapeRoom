@@ -49,7 +49,6 @@
 extern "C" {
 #endif
 
-extern struct mqtt_topic status_topic;
 extern struct mqtt_topic servo_topic;
 extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;

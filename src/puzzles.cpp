@@ -10,10 +10,13 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 							      {0});
 
 
+static struct nvs_fs fileSystem;
 
-Puzzle::Puzzle() {
-
+Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
+{
+    nvsInit();
     builtIntLedInit();
+    readInfosFromMemory();
     // disc = new Disc;
     // while (1)
     // {
@@ -27,7 +30,6 @@ Puzzle *puzzle = nullptr;
 
 void Puzzle:: puzzleTypeSelection(char *type)
 {
-    deviceSpecified = true;
  
     gpio_pin_set_dt(&builtInLed, 1);
 
@@ -79,7 +81,6 @@ void Puzzle:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is not recognized.");
         gpio_pin_set_dt(&builtInLed, 0);
     }
-
 }
 
 
@@ -89,6 +90,8 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
         {
+            writeDeviceName(msg->msg);
+            deviceSpecified = true;
             puzzleTypeSelection(msg->msg);
         }
     }
@@ -153,6 +156,45 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
 
 }
 
+int Puzzle:: nvsInit()
+{
+    int rc;
+    struct flash_pages_info info;
+    fs->flash_device = NVS_PARTITION_DEVICE;
+    	if (!device_is_ready(fs->flash_device)) {
+		printk("Flash device %s is not ready\n", fs->flash_device->name);
+		return 0;
+	}
+	fs->offset = NVS_PARTITION_OFFSET;
+	rc = flash_get_page_info_by_offs(fs->flash_device, fs->offset, &info);
+	if (rc) {
+		printk("Unable to get page info, rc=%d\n", rc);
+		return 0;
+	}
+	fs->sector_size = info.size;
+	fs->sector_count = 3U;
+    rc = nvs_mount(fs);
+	if (rc) {
+        flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, 0x100000);
+        rc = nvs_mount(fs);
+        if (rc) {
+            printk("Flash Init failed, rc=%d\n", rc);
+            return 0;
+        }
+	}
+}
+
+void Puzzle:: readInfosFromMemory()
+{
+    int rc = 0;
+    char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
+    rc = nvs_read(fs, 0, &name, PUZZLE_TYPE_NAME_MAX_LEN);
+    if(rc)
+    {
+        deviceSpecified = true;
+        puzzleTypeSelection(name);
+    }
+}
 
 int Puzzle:: builtIntLedInit()
 {
@@ -177,22 +219,14 @@ void puzzleEntryPoint(void *, void *, void *)
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
-    puzzle = new Puzzle;
-    // while(1)
-    // {
-
-    //     gpio_pin_set_dt(&builtInLed, 1);
-    //     k_msleep(500);
-    //     gpio_pin_set_dt(&builtInLed, 0);
-    //     k_msleep(500);
-    // }
+    puzzle = new Puzzle(&fileSystem);
     while(!puzzle->deviceSpecified)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
             puzzle -> messageHandler(msg);
             memset(msg, 0, sizeof(struct MqttMsg));
-           
+        
         }
         k_msleep(1000);
 
@@ -202,12 +236,31 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            puzzle -> messageHandler(msg);
-            memset(msg, 0, sizeof(struct MqttMsg));
+            if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
+            {
+                puzzle -> writeDeviceName(msg->msg);
+                sys_reboot(0);
+            }
+            else
+            {
+                puzzle -> messageHandler(msg);
+                memset(msg, 0, sizeof(struct MqttMsg));
+            }
            
         }
         k_msleep(1000);
     }
+}
+
+int Puzzle:: writeDeviceName(char *name)
+{
+    char buf[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
+    char buf2[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
+    strcpy(buf, name);
+    nvs_write(fs, 0, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
+    nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
+    int a = 3;
+    return a;
 }
 
 extern "C" void puzzleThreadCreate()

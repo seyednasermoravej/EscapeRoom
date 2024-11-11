@@ -50,7 +50,8 @@
 			"stop_token": "c",
 			"thread": "c",
 			"aasddriver.h": "c",
-			"dhcpclient.h": "c"
+			"dhcpclient.h": "c",
+			"flash_img.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

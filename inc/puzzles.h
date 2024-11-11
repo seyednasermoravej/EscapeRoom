@@ -17,6 +17,18 @@
 #include <zephyr/devicetree.h>
 
 
+#include <zephyr/kernel.h>
+#include <zephyr/sys/reboot.h>
+#include <zephyr/device.h>
+#include <string.h>
+#include <zephyr/drivers/flash.h>
+#include <zephyr/storage/flash_map.h>
+#include <zephyr/fs/nvs.h>
+
+#define NVS_PARTITION		storage_partition
+#define NVS_PARTITION_DEVICE	FIXED_PARTITION_DEVICE(NVS_PARTITION)
+#define NVS_PARTITION_OFFSET	FIXED_PARTITION_OFFSET(NVS_PARTITION)
+
 #include "gate.h"
 #include "servos.h"
 #include "configDevice.h"
@@ -53,16 +65,18 @@ enum PuzzleTypes
 // }
 
 #define PUZZLE_STACK_SIZE                  8192 
-#define PUZZLE_PRIORITY                     8
-
+#define PUZZLE_PRIORITY                    9 
+#define PUZZLE_TYPE_NAME_MAX_LEN           128
 
 class Puzzle
 {
 public:
-    Puzzle();
+    Puzzle(struct nvs_fs *fs);
     void messageHandler(struct MqttMsg *msg);
     bool deviceSpecified = false;
     PuzzleTypes puzzleType = UNSPECIFIED;
+    void puzzleTypeSelection(char *type);
+    int  writeDeviceName(char *name);
 
 private:
 
@@ -73,11 +87,13 @@ private:
     NumbersGuessing *numbersGuessing;
     Laboratory *laboratory;
     RotatingPlatform *rotatingPlatform;
+    struct nvs_fs *fs;
 
     int builtIntLedInit();
+    int nvsInit();
+    void readInfosFromMemory();
 
 
-    void puzzleTypeSelection(char *type);
 
 };
 

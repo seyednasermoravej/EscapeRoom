@@ -23,7 +23,6 @@ RotatingPlatform:: RotatingPlatform()
 {
     LOG_INF("Rotating Platform Puzzle is selected");
 
-	sem_init(&semCalibrate, 0, 0);
     k_work_init(&calibrationWork, calibrationWorkHandler);
     stepperInit();
     buttonsInit();
@@ -90,7 +89,8 @@ void RotatingPlatform:: calibration()
     }
     long stepsPerRev = stepper->currentPosition();
     stepsPerDegree = (double)stepsPerRev / 360; 
-    sem_post(&semCalibrate);
+    // sem_post(&semCalibrate);
+    calibrated = true;
     LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
     struct MqttMsg msg;
     strcpy(msg.topic, STATUS_TOPIC);
@@ -151,8 +151,7 @@ int RotatingPlatform:: stepperInit()
     stepper->setAcceleration(1000);
     homeSwitchInit();
     calibrateSwitchInit();
-    calibration();
-    sem_wait(&semCalibrate);
+    // calibration();
 } 
 
 void RotatingPlatform:: iStopIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
@@ -249,33 +248,41 @@ int RotatingPlatform:: relaysInit()
 
 void RotatingPlatform:: messageHandler(MqttMsg *msg)
 {
-    if(strcmp(msg->topic, SET_STEPPER_POSITION) == 0)
+    if(calibrated)
     {
-        goToPosition(atoi(msg->msg));
-    }
-    else if(strcmp(msg->topic, SET_STEPPER_SPEED) == 0)
-    {
-        // aasd->setPosition(atoi(msg->msg));
-    }
-    else if(strcmp(msg->topic, GET_STEPPER_SPEED) == 0)
-    {
-        // MqttMsg msg;
-        // strcpy(msg.topic, GET_AASD_SPEED);
-        // sprintf(msg.msg, "%d", aasd->getSpeed());
-        // // itoa(aasd->getSpeed(), msg.msg, 10);
-        // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    }
-    else if(strcmp(msg->topic, GET_STEPPER_POSITION) == 0)
-    {
-    //     // MqttMsg msg;
-    //     // strcpy(msg.topic, GET_AASD_POSITION);
-    //     // sprintf(msg.msg, "%d", aasd->getPosition());
-    //     // // itoa(aasd->getPosition(), msg.msg, 10);
-    //     // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        if(strcmp(msg->topic, SET_STEPPER_POSITION) == 0)
+        {
+            goToPosition(atoi(msg->msg));
+        }
+        else if(strcmp(msg->topic, SET_STEPPER_SPEED) == 0)
+        {
+            // aasd->setPosition(atoi(msg->msg));
+        }
+        else if(strcmp(msg->topic, GET_STEPPER_SPEED) == 0)
+        {
+            // MqttMsg msg;
+            // strcpy(msg.topic, GET_AASD_SPEED);
+            // sprintf(msg.msg, "%d", aasd->getSpeed());
+            // // itoa(aasd->getSpeed(), msg.msg, 10);
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+        else if(strcmp(msg->topic, GET_STEPPER_POSITION) == 0)
+        {
+        //     // MqttMsg msg;
+        //     // strcpy(msg.topic, GET_AASD_POSITION);
+        //     // sprintf(msg.msg, "%d", aasd->getPosition());
+        //     // // itoa(aasd->getPosition(), msg.msg, 10);
+        //     // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+        else
+        {
+            LOG_INF("The command is not valid.");
+        }
+
     }
     else
     {
-        LOG_INF("The command is not valid.");
+        LOG_INF("The device is not calibrated.");
     }
 
 }

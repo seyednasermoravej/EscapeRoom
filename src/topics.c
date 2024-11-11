@@ -1,14 +1,6 @@
 #include "topics.h"
 
 
-struct mqtt_topic status_topic = {
-    .topic =
-        {
-
-            .utf8 = (uint8_t*)STATUS_TOPIC,
-            .size = strlen(STATUS_TOPIC)
-        },
-    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
 struct mqtt_topic servo_topic = {
     .topic =
