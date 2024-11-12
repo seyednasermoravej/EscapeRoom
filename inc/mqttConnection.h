@@ -25,7 +25,7 @@ extern bool command;
 // #define SERVER_IP_ADDRESS    "192.168.100.169"
 #define SERVER_IP_ADDRESS    "5.196.78.28"
 // #define SERVER_IP_ADDRESS    "91.121.93.94"
-extern void mqttThreadCreate();
+extern void mqttThreadCreate(char *);
 
 extern void mqttEntryPoint(void *, void *, void *);
 

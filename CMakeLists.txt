@@ -19,5 +19,7 @@ target_compile_options(set-app-flags INTERFACE -O0)
 target_link_libraries(app PRIVATE set-app-flags)
 #optimizain disable end
 
-
+#begin for dns resolver
+include(${ZEPHYR_BASE}/samples/net/common/common.cmake)
+#end for dns resolver
 # list(REMOVE_ITEM app_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/unwanted_file.cpp)

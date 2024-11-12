@@ -5,12 +5,11 @@
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
-void threadsCreation();
 void i2cScanner();
 void test();
 
 extern void puzzleThreadCreate();
-extern void mqttThreadCreate();
+extern void mqttThreadCreate(char *);
 
 int main()
 { 
@@ -18,12 +17,17 @@ int main()
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
     dhcpClient();
+    // char serverName[] = "mqtt-1.localdomain";
+    char serverName[] = "test.mosquitto.org";
+    char serverIpAddress[128] = {0};
+    // dnsResolver(serverName, serverIpAddress);
     // test();
     //http request for getting DFU
-    sem_wait(&dhcpActive);
+    
     // sem_destroy(&dhcpActive);
+    mqttThreadCreate(serverIpAddress);
+    puzzleThreadCreate();
 
-    threadsCreation();
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/escape");
@@ -34,13 +38,6 @@ int main()
         k_msleep(2000);
         k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     }
-}
-
-
-void threadsCreation()
-{
-    mqttThreadCreate();
-    puzzleThreadCreate();
 }
 
 void i2cScanner()

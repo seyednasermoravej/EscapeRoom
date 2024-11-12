@@ -9,7 +9,7 @@
 
 #include "dhcpClient.h"
 
-LOG_MODULE_REGISTER(net_dhcpv4_client, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(net_dhcpv4_client, LOG_LEVEL_INF);
 
 sem_t dhcpActive;
 
@@ -91,7 +91,7 @@ int dhcpClient(void)
 	net_dhcpv4_init_option_callback(&dhcp_cb, option_handler,
 					DHCP_OPTION_NTP, ntp_server,
 					sizeof(ntp_server));
-
+	
 	net_dhcpv4_add_option_callback(&dhcp_cb);
 
 	net_if_foreach(start_dhcpv4_client, NULL);

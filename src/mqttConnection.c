@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -30,7 +30,9 @@ static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
 static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
 
 static int publisher(const char *message, const char *topic);
+// static int publisher(const char *message, const char *topic, char *ipAddress);
 
+char serverIpAddress[17] = {0};
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
 /* Making RX buffer large enough that the full IPv6 packet can fit into it */
 #define MQTT_LIB_WEBSOCKET_RECV_BUF_LEN 1280
@@ -311,7 +313,8 @@ static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *me
 
 #define PRINT_RESULT(func, rc) LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
 
-static void broker_init(void)
+static void broker_init()
+// static void broker_init(char *serveripaddress)
 {
 #if defined(CONFIG_NET_IPV6)
 	struct sockaddr_in6 *broker6 = (struct sockaddr_in6 *)&broker;
@@ -332,8 +335,10 @@ static void broker_init(void)
 
 	broker4->sin_family = AF_INET;
 	broker4->sin_port = htons(SERVER_PORT);
+	LOG_DBG("This is the length of the SERVER IP addrese: %d", strlen(SERVER_IP_ADDRESS));
+	LOG_DBG("This is the length of the serverIp address addrese: %d", strlen(serverIpAddress));
+	// zsock_inet_pton(AF_INET, serverIpAddress, &broker4->sin_addr);
 	zsock_inet_pton(AF_INET, SERVER_IP_ADDRESS, &broker4->sin_addr);
-	// zsock_inet_pton(AF_INET, SERVER_ADDR, &broker4->sin_addr);
 #if defined(CONFIG_SOCKS)
 	struct sockaddr_in *proxy4 = (struct sockaddr_in *)&socks5_proxy;
 
@@ -345,10 +350,12 @@ static void broker_init(void)
 }
 
 static void client_init(struct mqtt_client *client)
+// static void client_init(struct mqtt_client *client, char *serverIpAddress)
 {
 	mqtt_client_init(client);
 
 	broker_init();
+	// broker_init(serverIpAddress);
 
 	/* MQTT client configuration */
 	client->broker = &broker;
@@ -409,12 +416,14 @@ static void client_init(struct mqtt_client *client)
 }
 
 /* In this routine we block until the connected variable is 1 */
+// static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
 static int try_to_connect(struct mqtt_client *client)
 {
 	int rc, i = 0;
 
 	while (i++ < APP_CONNECT_TRIES && !connected) {
 
+		// client_init(client, serverIpAddress);
 		client_init(client);
 
 		rc = mqtt_connect(client);
@@ -489,11 +498,13 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 	}
 
 static int publisher(const char *message, const char *topic)
+// static int publisher(const char *message, const char *topic, char *serverIpAddress)
 {
 	int rc = 0;
 
 	LOG_INF("attempting to connect: ");
 	rc = try_to_connect(&client_ctx);
+	// rc = try_to_connect(&client_ctx, serverIpAddress);
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);
 
@@ -526,7 +537,7 @@ K_THREAD_DEFINE(app_thread, STACK_SIZE, start_app, NULL, NULL, NULL, THREAD_PRIO
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
 
-void mqttEntryPoint(void *, void *, void *)
+void mqttEntryPoint(void * serverIpAddressIn, void *, void *)
 {
 #if defined(CONFIG_MQTT_LIB_TLS)
 	int rc;
@@ -534,11 +545,13 @@ void mqttEntryPoint(void *, void *, void *)
 	rc = tls_init();
 	PRINT_RESULT("tls_init", rc);
 #endif
-	struct MqttMsg msg;
-	memset(&msg, 0, sizeof(struct MqttMsg));
+	strcat(serverIpAddress, (char *)serverIpAddressIn);
+	struct MqttMsg msg = {0};
+	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
 			publisher(msg.msg, msg.topic);
+			// publisher(msg.msg, msg.topic, serverIpAddress);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
 		int rc = 0;
@@ -560,10 +573,10 @@ K_THREAD_STACK_DEFINE(mqttStackArea, MQTT_STACK_SIZE);
 
 struct k_thread mqttThread;
 
-void mqttThreadCreate()
+void mqttThreadCreate(char *serverIpAddress)
 {
 	k_tid_t mqtt =
 		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),
-				mqttEntryPoint, NULL, NULL, NULL, MQTT_PRIORITY, 0, K_NO_WAIT);
+				mqttEntryPoint, (void *)serverIpAddress, NULL, NULL, MQTT_PRIORITY, 0, K_NO_WAIT);
 	k_thread_name_set(mqtt, "mqtt");
 }

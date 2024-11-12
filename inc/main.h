@@ -9,5 +9,7 @@
 #include <zephyr/drivers/i2c.h>
 
 #define ADDR_NODE	DT_ALIAS(addr)
+int dnsResolver(char *queryName, char *serverIpAddress);
+extern sem_t dhcpActive;
 #endif
 
