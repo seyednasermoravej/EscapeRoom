@@ -49,6 +49,9 @@
 extern "C" {
 #endif
 
+extern char deviceIdPub[32];
+
+
 extern struct mqtt_topic servo_topic;
 extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;
@@ -64,6 +67,8 @@ extern struct mqtt_topic led7_topic;
 extern struct mqtt_topic led8_topic;
 extern struct mqtt_topic stepperSpeed_topic;
 extern struct mqtt_topic stepperPosition_topic;
+extern struct mqtt_topic deviceId_topic;
+
 
 #ifdef __cplusplus
 }

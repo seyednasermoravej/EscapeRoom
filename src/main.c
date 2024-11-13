@@ -1,22 +1,32 @@
 #include "main.h"
-#include <stdlib.h>
-#include <zephyr/drivers/i2c.h>
-#include <zephyr/tracing/tracing.h>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 void i2cScanner();
 void test();
-
+struct mqtt_topic deviceId_topic = {0};
 extern void puzzleThreadCreate();
 extern void mqttThreadCreate(char *);
-
+char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
+char deviceIdPub[32];
+void readingHWinfo(char *idStr);
 int main()
 { 
     //performing new update on firmware
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
+    readingHWinfo(deviceId);
+    LOG_INF("Device ID: %s", deviceId);
+    sprintf(deviceIdPub, "sub/%s", deviceId);
     // dhcpClient();
+
+    deviceId_topic.topic.utf8 = deviceIdPub;
+    deviceId_topic.topic.size = strlen(deviceIdPub);
+    deviceId_topic.qos = MQTT_QOS_1_AT_LEAST_ONCE;
+
+
+
+
     // char serverName[] = "mqtt-1.localdomain";
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
@@ -30,7 +40,8 @@ int main()
 
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
-    strcpy(send->topic, "pub/escape");
+    strcpy(send->topic, "pub/");
+    strcat(send->topic, deviceId);
     strcpy(send->msg, "Hello guys.");
     k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
@@ -86,4 +97,25 @@ void test()
         k_msleep(4000);
     }
     puzzleThreadCreate();
+}
+
+
+void readingHWinfo(char *idStr)
+{
+    uint8_t id[8];
+    ssize_t length;
+
+    length = hwinfo_get_device_id(id, sizeof(id));
+
+    if (length > 0) {
+        // LOG_PRINTK("Device ID: ");
+        for (int i = 0; i < length; i++) {
+            // LOG_PRINTK("%02x", id[i]);
+            sprintf(&idStr[i * 2], "%02x", id[i]);
+        }
+        idStr[2 * length] = '\0';
+        // LOG_PRINTK("\n");
+    } else {
+        LOG_PRINTK("Failed to read device ID\n");
+    }
 }

@@ -1,18 +1,7 @@
-#include <zephyr/logging/log.h>
+#include "dnsResolver.h"
+
 LOG_MODULE_REGISTER(net_dns_resolve_client_sample, LOG_LEVEL_DBG);
 
-#include <zephyr/kernel.h>
-#include <zephyr/linker/sections.h>
-#include <errno.h>
-#include <stdio.h>
-
-#include <zephyr/net/net_core.h>
-#include <zephyr/net/net_if.h>
-#include <zephyr/net/net_mgmt.h>
-#include <zephyr/net/dns_resolve.h>
-
-#include "net_sample_common.h"
-#include "main.h"
 
 #if defined(CONFIG_MDNS_RESOLVER)
 #if defined(CONFIG_NET_IPV4)

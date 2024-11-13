@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -124,9 +124,10 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[12] = led8_topic;
 	mqttLists[13] = stepperPosition_topic;
 	mqttLists[14] = stepperSpeed_topic;
+	mqttLists[15] = deviceId_topic;
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 15, .message_id = 34};
+		.list = mqttLists, .list_count = 16, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

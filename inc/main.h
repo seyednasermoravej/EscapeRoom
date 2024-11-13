@@ -1,15 +1,17 @@
 #ifndef __MAIN__H__
 #define __MAIN__H__
 
+#include <zephyr/drivers/i2c.h>
+#include <stdlib.h>
+#include <zephyr/tracing/tracing.h>
+#include <zephyr/drivers/hwinfo.h>
 
-#include "dhcpClient.h"
+#include "dnsResolver.h"
 #include "mqttConnection.h"
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
-#include <zephyr/drivers/i2c.h>
+
 
 #define ADDR_NODE	DT_ALIAS(addr)
-int dnsResolver(char *queryName, char *serverIpAddress);
-extern sem_t dhcpActive;
 #endif
 

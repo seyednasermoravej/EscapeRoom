@@ -52,7 +52,9 @@
 			"aasddriver.h": "c",
 			"dhcpclient.h": "c",
 			"flash_img.h": "c",
-			"net_sample_common.h": "c"
+			"net_sample_common.h": "c",
+			"errno.h": "c",
+			"topics.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true
