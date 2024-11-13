@@ -16,11 +16,11 @@ int main()
     //performing new update on firmware
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
-    dhcpClient();
+    // dhcpClient();
     // char serverName[] = "mqtt-1.localdomain";
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
-    // dnsResolver(serverName, serverIpAddress);
+    dnsResolver(serverName, serverIpAddress);
     // test();
     //http request for getting DFU
     
@@ -31,7 +31,7 @@ int main()
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/escape");
-    strcpy(send->msg, "hi Bram and Philippe");
+    strcpy(send->msg, "Hello guys.");
     k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {

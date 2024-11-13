@@ -335,10 +335,10 @@ static void broker_init()
 
 	broker4->sin_family = AF_INET;
 	broker4->sin_port = htons(SERVER_PORT);
-	LOG_DBG("This is the length of the SERVER IP addrese: %d", strlen(SERVER_IP_ADDRESS));
-	LOG_DBG("This is the length of the serverIp address addrese: %d", strlen(serverIpAddress));
-	// zsock_inet_pton(AF_INET, serverIpAddress, &broker4->sin_addr);
-	zsock_inet_pton(AF_INET, SERVER_IP_ADDRESS, &broker4->sin_addr);
+	// LOG_DBG("This is the length of the SERVER IP addrese: %d", strlen(SERVER_IP_ADDRESS));
+	// LOG_DBG("This is the length of the serverIp address addrese: %d", strlen(serverIpAddress));
+	zsock_inet_pton(AF_INET, serverIpAddress, &broker4->sin_addr);
+	// zsock_inet_pton(AF_INET, SERVER_IP_ADDRESS, &broker4->sin_addr);
 #if defined(CONFIG_SOCKS)
 	struct sockaddr_in *proxy4 = (struct sockaddr_in *)&socks5_proxy;
 
