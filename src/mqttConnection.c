@@ -29,8 +29,8 @@ struct k_mem_domain app_domain;
 static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
 static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
 
-static int publisher(const char *message, const char *topic);
-// static int publisher(const char *message, const char *topic, char *ipAddress);
+// static int publisher(const char *message, const char *topic);
+static int publisher(const char *message, const char *topic, char *ipAddress);
 
 char serverIpAddress[17] = {0};
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
@@ -313,8 +313,8 @@ static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *me
 
 #define PRINT_RESULT(func, rc) LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
 
-static void broker_init()
-// static void broker_init(char *serveripaddress)
+// static void broker_init()
+static void broker_init(char *serveripaddress)
 {
 #if defined(CONFIG_NET_IPV6)
 	struct sockaddr_in6 *broker6 = (struct sockaddr_in6 *)&broker;
@@ -349,13 +349,13 @@ static void broker_init()
 #endif
 }
 
-static void client_init(struct mqtt_client *client)
-// static void client_init(struct mqtt_client *client, char *serverIpAddress)
+// static void client_init(struct mqtt_client *client)
+static void client_init(struct mqtt_client *client, char *serverIpAddress)
 {
 	mqtt_client_init(client);
 
-	broker_init();
-	// broker_init(serverIpAddress);
+	// broker_init();
+	broker_init(serverIpAddress);
 
 	/* MQTT client configuration */
 	client->broker = &broker;
@@ -416,15 +416,15 @@ static void client_init(struct mqtt_client *client)
 }
 
 /* In this routine we block until the connected variable is 1 */
-// static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
-static int try_to_connect(struct mqtt_client *client)
+static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
+// static int try_to_connect(struct mqtt_client *client)
 {
 	int rc, i = 0;
 
 	while (i++ < APP_CONNECT_TRIES && !connected) {
 
-		// client_init(client, serverIpAddress);
-		client_init(client);
+		client_init(client, serverIpAddress);
+		// client_init(client);
 
 		rc = mqtt_connect(client);
 		if (rc != 0) {
@@ -497,14 +497,14 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 		}                                                                                  \
 	}
 
-static int publisher(const char *message, const char *topic)
-// static int publisher(const char *message, const char *topic, char *serverIpAddress)
+// static int publisher(const char *message, const char *topic)
+static int publisher(const char *message, const char *topic, char *serverIpAddress)
 {
 	int rc = 0;
 
 	LOG_INF("attempting to connect: ");
-	rc = try_to_connect(&client_ctx);
-	// rc = try_to_connect(&client_ctx, serverIpAddress);
+	// rc = try_to_connect(&client_ctx);
+	rc = try_to_connect(&client_ctx, serverIpAddress);
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);
 
@@ -550,14 +550,15 @@ void mqttEntryPoint(void * serverIpAddressIn, void *, void *)
 	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
-			publisher(msg.msg, msg.topic);
-			// publisher(msg.msg, msg.topic, serverIpAddress);
+			// publisher(msg.msg, msg.topic);
+			publisher(msg.msg, msg.topic, serverIpAddress);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
 		int rc = 0;
 
 		LOG_INF("attempting to connect: ");
-		rc = try_to_connect(&client_ctx);
+		rc = try_to_connect(&client_ctx, serverIpAddress);
+		// rc = try_to_connect(&client_ctx);
 		PRINT_RESULT("try_to_connect", rc);
 		SUCCESS_OR_EXIT(rc);
 		if(connected)
