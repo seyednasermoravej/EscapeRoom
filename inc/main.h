@@ -12,6 +12,10 @@
 #include "messageQueues.h"
 
 
+
+
+
+
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif
 

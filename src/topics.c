@@ -213,8 +213,8 @@ struct mqtt_topic stepperSpeed_topic = {
 .topic =
 {
 
-    .utf8 = (uint8_t*)SET_STEPPER_SPEED,
-    .size = strlen(SET_STEPPER_SPEED)
+    .utf8 = (uint8_t*)SET_STEPPER_TIME_POSITION,
+    .size = strlen(SET_STEPPER_TIME_POSITION)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 

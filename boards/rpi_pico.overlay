@@ -24,7 +24,7 @@
 		button0: button_0 {
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -60,25 +60,26 @@
 			debounce-interval-ms=<1000>;
 			rotating_platform_home_switch: home-switch
 			{
-				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_KEY_HOME>;
+				// gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+				gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH)>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
 			rotating_platform_calibrate_switch: calibrate-switch
 			{
-				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_KEY_T>;
+				gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
 			rotating_platform_stepper_enable: stepper-enable{
 				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
 			rotating_platform_stepper_step: stepper-step{
 				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
 			rotating_platform_stepper_direction: stepper-direction{
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
 		};
 	};
@@ -88,17 +89,17 @@
 		tmstb: tm_stb {
 			gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 stb pin";
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};				
 		tmclk: tm_clk {
 			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 clock pin";
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};	
 		tmdo: tm_do {
 			gpios = <&gpio0 8 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 do pin";	
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -122,7 +123,7 @@
 			<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
 			<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
 			label = "Device address";
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 	};
 	relayslocks
@@ -131,12 +132,12 @@
 		relayscheck: relays_check
 		{
 			gpios = <&gpio0 22 (GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 		maglocks: maglocks
 		{
 			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -182,14 +183,15 @@
 	aliases{
 		hintbutton = &button0;
 		built-in-led = &led0;
+		keypad = &kbd_matrix;
 	};
 	rotary-encoder
 	{
 		compatible = "gpio-keys";
 		rotaryencoder: encoderpins{
-			gpios = <&gpio0 2 (GPIO_ACTIVE_LOW)>, <&gpio0 3 (GPIO_ACTIVE_LOW)>, <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>, <&gpio0 27 (GPIO_ACTIVE_LOW)>, <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 					// <&gpio0 5 (GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_0>;
+			zephyr,code = <INPUT_BTN_0>;
 		};
 			
 		zephyr,deferred-init;
@@ -197,10 +199,15 @@
 		kbd_matrix: kbd-matrix {
 		compatible = "gpio-kbd-matrix";
 		row-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			
-		col-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>,
-			    <&gpio0 6 GPIO_ACTIVE_LOW>;
+		col-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>,
+			    <&gpio0 8 GPIO_ACTIVE_LOW>,
+			    <&gpio0 9 GPIO_ACTIVE_LOW>,
+			    <&gpio0 10 GPIO_ACTIVE_LOW>;
+		col-drive-inactive;
 		// zephyr-code = <0 1 2 4>;		
 		// no-ghostkey-check;
 		keymap{
@@ -208,22 +215,29 @@
 			keymap = <
 			        MATRIX_KEY(0, 0, INPUT_KEY_1)
 					MATRIX_KEY(0, 1, INPUT_KEY_2)
-					// MATRIX_KEY(0, 2, INPUT_KEY_3)
+					MATRIX_KEY(0, 2, INPUT_KEY_3)
+					MATRIX_KEY(0, 3, INPUT_KEY_A)
 					MATRIX_KEY(1, 0, INPUT_KEY_4)
 					MATRIX_KEY(1, 1, INPUT_KEY_5)
-					// MATRIX_KEY(1, 2, INPUT_KEY_6)
-					// MATRIX_KEY(2, 0, INPUT_KEY_7)
-					// MATRIX_KEY(2, 1, INPUT_KEY_8)
-					// MATRIX_KEY(2, 2, INPUT_KEY_9)
+					MATRIX_KEY(1, 2, INPUT_KEY_6)
+					MATRIX_KEY(1, 3, INPUT_KEY_B)
+					MATRIX_KEY(2, 0, INPUT_KEY_7)
+					MATRIX_KEY(2, 1, INPUT_KEY_8)
+					MATRIX_KEY(2, 2, INPUT_KEY_9)
+					MATRIX_KEY(2, 3, INPUT_KEY_C)
+					MATRIX_KEY(3, 0, INPUT_KEY_KPASTERISK)
+					MATRIX_KEY(3, 1, INPUT_KEY_0)
+					MATRIX_KEY(3, 2, INPUT_KEY_E)
+					MATRIX_KEY(3, 3, INPUT_KEY_D)
 			>;
-			row-size = <2>;
-			col-size = <2>;
+			row-size = <4>;
+			col-size = <4>;
 		};
 		// zephyr,deferred-init;
-		debounce-down-ms = <80>;
-		debounce-up-ms = <40>;
-		// poll-timeout-ms = <500>;
-		// idle-mode = "interrupt";
+		debounce-down-ms = <30>;
+		debounce-up-ms = <30>;
+		settle-time-us = <50>;
+		idle-mode = "interrupt";
 
 	};
 

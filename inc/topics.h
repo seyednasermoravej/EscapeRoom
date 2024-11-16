@@ -36,12 +36,12 @@
 #define RFID_IN_TOPIC           "pub/rfidIn" 
 #define ROTARY_ENCODER_TOPIC    "pub/rotaryEncoder"
 #define LOGS_TOPIC              "pub/logs"
-#define KEYPAD_TOPIC            "pub/keypad"
+#define KEYPAD_TOPIC                       "pub/keypad"
 
-#define SET_STEPPER_SPEED          "sub/stepperSpeed"
+#define SET_STEPPER_TIME_POSITION          "sub/stepperTimePosition"
 #define SET_STEPPER_POSITION       "sub/stepperPosition"
-#define GET_STEPPER_SPEED          "pub/stepperSpeed" 
-#define GET_STEPPER_POSITION       "pub/stepperPosition"             
+// #define GET_STEPPER_SPEED          "pub/stepperSpeed" 
+// #define GET_STEPPER_POSITION       "pub/stepperPosition"             
 
 
 

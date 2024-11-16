@@ -49,7 +49,7 @@ int RotatingPlatform:: homeSwitchInit()
         return -1;
     }
     ret = gpio_pin_interrupt_configure_dt(&homeSwitch,
-                        GPIO_INT_EDGE_FALLING);
+                        GPIO_INT_EDGE_RISING);
     if (ret != 0) {
         printk("Error %d: failed to configure interrupt on %s pin %d\n",
             ret, homeSwitch.port->name, homeSwitch.pin);
@@ -87,6 +87,9 @@ void RotatingPlatform:: calibration()
     {
         stepper->run();
     }
+    LOG_INF("current pos before stop in calibration is: %ld", stepper->currentPosition());
+    stepper->stop();
+    LOG_INF("current pos after stop in calibration is: %ld", stepper->currentPosition());
     long stepsPerRev = stepper->currentPosition();
     stepsPerDegree = (double)stepsPerRev / 360; 
     // sem_post(&semCalibrate);
@@ -106,6 +109,7 @@ void RotatingPlatform:: goToHome()
     {
         stepper->run();
     }
+    LOG_INF("current pos before stop is: %ld", stepper->currentPosition());
     stepper->stop();
     stepper->setCurrentPosition(0);
     LOG_INF("Current Position is: %ld", stepper->currentPosition());
@@ -254,26 +258,41 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
         {
             goToPosition(atoi(msg->msg));
         }
-        else if(strcmp(msg->topic, SET_STEPPER_SPEED) == 0)
+        else if(strcmp(msg->topic, SET_STEPPER_TIME_POSITION) == 0)
         {
+            char time[8];
+            char pos[8];
+            uint8_t commaPos = 0;
+            while(*(msg->msg + commaPos) != ',')
+            {
+                time[commaPos] = *(msg->msg + commaPos);
+                commaPos++;
+            }
+            strcpy(pos, (msg->msg + commaPos) + 1);
+            int timeInt = atoi(time);
+            int posInt = atoi(pos);
+            int accel = (2 * posInt)/(timeInt * timeInt);
+            stepper->setAcceleration(accel);
+            stepper->moveTo(posInt);
+            LOG_INF("The new position is:%ld", stepper->currentPosition());
             // aasd->setPosition(atoi(msg->msg));
         }
-        else if(strcmp(msg->topic, GET_STEPPER_SPEED) == 0)
-        {
+        // else if(strcmp(msg->topic, GET_STEPPER_SPEED) == 0)
+        // {
             // MqttMsg msg;
             // strcpy(msg.topic, GET_AASD_SPEED);
             // sprintf(msg.msg, "%d", aasd->getSpeed());
             // // itoa(aasd->getSpeed(), msg.msg, 10);
             // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        else if(strcmp(msg->topic, GET_STEPPER_POSITION) == 0)
-        {
-        //     // MqttMsg msg;
-        //     // strcpy(msg.topic, GET_AASD_POSITION);
-        //     // sprintf(msg.msg, "%d", aasd->getPosition());
-        //     // // itoa(aasd->getPosition(), msg.msg, 10);
-        //     // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
+        // }
+        // else if(strcmp(msg->topic, GET_STEPPER_POSITION) == 0)
+        // {
+            // MqttMsg msg;
+            // strcpy(msg.topic, GET_AASD_POSITION);
+            // sprintf(msg.msg, "%d", aasd->getPosition());
+            // // itoa(aasd->getPosition(), msg.msg, 10);
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        // }
         else
         {
             LOG_INF("The command is not valid.");

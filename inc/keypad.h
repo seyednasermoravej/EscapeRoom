@@ -1,26 +1,24 @@
 #ifndef __KEYPAD__H__
 #define __KEYPAD__H__
 
-#include <zephyr/drivers/gpio.h>
-#include <zephyr/input/input_kbd_matrix.h>
-#include <zephyr/input/input_keymap.h>
-#include "messageQueues.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <zephyr/kernel.h>
-
-class Keypad
-{
-public:
-    Keypad(const struct device *_devGpio, struct k_msgq *_queue);
-
-
-private:
-    struct device *devGpio; 
-    struct k_msgq *queue;
-    struct input_kbd_matrix_common_config *cfg;
-    void gpio_kbd_scan_set_row(uint8_t row);
-    void input_kbd_matrix_drive_column_hook(int col);
-};
+#include <zephyr/device.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/input/input.h>
+#include "zephyr/logging/log.h"
+#include "messageQueues.h"
+// #define INPUT_DEV DT_NODELABEL(kbd_matrix)
+void keypad();
 
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif

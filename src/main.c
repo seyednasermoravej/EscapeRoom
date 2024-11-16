@@ -1,5 +1,6 @@
 #include "main.h"
 
+#include "keypad.h"
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 void i2cScanner();
@@ -31,7 +32,7 @@ int main()
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     dnsResolver(serverName, serverIpAddress);
-    // test();
+    test();
     //http request for getting DFU
     
     // sem_destroy(&dhcpActive);
@@ -89,6 +90,7 @@ void i2cScanner()
 
 void test()
 {
+    keypad();
     while(1)
     {
         LOG_INF("inf");
