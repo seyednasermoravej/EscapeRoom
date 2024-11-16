@@ -82,23 +82,32 @@ void RotatingPlatform:: calibration()
 {
     goToHome();
     isHome = false;
-    stepper->move(10000000);
-    while(!isHome)
-    {
+    //////////////////////////////////
+    stepper->move(12500);
+
+    while (stepper->currentPosition() != 12500) // Full speed up to 300
         stepper->run();
-    }
-    LOG_INF("current pos before stop in calibration is: %ld", stepper->currentPosition());
+
+
     stepper->stop();
-    LOG_INF("current pos after stop in calibration is: %ld", stepper->currentPosition());
-    long stepsPerRev = stepper->currentPosition();
-    stepsPerDegree = (double)stepsPerRev / 360; 
-    // sem_post(&semCalibrate);
-    calibrated = true;
-    LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
-    struct MqttMsg msg;
-    strcpy(msg.topic, STATUS_TOPIC);
-    strcpy(msg.msg, "calibrated");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+
+    /////////////////////////////
+    // while(!isHome)
+    // {
+    //     stepper->run();
+    // }
+    // LOG_INF("current pos before stop in calibration is: %ld", stepper->currentPosition());
+    // stepper->stop();
+    // LOG_INF("current pos after stop in calibration is: %ld", stepper->currentPosition());
+    // long stepsPerRev = stepper->currentPosition();
+    // stepsPerDegree = (double)stepsPerRev / 360; 
+    // // sem_post(&semCalibrate);
+    // calibrated = true;
+    // LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
+    // struct MqttMsg msg;
+    // strcpy(msg.topic, STATUS_TOPIC);
+    // strcpy(msg.msg, "calibrated");
+    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     
 }
 

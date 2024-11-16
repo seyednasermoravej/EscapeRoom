@@ -24,7 +24,7 @@
 		button0: button_0 {
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -60,26 +60,26 @@
 			debounce-interval-ms=<1000>;
 			rotating_platform_home_switch: home-switch
 			{
-				// gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-				gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_BTN_0>;
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+				// gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH)>;
+				zephyr,code = <INPUT_KEY_HOME>;
 			};
 			rotating_platform_calibrate_switch: calibrate-switch
 			{
 				gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_KEY_T>;
 			};
 			rotating_platform_stepper_enable: stepper-enable{
 				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_KEY_HOME>;
 			};
 			rotating_platform_stepper_step: stepper-step{
 				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_KEY_HOME>;
 			};
 			rotating_platform_stepper_direction: stepper-direction{
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_KEY_HOME>;
 			};
 		};
 	};
@@ -89,17 +89,17 @@
 		tmstb: tm_stb {
 			gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 stb pin";
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};				
 		tmclk: tm_clk {
 			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 clock pin";
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};	
 		tmdo: tm_do {
 			gpios = <&gpio0 8 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 do pin";	
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -123,7 +123,7 @@
 			<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
 			<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
 			label = "Device address";
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 	};
 	relayslocks
@@ -132,12 +132,12 @@
 		relayscheck: relays_check
 		{
 			gpios = <&gpio0 22 (GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		maglocks: maglocks
 		{
 			gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
@@ -191,7 +191,7 @@
 		rotaryencoder: encoderpins{
 			gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>, <&gpio0 27 (GPIO_ACTIVE_LOW)>, <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 					// <&gpio0 5 (GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_BTN_0>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 			
 		zephyr,deferred-init;
@@ -207,10 +207,10 @@
 			    <&gpio0 8 GPIO_ACTIVE_LOW>,
 			    <&gpio0 9 GPIO_ACTIVE_LOW>,
 			    <&gpio0 10 GPIO_ACTIVE_LOW>;
-		col-drive-inactive;
+		// col-drive-inactive;
 		// zephyr-code = <0 1 2 4>;		
-		// no-ghostkey-check;
-		keymap{
+		no-ghostkey-check;
+		keypad: keymap{
 			compatible = "input-keymap";
 			keymap = <
 			        MATRIX_KEY(0, 0, INPUT_KEY_1)
@@ -233,11 +233,11 @@
 			row-size = <4>;
 			col-size = <4>;
 		};
-		// zephyr,deferred-init;
-		debounce-down-ms = <30>;
-		debounce-up-ms = <30>;
-		settle-time-us = <50>;
-		idle-mode = "interrupt";
+		zephyr,deferred-init;
+		// debounce-down-ms = <30>;
+		// debounce-up-ms = <30>;
+		// settle-time-us = <50>;
+		// idle-mode = "interrupt";
 
 	};
 

@@ -4,33 +4,42 @@
 LOG_MODULE_REGISTER(keypad, LOG_LEVEL_INF);
 
 
-void keypadHandler(struct input_event *val, void*)
+void keypadHandler(struct input_event *val, void* topic)
 {
     if (val->type == INPUT_EV_KEY) {
-        // struct MqttMsg msg = {0};
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, (char *)topic);
         // strcpy(msg.topic, KEYPAD_TOPIC);
-        switch (val->code)
+        if(val->code < 11)
         {
-            case INPUT_KEY_0:
-                // strcpy(msg.msg, "key 0 is pressed");
-                // LOG_INF("%s", msg.msg);
 
-                break;
-            
-            default:
-                break;
+            LOG_INF("code: %d, state: %s",  val->code - 1, val->value ? "pressed" : "released");
+            sprintf(msg.msg, "code: %d, state: %s",  val->code - 1, val->value ? "pressed" : "released");
         }
-        // printk("Key %s at row %d, column %d\n",
-        printk("row %d, column %d\n",
-            //    val->state ? "pressed" : "released",
-               val->code / 10, val->code % 10);
+        if(val->code == 11)
+        {
+            LOG_INF("code: %d, state: %s",  val->code - 2, val->value ? "pressed" : "released");
+            sprintf(msg.msg, "code: %d, state: %s",  val->code - 2, val->value ? "pressed" : "released");
+        }
+        if(val->code == 55)
+        {
+            LOG_INF("*, state: %s",  val->value ? "pressed" : "released");
+            sprintf(msg.msg, "*, state: %s",  val->value ? "pressed" : "released");
+
+        }
+        if(val->code == INPUT_KEY_E)
+        {
+            sprintf(msg.msg, "#, state: %s",  val->value ? "pressed" : "released");
+            LOG_INF("#, state: %s",  val->value ? "pressed" : "released");
+        }
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
 }
 
-void keypad(void)
+int keypad(const struct device *dev, char *topic)
 {
-    const struct device *input_dev = DEVICE_DT_GET(DT_NODELABEL(kbd_matrix));
-    device_init(input_dev);
+    device_init(dev);
+    INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(keypad)), keypadHandler, KEYPAD_TOPIC);
+    return 0;
 
-    INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)), keypadHandler, NULL);
 }

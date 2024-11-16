@@ -56,7 +56,8 @@
 			"errno.h": "c",
 			"topics.h": "c",
 			"stdio.h": "c",
-			"keypad.h": "c"
+			"keypad.h": "c",
+			"unseen.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

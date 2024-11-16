@@ -32,7 +32,7 @@ int main()
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     dnsResolver(serverName, serverIpAddress);
-    test();
+    // test();
     //http request for getting DFU
     
     // sem_destroy(&dhcpActive);
@@ -90,7 +90,7 @@ void i2cScanner()
 
 void test()
 {
-    keypad();
+    // keypad();
     while(1)
     {
         LOG_INF("inf");
