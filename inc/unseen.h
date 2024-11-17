@@ -20,7 +20,6 @@ public:
     void messageHandler(struct MqttMsg *msg);
 
 private:
-    // Keypad *keypad;
 
 
 };

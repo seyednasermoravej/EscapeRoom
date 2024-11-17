@@ -64,7 +64,6 @@ int RotatingPlatform:: homeSwitchInit()
 
 void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    LOG_INF("Entered calibrate switch ");
     RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
     k_work_submit(&instance->calibrationWork);
 }
@@ -74,12 +73,22 @@ void RotatingPlatform:: calibrationWorkHandler(struct k_work *work)
     // Cast work to the correct type
     RotatingPlatform *instance = CONTAINER_OF(work, RotatingPlatform, calibrationWork);
     // Call the actual calibration function
-    instance->calibration(); // Pass appropriate parameters
+    static uint32_t prevTime = 0;
+    uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
+    if((currentTime - prevTime > 4000) || (prevTime - currentTime > 4000))
+    {
+        prevTime = currentTime;
+        instance->calibration(); // Pass appropriate parameters
+
+    }
+    prevTime = currentTime;
+
 }
 
 
 void RotatingPlatform:: calibration()
 {
+    LOG_INF("Entered calibration");
     goToHome();
     isHome = false;
     //////////////////////////////////

@@ -28,10 +28,10 @@ int main()
 
 
 
-    char serverName[] = "mqtt-1.localdomain";
-    // char serverName[] = "test.mosquitto.org";
+    // char serverName[] = "mqtt-1.localdomain";
+    char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
-    test();
+    // test();
     dnsResolver(serverName, serverIpAddress);
     
     //http request for getting DFU
@@ -91,7 +91,7 @@ void i2cScanner()
 
 void test()
 {
-    keypad();
+    // keypad();
     while(1)
     {
         LOG_INF("inf");
