@@ -64,8 +64,19 @@ int RotatingPlatform:: homeSwitchInit()
 
 void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
-    k_work_submit(&instance->calibrationWork);
+    if(pins == BIT(calibrateSwitch.pin))
+    {
+        RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
+        static uint32_t prevTime = 0;
+        uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
+        if((currentTime - prevTime > 4000) || (prevTime - currentTime > 4000))
+        {
+            prevTime = currentTime;
+            k_work_submit(&instance->calibrationWork);
+        }
+        prevTime = currentTime;
+
+    }
 }
 
 void RotatingPlatform:: calibrationWorkHandler(struct k_work *work) 
@@ -73,15 +84,8 @@ void RotatingPlatform:: calibrationWorkHandler(struct k_work *work)
     // Cast work to the correct type
     RotatingPlatform *instance = CONTAINER_OF(work, RotatingPlatform, calibrationWork);
     // Call the actual calibration function
-    static uint32_t prevTime = 0;
-    uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
-    if((currentTime - prevTime > 4000) || (prevTime - currentTime > 4000))
-    {
-        prevTime = currentTime;
-        instance->calibration(); // Pass appropriate parameters
+    instance->calibration(); // Pass appropriate parameters
 
-    }
-    prevTime = currentTime;
 
 }
 
@@ -121,17 +125,30 @@ void RotatingPlatform:: calibration()
 void RotatingPlatform:: goToHome()
 {
     stepper->move(1000000);
+    // // while(!isHome)
+    // // {
+    // //     stepper->run();
+    // // }
     // while(!isHome)
     // {
     //     stepper->run();
+    //     if(isHome)
+    //         stepper->stop();
     // }
-    while(!isHome)
-    {
-        stepper->run();
-        if(isHome)
-            stepper->stop();
-    }
-    stepper->stop();
+        while (stepper->currentPosition() != 1000000) // Full speed up to 300
+        {
+
+            stepper->run();
+            if(isHome)
+            {
+                stepper->stop();
+                while(stepper->currentPosition() != stepper->targetPosition())
+                    stepper->run();
+                break;
+            }
+        }
+
+    // stepper->stop();
     LOG_INF("current pos before stop is: %ld", stepper->currentPosition());
     stepper->setCurrentPosition(0);
     LOG_INF("Current Position is: %ld", stepper->currentPosition());
