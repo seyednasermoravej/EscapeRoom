@@ -14,7 +14,7 @@ extern "C" {
 #endif
 
 
-int keypad(const struct device *dev, char *topic);
+void keypad();
 
 
 #ifdef __cplusplus

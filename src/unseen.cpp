@@ -6,7 +6,7 @@ LOG_MODULE_REGISTER(unseen, LOG_LEVEL_INF);
 
 Unseen:: Unseen()
 {
-    keypad(DEVICE_DT_GET(DT_NODELABEL(keypad)), KEYPAD_TOPIC);
+    keypad();
     // keypad = new Keypad(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)), &msqSendToMQTT);
 }
 

@@ -66,7 +66,7 @@
 			};
 			rotating_platform_calibrate_switch: calibrate-switch
 			{
-				gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_T>;
 			};
 			rotating_platform_stepper_enable: stepper-enable{

@@ -36,10 +36,10 @@ void keypadHandler(struct input_event *val, void* topic)
     }
 }
 
-int keypad(const struct device *dev, char *topic)
-{
-    device_init(dev);
     INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(keypad)), keypadHandler, KEYPAD_TOPIC);
-    return 0;
+void keypad()
+{
+    device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix)));
+    // return 0;
 
 }

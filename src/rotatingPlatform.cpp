@@ -83,12 +83,10 @@ void RotatingPlatform:: calibration()
     goToHome();
     isHome = false;
     //////////////////////////////////
-    stepper->move(12500);
+    stepper->move(-25000);
 
-    while (stepper->currentPosition() != 12500) // Full speed up to 300
+    while (stepper->currentPosition() != -25000) // Full speed up to 300
         stepper->run();
-
-
     stepper->stop();
 
     /////////////////////////////
@@ -113,13 +111,19 @@ void RotatingPlatform:: calibration()
 
 void RotatingPlatform:: goToHome()
 {
-    stepper->move(10000000);
+    stepper->move(1000000);
+    // while(!isHome)
+    // {
+    //     stepper->run();
+    // }
     while(!isHome)
     {
         stepper->run();
+        if(isHome)
+            stepper->stop();
     }
-    LOG_INF("current pos before stop is: %ld", stepper->currentPosition());
     stepper->stop();
+    LOG_INF("current pos before stop is: %ld", stepper->currentPosition());
     stepper->setCurrentPosition(0);
     LOG_INF("Current Position is: %ld", stepper->currentPosition());
 }
