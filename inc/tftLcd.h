@@ -3,7 +3,7 @@
 
 
 
-// #include <zephyr/device.h>
+#include <zephyr/device.h>
 // #include <zephyr/devicetree.h>
 // #include <zephyr/drivers/display.h>
 // #include <zephyr/drivers/gpio.h>

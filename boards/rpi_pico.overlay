@@ -82,6 +82,7 @@
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <INPUT_KEY_HOME>;
 			};
+			// zephyr,deferred-init;
 		};
 	};
 	ledandkeys
@@ -368,6 +369,7 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
+	//my test
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
@@ -377,14 +379,23 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-		lcd2: pcf857x@21{
-		compatible = "nxp,pcf857x";
-		reg = <0x21>;
-		gpio-controller;
-		#gpio-cells = <2>;
-		ngpios = <8>;
-		zephyr,deferred-init;
-	};
+	// 	lcd1: pcf857x@27 {
+	// 	compatible = "nxp,pcf857x";
+	// 	status = "okay";
+	// 	reg = <0x27>;
+	// 	gpio-controller;
+	// 	#gpio-cells = <2>;
+	// 	ngpios = <8>;
+	// 	zephyr,deferred-init;
+	// };
+	// 	lcd2: pcf857x@21{
+	// 	compatible = "nxp,pcf857x";
+	// 	reg = <0x21>;
+	// 	gpio-controller;
+	// 	#gpio-cells = <2>;
+	// 	ngpios = <8>;
+	// 	zephyr,deferred-init;
+	// };
 		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";
 		status = "okay";

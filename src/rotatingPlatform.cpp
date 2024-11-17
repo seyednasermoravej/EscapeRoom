@@ -23,10 +23,11 @@ RotatingPlatform:: RotatingPlatform()
 {
     LOG_INF("Rotating Platform Puzzle is selected");
 
-    k_work_init(&calibrationWork, calibrationWorkHandler);
     stepperInit();
     buttonsInit();
     relaysInit();
+    k_work_init(&calibrationWork, calibrationWorkHandler);
+    device_init(relays->port);
 }
 
 void RotatingPlatform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
@@ -38,7 +39,7 @@ void RotatingPlatform:: homeSwitchIrqWrapper(const struct device *dev, struct gp
 
 int RotatingPlatform:: homeSwitchInit()
 {
-    device_init(homeSwitch.port);
+    // device_init(homeSwitch.port);
 
     int ret;
     if (!device_is_ready(homeSwitch.port)) {
@@ -66,15 +67,21 @@ void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, stru
 {
     if(pins == BIT(calibrateSwitch.pin))
     {
-        RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
-        static uint32_t prevTime = 0;
-        uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
-        if((currentTime - prevTime > 1000) || (prevTime - currentTime > 1000))
-        {
+        // static int cal = 0;
+        // if (cal > 1)
+        // {
+            RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
+            static uint32_t prevTime = 0;
+            uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
+            if((currentTime - prevTime > 1000) || (prevTime - currentTime > 1000))
+            {
+                prevTime = currentTime;
+                k_work_submit(&instance->calibrationWork);
+            }
             prevTime = currentTime;
-            k_work_submit(&instance->calibrationWork);
-        }
-        prevTime = currentTime;
+
+        // }
+        // cal++;
 
     }
 }
@@ -100,13 +107,13 @@ void RotatingPlatform:: calibration()
         goToHome();
         isHome = false;
         calibrated = true;
+        stepper->move(-30000);
+
+        while (stepper->currentPosition() != -30000) // Full speed up to 300
+            stepper->run();
+        stepper->stop();
     }
     //////////////////////////////////
-    // stepper->move(-25000);
-
-    // while (stepper->currentPosition() != -25000) // Full speed up to 300
-    //     stepper->run();
-    // stepper->stop();
 
     /////////////////////////////
     // while(!isHome)
@@ -136,7 +143,7 @@ void RotatingPlatform:: goToHome()
         stepper->run();
         if(isHome)
         {
-            stepper->setAcceleration(5000);
+            stepper->setAcceleration(3000);
             stepper->stop();
             while(stepper->currentPosition() != stepper->targetPosition())
                 stepper->run();
@@ -157,7 +164,7 @@ void RotatingPlatform:: goToHome()
 int RotatingPlatform:: calibrateSwitchInit()
 {
     int ret;
-    ret = device_init(calibrateSwitch.port);
+    // ret = device_init(calibrateSwitch.port);
 
     if (!device_is_ready(calibrateSwitch.port)) {
         return -1;
@@ -213,7 +220,7 @@ void RotatingPlatform:: iStopWorkHandler(struct k_work *work)
 
 int RotatingPlatform:: iStopInit()
 {
-    device_init(iStop.port);
+    // device_init(iStop.port);
     int ret;
     if (!device_is_ready(iStop.port)) {
         return -1;
@@ -250,7 +257,7 @@ int RotatingPlatform:: buttonsInit()
 {
     int ret = 0;
     uint32_t interruptBits = 0;
-    device_init(buttons -> port);
+    // device_init(buttons -> port);
 
     for(unsigned int i = 0; i < ARRAY_SIZE(buttons); i++){
         if (!device_is_ready(buttons[i].port)) {
@@ -276,7 +283,7 @@ int RotatingPlatform:: buttonsInit()
 int RotatingPlatform:: relaysInit()
 {
     int ret;
-    device_init(relays->port);
+    // device_init(relays->port);
     for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
         if (!device_is_ready(relays[i].port)) {
 		    return -1;

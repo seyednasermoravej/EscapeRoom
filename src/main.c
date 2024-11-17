@@ -13,6 +13,7 @@ char deviceIdPub[32];
 void readingHWinfo(char *idStr);
 int main()
 { 
+    // i2cScanner();
     //performing new update on firmware
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
@@ -28,8 +29,8 @@ int main()
 
 
 
-    // char serverName[] = "mqtt-1.localdomain";
-    char serverName[] = "test.mosquitto.org";
+    char serverName[] = "mqtt-1.localdomain";
+    // char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     // test();
     dnsResolver(serverName, serverIpAddress);
@@ -60,7 +61,7 @@ void i2cScanner()
     uint8_t addr;
     int ret;
 
-    i2c_dev = device_get_binding("I2C_0");
+    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
     if (!i2c_dev) {
         printf("Error: I2C device not found\n");
         return;

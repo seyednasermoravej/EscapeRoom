@@ -75,7 +75,7 @@ Gate:: Gate()
 	relaysCheckInit();
 	magLocksInit();
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
-	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
+	// lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
 }
 
 
@@ -176,7 +176,7 @@ void Gate:: messageHandler(struct MqttMsg *msg)
         struct LcdMsg lcd = {0};
         strcpy(lcd.firstLine, msg->msg);
         k_msgq_put(&msqLcd1, &lcd, K_NO_WAIT);
-        k_msgq_put(&msqLcd2, &lcd, K_NO_WAIT);
+        // k_msgq_put(&msqLcd2, &lcd, K_NO_WAIT);
     }
 }
 
