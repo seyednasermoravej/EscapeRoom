@@ -143,7 +143,7 @@ void RotatingPlatform:: goToHome()
         stepper->run();
         if(isHome)
         {
-            stepper->setAcceleration(3000);
+            stepper->setAcceleration(6000);
             stepper->stop();
             while(stepper->currentPosition() != stepper->targetPosition())
                 stepper->run();
@@ -198,8 +198,8 @@ void RotatingPlatform:: goToPosition(int pos)
 int RotatingPlatform:: stepperInit()
 {
     stepper = new AccelStepper(AccelStepper::DRIVER, &stepPin, &directionPin, &directionPin, &directionPin, enablePin); 
-    stepper->setMaxSpeed(500000);
-    stepper->setAcceleration(1000);
+    stepper->setMaxSpeed(5000);
+    stepper->setAcceleration(500);
     homeSwitchInit();
     calibrateSwitchInit();
     // calibration();

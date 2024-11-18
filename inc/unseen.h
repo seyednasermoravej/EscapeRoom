@@ -21,6 +21,8 @@ public:
 
 private:
 
+    TftLcd *display;
+
 
 };
 

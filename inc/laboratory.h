@@ -23,7 +23,7 @@ public:
 
 
 private:
-
+    const struct device *strip;
 };
 
 
