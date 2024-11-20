@@ -19,6 +19,8 @@ static const struct gpio_dt_spec relays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_relays), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
 };
 
+
+
 RotatingPlatform:: RotatingPlatform()
 {
     LOG_INF("Rotating Platform Puzzle is selected");
@@ -28,6 +30,7 @@ RotatingPlatform:: RotatingPlatform()
     relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     device_init(relays->port);
+
 }
 
 void RotatingPlatform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
@@ -200,7 +203,7 @@ void RotatingPlatform:: goToPosition(int position)
 
 
     stepper->moveTo(position);
-    LOG_DBG("current position is: %d, target is: %d", stepper->currentPosition(), stepper->targetPosition());
+    LOG_DBG("current position is: %ld, target is: %ld", stepper->currentPosition(), stepper->targetPosition());
     while ((stepper->currentPosition() != position)) // Full speed up to 300
     {
         // if(k_msgq_get(&msqReceivedFromMQTT, &msg, K_NO_WAIT))

@@ -15,7 +15,7 @@
 #include <semaphore.h>
 #include "topics.h"
 #include "AccelStepper.h"
-// #include "aasdDriver.h"
+#include <zephyr/input/input.h>
 
 #define DT_SPEC_AND_COMMA_CONFIG_DEVICE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),

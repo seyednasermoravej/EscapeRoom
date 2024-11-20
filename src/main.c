@@ -1,6 +1,7 @@
 #include "main.h"
 
 #include "keypad.h"
+
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 void i2cScanner();
@@ -11,6 +12,42 @@ extern void mqttThreadCreate(char *);
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
+
+
+
+
+
+static const struct device *const test_gpio_keys_dev = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
+void buttonsHandler(struct input_event *val, void* topic)
+{
+    if (val->type == INPUT_EV_KEY)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_BTN_0) && (val->value))
+        {
+
+            LOG_INF("End time pressed");
+            sprintf(msg.msg, "End time pressed");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int main()
 { 
     // i2cScanner();
@@ -29,10 +66,10 @@ int main()
 
 
 
-    char serverName[] = "mqtt-1.localdomain";
-    // char serverName[] = "test.mosquitto.org";
+    // char serverName[] = "mqtt-1.localdomain";
+    char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
-    // test();
+    test();
     dnsResolver(serverName, serverIpAddress);
     
     //http request for getting DFU
@@ -92,15 +129,14 @@ void i2cScanner()
 
 void test()
 {
-    // keypad();
+
+    device_init(test_gpio_keys_dev);
+    INPUT_CALLBACK_DEFINE(test_gpio_keys_dev, buttonsHandler, NULL);
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time_button)));
     while(1)
     {
-        LOG_INF("inf");
-        // LOG_DBG("dbg");
-        // LOG_ERR("error");
-        k_msleep(4000);
+        k_msleep(1000);
     }
-    puzzleThreadCreate();
 }
 
 

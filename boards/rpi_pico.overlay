@@ -84,17 +84,19 @@
 			};
 			// zephyr,deferred-init;
 		};
-		// rotating_platform_end_time
-		// {
-		// 	compatible = "gpio-keys";
-		// 	debounce-interval-ms=<1000>;
-		// 	rotating_platform_home_switch: home-switch
-		// 	{
-		// 		gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-		// 		zephyr,code = <INPUT_KEY_HOME>;
-		// 	};
+		rotating_platform_end_time:gpio-keys
+		{
+			compatible = "gpio-keys";
+			debounce-interval-ms=<30>;
+			status = "okay";
+			rotating_platform_end_time_button: end-time-button
+			{
+				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			zephyr,deferred-init;
 
-		// };
+		};
 	};
 	ledandkeys
 	{
@@ -213,7 +215,8 @@
 			
 		zephyr,deferred-init;
 	};
-		kbd_matrix: kbd-matrix {
+	kbd_matrix: kbd-matrix
+	{
 		compatible = "gpio-kbd-matrix";
 		row-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
