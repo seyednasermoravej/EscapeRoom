@@ -32,6 +32,8 @@ public:
     void iStopWorkHandler(struct k_work *work);
     static void buttonsIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     void buttonsIrq(const struct device *dev, uint32_t pins);
+    void goToStartPos();
+    void stop();
 
 private:
     AccelStepper *stepper = NULL;
@@ -53,6 +55,8 @@ private:
     double stepsPerDegree = 0;
     void goToPosition(int pos);
     bool calibrated = false;
+    int startPos = -30000;
+
 };
 
 

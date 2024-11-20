@@ -65,25 +65,16 @@ int RotatingPlatform:: homeSwitchInit()
 
 void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    if(pins == BIT(calibrateSwitch.pin))
+    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
+    static uint32_t prevTime = 0;
+    uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
+    if((currentTime - prevTime > 1000) || (prevTime - currentTime > 1000))
     {
-        // static int cal = 0;
-        // if (cal > 1)
-        // {
-            RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
-            static uint32_t prevTime = 0;
-            uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
-            if((currentTime - prevTime > 1000) || (prevTime - currentTime > 1000))
-            {
-                prevTime = currentTime;
-                k_work_submit(&instance->calibrationWork);
-            }
-            prevTime = currentTime;
-
-        // }
-        // cal++;
-
+        prevTime = currentTime;
+        k_work_submit(&instance->calibrationWork);
     }
+    prevTime = currentTime;
+
 }
 
 void RotatingPlatform:: calibrationWorkHandler(struct k_work *work) 
@@ -99,20 +90,32 @@ void RotatingPlatform:: calibrationWorkHandler(struct k_work *work)
 
 void RotatingPlatform:: calibration()
 {
-    if(calibrated)
-        return;
-    else
+    static uint8_t numIn = 0;
+    numIn++;
+    if(numIn % 2)
     {
         LOG_INF("Entered calibration");
+
         goToHome();
         isHome = false;
         calibrated = true;
-        stepper->move(-30000);
 
-        while (stepper->currentPosition() != -30000) // Full speed up to 300
-            stepper->run();
-        stepper->stop();
+        stepper->setAcceleration(500);
+        goToStartPos();
+
+        stepper->setCurrentPosition(0);
+
+        numIn = 1;
+        calibrated = true;
+        LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
+        struct MqttMsg msg;
+        strcpy(msg.topic, STATUS_TOPIC);
+        strcpy(msg.msg, "calibrated");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        // stepsPerDegree = 350000/360;
+        // stepsPerDegree = (double)stepsPerRev / 360; 
     }
+
     //////////////////////////////////
 
     /////////////////////////////
@@ -124,15 +127,17 @@ void RotatingPlatform:: calibration()
     // stepper->stop();
     // LOG_INF("current pos after stop in calibration is: %ld", stepper->currentPosition());
     // long stepsPerRev = stepper->currentPosition();
-    // stepsPerDegree = (double)stepsPerRev / 360; 
-    // // sem_post(&semCalibrate);
-    // calibrated = true;
-    // LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
-    // struct MqttMsg msg;
-    // strcpy(msg.topic, STATUS_TOPIC);
-    // strcpy(msg.msg, "calibrated");
-    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     
+}
+
+void RotatingPlatform:: goToStartPos()
+{
+    stepper->move(startPos);
+
+    while (stepper->currentPosition() != startPos) // Full speed up to 300
+        stepper->run();
+    stepper->stop();
+
 }
 
 void RotatingPlatform:: goToHome()
@@ -150,13 +155,6 @@ void RotatingPlatform:: goToHome()
             break;
         }
     }
-    // while(!isHome)
-    // {
-    //     stepper->run();
-    //     if(isHome)
-    //         stepper->stop();
-    // }
-    // stepper->stop();
     LOG_INF("current pos before stop is: %ld", stepper->currentPosition());
     stepper->setCurrentPosition(0);
     LOG_INF("Current Position is: %ld", stepper->currentPosition());
@@ -188,12 +186,38 @@ int RotatingPlatform:: calibrateSwitchInit()
 }
 
 
-void RotatingPlatform:: goToPosition(int pos)
+void RotatingPlatform:: goToPosition(int position)
 {
-    long position = pos * stepsPerDegree;
+    struct MqttMsg msg = {0};
+    // long position = pos * stepsPerDegree;
+
+
+
+    stepper->setAcceleration(500);
+
+
+
+
+
     stepper->moveTo(position);
-    while (stepper->currentPosition() != position) // Full speed up to 300
+    LOG_DBG("current position is: %d, target is: %d", stepper->currentPosition(), stepper->targetPosition());
+    while ((stepper->currentPosition() != position)) // Full speed up to 300
+    {
+        // if(k_msgq_get(&msqReceivedFromMQTT, &msg, K_NO_WAIT))
+        // {
+        //     if(strcmp(msg.topic, SET_STEPPER_STOP) == 0)
+        //     {
+        //         stepper->stop();
+        //         break;
+        //     }
+        //     else
+        //     {
+        //         k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
+        //     }
+        // }
         stepper->run();
+    }
+    LOG_INF("moving finished");
 }
 int RotatingPlatform:: stepperInit()
 {
@@ -303,7 +327,18 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
     {
         if(strcmp(msg->topic, SET_STEPPER_POSITION) == 0)
         {
-            goToPosition(atoi(msg->msg));
+            if(strcmp(msg->msg, "position2") == 0)
+            {
+                goToPosition(-305000);
+            }
+            else if(strcmp(msg->msg, "start position") == 0)
+            {
+                goToPosition(0);
+            }
+            else
+            {
+                LOG_INF("The position is not valid");
+            }
         }
         else if(strcmp(msg->topic, SET_STEPPER_TIME_POSITION) == 0)
         {
@@ -324,22 +359,14 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
             LOG_INF("The new position is:%ld", stepper->currentPosition());
             // aasd->setPosition(atoi(msg->msg));
         }
-        // else if(strcmp(msg->topic, GET_STEPPER_SPEED) == 0)
-        // {
-            // MqttMsg msg;
-            // strcpy(msg.topic, GET_AASD_SPEED);
-            // sprintf(msg.msg, "%d", aasd->getSpeed());
-            // // itoa(aasd->getSpeed(), msg.msg, 10);
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        // }
-        // else if(strcmp(msg->topic, GET_STEPPER_POSITION) == 0)
-        // {
-            // MqttMsg msg;
-            // strcpy(msg.topic, GET_AASD_POSITION);
-            // sprintf(msg.msg, "%d", aasd->getPosition());
-            // // itoa(aasd->getPosition(), msg.msg, 10);
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        // }
+        else if(strcmp(msg->topic, SET_STEPPER_GO_TO_START_POSITION) == 0)
+        {
+            goToStartPos();
+        }
+        else if(strcmp(msg->topic, SET_STEPPER_STOP) == 0)
+        {
+            stop();
+        }
         else
         {
             LOG_INF("The command is not valid.");
@@ -351,4 +378,12 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
         LOG_INF("The device is not calibrated.");
     }
 
+}
+
+
+void RotatingPlatform:: stop()
+{
+    stepper->stop();
+    while(stepper->currentPosition() != stepper->targetPosition())
+        stepper->run();
 }

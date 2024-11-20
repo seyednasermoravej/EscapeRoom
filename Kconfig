@@ -24,6 +24,8 @@ config NET_SAMPLE_APP_MAX_CONNECTIONS
 	  A value of zero means to continue forever.
 
 
+
 endmenu
 
 source "Kconfig.zephyr"
+# source "drivers/tcs34725/Kconfig"

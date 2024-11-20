@@ -13,6 +13,7 @@
 #include <zephyr/devicetree.h>
 
 #include "topics.h"
+#include "ledStrip.h"
 
 
 class Laboratory
@@ -23,7 +24,7 @@ public:
 
 
 private:
-    const struct device *strip;
+    LedStrip *ledStrip;
 };
 
 

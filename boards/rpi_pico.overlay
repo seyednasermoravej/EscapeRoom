@@ -62,7 +62,6 @@
 			rotating_platform_home_switch: home-switch
 			{
 				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-				// gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <INPUT_KEY_HOME>;
 			};
 				debounce-interval-ms=<6000>;
@@ -85,6 +84,17 @@
 			};
 			// zephyr,deferred-init;
 		};
+		// rotating_platform_end_time
+		// {
+		// 	compatible = "gpio-keys";
+		// 	debounce-interval-ms=<1000>;
+		// 	rotating_platform_home_switch: home-switch
+		// 	{
+		// 		gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		// 		zephyr,code = <INPUT_KEY_HOME>;
+		// 	};
+
+		// };
 	};
 	ledandkeys
 	{
@@ -275,7 +285,7 @@
 	pinctrl-0 = <&spi1_pins>;
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-		laboratory_led_strip: ws2812@0 {
+	laboratory_led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-spi";
 
 		/* SPI */
@@ -283,7 +293,7 @@
 		spi-max-frequency = <6400000>;
 
 		/* WS2812 */
-		chain-length = <2>; /* arbitrary; change at will */
+		chain-length = <15>; /* arbitrary; change at will */
 		spi-cpha;
 		spi-one-frame = <0xf0>; /* 11110000: 625 ns high and 625 ns low */
 		spi-zero-frame = <0xc0>; /* 11000000: 312.5 ns high and 937.5 ns low */
@@ -427,6 +437,11 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
+	// rgb_sensor0: tcs34725@29
+	// {
+	// 	compatible = "taos,tcs34725";
+	// 	reg = <0x29>;
+	// };
   
 
 };

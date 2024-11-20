@@ -1,13 +1,14 @@
 #include "laboratory.h"
 
-const struct device *const _strip = DEVICE_DT_GET(DT_NODELABEL(laboratory_led_strip));
+
+
 Laboratory:: Laboratory() 
 {
-    // strip = _strip;
-        // strip = DEVICE_DT_GET(DT_NODELABEL(laboratory_led_strip));
+
+    // ledStrip = new LedStrip(DEVICE_DT_GET(DT_NODELABEL(laboratory_led_strip)), DT_PROP(DT_NODELABEL(laboratory_led_strip), chain_length));
 };
 
 void Laboratory:: messageHandler(struct MqttMsg *msg)
 {
-    
+   uint32_t k = 100; 
 }

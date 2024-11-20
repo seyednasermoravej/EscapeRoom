@@ -16,12 +16,8 @@ Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
     builtIntLedInit();
-    readInfosFromMemory();
-    // disc = new Disc;
-    // while (1)
-    // {
-    //     k_msleep(11110);
-    // }
+    // readInfosFromMemory();
+    puzzleTypeSelection("rotating platform");
 }
 
 
@@ -38,42 +34,49 @@ void Puzzle:: puzzleTypeSelection(char *type)
         puzzleType = SERVOS_PUZZLE;
         servos = new Servos;
         LOG_INF("Puzzle type is Servos");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "gate") == 0)
     {
         puzzleType = GATE_PUZZLE;
         gate = new Gate;
         LOG_INF("Puzzle type is Gate.");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "config") == 0)
     {
         puzzleType = CONFIG_DEVICE_PUZZLE;
         configDevice = new ConfigDevice;
         LOG_INF("Device is configuring by user.");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "numbers guessing") == 0)
     {
         puzzleType = NUMBERS_GUESSING_PUZZLE;
         numbersGuessing = new NumbersGuessing;
         LOG_INF("Puzzle type is numbers guessing.");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "nuseen") == 0)
     {
         puzzleType = UNSEEN_PUZZLE;
         unseen = new Unseen;
         LOG_INF("Puzzle type is unseen.");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "laboratory") == 0)
     {
         puzzleType = LABORATORY_PUZZLE;
         laboratory = new Laboratory;
         LOG_INF("Puzzle type is laboratory.");
+        deviceSpecified = true;
     }
     else if(strcmp(type, "rotating platform") == 0)
     {
         puzzleType = ROTATING_PLATFORM_PUZZLE;
         rotatingPlatform = new RotatingPlatform;
         LOG_INF("Puzzle type is Rotating Platform.");
+        deviceSpecified = true;
     }
     else
     {

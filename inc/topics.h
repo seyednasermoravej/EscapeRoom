@@ -39,6 +39,8 @@
 #define KEYPAD_TOPIC                       "pub/keypad"
 
 #define SET_STEPPER_TIME_POSITION          "sub/stepperTimePosition"
+#define SET_STEPPER_GO_TO_START_POSITION          "sub/stepperGoToStartPosition"
+#define SET_STEPPER_STOP          "sub/stepperStop"
 #define SET_STEPPER_POSITION       "sub/stepperPosition"
 // #define GET_STEPPER_SPEED          "pub/stepperSpeed" 
 // #define GET_STEPPER_POSITION       "pub/stepperPosition"             
@@ -67,6 +69,8 @@ extern struct mqtt_topic led7_topic;
 extern struct mqtt_topic led8_topic;
 extern struct mqtt_topic stepperSpeed_topic;
 extern struct mqtt_topic stepperPosition_topic;
+extern struct mqtt_topic stepperGoToStartPosition_topic;
+extern struct mqtt_topic stepperStop_topic;
 extern struct mqtt_topic deviceId_topic;
 
 

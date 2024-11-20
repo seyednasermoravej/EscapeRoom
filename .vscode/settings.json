@@ -57,7 +57,14 @@
 			"topics.h": "c",
 			"stdio.h": "c",
 			"keypad.h": "c",
-			"unseen.h": "c"
+			"unseen.h": "c",
+			"array": "c",
+			"string_view": "c",
+			"hash_map": "c",
+			"hash_set": "c",
+			"slist": "c",
+			"initializer_list": "c",
+			"utility": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

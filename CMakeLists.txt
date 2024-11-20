@@ -23,3 +23,9 @@ target_link_libraries(app PRIVATE set-app-flags)
 include(${ZEPHYR_BASE}/samples/net/common/common.cmake)
 #end for dns resolver
 # list(REMOVE_ITEM app_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/unwanted_file.cpp)
+
+#begin rgb driver
+
+zephyr_library_sources_ifdef(CONFIG_TCS34725		${CMAKE_CURRENT_SOURCE_DIR}/drivers/tcs34725.c)
+
+#end rgb driver
