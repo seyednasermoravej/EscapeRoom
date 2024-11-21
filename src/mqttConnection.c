@@ -118,18 +118,18 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[6] = stepperStop_topic;
 	mqttLists[7] = stepperGoToStartPosition_topic;
 	mqttLists[8] = stepperPosition_topic;
-	// mqttLists[9] = led1_topic;
-	// mqttLists[10] = led2_topic;
-	// mqttLists[11] = led3_topic;
-	// mqttLists[12] = led4_topic;
-	// mqttLists[13] = led5_topic;
-	// mqttLists[14] = led6_topic;
-	// mqttLists[15] = led7_topic;
-	// mqttLists[16] = led8_topic;
-	// mqttLists[17] = deviceId_topic;
+	mqttLists[9] = led1_topic;
+	mqttLists[10] = led2_topic;
+	mqttLists[11] = led3_topic;
+	mqttLists[12] = led4_topic;
+	mqttLists[13] = led5_topic;
+	mqttLists[14] = led6_topic;
+	mqttLists[15] = led7_topic;
+	mqttLists[16] = led8_topic;
+	mqttLists[17] = deviceId_topic;
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 9, .message_id = 34};
+		.list = mqttLists, .list_count = 18, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

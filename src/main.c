@@ -17,24 +17,6 @@ void readingHWinfo(char *idStr);
 
 
 
-static const struct device *const test_gpio_keys_dev = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
-void buttonsHandler(struct input_event *val, void* topic)
-{
-    if (val->type == INPUT_EV_KEY)
-    {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_BTN_0) && (val->value))
-        {
-
-            LOG_INF("End time pressed");
-            sprintf(msg.msg, "End time pressed");
-        }
-    }
-}
-
-
 
 
 
@@ -69,7 +51,7 @@ int main()
     // char serverName[] = "mqtt-1.localdomain";
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
-    test();
+    // test();
     dnsResolver(serverName, serverIpAddress);
     
     //http request for getting DFU
@@ -126,13 +108,86 @@ void i2cScanner()
     }
 }
 
+void qdecRoomHandler(struct input_event *val, void* topic)
+{
+    if (val->type == INPUT_EV_KEY)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_REL_WHEEL) && (val->value))
+        {
 
+            LOG_INF("room key");
+            // sprintf(msg.msg, "key pressed");
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+    }
+    else if (val->type == INPUT_EV_REL)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_REL_WHEEL) && (val->value))
+        {
+
+            LOG_INF("room rel");
+            // sprintf(msg.msg, "key pressed");
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+    }
+    else
+    {
+        LOG_INF("room nof of theem");
+    } 
+}
+
+
+
+void qdecLangHandler(struct input_event *val, void* topic)
+{
+    if (val->type == INPUT_EV_KEY)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_REL_WHEEL) && (val->value))
+        {
+
+            LOG_INF("lang key");
+            // sprintf(msg.msg, "key pressed");
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+    }
+    else if (val->type == INPUT_EV_REL)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_REL_WHEEL) && (val->value))
+        {
+
+            LOG_INF("lang rel");
+            // sprintf(msg.msg, "key pressed");
+            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+    }
+    else
+    {
+        LOG_INF("lang nof of theem");
+    } 
+}
+
+static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
+static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
 void test()
 {
 
-    device_init(test_gpio_keys_dev);
-    INPUT_CALLBACK_DEFINE(test_gpio_keys_dev, buttonsHandler, NULL);
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time_button)));
+    device_init(qdecLang);
+    device_init(qdecRoom);
+    
+    INPUT_CALLBACK_DEFINE(qdecLang, qdecLangHandler, NULL);
+    INPUT_CALLBACK_DEFINE(qdecRoom, qdecRoomHandler, NULL);
     while(1)
     {
         k_msleep(1000);

@@ -49,7 +49,7 @@
 
 #define APP_CONNECT_TRIES	10
 
-#define APP_MQTT_BUFFER_SIZE    256	
+#define APP_MQTT_BUFFER_SIZE    512	
 
 #define MQTT_CLIENTID		"escape_room795"
 

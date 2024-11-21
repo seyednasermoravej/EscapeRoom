@@ -22,7 +22,7 @@
 	buttons
 	{
 		compatible = "gpio-keys";
-		button0: button_0 {
+		button10: button_10 {
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
 			zephyr,code = <INPUT_KEY_0>;
@@ -58,7 +58,6 @@
 		rotating_platform_servos_control
 		{
 			compatible = "gpio-keys";
-			debounce-interval-ms=<1000>;
 			rotating_platform_home_switch: home-switch
 			{
 				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
@@ -91,7 +90,7 @@
 			status = "okay";
 			rotating_platform_end_time_button: end-time-button
 			{
-				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_0>;
 			};
 			zephyr,deferred-init;
@@ -166,6 +165,87 @@
 		};
 		zephyr,deferred-init;
 	};
+
+	config_puzzle
+	{
+		config_puzzle_buttons: buttons
+		{
+			compatible = "gpio-keys";
+			button0: button_0
+			{
+				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			button1: button_1
+			{
+				gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			button2: button_2
+			{
+				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			button3: button_3
+			{
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_3>;
+			};
+			button4: button_4
+			{
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_4>;
+			};
+			button5: button_5
+			{
+				gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_5>;
+			};
+			button6: button_6
+			{
+				gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_6>;
+			};
+			sw0: sw_0 
+			{
+				gpios = <&gpio0 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_7>;
+			};
+			lang_button: rotary_0 
+			{
+				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_8>;
+			};
+			room_button: rotary_1 
+			{
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_9>;
+			};
+			zephyr,deferred-init;
+		};
+		config_puzzle_qdec_lang: qdec0
+		{
+			compatible = "gpio-qdec";
+			gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+					<&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			steps-per-period = <4>;
+			zephyr,axis = <INPUT_REL_WHEEL>;
+			sample-time-us = <2000>;
+			idle-timeout-ms = <200>;
+			zephyr,deferred-init;
+		};
+		config_puzzle_qdec_room: qdec1
+		{
+			compatible = "gpio-qdec";
+			gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+					<&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			steps-per-period = <4>;
+			zephyr,axis = <INPUT_REL_WHEEL>;
+			sample-time-us = <2000>;
+			idle-timeout-ms = <200>;
+			zephyr,deferred-init;
+		};
+	};
 	// labratory
 	// {
 	// 	labratory_led_strip: &led_strip;
@@ -203,17 +283,6 @@
 		hintbutton = &button0;
 		built-in-led = &led0;
 		keypad = &kbd_matrix;
-	};
-	rotary-encoder
-	{
-		compatible = "gpio-keys";
-		rotaryencoder: encoderpins{
-			gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>, <&gpio0 27 (GPIO_ACTIVE_LOW)>, <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-					// <&gpio0 5 (GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_ACTIVE_LOW)>, <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			zephyr,code = <INPUT_KEY_0>;
-		};
-			
-		zephyr,deferred-init;
 	};
 	kbd_matrix: kbd-matrix
 	{
@@ -353,13 +422,13 @@ pico_spi: &spi0 {};
 
 };
 
-&i2c1_default {
-	group1 {
-		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
+// &i2c1_default {
+// 	group1 {
+// 		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
 
-	};
+// 	};
 
-  };
+//   };
 
 
 &i2c0{

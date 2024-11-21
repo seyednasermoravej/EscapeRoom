@@ -1,6 +1,7 @@
 menu "TCS34725 Sensor"
 config TCS34725
     bool "TCS34725 RGB Sensor"
+    default n
     depends on I2C
     help
       Enable support for the TCS34725 RGB sensor.

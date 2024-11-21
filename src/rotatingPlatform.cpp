@@ -21,6 +21,25 @@ static const struct gpio_dt_spec relays[] = {
 
 
 
+
+void buttonsHandler(struct input_event *val, void* topic)
+{
+    if (val->type == INPUT_EV_KEY)
+    {
+        struct MqttMsg msg = {0};
+        strcpy(msg.topic, "pub/end time");
+        // strcpy(msg.topic, (char *)topic);
+        if((val->code == INPUT_BTN_0) && (val->value))
+        {
+
+            LOG_INF("End time pressed");
+            sprintf(msg.msg, "End time pressed");
+            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        }
+    }
+}
+
+static const struct device *const test_gpio_keys_dev = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
 RotatingPlatform:: RotatingPlatform()
 {
     LOG_INF("Rotating Platform Puzzle is selected");
@@ -30,6 +49,8 @@ RotatingPlatform:: RotatingPlatform()
     relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     device_init(relays->port);
+    device_init(test_gpio_keys_dev);
+    INPUT_CALLBACK_DEFINE(test_gpio_keys_dev, buttonsHandler, NULL);
 
 }
 
