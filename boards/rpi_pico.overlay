@@ -432,13 +432,13 @@ pico_spi: &spi0 {};
 
 };
 
-&i2c1_default {
-	group1 {
-		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
+// &i2c1_default {
+// 	group1 {
+// 		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
 
-	};
+// 	};
 
-  };
+//   };
 
 
 &i2c0{
@@ -500,7 +500,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		zephyr,deferred-init;
+		// zephyr,deferred-init;
 	};
 		lcd2: pcf857x@26{
 		compatible = "nxp,pcf857x";
@@ -508,7 +508,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		zephyr,deferred-init;
+		// zephyr,deferred-init;
 	};
 		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";
@@ -517,7 +517,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		zephyr,deferred-init;
+		// zephyr,deferred-init;
 	};
 	// rgb_sensor0: tcs34725@29
 	// {
