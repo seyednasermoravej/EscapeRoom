@@ -17,7 +17,8 @@ Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
     nvsInit();
     builtIntLedInit();
     // readInfosFromMemory();
-    puzzleTypeSelection("rotating platform");
+    puzzleTypeSelection("config");
+    // puzzleTypeSelection("rotating platform");
 }
 
 

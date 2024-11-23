@@ -127,9 +127,17 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[15] = led7_topic;
 	mqttLists[16] = led8_topic;
 	mqttLists[17] = deviceId_topic;
+	mqttLists[18] = relay0_topic;
+	mqttLists[19] = relay1_topic;
+	mqttLists[20] = relay2_topic;
+	mqttLists[21] = relay3_topic;
+	mqttLists[22] = relay4_topic;
+	mqttLists[23] = relay5_topic;
+	mqttLists[24] = relay6_topic;
+	mqttLists[25] = relay7_topic;
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 18, .message_id = 34};
+		.list = mqttLists, .list_count = 26, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

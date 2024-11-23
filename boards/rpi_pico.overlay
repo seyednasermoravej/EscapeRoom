@@ -188,47 +188,42 @@
 			};
 			button3: button_3
 			{
-				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_3>;
 			};
 			button4: button_4
 			{
-				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_4>;
 			};
 			button5: button_5
 			{
-				gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_5>;
-			};
-			button6: button_6
-			{
-				gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_6>;
 			};
 			sw0: sw_0 
 			{
-				gpios = <&gpio0 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_7>;
+				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_6>;
 			};
 			lang_button: rotary_0 
 			{
-				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_8>;
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_7>;
 			};
 			room_button: rotary_1 
 			{
-				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_9>;
+				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_8>;
 			};
 			zephyr,deferred-init;
 		};
 		config_puzzle_qdec_lang: qdec0
 		{
 			compatible = "gpio-qdec";
-			gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
-					<&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-			steps-per-period = <4>;
+			gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+					<&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			steps-per-period = <2>;
 			zephyr,axis = <INPUT_REL_WHEEL>;
 			sample-time-us = <2000>;
 			idle-timeout-ms = <200>;
@@ -237,13 +232,28 @@
 		config_puzzle_qdec_room: qdec1
 		{
 			compatible = "gpio-qdec";
-			gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
-					<&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-			steps-per-period = <4>;
+			gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+					<&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			steps-per-period = <2>;
 			zephyr,axis = <INPUT_REL_WHEEL>;
 			sample-time-us = <2000>;
 			idle-timeout-ms = <200>;
 			zephyr,deferred-init;
+		};
+		config_puzzle_outputs
+		{
+			compatible = "gpio-leds";
+			config_puzzle_relays: config_puzzle_relays{
+				gpios = <&expander 0 (GPIO_ACTIVE_LOW)>,
+						<&expander 1 (GPIO_ACTIVE_LOW)>,
+						<&expander 2 (GPIO_ACTIVE_LOW)>,
+						<&expander 3 (GPIO_ACTIVE_LOW)>,
+						<&expander 4 (GPIO_ACTIVE_LOW)>,
+						<&expander 5 (GPIO_ACTIVE_LOW)>,
+						<&expander 6 (GPIO_ACTIVE_LOW)>,
+						<&expander 7 (GPIO_ACTIVE_LOW)>;
+				
+			};
 		};
 	};
 	// labratory
@@ -422,13 +432,13 @@ pico_spi: &spi0 {};
 
 };
 
-// &i2c1_default {
-// 	group1 {
-// 		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
+&i2c1_default {
+	group1 {
+		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
 
-// 	};
+	};
 
-//   };
+  };
 
 
 &i2c0{
@@ -474,15 +484,6 @@ pico_spi: &spi0 {};
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
 	//my test
-		lcd1: pcf857x@27 {
-		compatible = "nxp,pcf857x";
-		status = "okay";
-		reg = <0x27>;
-		gpio-controller;
-		#gpio-cells = <2>;
-		ngpios = <8>;
-		zephyr,deferred-init;
-	};
 	// 	lcd1: pcf857x@27 {
 	// 	compatible = "nxp,pcf857x";
 	// 	status = "okay";
@@ -492,14 +493,23 @@ pico_spi: &spi0 {};
 	// 	ngpios = <8>;
 	// 	zephyr,deferred-init;
 	// };
-	// 	lcd2: pcf857x@21{
-	// 	compatible = "nxp,pcf857x";
-	// 	reg = <0x21>;
-	// 	gpio-controller;
-	// 	#gpio-cells = <2>;
-	// 	ngpios = <8>;
-	// 	zephyr,deferred-init;
-	// };
+		lcd1: pcf857x@27 {
+		compatible = "nxp,pcf857x";
+		status = "okay";
+		reg = <0x27>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+		zephyr,deferred-init;
+	};
+		lcd2: pcf857x@26{
+		compatible = "nxp,pcf857x";
+		reg = <0x26>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+		zephyr,deferred-init;
+	};
 		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";
 		status = "okay";

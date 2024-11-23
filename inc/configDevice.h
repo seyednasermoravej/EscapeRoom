@@ -16,6 +16,7 @@
 #include "topics.h"
 #include "lcd.h"
 #include <zephyr/input/input.h>
+#include <zephyr/drivers/led.h>
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
@@ -27,7 +28,6 @@ public:
 
 
 private:
-    int inputsInit();
     Lcd *lcd1;
     Lcd *lcd2;
 };

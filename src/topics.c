@@ -235,3 +235,69 @@ struct mqtt_topic stepperStop_topic = {
     .size = strlen(SET_STEPPER_STOP)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+
+struct mqtt_topic relay0_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY0_TOPIC,
+    .size = strlen(RELAY0_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY1_TOPIC,
+    .size = strlen(RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY2_TOPIC,
+    .size = strlen(RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay3_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY3_TOPIC,
+    .size = strlen(RELAY3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay4_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY4_TOPIC,
+    .size = strlen(RELAY4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay5_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY5_TOPIC,
+    .size = strlen(RELAY5_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay6_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY6_TOPIC,
+    .size = strlen(RELAY6_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic relay7_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)RELAY7_TOPIC,
+    .size = strlen(RELAY7_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};

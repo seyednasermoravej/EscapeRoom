@@ -32,7 +32,6 @@ void readingHWinfo(char *idStr);
 
 int main()
 { 
-    // i2cScanner();
     //performing new update on firmware
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");
@@ -48,8 +47,8 @@ int main()
 
 
 
-    // char serverName[] = "mqtt-1.localdomain";
-    char serverName[] = "test.mosquitto.org";
+    char serverName[] = "mqtt-1.localdomain";
+    // char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     // test();
     dnsResolver(serverName, serverIpAddress);
@@ -58,17 +57,21 @@ int main()
     
     // sem_destroy(&dhcpActive);
     mqttThreadCreate(serverIpAddress);
+
+    i2cScanner();
+
     puzzleThreadCreate();
 
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
     strcpy(send->topic, "pub/");
     strcat(send->topic, deviceId);
-    strcpy(send->msg, "Hello guys.");
+    // strcpy(send->msg, "Hello guys.");
     k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
-        k_msleep(2000);
+        k_sleep(K_SECONDS(120));
+        sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
         k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     }
 }
@@ -87,6 +90,9 @@ void i2cScanner()
     }
 
     printf("Scanning I2C bus...\n");
+    struct MqttMsg mqtt = {0};
+    strcpy(mqtt.topic, "pub/");
+    strcat(mqtt.topic, deviceId);
     while (1)
     {
 
@@ -102,92 +108,22 @@ void i2cScanner()
             ret = i2c_transfer(i2c_dev, &msg, 1, addr);
             if (ret == 0) {
                 printf("Device found at address 0x%02X\n", addr);
+                sprintf(mqtt.msg, "Device found at address 0x%02X\n", addr);
+                k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
             }
         }
+        sprintf(mqtt.msg, "scanning finished.");
+        k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
+        LOG_INF("scanning finished.");
         k_msleep(1000);
     }
 }
 
-void qdecRoomHandler(struct input_event *val, void* topic)
-{
-    if (val->type == INPUT_EV_KEY)
-    {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_REL_WHEEL) && (val->value))
-        {
-
-            LOG_INF("room key");
-            // sprintf(msg.msg, "key pressed");
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-    }
-    else if (val->type == INPUT_EV_REL)
-    {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_REL_WHEEL) && (val->value))
-        {
-
-            LOG_INF("room rel");
-            // sprintf(msg.msg, "key pressed");
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-    }
-    else
-    {
-        LOG_INF("room nof of theem");
-    } 
-}
-
-
-
-void qdecLangHandler(struct input_event *val, void* topic)
-{
-    if (val->type == INPUT_EV_KEY)
-    {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_REL_WHEEL) && (val->value))
-        {
-
-            LOG_INF("lang key");
-            // sprintf(msg.msg, "key pressed");
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-    }
-    else if (val->type == INPUT_EV_REL)
-    {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_REL_WHEEL) && (val->value))
-        {
-
-            LOG_INF("lang rel");
-            // sprintf(msg.msg, "key pressed");
-            // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-    }
-    else
-    {
-        LOG_INF("lang nof of theem");
-    } 
-}
-
-static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
-static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
 void test()
 {
+    struct MqttMsg msg = {0};
+    sprintf(msg.msg, "Button 0 pressed");
 
-    device_init(qdecLang);
-    device_init(qdecRoom);
-    
-    INPUT_CALLBACK_DEFINE(qdecLang, qdecLangHandler, NULL);
-    INPUT_CALLBACK_DEFINE(qdecRoom, qdecRoomHandler, NULL);
     while(1)
     {
         k_msleep(1000);

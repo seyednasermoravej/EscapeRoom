@@ -42,8 +42,20 @@
 #define SET_STEPPER_GO_TO_START_POSITION          "sub/stepperGoToStartPosition"
 #define SET_STEPPER_STOP          "sub/stepperStop"
 #define SET_STEPPER_POSITION       "sub/stepperPosition"
-// #define GET_STEPPER_SPEED          "pub/stepperSpeed" 
-// #define GET_STEPPER_POSITION       "pub/stepperPosition"             
+
+
+#define RELAY0_TOPIC                                       "sub/relay0" 
+#define RELAY1_TOPIC                                       "sub/relay1" 
+#define RELAY2_TOPIC                                       "sub/relay2" 
+#define RELAY3_TOPIC                                       "sub/relay3" 
+#define RELAY4_TOPIC                                       "sub/relay4" 
+#define RELAY5_TOPIC                                       "sub/relay5" 
+#define RELAY6_TOPIC                                       "sub/relay6" 
+#define RELAY7_TOPIC                                       "sub/relay7" 
+
+
+
+
 
 
 
@@ -72,6 +84,15 @@ extern struct mqtt_topic stepperPosition_topic;
 extern struct mqtt_topic stepperGoToStartPosition_topic;
 extern struct mqtt_topic stepperStop_topic;
 extern struct mqtt_topic deviceId_topic;
+
+extern struct mqtt_topic relay0_topic;
+extern struct mqtt_topic relay1_topic;
+extern struct mqtt_topic relay2_topic;
+extern struct mqtt_topic relay3_topic;
+extern struct mqtt_topic relay4_topic;
+extern struct mqtt_topic relay5_topic;
+extern struct mqtt_topic relay6_topic;
+extern struct mqtt_topic relay7_topic;
 
 
 #ifdef __cplusplus

@@ -39,7 +39,7 @@ void buttonsHandler(struct input_event *val, void* topic)
     }
 }
 
-static const struct device *const test_gpio_keys_dev = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
+static const struct device *const buttonEndTime = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
 RotatingPlatform:: RotatingPlatform()
 {
     LOG_INF("Rotating Platform Puzzle is selected");
@@ -49,8 +49,8 @@ RotatingPlatform:: RotatingPlatform()
     relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     device_init(relays->port);
-    device_init(test_gpio_keys_dev);
-    INPUT_CALLBACK_DEFINE(test_gpio_keys_dev, buttonsHandler, NULL);
+    device_init(buttonEndTime);
+    INPUT_CALLBACK_DEFINE(buttonEndTime, buttonsHandler, NULL);
 
 }
 
