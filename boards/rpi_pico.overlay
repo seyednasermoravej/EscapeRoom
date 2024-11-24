@@ -260,49 +260,45 @@
 			};
 		};
 	};
-	// cabinet_puzzle
-	// {
-	// 	cabinet_puzzle_input: cabinet-puzzle-input
-	// 	{
-	// 		compatible = "gpio-keys";
-	// 		button0: button_0
-	// 		{
-	// 			gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			zephyr,code = <INPUT_BTN_0>;
-	// 		};
-	// 		button1: button_1
-	// 		{
-	// 			gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			zephyr,code = <INPUT_BTN_1>;
-	// 		};
-	// 		button2: button_2
-	// 		{
-	// 			gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			zephyr,code = <INPUT_BTN_2>;
-	// 		};
-	// 		button3: button_3
-	// 		{
-	// 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			zephyr,code = <INPUT_BTN_3>;
-	// 		};
-	// 		zephyr,deferred-init;
-	// 	};
-	// 	cabinet_puzzle_output: cabinet-puzzle-output
-	// 	{
-	// 		compatible = "gpio-leds";
-	// 		: config-puzzle-relays{
-	// 			gpios = <&expander 0 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 1 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 2 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 3 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 4 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 5 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 6 (GPIO_ACTIVE_HIGH)>,
-	// 					<&expander 7 (GPIO_ACTIVE_HIGH)>;
+	cabinet_puzzle
+	{
+		cabinet_puzzle_input: cabinet-puzzle-input
+		{
+			compatible = "gpio-keys";
+			button0: button_0
+			{
+				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			button1: button_1
+			{
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			button2: button_2
+			{
+				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			button3: button_3
+			{
+				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_3>;
+			};
+			zephyr,deferred-init;
+		};
+		cabinet_puzzle_outputs: cabinet-puzzle-outputs
+		{
+			compatible = "gpio-leds";
+			cabinet_puzzle_relays{
+				gpios = <&gpio0 3 (GPIO_ACTIVE_HIGH)>,
+						<&gpio0 4 (GPIO_ACTIVE_HIGH)>,
+						<&gpio0 5 (GPIO_ACTIVE_HIGH)>,
+						<&gpio0 6 (GPIO_ACTIVE_HIGH)>;
 				
-	// 		};
+			};
 
-	// 	};
+		};
 
 	// };
 	// labratory

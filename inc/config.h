@@ -51,7 +51,7 @@
 
 #define APP_MQTT_BUFFER_SIZE    2048	
 
-#define MQTT_CLIENTID		"escape_room795"
+#define MQTT_CLIENTID		"escaperoom795"
 
 /* Set the following to 1 to enable the Bluemix topic format */
 #define APP_BLUEMIX_TOPIC	0
