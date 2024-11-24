@@ -44,7 +44,7 @@ enum PuzzleTypes
     UNSPECIFIED = 0,
     SERVOS_PUZZLE,
     GATE_PUZZLE,
-    CONFIG_DEVICE_PUZZLE,
+    CONSOLE_PUZZLE,
     NUMBERS_GUESSING_PUZZLE,
     UNSEEN_PUZZLE,
     LABORATORY_PUZZLE,
@@ -79,6 +79,7 @@ public:
     PuzzleTypes puzzleType = UNSPECIFIED;
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
+    void alive();
 
 private:
 

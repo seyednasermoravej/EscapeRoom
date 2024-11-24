@@ -26,6 +26,7 @@ class ConfigDevice
 public:
     ConfigDevice();
     void messageHandler(struct MqttMsg *msg);
+    void alive();
 
 
 private:

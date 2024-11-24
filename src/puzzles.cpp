@@ -50,13 +50,13 @@ void Puzzle:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is Gate.");
         deviceSpecified = true;
     }
-    else if(strcmp(type, "config") == 0)
+    else if(strcmp(type, "console") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is config device");
+        sprintf(msg.msg, "Puzzle type is console");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = CONFIG_DEVICE_PUZZLE;
+        puzzleType = CONSOLE_PUZZLE;
         configDevice = new ConfigDevice;
-        LOG_INF("puzzle type is config device.");
+        LOG_INF("puzzle type is console.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "numbers guessing") == 0)
@@ -153,7 +153,7 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
                 servos -> messageHandler(msg);
                 break;
 
-            case CONFIG_DEVICE_PUZZLE:
+            case CONSOLE_PUZZLE:
                 configDevice -> messageHandler(msg);
                 break;
 
@@ -180,6 +180,41 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
 
 }
 
+
+void Puzzle:: alive()
+{
+    switch (puzzle->puzzleType)
+    {
+    // case GATE_PUZZLE:
+    //     gate -> alive();
+    //     break;
+    
+    // case SERVOS_PUZZLE:
+    //     servos -> alive();
+    //     break;
+
+    case CONSOLE_PUZZLE:
+        configDevice -> alive();
+        break;
+
+    // case NUMBERS_GUESSING_PUZZLE:
+    //     numbersGuessing -> alive();
+    //     break;
+
+    // case UNSEEN_PUZZLE:
+    //     unseen -> alive();
+    //     break;
+
+    // case LABORATORY_PUZZLE:
+    //     laboratory -> alive();
+
+    // case ROTATING_PLATFORM_PUZZLE:
+    //     rotatingPlatform -> alive();
+    default:
+        break;
+    }
+
+}
 int Puzzle:: nvsInit()
 {
     int rc;
@@ -220,7 +255,7 @@ void Puzzle:: readInfosFromMemory()
     int rc = 0;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     rc = nvs_read(fs, 0, &name, PUZZLE_TYPE_NAME_MAX_LEN);
-    if(rc)
+    if(rc > 0)
     {
         // deviceSpecified = true;
         puzzleTypeSelection(name);
@@ -262,7 +297,7 @@ void puzzleEntryPoint(void *, void *, void *)
         k_msleep(1000);
 
     }
-    
+    int counter = 0; 
     while(1)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
@@ -279,6 +314,12 @@ void puzzleEntryPoint(void *, void *, void *)
                 // memset(msg, 0, sizeof(struct MqttMsg));
             // }
            
+        }
+        counter++;
+        if(counter > 5)
+        {
+            puzzle -> alive();  
+            counter = 0;
         }
         k_msleep(1000);
     }

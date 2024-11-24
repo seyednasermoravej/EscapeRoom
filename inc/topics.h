@@ -9,8 +9,8 @@
 #define SERVO0_TOPIC            "sub/servo0"
 #define K3_TOPIC                "sub/relaysControl"
 #define LCD_TOPIC               "sub/lcd"
-#define LCD1_TOPIC              "Intro_Room/lcd1"
-#define LCD2_TOPIC              "Intro_Room/lcd2"
+#define LCD1_TOPIC              "introRoom/console/lcd1"
+#define LCD2_TOPIC              "introRoom/console/lcd2"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "sub/puzzleType"
 #define LED1_TOPIC              "sub/led1"
@@ -44,14 +44,14 @@
 #define SET_STEPPER_POSITION       "sub/stepperPosition"
 
 
-#define RELAY0_TOPIC                                       "sub/relay0" 
-#define RELAY1_TOPIC                                       "sub/relay1" 
-#define RELAY2_TOPIC                                       "sub/relay2" 
-#define RELAY3_TOPIC                                       "sub/relay3" 
-#define RELAY4_TOPIC                                       "sub/relay4" 
-#define RELAY5_TOPIC                                       "sub/relay5" 
-#define RELAY6_TOPIC                                       "sub/relay6" 
-#define RELAY7_TOPIC                                       "sub/relay7" 
+#define RELAY0_TOPIC                                       "introRoom/console/relay0" 
+#define RELAY1_TOPIC                                       "introRoom/console/relay1" 
+#define RELAY2_TOPIC                                       "introRoom/console/relay2" 
+#define RELAY3_TOPIC                                       "introRoom/console/relay3" 
+#define RELAY4_TOPIC                                       "introRoom/console/relay4" 
+#define RELAY5_TOPIC                                       "introRoom/console/relay5" 
+#define RELAY6_TOPIC                                       "introRoom/console/relay6" 
+#define RELAY7_TOPIC                                       "introRoom/console/relay7" 
 
 
 

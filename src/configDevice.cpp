@@ -15,6 +15,8 @@ static const struct gpio_dt_spec config_puzzle_relays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(config_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
+static const char roomName[] = "introRoom";
+static const char puzzleTypeName[] = "console";
 
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
 // static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
@@ -22,78 +24,35 @@ static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_pu
 static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
 static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
 
-
 static void buttonsHandler(struct input_event *val, void* topic)
 {
     if (val->type == INPUT_EV_KEY)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "intro_room/console/button0");
-        // strcpy(msg.topic, (char *)topic);
-        
-        if((val->code == INPUT_BTN_0) && (val->value))
-        {
-
-            LOG_INF("Button 0 pressed");
-            sprintf(msg.msg, "Button 0 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        if((val->code == INPUT_BTN_1) && (val->value))
-        {
-
-            LOG_INF("Button 1 pressed");
-            sprintf(msg.msg, "Button 1 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        if((val->code == INPUT_BTN_2) && (val->value))
-        {
-
-            LOG_INF("Button 2 pressed");
-            sprintf(msg.msg, "Button 2 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        if((val->code == INPUT_BTN_3) && (val->value))
-        {
-
-            LOG_INF("Button 3 pressed");
-            sprintf(msg.msg, "Button 3 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        if((val->code == INPUT_BTN_4) && (val->value))
-        {
-
-            LOG_INF("Button 4 pressed");
-            sprintf(msg.msg, "Button 4 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-        if((val->code == INPUT_BTN_5) && (val->value))
-        {
-
-            LOG_INF("Button 5 pressed");
-            sprintf(msg.msg, "Button 5 pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
         if(val->code == INPUT_BTN_6)
         {
-
-            LOG_INF("%s", val->value? "switch on": "switch off");
-            sprintf(msg.msg, val->value? "switch on": "switch off");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+            sprintf(msg.topic, "%s/%s/switch1", roomName, puzzleTypeName);
+            val->value ? sprintf(msg.msg, "TRUE"): sprintf(msg.msg, "FALSE");
         }
-        if((val->code == INPUT_BTN_7) && (val->value))
+        else if((val->code == INPUT_BTN_7) && (val->value))
         {
-
-            LOG_INF("room pressed");
-            sprintf(msg.msg, "room pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+            sprintf(msg.topic, "%s/%s/langButton", roomName, puzzleTypeName);
+            sprintf(msg.msg, "TRUE");
         }
-        if((val->code == INPUT_BTN_8) && (val->value))
+        else if((val->code == INPUT_BTN_8) && (val->value))
         {
-
-            LOG_INF("language pressed");
-            sprintf(msg.msg, "language pressed");
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+            sprintf(msg.topic, "%s/%s/roomButton", roomName, puzzleTypeName);
+            sprintf(msg.msg, "TRUE");
         }
+        else
+        {
+            if(val->value)
+            {
+                sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, (val->code - 0x100) + 1);
+                sprintf(msg.msg, "TRUE");
+            }
+        }
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
 }
 
@@ -103,20 +62,16 @@ void qdecLangHandler(struct input_event *val, void* topic)
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/language");
+        strcpy(msg.topic, "introRoom/console/langEncoder");
         // strcpy(msg.topic, (char *)topic);
         if(val->code == INPUT_REL_WHEEL)
         {
             if(val->value == 1)
             {
-                LOG_INF("language, direction: clockwise.");
-                sprintf(msg.msg, "language, direction: clockwise.");
+                sprintf(msg.msg, "cw");
             }
             else
-            {
-                LOG_INF("language, direction: counterclockwise.");
-                sprintf(msg.msg, "language, direction: counterclockwise.");
-            }
+                sprintf(msg.msg, "ccw");
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
     }
@@ -132,18 +87,17 @@ void qdecRoomHandler(struct input_event *val, void* topic)
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/room");
-        if(val->value == 1)
+        strcpy(msg.topic, "introRoom/console/roomEncoder");
+        if(val->code == INPUT_REL_WHEEL)
         {
-            LOG_INF("room, direction: clockwise.");
-            sprintf(msg.msg, "room, direction: clockwise.");
+            if(val->value == 1)
+            {
+                sprintf(msg.msg, "cw");
+            }
+            else
+                sprintf(msg.msg, "ccw");
+            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
-        else
-        {
-            LOG_INF("room, direction: counterclockwise.");
-            sprintf(msg.msg, "room, direction: counterclockwise.");
-        }
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
     else
     {
@@ -151,12 +105,18 @@ void qdecRoomHandler(struct input_event *val, void* topic)
     } 
 }
 
-
+void ConfigDevice::alive()
+{
+    struct MqttMsg msg = {0};
+    sprintf(msg.topic, "%s/%s/alive", roomName, puzzleTypeName);
+    sprintf(msg.msg, "TRUE");
+    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+}
 
 ConfigDevice:: ConfigDevice()
 {
     struct MqttMsg msg = {0};
-    strcpy(msg.topic, "pub/");
+    sprintf(msg.topic, "%s/%s", roomName, puzzleTypeName);
     strcat(msg.topic, deviceId);
 
     device_init(qdecLang);
@@ -177,6 +137,8 @@ ConfigDevice:: ConfigDevice()
 
     sprintf(msg.msg, "lcd2 is configured");
     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+
+
     // int ret;
 	// device_init(DEVICE_DT_GET(DT_NODELABEL(expander)));
     // for(unsigned int i = 0; i < ARRAY_SIZE(config_puzzle_relays); i++){
