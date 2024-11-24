@@ -16,8 +16,8 @@ Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
     builtIntLedInit();
-    // readInfosFromMemory();
-    puzzleTypeSelection("config");
+    readInfosFromMemory();
+    // puzzleTypeSelection("config");
     // puzzleTypeSelection("rotating platform");
 }
 
@@ -27,18 +27,24 @@ Puzzle *puzzle = nullptr;
 
 void Puzzle:: puzzleTypeSelection(char *type)
 {
- 
-    gpio_pin_set_dt(&builtInLed, 1);
+    struct MqttMsg msg = {0};
+    strcpy(msg.topic, "pub/");
+    strcat(msg.topic, deviceId);
 
     if(strcmp(type, "servos") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is Servos");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = SERVOS_PUZZLE;
         servos = new Servos;
         LOG_INF("Puzzle type is Servos");
+
         deviceSpecified = true;
     }
     else if(strcmp(type, "gate") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is gate");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = GATE_PUZZLE;
         gate = new Gate;
         LOG_INF("Puzzle type is Gate.");
@@ -46,13 +52,17 @@ void Puzzle:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "config") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is config device");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = CONFIG_DEVICE_PUZZLE;
         configDevice = new ConfigDevice;
-        LOG_INF("Device is configuring by user.");
+        LOG_INF("puzzle type is config device.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "numbers guessing") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is numbers guessing");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = NUMBERS_GUESSING_PUZZLE;
         numbersGuessing = new NumbersGuessing;
         LOG_INF("Puzzle type is numbers guessing.");
@@ -60,6 +70,8 @@ void Puzzle:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "nuseen") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is unseen");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = UNSEEN_PUZZLE;
         unseen = new Unseen;
         LOG_INF("Puzzle type is unseen.");
@@ -67,6 +79,8 @@ void Puzzle:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "laboratory") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is labratory");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = LABORATORY_PUZZLE;
         laboratory = new Laboratory;
         LOG_INF("Puzzle type is laboratory.");
@@ -74,10 +88,16 @@ void Puzzle:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "rotating platform") == 0)
     {
+        sprintf(msg.msg, "Puzzle type is rotating platform");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = ROTATING_PLATFORM_PUZZLE;
         rotatingPlatform = new RotatingPlatform;
         LOG_INF("Puzzle type is Rotating Platform.");
         deviceSpecified = true;
+    }
+    if(deviceSpecified)
+    {
+        gpio_pin_set_dt(&builtInLed, 1);
     }
     else
     {
@@ -190,12 +210,19 @@ int Puzzle:: nvsInit()
 
 void Puzzle:: readInfosFromMemory()
 {
+    // nvs_delete(fs, 0);
+    // gpio_pin_set_dt(&builtInLed, 1);
+    // while(1);
+
+
+
+
     int rc = 0;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     rc = nvs_read(fs, 0, &name, PUZZLE_TYPE_NAME_MAX_LEN);
     if(rc)
     {
-        deviceSpecified = true;
+        // deviceSpecified = true;
         puzzleTypeSelection(name);
     }
 }
@@ -240,16 +267,17 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
-            {
-                puzzle -> writeDeviceName(msg->msg);
-                sys_reboot(0);
-            }
-            else
-            {
+            // if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
+            // {
+            //     if(puzzle)
+            //     puzzle -> writeDeviceName(msg->msg);
+            //     // sys_reboot(0);
+            // }
+            // else
+            // {
                 puzzle -> messageHandler(msg);
-                memset(msg, 0, sizeof(struct MqttMsg));
-            }
+                // memset(msg, 0, sizeof(struct MqttMsg));
+            // }
            
         }
         k_msleep(1000);
@@ -263,8 +291,6 @@ int Puzzle:: writeDeviceName(char *name)
     strcpy(buf, name);
     nvs_write(fs, 0, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
     nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
-    int a = 3;
-    return a;
 }
 
 extern "C" void puzzleThreadCreate()

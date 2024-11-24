@@ -9,8 +9,8 @@
 #define SERVO0_TOPIC            "sub/servo0"
 #define K3_TOPIC                "sub/relaysControl"
 #define LCD_TOPIC               "sub/lcd"
-#define LCD1_TOPIC              "sub/lcd1"
-#define LCD2_TOPIC              "sub/lcd2"
+#define LCD1_TOPIC              "Intro_Room/lcd1"
+#define LCD2_TOPIC              "Intro_Room/lcd2"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "sub/puzzleType"
 #define LED1_TOPIC              "sub/led1"
@@ -69,6 +69,8 @@ extern char deviceIdPub[32];
 extern struct mqtt_topic servo_topic;
 extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;
+extern struct mqtt_topic lcd1_topic;
+extern struct mqtt_topic lcd2_topic;
 extern struct mqtt_topic builtInLed_topic;
 extern struct mqtt_topic puzzleType_topic;
 extern struct mqtt_topic led1_topic;

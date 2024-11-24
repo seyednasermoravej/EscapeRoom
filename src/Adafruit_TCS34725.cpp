@@ -108,7 +108,7 @@ void Adafruit_TCS34725::disable() {
  *  @param  gain
  *          Gain
  */
-Adafruit_TCS34725::Adafruit_TCS34725(uint8_t it, tcs34725Gain_t gain) {
+Adafruit_TCS34725::Adafruit_TCS34725(const struct i2c_dt_spec *i2cDev, uint8_t it, tcs34725Gain_t gain): i2c_dev(i2cDev) {
   _tcs34725Initialised = false;
   _tcs34725IntegrationTime = it;
   _tcs34725Gain = gain;

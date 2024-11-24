@@ -194,7 +194,7 @@ typedef enum {
  */
 class Adafruit_TCS34725 {
 public:
-  Adafruit_TCS34725(uint8_t = TCS34725_INTEGRATIONTIME_2_4MS,
+  Adafruit_TCS34725(const struct i2c_dt_spec *i2cDev, uint8_t = TCS34725_INTEGRATIONTIME_2_4MS,
                     tcs34725Gain_t = TCS34725_GAIN_1X);
 
   boolean begin();

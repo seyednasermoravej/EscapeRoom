@@ -64,7 +64,8 @@
 			"hash_set": "c",
 			"slist": "c",
 			"initializer_list": "c",
-			"utility": "c"
+			"utility": "c",
+			"gate.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

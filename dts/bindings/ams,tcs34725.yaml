@@ -1,7 +1,7 @@
 
 description: I2C driver for COLOR LIGHT-TO-DIGITAL CONVERTER with IR FILTER module.
 
-compatible: "taos,tcs34725"
+compatible: "ams,tcs34725"
 
 include: [i2c-device.yaml]
 

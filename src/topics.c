@@ -29,6 +29,24 @@ struct mqtt_topic lcd_topic = {
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
+struct mqtt_topic lcd1_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LCD1_TOPIC,
+            .size = strlen(LCD1_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+struct mqtt_topic lcd2_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)LCD2_TOPIC,
+            .size = strlen(LCD2_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
 struct mqtt_topic builtInLed_topic = {
     .topic =
         {

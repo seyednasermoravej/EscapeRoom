@@ -29,6 +29,8 @@
 #define NVS_PARTITION_DEVICE	FIXED_PARTITION_DEVICE(NVS_PARTITION)
 #define NVS_PARTITION_OFFSET	FIXED_PARTITION_OFFSET(NVS_PARTITION)
 
+
+#include "main.h"
 #include "gate.h"
 #include "servos.h"
 #include "configDevice.h"

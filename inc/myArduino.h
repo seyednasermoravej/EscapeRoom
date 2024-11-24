@@ -25,7 +25,8 @@ extern "C" {
 #define digitalRead(x)              gpio_pin_get_dt(x)
 
 #define LOW                         0 
-#define HIGH                        1 
+#define HIGH                        1
+
 
 // #define i2c_dev->write(buf, n)      i2c_write_dt(i2c_dev, buf, n)
 

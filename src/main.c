@@ -44,13 +44,11 @@ int main()
     deviceId_topic.topic.size = strlen(deviceIdPub);
     deviceId_topic.qos = MQTT_QOS_1_AT_LEAST_ONCE;
 
-
-
+    // test();
 
     // char serverName[] = "mqtt-1.localdomain";
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
-    test();
     dnsResolver(serverName, serverIpAddress);
     
     //http request for getting DFU
@@ -92,10 +90,11 @@ void i2cScanner()
     struct MqttMsg mqtt = {0};
     strcpy(mqtt.topic, "pub/");
     strcat(mqtt.topic, deviceId);
+    bool deviceFound = false;
     while (1)
     {
 
-
+        deviceFound = false;
         for (addr = 1; addr < 128; addr++) {
             struct i2c_msg msg;
             uint8_t dummy_data = 0;
@@ -105,27 +104,29 @@ void i2cScanner()
             msg.flags = I2C_MSG_WRITE | I2C_MSG_STOP;
 
             ret = i2c_transfer(i2c_dev, &msg, 1, addr);
-            if(addr == 0x27)
-            {
-                LOG_INF("ret is %d", ret);
-            }
+
             if (ret == 0) {
                 printf("Device found at address 0x%02X\n", addr);
                 sprintf(mqtt.msg, "Device found at address 0x%02X\n", addr);
-                // k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
+                k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
+                deviceFound = true;
             }
         }
-        sprintf(mqtt.msg, "scanning finished.");
-        // k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
-        LOG_INF("scanning finished.");
-        k_msleep(1000);
+        if(!deviceFound)
+        {
+            sprintf(mqtt.msg, "device not found.");
+            k_msgq_put(&msqSendToMQTT, &mqtt, K_NO_WAIT);
+            LOG_INF("device not found.");
+
+        }
+        k_msleep(4000);
     }
 }
 
 void test()
 {
-    struct MqttMsg msg = {0};
-    sprintf(msg.msg, "Button 0 pressed");
+    // struct MqttMsg mg = {0};
+    // sprintf(msg.msg, "Button 0 pressed");
 
     i2cScanner();
     while(1)

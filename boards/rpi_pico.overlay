@@ -55,7 +55,7 @@
 						<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;
 			};
 		};
-		rotating_platform_servos_control
+		rotating_platform_servos_control_input
 		{
 			compatible = "gpio-keys";
 			rotating_platform_home_switch: home-switch
@@ -69,19 +69,22 @@
 				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_T>;
 			};
+	
+			// zephyr,deferred-init;
+		};
+		rotating_platform_servo_control_output
+		{
+			// compatible = "gpio-leds";
 			rotating_platform_stepper_enable: stepper-enable{
 				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
 			};
 			rotating_platform_stepper_step: stepper-step{
 				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
 			};
 			rotating_platform_stepper_direction: stepper-direction{
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
-				zephyr,code = <INPUT_KEY_HOME>;
 			};
-			// zephyr,deferred-init;
+			zephyr,deferred-init;
 		};
 		rotating_platform_end_time:gpio-keys
 		{
@@ -129,17 +132,18 @@
 			gpios = <&expander 7 (GPIO_ACTIVE_HIGH)>;
 		};
 	};
-	dipswitch
-	{
-		compatible = "gpio-keys";
-		addresses: switchs{
-			gpios = <&expander 0 (GPIO_ACTIVE_LOW)>, <&expander 1 (GPIO_ACTIVE_LOW)>, 
-			<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
-			<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
-			label = "Device address";
-			zephyr,code = <INPUT_KEY_0>;
-		};
-	};
+	// dipswitch
+	// {
+	// 	// compatible = "gpio-keys";
+	// 	// addresses: switchs{
+	// 	// 	gpios = <&expander 0 (GPIO_ACTIVE_LOW)>, <&expander 1 (GPIO_ACTIVE_LOW)>, 
+	// 	// 	<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
+	// 	// 	<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
+	// 		// label = "Device address";
+	// 		// zephyr,code = <INPUT_KEY_0>;
+	// 	};
+	// 	zephyr,deferred-init;
+	// };
 	relayslocks
 	{
 		compatible = "gpio-keys";
@@ -240,18 +244,18 @@
 			idle-timeout-ms = <200>;
 			zephyr,deferred-init;
 		};
-		config_puzzle_outputs
+		config_puzzle_outputs: config-puzzle-outputs
 		{
 			compatible = "gpio-leds";
-			config_puzzle_relays: config_puzzle_relays{
-				gpios = <&expander 0 (GPIO_ACTIVE_LOW)>,
-						<&expander 1 (GPIO_ACTIVE_LOW)>,
-						<&expander 2 (GPIO_ACTIVE_LOW)>,
-						<&expander 3 (GPIO_ACTIVE_LOW)>,
-						<&expander 4 (GPIO_ACTIVE_LOW)>,
-						<&expander 5 (GPIO_ACTIVE_LOW)>,
-						<&expander 6 (GPIO_ACTIVE_LOW)>,
-						<&expander 7 (GPIO_ACTIVE_LOW)>;
+			config_puzzle_relays: config-puzzle-relays{
+				gpios = <&expander 0 (GPIO_ACTIVE_HIGH)>,
+						<&expander 1 (GPIO_ACTIVE_HIGH)>,
+						<&expander 2 (GPIO_ACTIVE_HIGH)>,
+						<&expander 3 (GPIO_ACTIVE_HIGH)>,
+						<&expander 4 (GPIO_ACTIVE_HIGH)>,
+						<&expander 5 (GPIO_ACTIVE_HIGH)>,
+						<&expander 6 (GPIO_ACTIVE_HIGH)>,
+						<&expander 7 (GPIO_ACTIVE_HIGH)>;
 				
 			};
 		};
@@ -288,6 +292,7 @@
 			mipi-max-frequency = <25000000>;
 			zephyr,deferred-init;
 		};
+		zephyr,deferred-init;
 	};
 	aliases{
 		hintbutton = &button0;
@@ -367,7 +372,7 @@
 	pinctrl-0 = <&spi1_pins>;
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-	laboratory_led_strip: ws2812@0 {
+	color_led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-spi";
 
 		/* SPI */
@@ -375,7 +380,7 @@
 		spi-max-frequency = <6400000>;
 
 		/* WS2812 */
-		chain-length = <15>; /* arbitrary; change at will */
+		chain-length = <16>; /* arbitrary; change at will */
 		spi-cpha;
 		spi-one-frame = <0xf0>; /* 11110000: 625 ns high and 625 ns low */
 		spi-zero-frame = <0xc0>; /* 11000000: 312.5 ns high and 937.5 ns low */
@@ -383,6 +388,7 @@
 				 LED_COLOR_ID_RED
 				 LED_COLOR_ID_BLUE>;
 		zephyr,deferred-init;
+		status = "okay";
 	};
 
 };
@@ -432,13 +438,13 @@ pico_spi: &spi0 {};
 
 };
 
-// &i2c1_default {
-// 	group1 {
-// 		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
+&i2c1_default {
+	group1 {
+		pinmux = <I2C1_SDA_P14>, <I2C1_SCL_P15>;
 
-// 	};
+	};
 
-//   };
+  };
 
 
 &i2c0{
@@ -450,6 +456,7 @@ pico_spi: &spi0 {};
 		reg = <0x24>;
 		int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 		reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
+		zephyr,deferred-init;
 	};
 
 	// mux0: tca9546a@77
@@ -482,17 +489,8 @@ pico_spi: &spi0 {};
 &i2c1{
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
-	clock-frequency = <I2C_BITRATE_STANDARD>;
-	//my test
-	// 	lcd1: pcf857x@27 {
-	// 	compatible = "nxp,pcf857x";
-	// 	status = "okay";
-	// 	reg = <0x27>;
-	// 	gpio-controller;
-	// 	#gpio-cells = <2>;
-	// 	ngpios = <8>;
-	// 	zephyr,deferred-init;
-	// };
+	clock-frequency = <I2C_BITRATE_FAST>;
+	// clock-frequency = <I2C_BITRATE_STANDARD>;
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
@@ -500,7 +498,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 	};
 		lcd2: pcf857x@26{
 		compatible = "nxp,pcf857x";
@@ -508,7 +506,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 	};
 		expander: pcf857x@20 {
 		compatible = "nxp,pcf857x";
@@ -517,13 +515,15 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 	};
-	// rgb_sensor0: tcs34725@29
-	// {
-	// 	compatible = "taos,tcs34725";
-	// 	reg = <0x29>;
-	// };
+	rgb_sensor0: tcs34725@29
+	{
+		status = "okay";
+		compatible = "ams,tcs34725";
+		reg = <0x29>;
+		zephyr,deferred-init;
+	};
   
 
 };

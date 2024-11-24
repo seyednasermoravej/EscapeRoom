@@ -14,7 +14,7 @@
 
 
 
-
+extern char deviceId[17]; 
 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif

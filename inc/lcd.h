@@ -164,8 +164,8 @@ class Lcd
 {
     public:
     Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
-    void firstLine(char *firstLine);
-    void secondLine(char *secondLine);
+    void firstLine(const char *firstLine);
+    void secondLine(const char *secondLine);
 
     private:
     uint8_t GPIO_PIN_E, GPIO_PIN_RS, GPIO_PIN_BL, GPIO_PIN_D4, GPIO_PIN_D5, GPIO_PIN_D6, GPIO_PIN_D7;
@@ -192,7 +192,7 @@ class Lcd
     void pi_lcd_right_to_left(const struct device *gpio_dev);
     void pi_lcd_auto_scroll_right(const struct device *gpio_dev);
     void pi_lcd_auto_scroll_left(const struct device *gpio_dev);
-    void pi_lcd_string(const struct device *gpio_dev, char *msg);
+    void pi_lcd_string(const struct device *gpio_dev, const char *msg);
     void pi_lcd_init(const struct device *gpio_dev, uint8_t cols, uint8_t rows, uint8_t dotsize);
     char clearLine[17] = "                ";
 };

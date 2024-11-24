@@ -3,14 +3,14 @@
 
 LOG_MODULE_REGISTER(gate, LOG_LEVEL_INF);
 
-#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
- 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
+// #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
+//  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
 
-//  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
-static const struct gpio_dt_spec addresses[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA_GATE)
-};
+// //  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
+// static const struct gpio_dt_spec addresses[] = {
+//     DT_FOREACH_PROP_ELEM(DT_NODELABEL(addresses), gpios, DT_SPEC_AND_COMMA_GATE)
+// };
 
 
 #define HINT_NODE	DT_ALIAS(hintbutton)
@@ -103,17 +103,17 @@ int Gate:: addrKeysVal()
     int addr16=0;
     int addr32=0;
     int address_integrated=0;
-    addr1=gpio_pin_get_dt(&addresses[0]);
-    // printk("The Device Addr1 is %d\n\r",addr1);
-    addr2=gpio_pin_get_dt(&addresses[1]);
-    // printk("The Device Addr2 is %d\n\r",addr2);
-    addr4=gpio_pin_get_dt(&addresses[2]);
-    // printk("The Device Addr4 is %d\n\r",addr4);
-    addr8=gpio_pin_get_dt(&addresses[3]);
-    // printk("The Device Addr8 is %d\n\r",addr8);
-    addr16=gpio_pin_get_dt(&addresses[4]);
-    // printk("The Device Addr16 is %d\n\r",addr16);
-    addr32=gpio_pin_get_dt(&addresses[5]);
+    // addr1=gpio_pin_get_dt(&addresses[0]);
+    // // printk("The Device Addr1 is %d\n\r",addr1);
+    // addr2=gpio_pin_get_dt(&addresses[1]);
+    // // printk("The Device Addr2 is %d\n\r",addr2);
+    // addr4=gpio_pin_get_dt(&addresses[2]);
+    // // printk("The Device Addr4 is %d\n\r",addr4);
+    // addr8=gpio_pin_get_dt(&addresses[3]);
+    // // printk("The Device Addr8 is %d\n\r",addr8);
+    // addr16=gpio_pin_get_dt(&addresses[4]);
+    // // printk("The Device Addr16 is %d\n\r",addr16);
+    // addr32=gpio_pin_get_dt(&addresses[5]);
     // printk("The Device Addr32 is %d\n\r",addr32);
     address_integrated = addr1 + (addr2*2) + (addr4*4) + (addr8*8) + (addr16*16) + (addr32*32);
     return address_integrated;
@@ -123,15 +123,15 @@ int Gate:: addrKeysInit()
 {
     int ret;
 
-    for(unsigned int i = 0; i < ARRAY_SIZE(addresses); i++){
-        if (!device_is_ready(addresses[i].port)) {
-		    return -1;
-	    }
-        ret = gpio_pin_configure_dt(&addresses[i], GPIO_INPUT);
-	    if (ret < 0) {
-		    return -1;
-	    }
-    }
+    // for(unsigned int i = 0; i < ARRAY_SIZE(addresses); i++){
+    //     if (!device_is_ready(addresses[i].port)) {
+	// 	    return -1;
+	//     }
+    //     ret = gpio_pin_configure_dt(&addresses[i], GPIO_INPUT);
+	//     if (ret < 0) {
+	// 	    return -1;
+	//     }
+    // }
 	return 0;
 }
 

@@ -264,7 +264,7 @@ void Lcd:: pi_lcd_auto_scroll_left(const struct device *gpio_dev)
 			LCD_ENTRY_MODE_SET | lcd_data.disp_cntl);
 }
 
-void Lcd:: pi_lcd_string(const struct device *gpio_dev, char *msg)
+void Lcd:: pi_lcd_string(const struct device *gpio_dev, const char *msg)
 {
 	int i;
 	int len = 0;
@@ -401,7 +401,7 @@ Lcd:: Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL,
 }
 
 
-void Lcd:: firstLine(char *firstLine)
+void Lcd:: firstLine(const char *firstLine)
 {
 	pi_lcd_set_cursor(gpio_dev, 0, 0);
 	pi_lcd_string(gpio_dev, clearLine);
@@ -410,7 +410,7 @@ void Lcd:: firstLine(char *firstLine)
 	k_msleep(MSEC_PER_SEC * 3U);
 }
 
-void Lcd:: secondLine(char *secondLine)
+void Lcd:: secondLine(const char *secondLine)
 {
 	pi_lcd_set_cursor(gpio_dev, 0, 1);
 	pi_lcd_string(gpio_dev, clearLine);

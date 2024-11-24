@@ -224,6 +224,7 @@ bool Adafruit_PN532::begin() {
   // //   while (ser_dev->available())
   // //     ser_dev->read();
   // }
+  device_init(i2c_dev->bus);
       if (!i2c_dev) {
         LOG_ERR("Error: I2C device not found\n");
         return false;

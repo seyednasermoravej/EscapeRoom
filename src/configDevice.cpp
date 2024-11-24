@@ -6,12 +6,18 @@ LOG_MODULE_REGISTER(configDevice, LOG_LEVEL_INF);
 #define LCD1_NODE DT_NODELABEL(lcd1)
 #define LCD2_NODE DT_NODELABEL(lcd2)
 
+#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
+ 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
-#define RELAYS_NODE_ID	 DT_COMPAT_GET_ANY_STATUS_OKAY(config_puzzle_relays)
+
+//  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
+static const struct gpio_dt_spec config_puzzle_relays[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(config_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+};
 
 
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
-static const struct device *const relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
+// static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
 
 static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
 static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
@@ -22,8 +28,9 @@ static void buttonsHandler(struct input_event *val, void* topic)
     if (val->type == INPUT_EV_KEY)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/configDevice/buttons");
+        strcpy(msg.topic, "intro_room/console/button0");
         // strcpy(msg.topic, (char *)topic);
+        
         if((val->code == INPUT_BTN_0) && (val->value))
         {
 
@@ -148,6 +155,10 @@ void qdecRoomHandler(struct input_event *val, void* topic)
 
 ConfigDevice:: ConfigDevice()
 {
+    struct MqttMsg msg = {0};
+    strcpy(msg.topic, "pub/");
+    strcat(msg.topic, deviceId);
+
     device_init(qdecLang);
     device_init(qdecRoom);
     
@@ -156,14 +167,29 @@ ConfigDevice:: ConfigDevice()
 
 	device_init(DEVICE_DT_GET(LCD1_NODE));
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
-    lcd1->firstLine("Language");
+    lcd1->firstLine((const char *)"    Language    ");
+    sprintf(msg.msg, "lcd1 is configured");
+    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
 	device_init(DEVICE_DT_GET(LCD2_NODE));
 	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
-    lcd2->firstLine("Room");
+    lcd2->firstLine("      Room      ");
 
-
-	device_init(relays);
+    sprintf(msg.msg, "lcd2 is configured");
+    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    // int ret;
+	// device_init(DEVICE_DT_GET(DT_NODELABEL(expander)));
+    // for(unsigned int i = 0; i < ARRAY_SIZE(config_puzzle_relays); i++){
+    //     if (!device_is_ready(config_puzzle_relays[i].port)) {
+	// 	    // return -1;
+	//     }
+    //     ret = gpio_pin_configure_dt(&config_puzzle_relays[i], GPIO_OUTPUT_INACTIVE);
+	//     if (ret < 0) {
+	// 	    // return -1;
+	//     }
+    // }
+    // sprintf(msg.msg, "expander is configured");
+    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandler, NULL);
@@ -186,53 +212,53 @@ void ConfigDevice:: messageHandler(struct MqttMsg *msg)
         lcd2->secondLine(msg->msg);
     }
 
-    else if (strcmp(msg->topic, "sub/relay0") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 0): led_off(relays, 0);
-    }
+    // else if (strcmp(msg->topic, RELAY0_TOPIC) == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[0], 1): gpio_pin_set_dt(&config_puzzle_relays[0], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay1") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 1): led_off(relays, 1);
-    }
+    // else if (strcmp(msg->topic, RELAY1_TOPIC) == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[1], 1): gpio_pin_set_dt(&config_puzzle_relays[1], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay2") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 2): led_off(relays, 2);
-    }
+    // else if (strcmp(msg->topic, "sub/relay2") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[2], 1): gpio_pin_set_dt(&config_puzzle_relays[2], 0);
+    // }
     
-    else if (strcmp(msg->topic, "sub/relay3") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 3): led_off(relays, 3);
-    }
+    // else if (strcmp(msg->topic, "sub/relay3") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[3], 1): gpio_pin_set_dt(&config_puzzle_relays[3], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay4") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 4): led_off(relays, 4);
-    }
+    // else if (strcmp(msg->topic, "sub/relay4") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[4], 1): gpio_pin_set_dt(&config_puzzle_relays[4], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay5") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 5): led_off(relays, 5);
-    }
+    // else if (strcmp(msg->topic, "sub/relay5") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[5], 1): gpio_pin_set_dt(&config_puzzle_relays[5], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay6") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 6): led_off(relays, 6);
-    }
+    // else if (strcmp(msg->topic, "sub/relay6") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[6], 1): gpio_pin_set_dt(&config_puzzle_relays[6], 0);
+    // }
 
-    else if (strcmp(msg->topic, "sub/relay7") == 0)
-    {
-        int val = atoi(msg->msg);
-        val ? led_on(relays, 7): led_off(relays, 7);
-    }
+    // else if (strcmp(msg->topic, "sub/relay7") == 0)
+    // {
+    //     int val = atoi(msg->msg);
+    //     val ? gpio_pin_set_dt(&config_puzzle_relays[7], 1): gpio_pin_set_dt(&config_puzzle_relays[7], 0);
+    // }
 
     else
     {

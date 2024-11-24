@@ -14,6 +14,7 @@
 
 #include "topics.h"
 #include "ledStrip.h"
+#include "Adafruit_TCS34725.h"
 
 
 class Laboratory
@@ -25,6 +26,7 @@ public:
 
 private:
     LedStrip *ledStrip;
+    Adafruit_TCS34725 *tcs;
 };
 
 

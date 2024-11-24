@@ -17,6 +17,7 @@
 #include "lcd.h"
 #include <zephyr/input/input.h>
 #include <zephyr/drivers/led.h>
+#include "main.h"
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
