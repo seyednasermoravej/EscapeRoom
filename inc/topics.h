@@ -44,7 +44,16 @@
 #define SET_STEPPER_POSITION       "sub/stepperPosition"
 
 
-#define RELAY0_TOPIC                                       "introRoom/console/relay0" 
+// #define RELAY1_TOPIC                                       "sub/relay1" 
+// #define RELAY2_TOPIC                                       "sub/relay2" 
+// #define RELAY3_TOPIC                                       "sub/relay3" 
+// #define RELAY4_TOPIC                                       "sub/relay4" 
+// #define RELAY5_TOPIC                                       "sub/relay5" 
+// #define RELAY6_TOPIC                                       "sub/relay6" 
+// #define RELAY7_TOPIC                                       "sub/relay7" 
+// #define RELAY8_TOPIC                                       "sub/relay8" 
+
+
 #define RELAY1_TOPIC                                       "introRoom/console/relay1" 
 #define RELAY2_TOPIC                                       "introRoom/console/relay2" 
 #define RELAY3_TOPIC                                       "introRoom/console/relay3" 
@@ -52,7 +61,13 @@
 #define RELAY5_TOPIC                                       "introRoom/console/relay5" 
 #define RELAY6_TOPIC                                       "introRoom/console/relay6" 
 #define RELAY7_TOPIC                                       "introRoom/console/relay7" 
+#define RELAY8_TOPIC                                       "introRoom/console/relay8" 
 
+
+#define INTRO_ROOM_CABINET_RELAY1_TOPIC                                       "introRoom/cabinet/relay1" 
+#define INTRO_ROOM_CABINET_RELAY2_TOPIC                                       "introRoom/cabinet/relay2" 
+#define INTRO_ROOM_CABINET_RELAY3_TOPIC                                       "introRoom/cabinet/relay3" 
+#define INTRO_ROOM_CABINET_RELAY4_TOPIC                                       "introRoom/cabinet/relay4" 
 
 
 

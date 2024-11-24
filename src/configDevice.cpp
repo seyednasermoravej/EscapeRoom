@@ -128,15 +128,15 @@ ConfigDevice:: ConfigDevice()
 	device_init(DEVICE_DT_GET(LCD1_NODE));
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd1->firstLine((const char *)"    Language    ");
-    sprintf(msg.msg, "lcd1 is configured");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    // sprintf(msg.msg, "lcd1 is configured");
+    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
 	device_init(DEVICE_DT_GET(LCD2_NODE));
 	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd2->firstLine("      Room      ");
 
-    sprintf(msg.msg, "lcd2 is configured");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    // sprintf(msg.msg, "lcd2 is configured");
+    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
 
     // int ret;

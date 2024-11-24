@@ -259,8 +259,8 @@ struct mqtt_topic relay0_topic = {
 .topic =
 {
 
-    .utf8 = (uint8_t*)RELAY0_TOPIC,
-    .size = strlen(RELAY0_TOPIC)
+    .utf8 = (uint8_t*)RELAY8_TOPIC,
+    .size = strlen(RELAY8_TOPIC)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 struct mqtt_topic relay1_topic = {
@@ -317,5 +317,16 @@ struct mqtt_topic relay7_topic = {
 
     .utf8 = (uint8_t*)RELAY7_TOPIC,
     .size = strlen(RELAY7_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+
+
+struct mqtt_topic introRoom_cabinet_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)INTRO_ROOM_CABINET_RELAY1_TOPIC,
+    .size = strlen(INTRO_ROOM_CABINET_RELAY1_TOPIC)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};

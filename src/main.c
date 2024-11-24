@@ -46,8 +46,8 @@ int main()
 
     // test();
 
-    char serverName[] = "mqtt-1.localdomain";
-    // char serverName[] = "test.mosquitto.org";
+    // char serverName[] = "mqtt-1.localdomain";
+    char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     dnsResolver(serverName, serverIpAddress);
     
@@ -61,15 +61,15 @@ int main()
 
     struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
     memset(send, 0, sizeof(struct MqttMsg));
-    strcpy(send->topic, "pub/");
-    strcat(send->topic, deviceId);
-    // strcpy(send->msg, "Hello guys.");
-    k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+    // strcpy(send->topic, "pub/");
+    // strcat(send->topic, deviceId);
+    // // strcpy(send->msg, "Hello guys.");
+    // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
         k_sleep(K_SECONDS(120));
-        sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
-        k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+        // sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
+        // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     }
 }
 
