@@ -95,6 +95,15 @@ void Puzzle:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is Rotating Platform.");
         deviceSpecified = true;
     }
+    else if(strcmp(type, "cabinet") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is cabinet");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzleType = CABINET_PUZZLE;
+        cabinet = new Cabinet;
+        LOG_INF("Puzzle type is cabinet.");
+        deviceSpecified = true;
+    }
     if(deviceSpecified)
     {
         gpio_pin_set_dt(&builtInLed, 1);
@@ -170,6 +179,9 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
 
             case ROTATING_PLATFORM_PUZZLE:
                 rotatingPlatform -> messageHandler(msg);
+            
+            case CABINET_PUZZLE:
+                cabinet->messageHandler(msg);
             default:
                 break;
             }
@@ -195,6 +207,10 @@ void Puzzle:: alive()
 
     case CONSOLE_PUZZLE:
         configDevice -> alive();
+        break;
+
+    case CABINET_PUZZLE:
+        cabinet -> alive();
         break;
 
     // case NUMBERS_GUESSING_PUZZLE:

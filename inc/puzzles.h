@@ -38,6 +38,7 @@
 #include "numbersGuessing.h"
 #include "laboratory.h"
 #include "rotatingPlatform.h"
+#include "cabinet.h"
 
 enum PuzzleTypes
 {
@@ -49,6 +50,7 @@ enum PuzzleTypes
     UNSEEN_PUZZLE,
     LABORATORY_PUZZLE,
     ROTATING_PLATFORM_PUZZLE,
+    CABINET_PUZZLE,
 
 };
 
@@ -91,6 +93,7 @@ private:
     Laboratory *laboratory;
     RotatingPlatform *rotatingPlatform;
     struct nvs_fs *fs;
+    Cabinet *cabinet;
 
     int builtIntLedInit();
     int nvsInit();

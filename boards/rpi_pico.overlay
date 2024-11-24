@@ -265,22 +265,22 @@
 		cabinet_puzzle_input: cabinet-puzzle-input
 		{
 			compatible = "gpio-keys";
-			button0: button_0
+			cabinet_button0: cabinet_button_0
 			{
 				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_0>;
 			};
-			button1: button_1
+			cabinet_button1: cabinet_button_1
 			{
 				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_1>;
 			};
-			button2: button_2
+			cabinet_button2: cabinet_button_2
 			{
 				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_2>;
 			};
-			button3: button_3
+			cabinet_button3: cabinet_button_3
 			{
 				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_3>;
@@ -290,7 +290,7 @@
 		cabinet_puzzle_outputs: cabinet-puzzle-outputs
 		{
 			compatible = "gpio-leds";
-			cabinet_puzzle_relays{
+			cabinet_puzzle_relays: cabinet-puzzle-relays{
 				gpios = <&gpio0 3 (GPIO_ACTIVE_HIGH)>,
 						<&gpio0 4 (GPIO_ACTIVE_HIGH)>,
 						<&gpio0 5 (GPIO_ACTIVE_HIGH)>,
@@ -299,7 +299,7 @@
 			};
 
 		};
-
+	};
 	// };
 	// labratory
 	// {

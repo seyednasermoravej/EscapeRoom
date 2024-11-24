@@ -330,3 +330,27 @@ struct mqtt_topic introRoom_cabinet_relay1_topic = {
     .size = strlen(INTRO_ROOM_CABINET_RELAY1_TOPIC)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic introRoom_cabinet_relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)INTRO_ROOM_CABINET_RELAY2_TOPIC,
+    .size = strlen(INTRO_ROOM_CABINET_RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic introRoom_cabinet_relay3_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)INTRO_ROOM_CABINET_RELAY3_TOPIC,
+    .size = strlen(INTRO_ROOM_CABINET_RELAY3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic introRoom_cabinet_relay4_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)INTRO_ROOM_CABINET_RELAY4_TOPIC,
+    .size = strlen(INTRO_ROOM_CABINET_RELAY4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};

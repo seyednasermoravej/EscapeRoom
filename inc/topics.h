@@ -111,6 +111,11 @@ extern struct mqtt_topic relay5_topic;
 extern struct mqtt_topic relay6_topic;
 extern struct mqtt_topic relay7_topic;
 
+extern struct mqtt_topic introRoom_cabinet_relay1_topic;
+extern struct mqtt_topic introRoom_cabinet_relay2_topic;
+extern struct mqtt_topic introRoom_cabinet_relay3_topic;
+extern struct mqtt_topic introRoom_cabinet_relay4_topic;
+
 
 #ifdef __cplusplus
 }
