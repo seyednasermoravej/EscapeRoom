@@ -188,7 +188,6 @@ static int wait(int timeout)
 void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 {
 	int err;
-	char *payload = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
 	switch (evt->type) {
 	case MQTT_EVT_CONNACK:
 		if (evt->result != 0) {
@@ -261,7 +260,9 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 		break;
 
 	case MQTT_EVT_PUBLISH:
-		memset(payload, 0, MESSAGE_QUEUE_LEN);
+		// char *payload = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
+		char payload[MESSAGE_QUEUE_LEN] = {0};
+		// memset(payload, 0, MESSAGE_QUEUE_LEN);
 		mqtt_read_publish_payload(client, payload, MESSAGE_QUEUE_LEN);
 		// err = k_msgq_put(&msqSendToMQTT, payload, K_NO_WAIT);
 		// char *topicName = (char *)k_malloc(sizeof(char) * MESSAGE_QUEUE_LEN);
@@ -285,6 +286,7 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 	default:
 		break;
 	}
+	
 }
 
 // static char *get_mqtt_payload(enum mqtt_qos qos)
