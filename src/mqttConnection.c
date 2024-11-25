@@ -272,6 +272,15 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 		strcpy(msg.msg, payload);
 		err = k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
 
+
+
+		    if (evt->param.publish.message.topic.qos == MQTT_QOS_1_AT_LEAST_ONCE) {
+        struct mqtt_puback_param puback = {
+            .message_id = evt->param.publish.message_id
+        };
+        mqtt_publish_qos1_ack(client, &puback);
+    }
+
 		break;
 	default:
 		break;
