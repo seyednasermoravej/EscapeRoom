@@ -155,7 +155,6 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
             puzzle->messageHandler(msg);
         }
 
-
     }
 
 }
