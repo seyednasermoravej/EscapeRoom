@@ -4,7 +4,6 @@
 
 #include <zephyr/net/mqtt.h>
 
-#define STATUS_TOPIC            "pub/status"
 
 #define SERVO0_TOPIC            "sub/servo0"
 #define K3_TOPIC                "sub/relaysControl"
@@ -12,7 +11,7 @@
 #define LCD1_TOPIC              "introRoom/console/lcd1"
 #define LCD2_TOPIC              "introRoom/console/lcd2"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
-#define PUZZLE_TYPE_TOPIC       "sub/puzzleType"
+#define PUZZLE_TYPE_TOPIC       "puzzleType"
 #define LED1_TOPIC              "sub/led1"
 #define LED2_TOPIC              "sub/led2"
 #define LED3_TOPIC              "sub/led3"
@@ -38,10 +37,7 @@
 #define LOGS_TOPIC              "pub/logs"
 #define KEYPAD_TOPIC                       "pub/keypad"
 
-#define SET_STEPPER_TIME_POSITION          "sub/stepperTimePosition"
-#define SET_STEPPER_GO_TO_START_POSITION          "sub/stepperGoToStartPosition"
-#define SET_STEPPER_STOP          "sub/stepperStop"
-#define SET_STEPPER_POSITION       "sub/stepperPosition"
+#define INTRO_ROOM_PLATFORM_POSITION_TOPIC       "introRoom/platform/position"
 
 
 // #define RELAY1_TOPIC                                       "sub/relay1" 

@@ -4,6 +4,9 @@
 LOG_MODULE_REGISTER(rotatingPlatform, LOG_LEVEL_INF);
 
 
+static const char roomName[] = "introRoom";
+static const char puzzleTypeName[] = "platform";
+
 const struct gpio_dt_spec stepPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_step), gpios, {0});
 const struct gpio_dt_spec directionPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_direction), gpios, {0});
 const struct gpio_dt_spec enablePin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_enable), gpios, {0});
@@ -15,9 +18,9 @@ const struct gpio_dt_spec iStop = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_plat
 static const struct gpio_dt_spec buttons[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_buttons), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
 };
-static const struct gpio_dt_spec relays[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_relays), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
-};
+// static const struct gpio_dt_spec relays[] = {
+//     DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_relays), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
+// };
 
 
 
@@ -26,14 +29,12 @@ void buttonsHandler(struct input_event *val, void* topic)
 {
     if (val->type == INPUT_EV_KEY)
     {
-        struct MqttMsg msg = {0};
-        strcpy(msg.topic, "pub/end time");
-        // strcpy(msg.topic, (char *)topic);
-        if((val->code == INPUT_BTN_0) && (val->value))
+        if(val->value)
         {
-
-            LOG_INF("End time pressed");
-            sprintf(msg.msg, "End time pressed");
+            struct MqttMsg msg = {0};
+            sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
+            sprintf(msg.msg, "TRUE");
+            LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
     }
@@ -46,9 +47,9 @@ RotatingPlatform:: RotatingPlatform()
 
     stepperInit();
     buttonsInit();
-    relaysInit();
+    // relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
-    device_init(relays->port);
+    // device_init(relays->port);
     device_init(buttonEndTime);
     INPUT_CALLBACK_DEFINE(buttonEndTime, buttonsHandler, NULL);
 
@@ -110,7 +111,13 @@ void RotatingPlatform:: calibrationWorkHandler(struct k_work *work)
 
 
 }
-
+void RotatingPlatform::alive()
+{
+    struct MqttMsg msg = {0};
+    sprintf(msg.topic, "%s/%s/alive", roomName, puzzleTypeName);
+    sprintf(msg.msg, "TRUE");
+    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+}
 
 void RotatingPlatform:: calibration()
 {
@@ -133,8 +140,8 @@ void RotatingPlatform:: calibration()
         calibrated = true;
         LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
         struct MqttMsg msg;
-        strcpy(msg.topic, STATUS_TOPIC);
-        strcpy(msg.msg, "calibrated");
+        strcpy(msg.topic, INTRO_ROOM_PLATFORM_POSITION_TOPIC);
+        strcpy(msg.msg, "TRUE");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         // stepsPerDegree = 350000/360;
         // stepsPerDegree = (double)stepsPerRev / 360; 
@@ -328,34 +335,34 @@ int RotatingPlatform:: buttonsInit()
 	gpio_add_callback(buttons[0].port, &buttons_cb_data); 
 	return ret;
 } 
-int RotatingPlatform:: relaysInit()
-{
-    int ret;
-    // device_init(relays->port);
-    for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
-        if (!device_is_ready(relays[i].port)) {
-		    return -1;
-	    }
+// int RotatingPlatform:: relaysInit()
+// {
+//     int ret;
+//     // device_init(relays->port);
+//     for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
+//         if (!device_is_ready(relays[i].port)) {
+// 		    return -1;
+// 	    }
 
-        ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT);
-	    if (ret < 0) {
-		    return -1;
-	    }
-    }
-    return 0;
-} 
+//         ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT);
+// 	    if (ret < 0) {
+// 		    return -1;
+// 	    }
+//     }
+//     return 0;
+// } 
 
 void RotatingPlatform:: messageHandler(MqttMsg *msg)
 {
     if(calibrated)
     {
-        if(strcmp(msg->topic, SET_STEPPER_POSITION) == 0)
+        if(strcmp(msg->topic, INTRO_ROOM_PLATFORM_POSITION_TOPIC) == 0)
         {
-            if(strcmp(msg->msg, "position2") == 0)
+            if(strcmp(msg->msg, "back") == 0)
             {
                 goToPosition(-305000);
             }
-            else if(strcmp(msg->msg, "start position") == 0)
+            else if(strcmp(msg->msg, "front") == 0)
             {
                 goToPosition(0);
             }
@@ -363,33 +370,6 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
             {
                 LOG_INF("The position is not valid");
             }
-        }
-        else if(strcmp(msg->topic, SET_STEPPER_TIME_POSITION) == 0)
-        {
-            char time[8];
-            char pos[8];
-            uint8_t commaPos = 0;
-            while(*(msg->msg + commaPos) != ',')
-            {
-                time[commaPos] = *(msg->msg + commaPos);
-                commaPos++;
-            }
-            strcpy(pos, (msg->msg + commaPos) + 1);
-            int timeInt = atoi(time);
-            int posInt = atoi(pos);
-            int accel = (2 * posInt)/(timeInt * timeInt);
-            stepper->setAcceleration(accel);
-            stepper->moveTo(posInt);
-            LOG_INF("The new position is:%ld", stepper->currentPosition());
-            // aasd->setPosition(atoi(msg->msg));
-        }
-        else if(strcmp(msg->topic, SET_STEPPER_GO_TO_START_POSITION) == 0)
-        {
-            goToStartPos();
-        }
-        else if(strcmp(msg->topic, SET_STEPPER_STOP) == 0)
-        {
-            stop();
         }
         else
         {

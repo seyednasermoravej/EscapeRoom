@@ -222,35 +222,8 @@ struct mqtt_topic stepperPosition_topic = {
 .topic =
 {
 
-    .utf8 = (uint8_t*)SET_STEPPER_POSITION,
-    .size = strlen(SET_STEPPER_POSITION)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-struct mqtt_topic stepperSpeed_topic = {
-.topic =
-{
-    .utf8 = (uint8_t*)SET_STEPPER_TIME_POSITION,
-    .size = strlen(SET_STEPPER_TIME_POSITION)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-
-struct mqtt_topic stepperGoToStartPosition_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)SET_STEPPER_GO_TO_START_POSITION,
-    .size = strlen(SET_STEPPER_GO_TO_START_POSITION)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-struct mqtt_topic stepperStop_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)SET_STEPPER_STOP,
-    .size = strlen(SET_STEPPER_STOP)
+    .utf8 = (uint8_t*)INTRO_ROOM_PLATFORM_POSITION_TOPIC,
+    .size = strlen(INTRO_ROOM_PLATFORM_POSITION_TOPIC)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 

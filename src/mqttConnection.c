@@ -12,7 +12,7 @@
 
 bool command = false;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>
@@ -114,11 +114,11 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[2] = lcd_topic;
 	mqttLists[3] = builtInLed_topic;
 	mqttLists[4] = puzzleType_topic;
-	mqttLists[5] = stepperSpeed_topic;
-	mqttLists[6] = stepperStop_topic;
-	mqttLists[7] = stepperGoToStartPosition_topic;
-	mqttLists[8] = stepperPosition_topic;
-	mqttLists[9] = led1_topic;
+	mqttLists[5] = stepperPosition_topic;
+	mqttLists[6] = led1_topic;
+	mqttLists[7] = introRoom_cabinet_relay4_topic;
+	mqttLists[8] = introRoom_cabinet_relay3_topic;
+	mqttLists[9] = introRoom_cabinet_relay2_topic;
 	mqttLists[10] = led2_topic;
 	mqttLists[11] = led3_topic;
 	mqttLists[12] = led4_topic;
@@ -138,13 +138,10 @@ static int subscribe(struct mqtt_client *const c)
 	mqttLists[26] = lcd1_topic;
 	mqttLists[27] = lcd2_topic;
 	mqttLists[28] = introRoom_cabinet_relay1_topic;
-	mqttLists[29] = introRoom_cabinet_relay2_topic;
-	mqttLists[30] = introRoom_cabinet_relay3_topic;
-	mqttLists[31] = introRoom_cabinet_relay4_topic;
 
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 32, .message_id = 34};
+		.list = mqttLists, .list_count = 29, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s len %u", subscription_list.list[i].topic.utf8,

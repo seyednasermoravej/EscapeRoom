@@ -44,6 +44,7 @@
 				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_HOME>;
 			};
+			zephyr,deferred-init;
 		};
 
 		roatating_platform_relays

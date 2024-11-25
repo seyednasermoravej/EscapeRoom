@@ -34,6 +34,7 @@ public:
     void buttonsIrq(const struct device *dev, uint32_t pins);
     void goToStartPos();
     void stop();
+    void alive();
 
 private:
     AccelStepper *stepper = NULL;
