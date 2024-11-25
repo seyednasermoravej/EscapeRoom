@@ -33,12 +33,13 @@
 #include "main.h"
 #include "gate.h"
 #include "servos.h"
-#include "configDevice.h"
+#include "console.h"
 #include "unseen.h"
 #include "numbersGuessing.h"
 #include "laboratory.h"
 #include "rotatingPlatform.h"
 #include "cabinet.h"
+#include "puzzle.h"
 
 enum PuzzleTypes
 {
@@ -85,15 +86,8 @@ public:
 
 private:
 
-    Gate *gate;
-    Servos *servos;
-    ConfigDevice *configDevice;
-    Unseen *unseen;
-    NumbersGuessing *numbersGuessing;
-    Laboratory *laboratory;
-    RotatingPlatform *rotatingPlatform;
     struct nvs_fs *fs;
-    Cabinet *cabinet;
+    Puzzle *puzzle;
 
     int builtIntLedInit();
     int nvsInit();

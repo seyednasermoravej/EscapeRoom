@@ -1,5 +1,5 @@
-#ifndef __CONFIG_DEVICE__H__
-#define __CONFIG_DEVICE__H__
+#ifndef __CCONSOLE__H__
+#define __CCONSOLE__H__
 
 
 
@@ -18,15 +18,15 @@
 #include <zephyr/input/input.h>
 #include <zephyr/drivers/led.h>
 #include "main.h"
+#include "puzzle.h"
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
-class ConfigDevice
+class Console: public Puzzle
 {
 public:
-    ConfigDevice();
+    Console(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg);
-    void alive();
 
 
 private:

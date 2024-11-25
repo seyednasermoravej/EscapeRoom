@@ -13,23 +13,6 @@ char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int main()
 { 
     //performing new update on firmware

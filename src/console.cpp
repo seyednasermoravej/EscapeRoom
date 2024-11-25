@@ -1,4 +1,4 @@
-#include "configDevice.h"
+#include "console.h"
 
 LOG_MODULE_REGISTER(configDevice, LOG_LEVEL_INF);
 
@@ -105,15 +105,7 @@ void qdecRoomHandler(struct input_event *val, void* topic)
     } 
 }
 
-void ConfigDevice::alive()
-{
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s/alive", roomName, puzzleTypeName);
-    sprintf(msg.msg, "TRUE");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-}
-
-ConfigDevice:: ConfigDevice()
+Console:: Console(const char * room, const char *type): Puzzle(room, type)
 {
     struct MqttMsg msg = {0};
     sprintf(msg.topic, "%s/%s", roomName, puzzleTypeName);
@@ -157,7 +149,7 @@ ConfigDevice:: ConfigDevice()
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandler, NULL);
 }
 
-void ConfigDevice:: messageHandler(struct MqttMsg *msg)
+void Console:: messageHandler(struct MqttMsg *msg)
 {
 
     if(strcmp(msg->topic, LCD_TOPIC) == 0)

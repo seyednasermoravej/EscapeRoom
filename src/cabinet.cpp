@@ -26,7 +26,7 @@ static void buttonsHandler(struct input_event *val, void* topic)
 
         if(val->value)
         {
-            sprintf(msg.topic, "%s/%s/input%d", roomName, puzzleTypeName, (val->code - 0x100) + 1);
+            sprintf(msg.topic, "%s/%s/input%d", roomName, puzzleTypeName, (val->code - INPUT_BTN_0) + 1);
             sprintf(msg.msg, "TRUE");
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
@@ -49,16 +49,6 @@ Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 	    }
     }
 }
-
-
-void Cabinet::alive()
-{
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s/alive", roomName, puzzleTypeName);
-    sprintf(msg.msg, "TRUE");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-}
-
 
 
 void Cabinet:: messageHandler(struct MqttMsg *msg)

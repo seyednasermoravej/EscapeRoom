@@ -31,79 +31,80 @@ void Puzzles:: puzzleTypeSelection(char *type)
     strcpy(msg.topic, "pub/");
     strcat(msg.topic, deviceId);
 
-    if(strcmp(type, "servos") == 0)
+    if(strcmp(type, "cabinet") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is Servos");
+        sprintf(msg.msg, "Puzzle type is cabinet");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = SERVOS_PUZZLE;
-        servos = new Servos;
-        LOG_INF("Puzzle type is Servos");
+        puzzleType = CABINET_PUZZLE;
+        puzzle = new Cabinet("introRoom", "cabinet");
+        LOG_INF("Puzzle type is cabinet.");
+        deviceSpecified = true;
+    }
+    // else if(strcmp(type, "servos") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is Servos");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = SERVOS_PUZZLE;
+    //     servos = new Servos;
+    //     LOG_INF("Puzzle type is Servos");
 
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "gate") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is gate");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = GATE_PUZZLE;
-        gate = new Gate;
-        LOG_INF("Puzzle type is Gate.");
-        deviceSpecified = true;
-    }
+    //     deviceSpecified = true;
+    // }
+    // else if(strcmp(type, "gate") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is gate");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = GATE_PUZZLE;
+    //     gate = new Gate;
+    //     LOG_INF("Puzzle type is Gate.");
+    //     deviceSpecified = true;
+    // }
     else if(strcmp(type, "console") == 0)
     {
         sprintf(msg.msg, "Puzzle type is console");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = CONSOLE_PUZZLE;
-        configDevice = new ConfigDevice;
+        puzzle = new Console("introRoom", "console");
         LOG_INF("puzzle type is console.");
         deviceSpecified = true;
     }
-    else if(strcmp(type, "numbers guessing") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is numbers guessing");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = NUMBERS_GUESSING_PUZZLE;
-        numbersGuessing = new NumbersGuessing;
-        LOG_INF("Puzzle type is numbers guessing.");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "nuseen") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is unseen");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = UNSEEN_PUZZLE;
-        unseen = new Unseen;
-        LOG_INF("Puzzle type is unseen.");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "laboratory") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is labratory");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = LABORATORY_PUZZLE;
-        laboratory = new Laboratory;
-        LOG_INF("Puzzle type is laboratory.");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "rotating platform") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is rotating platform");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = ROTATING_PLATFORM_PUZZLE;
-        rotatingPlatform = new RotatingPlatform;
-        LOG_INF("Puzzle type is Rotating Platform.");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "cabinet") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is cabinet");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = CABINET_PUZZLE;
-        cabinet = new Cabinet("introRoom", "cabinet");
-        LOG_INF("Puzzle type is cabinet.");
-        deviceSpecified = true;
-    }
+    // else if(strcmp(type, "numbers guessing") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is numbers guessing");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = NUMBERS_GUESSING_PUZZLE;
+    //     numbersGuessing = new NumbersGuessing;
+    //     LOG_INF("Puzzle type is numbers guessing.");
+    //     deviceSpecified = true;
+    // }
+    // else if(strcmp(type, "nuseen") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is unseen");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = UNSEEN_PUZZLE;
+    //     unseen = new Unseen;
+    //     LOG_INF("Puzzle type is unseen.");
+    //     deviceSpecified = true;
+    // }
+    // else if(strcmp(type, "laboratory") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is labratory");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = LABORATORY_PUZZLE;
+    //     laboratory = new Laboratory;
+    //     LOG_INF("Puzzle type is laboratory.");
+    //     deviceSpecified = true;
+    // }
+    // else if(strcmp(type, "rotating platform") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is rotating platform");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = ROTATING_PLATFORM_PUZZLE;
+    //     rotatingPlatform = new RotatingPlatform;
+    //     LOG_INF("Puzzle type is Rotating Platform.");
+    //     deviceSpecified = true;
+    // }
+
     if(deviceSpecified)
     {
         gpio_pin_set_dt(&builtInLed, 1);
@@ -151,40 +152,7 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
         }
         else
         {
-            
-            switch (puzzles->puzzleType)
-            {
-            case GATE_PUZZLE:
-                gate -> messageHandler(msg);
-                break;
-            
-            case SERVOS_PUZZLE:
-                servos -> messageHandler(msg);
-                break;
-
-            case CONSOLE_PUZZLE:
-                configDevice -> messageHandler(msg);
-                break;
-
-            case NUMBERS_GUESSING_PUZZLE:
-                numbersGuessing -> messageHandler(msg);
-                break;
-
-            case UNSEEN_PUZZLE:
-                unseen -> messageHandler(msg);
-                break;
-
-            case LABORATORY_PUZZLE:
-                laboratory -> messageHandler(msg);
-
-            case ROTATING_PLATFORM_PUZZLE:
-                rotatingPlatform -> messageHandler(msg);
-            
-            case CABINET_PUZZLE:
-                cabinet->messageHandler(msg);
-            default:
-                break;
-            }
+            puzzle->messageHandler(msg);
         }
 
 
@@ -195,41 +163,7 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
 
 void Puzzles:: alive()
 {
-    switch (puzzles->puzzleType)
-    {
-    // case GATE_PUZZLE:
-    //     gate -> alive();
-    //     break;
-    
-    // case SERVOS_PUZZLE:
-    //     servos -> alive();
-    //     break;
-
-    case CONSOLE_PUZZLE:
-        configDevice -> alive();
-        break;
-
-    case CABINET_PUZZLE:
-        cabinet -> alive();
-        break;
-
-    // case NUMBERS_GUESSING_PUZZLE:
-    //     numbersGuessing -> alive();
-    //     break;
-
-    // case UNSEEN_PUZZLE:
-    //     unseen -> alive();
-    //     break;
-
-    // case LABORATORY_PUZZLE:
-    //     laboratory -> alive();
-
-    // case ROTATING_PLATFORM_PUZZLE:
-    //     rotatingPlatform -> alive();
-    default:
-        break;
-    }
-
+    puzzle->alive();
 }
 int Puzzles:: nvsInit()
 {
@@ -318,18 +252,7 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            // if(strcmp(msg->topic, PUZZLE_TYPE_TOPIC) == 0)
-            // {
-            //     if(puzzle)
-            //     puzzle -> writeDeviceName(msg->msg);
-            //     // sys_reboot(0);
-            // }
-            // else
-            // {
-                puzzles -> messageHandler(msg);
-                // memset(msg, 0, sizeof(struct MqttMsg));
-            // }
-           
+            puzzles -> messageHandler(msg); 
         }
         counter++;
         if(counter > 5)
