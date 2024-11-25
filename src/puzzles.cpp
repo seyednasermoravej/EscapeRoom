@@ -12,7 +12,7 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 
 static struct nvs_fs fileSystem;
 
-Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
+Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
     builtIntLedInit();
@@ -23,9 +23,9 @@ Puzzle::Puzzle(struct nvs_fs *_fs): fs(_fs)
 
 
 
-Puzzle *puzzle = nullptr;
+Puzzles *puzzles = nullptr;
 
-void Puzzle:: puzzleTypeSelection(char *type)
+void Puzzles:: puzzleTypeSelection(char *type)
 {
     struct MqttMsg msg = {0};
     strcpy(msg.topic, "pub/");
@@ -100,7 +100,7 @@ void Puzzle:: puzzleTypeSelection(char *type)
         sprintf(msg.msg, "Puzzle type is cabinet");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzleType = CABINET_PUZZLE;
-        cabinet = new Cabinet;
+        cabinet = new Cabinet("introRoom", "cabinet");
         LOG_INF("Puzzle type is cabinet.");
         deviceSpecified = true;
     }
@@ -117,7 +117,7 @@ void Puzzle:: puzzleTypeSelection(char *type)
 }
 
 
-void Puzzle:: messageHandler(struct MqttMsg *msg)
+void Puzzles:: messageHandler(struct MqttMsg *msg)
 {
     if(!deviceSpecified)
     {
@@ -152,7 +152,7 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
         else
         {
             
-            switch (puzzle->puzzleType)
+            switch (puzzles->puzzleType)
             {
             case GATE_PUZZLE:
                 gate -> messageHandler(msg);
@@ -193,9 +193,9 @@ void Puzzle:: messageHandler(struct MqttMsg *msg)
 }
 
 
-void Puzzle:: alive()
+void Puzzles:: alive()
 {
-    switch (puzzle->puzzleType)
+    switch (puzzles->puzzleType)
     {
     // case GATE_PUZZLE:
     //     gate -> alive();
@@ -231,7 +231,7 @@ void Puzzle:: alive()
     }
 
 }
-int Puzzle:: nvsInit()
+int Puzzles:: nvsInit()
 {
     int rc;
     struct flash_pages_info info;
@@ -259,7 +259,7 @@ int Puzzle:: nvsInit()
 	}
 }
 
-void Puzzle:: readInfosFromMemory()
+void Puzzles:: readInfosFromMemory()
 {
     // nvs_delete(fs, 0);
     // gpio_pin_set_dt(&builtInLed, 1);
@@ -278,7 +278,7 @@ void Puzzle:: readInfosFromMemory()
     }
 }
 
-int Puzzle:: builtIntLedInit()
+int Puzzles:: builtIntLedInit()
 {
     int ret;
 	if (!gpio_is_ready_dt(&builtInLed)) {
@@ -301,12 +301,12 @@ void puzzleEntryPoint(void *, void *, void *)
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
-    puzzle = new Puzzle(&fileSystem);
-    while(!puzzle->deviceSpecified)
+    puzzles = new Puzzles(&fileSystem);
+    while(!puzzles->deviceSpecified)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
-            puzzle -> messageHandler(msg);
+            puzzles -> messageHandler(msg);
             memset(msg, 0, sizeof(struct MqttMsg));
         
         }
@@ -326,7 +326,7 @@ void puzzleEntryPoint(void *, void *, void *)
             // }
             // else
             // {
-                puzzle -> messageHandler(msg);
+                puzzles -> messageHandler(msg);
                 // memset(msg, 0, sizeof(struct MqttMsg));
             // }
            
@@ -334,14 +334,14 @@ void puzzleEntryPoint(void *, void *, void *)
         counter++;
         if(counter > 5)
         {
-            puzzle -> alive();  
+            puzzles -> alive();  
             counter = 0;
         }
         k_msleep(1000);
     }
 }
 
-int Puzzle:: writeDeviceName(char *name)
+int Puzzles:: writeDeviceName(char *name)
 {
     char buf[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     char buf2[PUZZLE_TYPE_NAME_MAX_LEN] = {0};

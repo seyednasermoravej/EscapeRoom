@@ -15,13 +15,14 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
+#include "puzzle.h"
 
-class  Cabinet 
+class Cabinet: public Puzzle 
 {
 
 public:
-    Cabinet();
-    void messageHandler(struct MqttMsg *msg);
+    Cabinet(const char * room, const char *type);
+    void messageHandler(struct MqttMsg *msg) override;
     void alive();
 
 private:

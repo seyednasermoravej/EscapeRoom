@@ -72,10 +72,10 @@ enum PuzzleTypes
 #define PUZZLE_PRIORITY                    9 
 #define PUZZLE_TYPE_NAME_MAX_LEN           128
 
-class Puzzle
+class Puzzles
 {
 public:
-    Puzzle(struct nvs_fs *fs);
+    Puzzles(struct nvs_fs *fs);
     void messageHandler(struct MqttMsg *msg);
     bool deviceSpecified = false;
     PuzzleTypes puzzleType = UNSPECIFIED;

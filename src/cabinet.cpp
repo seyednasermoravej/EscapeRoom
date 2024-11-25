@@ -34,7 +34,7 @@ static void buttonsHandler(struct input_event *val, void* topic)
     }
 }
 
-Cabinet:: Cabinet()
+Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 {
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandler, NULL);
