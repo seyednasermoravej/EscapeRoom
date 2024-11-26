@@ -147,7 +147,15 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandler, NULL);
+
+    creatingMqttList();
 }
+
+void Console:: creatingMqttList()
+{
+    
+}
+
 
 void Console:: messageHandler(struct MqttMsg *msg)
 {

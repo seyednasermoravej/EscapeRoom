@@ -29,7 +29,7 @@
 
 #define APP_MQTT_BUFFER_SIZE    1024	
 
-#define MQTT_CLIENTID		"escaperoom795"
+#define MQTT_CLIENTID		"escapoom795"
 
 #define MQTT_STACK_SIZE     1024 * 8 
 #define MQTT_PRIORITY      8 

@@ -48,27 +48,19 @@ Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-
-	mqttList[0] = servo_topic;
-	mqttList[1] = k3_topic;
-	mqttList[2] = lcd_topic;
-	mqttList[3] = builtInLed_topic;
-	mqttList[4] = puzzleType_topic;
-	mqttList[5] = stepperPosition_topic;
-	mqttList[6] = led1_topic;
-	mqttList[7] = introRoom_cabinet_relay4_topic;
-	mqttList[8] = introRoom_cabinet_relay3_topic;
-	mqttList[9] = introRoom_cabinet_relay2_topic;
-	mqttList[10] = led2_topic;
-	mqttList[11] = led3_topic;
-	mqttList[12] = led4_topic;
-	mqttList[13] = led5_topic;
-	mqttList[14] = led6_topic;
-	mqttList[15] = introRoom_cabinet_relay1_topic;
-    mqttCount = 16;
+    creatingMqttList();
 }
 
+void Cabinet:: creatingMqttList()
+{
 
+	mqttList[0] = introRoom_cabinet_relay1_topic;
+	mqttList[1] = introRoom_cabinet_relay2_topic;
+	mqttList[2] = introRoom_cabinet_relay3_topic;
+	mqttList[3] = introRoom_cabinet_relay4_topic;
+    mqttCount = 4;
+
+}
 void Cabinet:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received");

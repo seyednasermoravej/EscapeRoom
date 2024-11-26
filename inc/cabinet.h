@@ -22,6 +22,7 @@ class Cabinet: public Puzzle
 public:
     Cabinet(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
+    void creatingMqttList() override;
 
 private:
 

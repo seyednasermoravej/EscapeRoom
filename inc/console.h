@@ -26,7 +26,9 @@ class Console: public Puzzle
 {
 public:
     Console(const char * room, const char *type);
-    void messageHandler(struct MqttMsg *msg);
+    void messageHandler(struct MqttMsg *msg) override;
+    void creatingMqttList() override;
+
 
 
 private:

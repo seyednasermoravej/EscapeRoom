@@ -16,6 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/net/mqtt.h>
+#include <stdlib.h>
 
 
 class Puzzle 
@@ -25,16 +26,17 @@ protected:
     const char *puzzleTypeName;
     struct mqtt_topic mqttList[16];
     uint16_t mqttCount = 0;
+    virtual void creatingMqttList() = 0;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName
     Puzzle(const char* room, const char* type);
 
     // Virtual method to be implemented by subclasses
-    virtual void messageHandler(MqttMsg *msg) = 0;
 
     // Common method for all subclasses
     void alive();
+    virtual void messageHandler(MqttMsg *msg) = 0;
 
     uint16_t getMqttCount();
     struct mqtt_topic *getMqttList();
