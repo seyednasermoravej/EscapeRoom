@@ -10,6 +10,7 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 							      {0});
 
 
+extern void mqttThreadCreate(char *);
 static struct nvs_fs fileSystem;
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
@@ -229,8 +230,11 @@ int Puzzles:: builtIntLedInit()
     return ret;
 }
 
-void puzzleEntryPoint(void *, void *, void *)
+void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 {
+
+
+    mqttThreadCreate((char*)serverIpAddress);
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
@@ -272,11 +276,11 @@ int Puzzles:: writeDeviceName(char *name)
     nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
 }
 
-extern "C" void puzzleThreadCreate()
+extern "C" void puzzleThreadCreate(char *serverIpAddress)
 {
     k_tid_t puzzleTid = k_thread_create(&puzzleThread, puzzleStackArea,
 									K_THREAD_STACK_SIZEOF(puzzleStackArea),
-									puzzleEntryPoint, NULL, NULL, NULL,
+									puzzleEntryPoint, (void *)serverIpAddress, NULL, NULL,
 									PUZZLE_PRIORITY, 0, K_NO_WAIT);
     k_thread_name_set(puzzleTid, "puzzle");
 }

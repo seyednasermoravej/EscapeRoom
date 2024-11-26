@@ -470,7 +470,7 @@ K_THREAD_STACK_DEFINE(mqttStackArea, MQTT_STACK_SIZE);
 
 struct k_thread mqttThread;
 
-extern "C" void mqttThreadCreate(char *serverIpAddress)
+void mqttThreadCreate(char *serverIpAddress)
 {
 	k_tid_t mqtt =
 		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),

@@ -6,8 +6,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 void i2cScanner();
 void test();
 struct mqtt_topic deviceId_topic = {0};
-extern void puzzleThreadCreate();
-extern void mqttThreadCreate(char *);
+extern void puzzleThreadCreate(char *serverIpAddress);
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
@@ -36,10 +35,9 @@ int main()
     //http request for getting DFU
     
     // sem_destroy(&dhcpActive);
-    mqttThreadCreate(serverIpAddress);
 
 
-    puzzleThreadCreate();
+    puzzleThreadCreate(serverIpAddress);
 
     while(1)
     {
