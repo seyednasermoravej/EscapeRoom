@@ -114,7 +114,7 @@ public:
     void publisher(const char *message, const char *topic);
     int subscribe();
     int try_to_connect();
-    APP_BMEM bool connected;
+    APP_BMEM bool connected = false;
     int process_mqtt_and_sleep(int timeout);
 
     void mqtt_evt_handler(const struct mqtt_evt *evt);

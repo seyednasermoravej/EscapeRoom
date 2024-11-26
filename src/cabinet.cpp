@@ -53,6 +53,7 @@ Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 
 void Cabinet:: messageHandler(struct MqttMsg *msg)
 {
+    LOG_INF("Command received");
     if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY1_TOPIC) == 0)
     {
         if(strcmp(msg->msg, "on") == 0)
