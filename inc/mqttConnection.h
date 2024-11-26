@@ -109,7 +109,7 @@ static int tls_init(void)
 class Mqtt
 {
 public:
-    Mqtt(const char *_serverIpAddress): serverIpAddress(_serverIpAddress){}
+    Mqtt(const char *_serverIpAddress, uint16_t _mqttCount): serverIpAddress(_serverIpAddress), mqttCount(_mqttCount){}
 
     void publisher(const char *message, const char *topic);
     int subscribe();
@@ -122,11 +122,13 @@ public:
 
     APP_BMEM struct mqtt_client client_ctx;
     APP_BMEM struct mqtt_client *client = &client_ctx;
+    APP_BMEM uint16_t mqttCount;
 
 private:
     const char *serverIpAddress;
     APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
     APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
+
 
     /* The mqtt client struct */
 

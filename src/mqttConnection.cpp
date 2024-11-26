@@ -46,7 +46,7 @@ int Mqtt:: subscribe()
 
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 16, .message_id = 34};
+		.list = mqttLists, .list_count = mqttCount, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s", subscription_list.list[i].topic.utf8);
@@ -442,7 +442,7 @@ void mqttEntryPoint(void * serverIpAddress, void *, void *)
 	PRINT_RESULT("tls_init", rc);
 #endif
 	struct MqttMsg msg = {0};
-	mqtt = new Mqtt((const char*)serverIpAddress);
+	mqtt = new Mqtt((const char*)serverIpAddress, 16);
 	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
