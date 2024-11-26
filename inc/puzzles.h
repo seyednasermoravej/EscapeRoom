@@ -83,11 +83,11 @@ public:
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
     void alive();
+    Puzzle *puzzle;
 
 private:
 
     struct nvs_fs *fs;
-    Puzzle *puzzle;
 
     int builtIntLedInit();
     int nvsInit();

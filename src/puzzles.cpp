@@ -10,7 +10,7 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 							      {0});
 
 
-extern void mqttThreadCreate(char *);
+extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
 static struct nvs_fs fileSystem;
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
@@ -251,7 +251,7 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 
     }
 
-    mqttThreadCreate((char*)serverIpAddress);
+    mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     int counter = 0; 
     while(1)
     {

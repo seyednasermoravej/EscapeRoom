@@ -13,23 +13,6 @@ LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
 int Mqtt:: subscribe()
 {
 
-	struct mqtt_topic mqttLists[100] = {0};
-	mqttLists[0] = servo_topic;
-	mqttLists[1] = k3_topic;
-	mqttLists[2] = lcd_topic;
-	mqttLists[3] = builtInLed_topic;
-	mqttLists[4] = puzzleType_topic;
-	mqttLists[5] = stepperPosition_topic;
-	mqttLists[6] = led1_topic;
-	mqttLists[7] = introRoom_cabinet_relay4_topic;
-	mqttLists[8] = introRoom_cabinet_relay3_topic;
-	mqttLists[9] = introRoom_cabinet_relay2_topic;
-	mqttLists[10] = led2_topic;
-	mqttLists[11] = led3_topic;
-	mqttLists[12] = led4_topic;
-	mqttLists[13] = led5_topic;
-	mqttLists[14] = led6_topic;
-	mqttLists[15] = introRoom_cabinet_relay1_topic;
 	// mqttLists[15] = led7_topic;
 	// mqttLists[16] = led8_topic;
 	// mqttLists[17] = deviceId_topic;
@@ -46,7 +29,7 @@ int Mqtt:: subscribe()
 
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = mqttCount, .message_id = 34};
+		.list = mqttList, .list_count = mqttCount, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s", subscription_list.list[i].topic.utf8);
@@ -442,7 +425,25 @@ void mqttEntryPoint(void * serverIpAddress, void *, void *)
 	PRINT_RESULT("tls_init", rc);
 #endif
 	struct MqttMsg msg = {0};
-	mqtt = new Mqtt((const char*)serverIpAddress, 16);
+	struct mqtt_topic mqttList[16] = {0};
+
+	mqttList[0] = servo_topic;
+	mqttList[1] = k3_topic;
+	mqttList[2] = lcd_topic;
+	mqttList[3] = builtInLed_topic;
+	mqttList[4] = puzzleType_topic;
+	mqttList[5] = stepperPosition_topic;
+	mqttList[6] = led1_topic;
+	mqttList[7] = introRoom_cabinet_relay4_topic;
+	mqttList[8] = introRoom_cabinet_relay3_topic;
+	mqttList[9] = introRoom_cabinet_relay2_topic;
+	mqttList[10] = led2_topic;
+	mqttList[11] = led3_topic;
+	mqttList[12] = led4_topic;
+	mqttList[13] = led5_topic;
+	mqttList[14] = led6_topic;
+	mqttList[15] = introRoom_cabinet_relay1_topic;
+	mqtt = new Mqtt((const char*)serverIpAddress, mqttList, 16);
 	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
@@ -470,7 +471,7 @@ K_THREAD_STACK_DEFINE(mqttStackArea, MQTT_STACK_SIZE);
 
 struct k_thread mqttThread;
 
-void mqttThreadCreate(char *serverIpAddress)
+void mqttThreadCreate(char *serverIpAddress, struct mqtt_topic *mqttList, uint16_t mqttCount)
 {
 	k_tid_t mqtt =
 		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),

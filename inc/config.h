@@ -44,14 +44,6 @@
 #endif /* CONFIG_MQTT_LIB_WEBSOCKET */
 #endif
 
-#define APP_CONNECT_TIMEOUT_MS	3000
-#define APP_SLEEP_MSECS		500
-
-#define APP_CONNECT_TRIES	10
-
-#define APP_MQTT_BUFFER_SIZE    512	
-
-#define MQTT_CLIENTID		"escaperoom795"
 
 /* Set the following to 1 to enable the Bluemix topic format */
 #define APP_BLUEMIX_TOPIC	0

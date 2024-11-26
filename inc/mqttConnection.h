@@ -22,7 +22,14 @@
 #include "messageQueues.h"
 
 
-extern bool command;
+#define APP_CONNECT_TIMEOUT_MS	3000
+#define APP_SLEEP_MSECS		500
+
+#define APP_CONNECT_TRIES	10
+
+#define APP_MQTT_BUFFER_SIZE    1024	
+
+#define MQTT_CLIENTID		"escaperoom795"
 
 #define MQTT_STACK_SIZE     1024 * 8 
 #define MQTT_PRIORITY      8 
@@ -109,7 +116,7 @@ static int tls_init(void)
 class Mqtt
 {
 public:
-    Mqtt(const char *_serverIpAddress, uint16_t _mqttCount): serverIpAddress(_serverIpAddress), mqttCount(_mqttCount){}
+    Mqtt(const char *_serverIpAddress, struct mqtt_topic *_mqttList, uint16_t _mqttCount): serverIpAddress(_serverIpAddress), mqttList(_mqttList), mqttCount(_mqttCount){}
 
     void publisher(const char *message, const char *topic);
     int subscribe();
@@ -123,6 +130,10 @@ public:
     APP_BMEM struct mqtt_client client_ctx;
     APP_BMEM struct mqtt_client *client = &client_ctx;
     APP_BMEM uint16_t mqttCount;
+    struct mqtt_topic *mqttList;
+
+
+
 
 private:
     const char *serverIpAddress;
