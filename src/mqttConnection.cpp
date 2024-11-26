@@ -29,24 +29,24 @@ int Mqtt:: subscribe()
 	mqttLists[12] = led4_topic;
 	mqttLists[13] = led5_topic;
 	mqttLists[14] = led6_topic;
-	mqttLists[15] = led7_topic;
-	mqttLists[16] = led8_topic;
-	mqttLists[17] = deviceId_topic;
-	mqttLists[18] = relay0_topic;
-	mqttLists[19] = relay1_topic;
-	mqttLists[20] = relay2_topic;
-	mqttLists[21] = relay3_topic;
-	mqttLists[22] = relay4_topic;
-	mqttLists[23] = relay5_topic;
-	mqttLists[24] = relay6_topic;
-	mqttLists[25] = relay7_topic;
-	mqttLists[26] = lcd1_topic;
-	mqttLists[27] = lcd2_topic;
-	mqttLists[28] = introRoom_cabinet_relay1_topic;
+	mqttLists[15] = introRoom_cabinet_relay1_topic;
+	// mqttLists[15] = led7_topic;
+	// mqttLists[16] = led8_topic;
+	// mqttLists[17] = deviceId_topic;
+	// mqttLists[18] = relay0_topic;
+	// mqttLists[19] = relay1_topic;
+	// mqttLists[20] = relay2_topic;
+	// mqttLists[21] = relay3_topic;
+	// mqttLists[22] = relay4_topic;
+	// mqttLists[23] = relay5_topic;
+	// mqttLists[24] = relay6_topic;
+	// mqttLists[25] = relay7_topic;
+	// mqttLists[26] = lcd1_topic;
+	// mqttLists[27] = lcd2_topic;
 
 
 	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttLists, .list_count = 29, .message_id = 34};
+		.list = mqttLists, .list_count = 16, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
 	{
 	LOG_INF("Subscribing to: %s", subscription_list.list[i].topic.utf8);

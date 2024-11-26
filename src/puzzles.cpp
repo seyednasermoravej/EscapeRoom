@@ -234,11 +234,11 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 {
 
 
-    mqttThreadCreate((char*)serverIpAddress);
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
     puzzles = new Puzzles(&fileSystem);
+
     while(!puzzles->deviceSpecified)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
@@ -250,6 +250,8 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
         k_msleep(1000);
 
     }
+
+    mqttThreadCreate((char*)serverIpAddress);
     int counter = 0; 
     while(1)
     {

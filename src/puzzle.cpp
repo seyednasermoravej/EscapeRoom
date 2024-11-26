@@ -16,3 +16,14 @@ void Puzzle:: alive()
     sprintf(msg.msg, "TRUE");
     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT); // Assuming k_msgq_put is defined elsewhere
 }
+
+
+uint16_t Puzzle:: getMqttCount()
+{
+    return mqttCount;
+}
+
+struct mqtt_topic *Puzzle:: getMqttList()
+{
+    return mqttList;
+}

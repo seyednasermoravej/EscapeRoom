@@ -15,6 +15,7 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
+#include <zephyr/net/mqtt.h>
 
 
 class Puzzle 
@@ -22,6 +23,8 @@ class Puzzle
 protected:
     const char *roomName;
     const char *puzzleTypeName;
+    struct mqtt_topic mqttList[16];
+    uint16_t mqttCount = 0;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName
@@ -33,7 +36,8 @@ public:
     // Common method for all subclasses
     void alive();
 
-
+    uint16_t getMqttCount();
+    struct mqtt_topic *getMqttList();
     // Virtual destructor for proper cleanup of derived classes
     virtual ~Puzzle() {}
 };
