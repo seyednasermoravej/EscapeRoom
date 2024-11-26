@@ -12,22 +12,6 @@ LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
 
 int Mqtt:: subscribe()
 {
-
-	// mqttLists[15] = led7_topic;
-	// mqttLists[16] = led8_topic;
-	// mqttLists[17] = deviceId_topic;
-	// mqttLists[18] = relay0_topic;
-	// mqttLists[19] = relay1_topic;
-	// mqttLists[20] = relay2_topic;
-	// mqttLists[21] = relay3_topic;
-	// mqttLists[22] = relay4_topic;
-	// mqttLists[23] = relay5_topic;
-	// mqttLists[24] = relay6_topic;
-	// mqttLists[25] = relay7_topic;
-	// mqttLists[26] = lcd1_topic;
-	// mqttLists[27] = lcd2_topic;
-
-
 	const struct mqtt_subscription_list subscription_list = {
 		.list = mqttList, .list_count = mqttCount, .message_id = 34};
 	for(uint8_t i = 0; i < subscription_list.list_count; i++)
@@ -416,7 +400,7 @@ K_THREAD_DEFINE(app_thread, STACK_SIZE, start_app, NULL, NULL, NULL, THREAD_PRIO
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
 
-void mqttEntryPoint(void * serverIpAddress, void *, void *)
+void mqttEntryPoint(void * serverIpAddress, void *mqttList, void *mqttCount)
 {
 #if defined(CONFIG_MQTT_LIB_TLS)
 	int rc;
@@ -425,25 +409,7 @@ void mqttEntryPoint(void * serverIpAddress, void *, void *)
 	PRINT_RESULT("tls_init", rc);
 #endif
 	struct MqttMsg msg = {0};
-	struct mqtt_topic mqttList[16] = {0};
-
-	mqttList[0] = servo_topic;
-	mqttList[1] = k3_topic;
-	mqttList[2] = lcd_topic;
-	mqttList[3] = builtInLed_topic;
-	mqttList[4] = puzzleType_topic;
-	mqttList[5] = stepperPosition_topic;
-	mqttList[6] = led1_topic;
-	mqttList[7] = introRoom_cabinet_relay4_topic;
-	mqttList[8] = introRoom_cabinet_relay3_topic;
-	mqttList[9] = introRoom_cabinet_relay2_topic;
-	mqttList[10] = led2_topic;
-	mqttList[11] = led3_topic;
-	mqttList[12] = led4_topic;
-	mqttList[13] = led5_topic;
-	mqttList[14] = led6_topic;
-	mqttList[15] = introRoom_cabinet_relay1_topic;
-	mqtt = new Mqtt((const char*)serverIpAddress, mqttList, 16);
+	mqtt = new Mqtt((const char*)serverIpAddress, (struct mqtt_topic*)mqttList, *(uint16_t *)mqttCount);
 	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
@@ -475,6 +441,6 @@ void mqttThreadCreate(char *serverIpAddress, struct mqtt_topic *mqttList, uint16
 {
 	k_tid_t mqtt =
 		k_thread_create(&mqttThread, mqttStackArea, K_THREAD_STACK_SIZEOF(mqttStackArea),
-				mqttEntryPoint, (void *)serverIpAddress, NULL, NULL, MQTT_PRIORITY, 0, K_NO_WAIT);
+				mqttEntryPoint, (void *)serverIpAddress, (void *)mqttList, (void *)&mqttCount, MQTT_PRIORITY, 0, K_NO_WAIT);
 	k_thread_name_set(mqtt, "mqtt");
 }
