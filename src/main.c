@@ -1,6 +1,5 @@
 #include "main.h"
 
-#include "keypad.h"
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
@@ -42,12 +41,6 @@ int main()
 
     puzzleThreadCreate();
 
-    struct MqttMsg *send = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
-    memset(send, 0, sizeof(struct MqttMsg));
-    // strcpy(send->topic, "pub/");
-    // strcat(send->topic, deviceId);
-    // // strcpy(send->msg, "Hello guys.");
-    // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
     while(1)
     {
         k_sleep(K_SECONDS(120));

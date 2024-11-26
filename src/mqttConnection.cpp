@@ -6,106 +6,11 @@
 
 #include "mqttConnection.h"
 
-#include "zephyr/drivers/gpio.h"
-
-#include "topics.h"
-
-bool command = false;
+Mqtt *mqtt = nullptr;
 
 LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
 
-#if defined(CONFIG_USERSPACE)
-#include <zephyr/app_memory/app_memdomain.h>
-K_APPMEM_PARTITION_DEFINE(app_partition);
-struct k_mem_domain app_domain;
-#define APP_BMEM K_APP_BMEM(app_partition)
-#define APP_DMEM K_APP_DMEM(app_partition)
-#else
-#define APP_BMEM
-#define APP_DMEM
-#endif
-
-/* Buffers for MQTT client. */
-static APP_BMEM uint8_t rx_buffer[APP_MQTT_BUFFER_SIZE];
-static APP_BMEM uint8_t tx_buffer[APP_MQTT_BUFFER_SIZE];
-
-// static int publisher(const char *message, const char *topic);
-static void publisher(const char *message, const char *topic, char *ipAddress);
-
-char serverIpAddress[17] = {0};
-#if defined(CONFIG_MQTT_LIB_WEBSOCKET)
-/* Making RX buffer large enough that the full IPv6 packet can fit into it */
-#define MQTT_LIB_WEBSOCKET_RECV_BUF_LEN 1280
-
-/* Websocket needs temporary buffer to store partial packets */
-static APP_BMEM uint8_t temp_ws_rx_buf[MQTT_LIB_WEBSOCKET_RECV_BUF_LEN];
-#endif
-
-/* The mqtt client struct */
-static APP_BMEM struct mqtt_client client_ctx;
-
-/* MQTT Broker details. */
-static APP_BMEM struct sockaddr_storage broker;
-
-#if defined(CONFIG_SOCKS)
-static APP_BMEM struct sockaddr socks5_proxy;
-#endif
-
-static APP_BMEM struct zsock_pollfd fds[1];
-static APP_BMEM int nfds;
-
-static APP_BMEM bool connected;
-
-#if defined(CONFIG_MQTT_LIB_TLS)
-
-#include "test_certs.h"
-
-#define TLS_SNI_HOSTNAME "localhost"
-#define APP_CA_CERT_TAG  1
-#define APP_PSK_TAG      2
-
-static APP_DMEM sec_tag_t m_sec_tags[] = {
-#if defined(MBEDTLS_X509_CRT_PARSE_C) || defined(CONFIG_NET_SOCKETS_OFFLOAD)
-	APP_CA_CERT_TAG,
-#endif
-#if defined(MBEDTLS_KEY_EXCHANGE_SOME_PSK_ENABLED)
-	APP_PSK_TAG,
-#endif
-};
-
-static int tls_init(void)
-{
-	int err = -EINVAL;
-
-#if defined(MBEDTLS_X509_CRT_PARSE_C) || defined(CONFIG_NET_SOCKETS_OFFLOAD)
-	err = tls_credential_add(APP_CA_CERT_TAG, TLS_CREDENTIAL_CA_CERTIFICATE, ca_certificate,
-				 sizeof(ca_certificate));
-	if (err < 0) {
-		LOG_ERR("Failed to register public certificate: %d", err);
-		return err;
-	}
-#endif
-
-#if defined(MBEDTLS_KEY_EXCHANGE_SOME_PSK_ENABLED)
-	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK, client_psk, sizeof(client_psk));
-	if (err < 0) {
-		LOG_ERR("Failed to register PSK: %d", err);
-		return err;
-	}
-
-	err = tls_credential_add(APP_PSK_TAG, TLS_CREDENTIAL_PSK_ID, client_psk_id,
-				 sizeof(client_psk_id) - 1);
-	if (err < 0) {
-		LOG_ERR("Failed to register PSK ID: %d", err);
-	}
-#endif
-
-	return err;
-}
-
-#endif /* CONFIG_MQTT_LIB_TLS */
-
-static int subscribe(struct mqtt_client *const c)
+int Mqtt:: subscribe()
 {
 
 	struct mqtt_topic mqttLists[100] = {0};
@@ -148,9 +53,9 @@ static int subscribe(struct mqtt_client *const c)
 
 	}
 
-	return mqtt_subscribe(c, &subscription_list);
+	return mqtt_subscribe(client, &subscription_list);
 }
-static void prepare_fds(struct mqtt_client *client)
+void Mqtt:: prepare_fds()
 {
 	if (client->transport.type == MQTT_TRANSPORT_NON_SECURE) {
 		fds[0].fd = client->transport.tcp.sock;
@@ -165,12 +70,12 @@ static void prepare_fds(struct mqtt_client *client)
 	nfds = 1;
 }
 
-static void clear_fds(void)
+void Mqtt:: clear_fds(void)
 {
 	nfds = 0;
 }
 
-static int wait(int timeout)
+int Mqtt::wait(int timeout)
 {
 	int ret = 0;
 
@@ -184,7 +89,14 @@ static int wait(int timeout)
 	return ret;
 }
 
-void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
+void Mqtt:: mqtt_evt_handlerWrapper(struct mqtt_client *clientData, const struct mqtt_evt *evt)
+{
+	Mqtt *instance = CONTAINER_OF(clientData, Mqtt, client_ctx);
+	instance->mqtt_evt_handler(evt);
+
+}
+
+void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
 {
     int err;
     switch (evt->type) {
@@ -196,7 +108,7 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 
         connected = true;
         LOG_INF("MQTT client connected!");
-        err = subscribe(client);
+        err = subscribe();
         break;
 
     case MQTT_EVT_DISCONNECT:
@@ -283,36 +195,8 @@ void mqtt_evt_handler(struct mqtt_client *client, const struct mqtt_evt *evt)
 }
 
 
-// static char *get_mqtt_payload(enum mqtt_qos qos)
-// {
-// #if APP_BLUEMIX_TOPIC
-// 	static APP_BMEM char payload[30];
 
-// 	snprintk(payload, sizeof(payload), "{d:{temperature:%d}}", (uint8_t)sys_rand32_get());
-// #else
-// 	static int counter = 0;
-// 	char buff[10];
-// 	memset(buff, 0, 10);
-// 	static APP_DMEM char payload[40];
-// 	memset(payload, 0, 40);
-// 	sprintf(payload, "Hi Bram: %d", counter);
-// 	counter++;
-// #endif
-
-// 	return payload;
-// }
-
-// static char *get_mqtt_topic(void)
-// {
-// #if APP_BLUEMIX_TOPIC
-// 	return "iot-2/type/" BLUEMIX_DEVTYPE "/id/" BLUEMIX_DEVID "/evt/" BLUEMIX_EVENT
-// 	       "/fmt/" BLUEMIX_FORMAT;
-// #else
-// 	return "pub/escapeRoom";
-// #endif
-// }
-
-static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *message, const char *topic)
+int Mqtt:: publish(enum mqtt_qos qos, const char *message, const char *topic)
 {
 	struct mqtt_publish_param param;
 
@@ -329,12 +213,7 @@ static int publish(struct mqtt_client *client, enum mqtt_qos qos, const char *me
 	return mqtt_publish(client, &param);
 }
 
-#define RC_STR(rc) ((rc) == 0 ? "OK" : "ERROR")
-
-#define PRINT_RESULT(func, rc) LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
-
-// static void broker_init()
-static void broker_init(char *serveripaddress)
+void Mqtt:: broker_init()
 {
 #if defined(CONFIG_NET_IPV6)
 	struct sockaddr_in6 *broker6 = (struct sockaddr_in6 *)&broker;
@@ -369,17 +248,16 @@ static void broker_init(char *serveripaddress)
 #endif
 }
 
-// static void client_init(struct mqtt_client *client)
-static void client_init(struct mqtt_client *client, char *serverIpAddress)
+void Mqtt:: client_init()
 {
 	mqtt_client_init(client);
 
 	// broker_init();
-	broker_init(serverIpAddress);
+	broker_init();
 
 	/* MQTT client configuration */
 	client->broker = &broker;
-	client->evt_cb = mqtt_evt_handler;
+	client->evt_cb = Mqtt:: mqtt_evt_handlerWrapper;
 	client->client_id.utf8 = (uint8_t *)MQTT_CLIENTID;
 	client->client_id.size = strlen(MQTT_CLIENTID);
 	client->password = NULL;
@@ -436,15 +314,14 @@ static void client_init(struct mqtt_client *client, char *serverIpAddress)
 }
 
 /* In this routine we block until the connected variable is 1 */
-static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
-// static int try_to_connect(struct mqtt_client *client)
+int Mqtt:: try_to_connect()
+
 {
 	int rc, i = 0;
 
 	while (i++ < APP_CONNECT_TRIES && !connected) {
 
-		client_init(client, serverIpAddress);
-		// client_init(client);
+		client_init();
 
 		rc = mqtt_connect(client);
 		if (rc != 0) {
@@ -453,7 +330,7 @@ static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
 			continue;
 		}
 
-		prepare_fds(client);
+		prepare_fds();
 
 		if (wait(APP_CONNECT_TIMEOUT_MS)) {
 			mqtt_input(client);
@@ -471,7 +348,7 @@ static int try_to_connect(struct mqtt_client *client, char *serverIpAddress)
 	return -EINVAL;
 }
 
-static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
+int Mqtt:: process_mqtt_and_sleep(int timeout)
 {
 	int64_t remaining = timeout;
 	int64_t start_time = k_uptime_get();
@@ -517,14 +394,13 @@ static int process_mqtt_and_sleep(struct mqtt_client *client, int timeout)
 		}                                                                                  \
 	}
 
-// static int publisher(const char *message, const char *topic)
-static void publisher(const char *message, const char *topic, char *serverIpAddress)
+void Mqtt:: publisher(const char *message, const char *topic)
 {
 	int rc = 0;
 
 	LOG_INF("attempting to connect: ");
-	// rc = try_to_connect(&client_ctx);
-	rc = try_to_connect(&client_ctx, serverIpAddress);
+
+	rc = try_to_connect();
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);
 
@@ -536,11 +412,11 @@ static void publisher(const char *message, const char *topic, char *serverIpAddr
 
 		// rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 
-		rc = publish(&client_ctx, MQTT_QOS_1_AT_LEAST_ONCE, message, topic);
+		rc = publish(MQTT_QOS_1_AT_LEAST_ONCE, message, topic);
 		// rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		PRINT_RESULT("mqtt_publish", rc);
 
-		rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
+		rc = process_mqtt_and_sleep(APP_SLEEP_MSECS);
 	}
 }
 #if defined(CONFIG_USERSPACE)
@@ -557,7 +433,7 @@ K_THREAD_DEFINE(app_thread, STACK_SIZE, start_app, NULL, NULL, NULL, THREAD_PRIO
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
 
-void mqttEntryPoint(void * serverIpAddressIn, void *, void *)
+void mqttEntryPoint(void * serverIpAddress, void *, void *)
 {
 #if defined(CONFIG_MQTT_LIB_TLS)
 	int rc;
@@ -565,26 +441,26 @@ void mqttEntryPoint(void * serverIpAddressIn, void *, void *)
 	rc = tls_init();
 	PRINT_RESULT("tls_init", rc);
 #endif
-	strcat(serverIpAddress, (char *)serverIpAddressIn);
 	struct MqttMsg msg = {0};
+	mqtt = new Mqtt((const char*)serverIpAddress);
 	// memset(&msg, 0, sizeof(struct MqttMsg));
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
 			// publisher(msg.msg, msg.topic);
-			publisher(msg.msg, msg.topic, serverIpAddress);
+			mqtt->publisher(msg.msg, msg.topic);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}
 		int rc = 0;
 
 		LOG_INF("attempting to connect: ");
-		rc = try_to_connect(&client_ctx, serverIpAddress);
+		rc = mqtt->try_to_connect();
 		// rc = try_to_connect(&client_ctx);
 		PRINT_RESULT("try_to_connect", rc);
 		SUCCESS_OR_EXIT(rc);
-		if(connected)
+		if(mqtt->connected)
 		{
 
-			rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
+			rc = mqtt->process_mqtt_and_sleep(APP_SLEEP_MSECS);
 		}
 		k_msleep(1000);
 	}

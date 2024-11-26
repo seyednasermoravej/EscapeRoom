@@ -7,7 +7,6 @@
 #include <zephyr/drivers/hwinfo.h>
 
 #include "dnsResolver.h"
-#include "mqttConnection.h"
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
 
