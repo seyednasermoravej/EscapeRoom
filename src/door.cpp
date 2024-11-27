@@ -36,7 +36,7 @@ void Door:: creatingMqttList()
 void Door:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received");
-    if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY1_TOPIC) == 0)
+    if(strcmp(msg->topic, CODE_RED_DOOR_RELAY1_TOPIC) == 0)
     {
         if(strcmp(msg->msg, "on") == 0)
         {
@@ -51,7 +51,7 @@ void Door:: messageHandler(struct MqttMsg *msg)
             LOG_INF("The command is not valid");
         }
     }
-    else if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY2_TOPIC) == 0)
+    else if(strcmp(msg->topic, CODE_RED_DOOR_RELAY2_TOPIC) == 0)
     {
         if(strcmp(msg->msg, "on") == 0)
         {

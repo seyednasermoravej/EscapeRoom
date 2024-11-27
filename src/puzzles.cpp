@@ -54,7 +54,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
         sprintf(msg.msg, "Puzzle type is door");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Door("codeRed", "door");
-        LOG_INF("Puzzle type is Gate.");
+        LOG_INF("Puzzle type is Door.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "console") == 0)
