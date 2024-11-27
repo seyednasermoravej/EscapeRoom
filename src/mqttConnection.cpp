@@ -366,7 +366,8 @@ void Mqtt:: publisher(const char *message, const char *topic)
 	int rc = 0;
 
 	LOG_INF("attempting to connect: ");
-
+	LOG_INF("new message");
+	LOG_INF("topic: %s, message: %s", topic, message);
 	rc = try_to_connect();
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);

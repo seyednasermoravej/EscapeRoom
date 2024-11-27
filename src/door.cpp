@@ -1,5 +1,6 @@
 #include "door.h"
 
+LOG_MODULE_REGISTER(door, LOG_LEVEL_INF);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 static const struct gpio_dt_spec relays[] = {
@@ -29,4 +30,42 @@ void Door:: creatingMqttList()
 	mqttList[1] = codeRed_door_relay2_topic;
     mqttCount = 2;
 
+}
+
+
+void Door:: messageHandler(struct MqttMsg *msg)
+{
+    LOG_INF("Command received");
+    if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY1_TOPIC) == 0)
+    {
+        if(strcmp(msg->msg, "on") == 0)
+        {
+            gpio_pin_set_dt(&relays[0], 1);
+        }
+        else if(strcmp(msg->msg, "off") == 0)
+        {
+            gpio_pin_set_dt(&relays[0], 0);
+        }
+        else
+        {
+            LOG_INF("The command is not valid");
+        }
+    }
+    else if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY2_TOPIC) == 0)
+    {
+        if(strcmp(msg->msg, "on") == 0)
+        {
+            gpio_pin_set_dt(&relays[1], 1);
+        }
+        else if(strcmp(msg->msg, "off") == 0)
+        {
+            gpio_pin_set_dt(&relays[1], 0);
+        }
+        else
+        {
+            LOG_INF("The command is not valid");
+        }
+    } 
+    else
+        LOG_INF("the command is not valid");
 }
