@@ -29,17 +29,17 @@
 		};
 		zephyr,deferred-init;
 	};
-	rotating_platform
+	platform
 	{
-		roatating_platform_buttons
+		_platform_buttons
 		{
 			compatible = "gpio-keys";
-			rotating_platform_interrupt_stop_button: interrupt-button
+			platform_interrupt_stop_button: interrupt-button
 			{
 				gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_T>;
 			};
-			rotating_platform_buttons:buttons
+			platform_buttons:buttons
 			{
 				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_HOME>;
@@ -47,25 +47,25 @@
 			zephyr,deferred-init;
 		};
 
-		roatating_platform_relays
+		_platform_relays
 		{
 			compatible = "gpio-leds";
-			rotating_platform_relays:relays
+			platform_relays:relays
 			{
 				gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>, 
 						<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;
 			};
 		};
-		rotating_platform_servos_control_input
+		platform_servos_control_input
 		{
 			compatible = "gpio-keys";
-			rotating_platform_home_switch: home-switch
+			platform_home_switch: home-switch
 			{
 				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <INPUT_KEY_HOME>;
 			};
 				debounce-interval-ms=<6000>;
-			rotating_platform_calibrate_switch: calibrate-switch
+			platform_calibrate_switch: calibrate-switch
 			{
 				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_T>;
@@ -73,26 +73,26 @@
 	
 			// zephyr,deferred-init;
 		};
-		rotating_platform_servo_control_output
+		platform_servo_control_output
 		{
 			// compatible = "gpio-leds";
-			rotating_platform_stepper_enable: stepper-enable{
+			platform_stepper_enable: stepper-enable{
 				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
 			};
-			rotating_platform_stepper_step: stepper-step{
+			platform_stepper_step: stepper-step{
 				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
 			};
-			rotating_platform_stepper_direction: stepper-direction{
+			platform_stepper_direction: stepper-direction{
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
 			};
 			zephyr,deferred-init;
 		};
-		rotating_platform_end_time:gpio-keys
+		platform_end_time:gpio-keys
 		{
 			compatible = "gpio-keys";
 			debounce-interval-ms=<30>;
 			status = "okay";
-			rotating_platform_end_time_button: end-time-button
+			platform_end_time_button: end-time-button
 			{
 				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_0>;

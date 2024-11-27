@@ -7,9 +7,6 @@
 
 #define SERVO0_TOPIC            "sub/servo0"
 #define K3_TOPIC                "sub/relaysControl"
-#define LCD_TOPIC               "sub/lcd"
-#define LCD1_TOPIC              "introRoom/console/lcd1"
-#define LCD2_TOPIC              "introRoom/console/lcd2"
 #define BUILT_IN_LED_TOPIC      "sub/builtInLed"
 #define PUZZLE_TYPE_TOPIC       "puzzleType"
 #define LED1_TOPIC              "sub/led1"
@@ -37,28 +34,7 @@
 #define LOGS_TOPIC              "pub/logs"
 #define KEYPAD_TOPIC                       "pub/keypad"
 
-#define INTRO_ROOM_PLATFORM_POSITION_TOPIC       "introRoom/platform/position"
-
-
-// #define RELAY1_TOPIC                                       "sub/relay1" 
-// #define RELAY2_TOPIC                                       "sub/relay2" 
-// #define RELAY3_TOPIC                                       "sub/relay3" 
-// #define RELAY4_TOPIC                                       "sub/relay4" 
-// #define RELAY5_TOPIC                                       "sub/relay5" 
-// #define RELAY6_TOPIC                                       "sub/relay6" 
-// #define RELAY7_TOPIC                                       "sub/relay7" 
-// #define RELAY8_TOPIC                                       "sub/relay8" 
-
-
-#define RELAY1_TOPIC                                       "introRoom/console/relay1" 
-#define RELAY2_TOPIC                                       "introRoom/console/relay2" 
-#define RELAY3_TOPIC                                       "introRoom/console/relay3" 
-#define RELAY4_TOPIC                                       "introRoom/console/relay4" 
-#define RELAY5_TOPIC                                       "introRoom/console/relay5" 
-#define RELAY6_TOPIC                                       "introRoom/console/relay6" 
-#define RELAY7_TOPIC                                       "introRoom/console/relay7" 
-#define RELAY8_TOPIC                                       "introRoom/console/relay8" 
-
+#define INTRO_ROOM_PLATFORM_POSITION_TOPIC                                    "introRoom/platform/position"
 
 #define INTRO_ROOM_CABINET_RELAY1_TOPIC                                       "introRoom/cabinet/relay1" 
 #define INTRO_ROOM_CABINET_RELAY2_TOPIC                                       "introRoom/cabinet/relay2" 
@@ -66,6 +42,8 @@
 #define INTRO_ROOM_CABINET_RELAY4_TOPIC                                       "introRoom/cabinet/relay4" 
 
 
+#define INTRO_ROOM_CONSOLE_LCD1_TOPIC                                         "introRoom/console/lcd1"
+#define INTRO_ROOM_CONSOLE_LCD2_TOPIC                                         "introRoom/console/lcd2"
 
 
 
@@ -80,8 +58,6 @@ extern char deviceIdPub[32];
 extern struct mqtt_topic servo_topic;
 extern struct mqtt_topic k3_topic;
 extern struct mqtt_topic lcd_topic;
-extern struct mqtt_topic lcd1_topic;
-extern struct mqtt_topic lcd2_topic;
 extern struct mqtt_topic builtInLed_topic;
 extern struct mqtt_topic puzzleType_topic;
 extern struct mqtt_topic led1_topic;
@@ -92,10 +68,6 @@ extern struct mqtt_topic led5_topic;
 extern struct mqtt_topic led6_topic;
 extern struct mqtt_topic led7_topic;
 extern struct mqtt_topic led8_topic;
-extern struct mqtt_topic stepperSpeed_topic;
-extern struct mqtt_topic stepperPosition_topic;
-extern struct mqtt_topic stepperGoToStartPosition_topic;
-extern struct mqtt_topic stepperStop_topic;
 extern struct mqtt_topic deviceId_topic;
 
 extern struct mqtt_topic relay0_topic;
@@ -106,6 +78,13 @@ extern struct mqtt_topic relay4_topic;
 extern struct mqtt_topic relay5_topic;
 extern struct mqtt_topic relay6_topic;
 extern struct mqtt_topic relay7_topic;
+
+
+extern struct mqtt_topic introRoom_platform_position_topic;
+
+
+extern struct mqtt_topic introRoom_console_lcd1_topic;
+extern struct mqtt_topic introRoom_console_lcd2_topic;
 
 extern struct mqtt_topic introRoom_cabinet_relay1_topic;
 extern struct mqtt_topic introRoom_cabinet_relay2_topic;

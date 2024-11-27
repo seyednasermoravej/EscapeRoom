@@ -153,23 +153,20 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
 void Console:: creatingMqttList()
 {
-    
+    mqttList[0] = introRoom_console_lcd1_topic;
+    mqttList[1] = introRoom_console_lcd2_topic;
+    mqttCount = 2;
 }
 
 
 void Console:: messageHandler(struct MqttMsg *msg)
 {
 
-    if(strcmp(msg->topic, LCD_TOPIC) == 0)
-    {
-        lcd1->firstLine(msg->msg);
-        // lcd2->firstLine(msg->msg);
-    }
-    else if(strcmp(msg->topic, LCD1_TOPIC) == 0)
+    if(strcmp(msg->topic, INTRO_ROOM_CONSOLE_LCD1_TOPIC) == 0)
     {
         lcd1->secondLine(msg->msg);
     }
-    else if(strcmp(msg->topic, LCD2_TOPIC) == 0)
+    else if(strcmp(msg->topic, INTRO_ROOM_CONSOLE_LCD2_TOPIC) == 0)
     {
         lcd2->secondLine(msg->msg);
     }

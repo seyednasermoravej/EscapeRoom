@@ -22,8 +22,8 @@
 class Puzzle 
 {
 protected:
-    const char *roomName;
-    const char *puzzleTypeName;
+    char *roomName;
+    char *puzzleTypeName;
     struct mqtt_topic mqttList[16];
     uint16_t mqttCount = 0;
     virtual void creatingMqttList() = 0;
@@ -41,7 +41,7 @@ public:
     uint16_t getMqttCount();
     struct mqtt_topic *getMqttList();
     // Virtual destructor for proper cleanup of derived classes
-    virtual ~Puzzle() {}
+    virtual ~Puzzle(); 
 };
 
 #endif

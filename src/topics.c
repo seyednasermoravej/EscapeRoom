@@ -20,32 +20,6 @@ struct mqtt_topic k3_topic = {
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
-struct mqtt_topic lcd_topic = {
-    .topic =
-        {
-
-            .utf8 = (uint8_t*)LCD_TOPIC,
-            .size = strlen(LCD_TOPIC)
-        },
-    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-struct mqtt_topic lcd1_topic = {
-    .topic =
-        {
-
-            .utf8 = (uint8_t*)LCD1_TOPIC,
-            .size = strlen(LCD1_TOPIC)
-        },
-    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-struct mqtt_topic lcd2_topic = {
-    .topic =
-        {
-
-            .utf8 = (uint8_t*)LCD2_TOPIC,
-            .size = strlen(LCD2_TOPIC)
-        },
-    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
 struct mqtt_topic builtInLed_topic = {
     .topic =
@@ -56,6 +30,7 @@ struct mqtt_topic builtInLed_topic = {
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
+
 struct mqtt_topic puzzleType_topic = {
     .topic =
         {
@@ -64,6 +39,31 @@ struct mqtt_topic puzzleType_topic = {
             .size = strlen(PUZZLE_TYPE_TOPIC)
         },
     .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+
+
+
+////////////////////intro room console begin\\\\\\\\\\
+
+struct mqtt_topic introRoom_console_lcd1_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)INTRO_ROOM_CONSOLE_LCD1_TOPIC,
+            .size = strlen(INTRO_ROOM_CONSOLE_LCD1_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+struct mqtt_topic introRoom_console_lcd2_topic = {
+    .topic =
+        {
+
+            .utf8 = (uint8_t*)INTRO_ROOM_CONSOLE_LCD2_TOPIC,
+            .size = strlen(INTRO_ROOM_CONSOLE_LCD2_TOPIC)
+        },
+    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////intro room console end\\\\\\\\\\
+
 
 struct mqtt_topic devAddr_topic = {
 .topic =
@@ -218,7 +218,9 @@ struct mqtt_topic seg8_topic = {
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
-struct mqtt_topic stepperPosition_topic = {
+////////////////////intro room platfrom begin\\\\\\\\\\
+
+struct mqtt_topic introRoom_platform_position_topic = {
 .topic =
 {
 
@@ -227,73 +229,9 @@ struct mqtt_topic stepperPosition_topic = {
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
+////////////////////intro room platfrom end\\\\\\\\\/
 
-struct mqtt_topic relay0_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY8_TOPIC,
-    .size = strlen(RELAY8_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay1_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY1_TOPIC,
-    .size = strlen(RELAY1_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay2_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY2_TOPIC,
-    .size = strlen(RELAY2_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay3_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY3_TOPIC,
-    .size = strlen(RELAY3_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay4_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY4_TOPIC,
-    .size = strlen(RELAY4_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay5_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY5_TOPIC,
-    .size = strlen(RELAY5_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay6_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY6_TOPIC,
-    .size = strlen(RELAY6_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-struct mqtt_topic relay7_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)RELAY7_TOPIC,
-    .size = strlen(RELAY7_TOPIC)
-},
-.qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
-
+////////////////////intro room cabinet begin\\\\\\\\\/
 
 struct mqtt_topic introRoom_cabinet_relay1_topic = {
 .topic =
@@ -327,3 +265,5 @@ struct mqtt_topic introRoom_cabinet_relay4_topic = {
     .size = strlen(INTRO_ROOM_CABINET_RELAY4_TOPIC)
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
+
+////////////////////intro room cabinet end\\\\\\\\\\

@@ -69,6 +69,15 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("puzzle type is console.");
         deviceSpecified = true;
     }
+    // else if(strcmp(type, "platform") == 0)
+    // {
+    //     sprintf(msg.msg, "Puzzle type is rotating platform");
+    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    //     puzzleType = ROTATING_PLATFORM_PUZZLE;
+    //     rotatingPlatform = new RotatingPlatform;
+    //     LOG_INF("Puzzle type is Rotating Platform.");
+    //     deviceSpecified = true;
+    // }
     // else if(strcmp(type, "numbers guessing") == 0)
     // {
     //     sprintf(msg.msg, "Puzzle type is numbers guessing");
@@ -94,15 +103,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     //     puzzleType = LABORATORY_PUZZLE;
     //     laboratory = new Laboratory;
     //     LOG_INF("Puzzle type is laboratory.");
-    //     deviceSpecified = true;
-    // }
-    // else if(strcmp(type, "rotating platform") == 0)
-    // {
-    //     sprintf(msg.msg, "Puzzle type is rotating platform");
-    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = ROTATING_PLATFORM_PUZZLE;
-    //     rotatingPlatform = new RotatingPlatform;
-    //     LOG_INF("Puzzle type is Rotating Platform.");
     //     deviceSpecified = true;
     // }
 
@@ -238,13 +238,21 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 
     memset(msg, 0, sizeof(struct MqttMsg));
     puzzles = new Puzzles(&fileSystem);
+    bool mqtt = false;
 
     while(!puzzles->deviceSpecified)
     {
+        if(!mqtt)
+        { 
+            mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
+            mqtt = true;
+        }
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
             puzzles -> messageHandler(msg);
             memset(msg, 0, sizeof(struct MqttMsg));
+            if(puzzles->deviceSpecified)
+                sys_reboot(0);
         
         }
         k_msleep(1000);
@@ -285,7 +293,7 @@ extern "C" void puzzleThreadCreate(char *serverIpAddress)
 									K_THREAD_STACK_SIZEOF(puzzleStackArea),
 									puzzleEntryPoint, (void *)serverIpAddress, NULL, NULL,
 									PUZZLE_PRIORITY, 0, K_NO_WAIT);
-    k_thread_name_set(puzzleTid, "puzzle");
+    k_thread_name_set(puzzleTid, "puzzles");
 }
 
 

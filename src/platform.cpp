@@ -1,22 +1,19 @@
 
-#include "rotatingPlatform.h"
+#include "platform.h"
 
-LOG_MODULE_REGISTER(rotatingPlatform, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(platform, LOG_LEVEL_INF);
 
 
-static const char roomName[] = "introRoom";
-static const char puzzleTypeName[] = "platform";
+const struct gpio_dt_spec stepPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_stepper_step), gpios, {0});
+const struct gpio_dt_spec directionPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_stepper_direction), gpios, {0});
+const struct gpio_dt_spec enablePin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_stepper_enable), gpios, {0});
+const struct gpio_dt_spec calibrateSwitch = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_calibrate_switch), gpios, {0});
+const struct gpio_dt_spec homeSwitch = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_home_switch), gpios, {0});
 
-const struct gpio_dt_spec stepPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_step), gpios, {0});
-const struct gpio_dt_spec directionPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_direction), gpios, {0});
-const struct gpio_dt_spec enablePin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_stepper_enable), gpios, {0});
-const struct gpio_dt_spec calibrateSwitch = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_calibrate_switch), gpios, {0});
-const struct gpio_dt_spec homeSwitch = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_home_switch), gpios, {0});
-
-const struct gpio_dt_spec iStop = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rotating_platform_interrupt_stop_button), gpios, {0});
+const struct gpio_dt_spec iStop = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_interrupt_stop_button), gpios, {0});
 
 static const struct gpio_dt_spec buttons[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_buttons), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(platform_buttons), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
 };
 // static const struct gpio_dt_spec relays[] = {
 //     DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_relays), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
@@ -32,7 +29,7 @@ void buttonsHandler(struct input_event *val, void* topic)
         if(val->value)
         {
             struct MqttMsg msg = {0};
-            sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
+            // sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
             sprintf(msg.msg, "TRUE");
             LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
@@ -40,10 +37,10 @@ void buttonsHandler(struct input_event *val, void* topic)
     }
 }
 
-static const struct device *const buttonEndTime = DEVICE_DT_GET(DT_NODELABEL(rotating_platform_end_time));
-RotatingPlatform:: RotatingPlatform()
+static const struct device *const buttonEndTime = DEVICE_DT_GET(DT_NODELABEL(platform_end_time));
+Platform:: Platform(const char * room, const char *type): Puzzle(room, type)
 {
-    LOG_INF("Rotating Platform Puzzle is selected");
+    LOG_INF("Platform Puzzle is selected");
 
     stepperInit();
     buttonsInit();
@@ -55,14 +52,14 @@ RotatingPlatform:: RotatingPlatform()
 
 }
 
-void RotatingPlatform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void Platform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     LOG_INF("Entered Home.");
-    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, homeSwitch_cb_data);
+    Platform *instance = CONTAINER_OF(cb, Platform, homeSwitch_cb_data);
     instance ->isHome = true;
 }
 
-int RotatingPlatform:: homeSwitchInit()
+int Platform:: homeSwitchInit()
 {
     // device_init(homeSwitch.port);
 
@@ -88,9 +85,9 @@ int RotatingPlatform:: homeSwitchInit()
 
 }
 
-void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void Platform:: calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, calibrateSwitch_cb_data);
+    Platform *instance = CONTAINER_OF(cb, Platform, calibrateSwitch_cb_data);
     static uint32_t prevTime = 0;
     uint32_t currentTime = k_cyc_to_ms_ceil32(arch_k_cycle_get_32());
     if((currentTime - prevTime > 1000) || (prevTime - currentTime > 1000))
@@ -102,24 +99,17 @@ void RotatingPlatform:: calibrateSwitchIrqWrapper(const struct device *dev, stru
 
 }
 
-void RotatingPlatform:: calibrationWorkHandler(struct k_work *work) 
+void Platform:: calibrationWorkHandler(struct k_work *work) 
 {
     // Cast work to the correct type
-    RotatingPlatform *instance = CONTAINER_OF(work, RotatingPlatform, calibrationWork);
+    Platform *instance = CONTAINER_OF(work, Platform, calibrationWork);
     // Call the actual calibration function
     instance->calibration(); // Pass appropriate parameters
 
 
 }
-void RotatingPlatform::alive()
-{
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s/alive", roomName, puzzleTypeName);
-    sprintf(msg.msg, "TRUE");
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-}
 
-void RotatingPlatform:: calibration()
+void Platform:: calibration()
 {
     static uint8_t numIn = 0;
     numIn++;
@@ -140,7 +130,7 @@ void RotatingPlatform:: calibration()
         calibrated = true;
         LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
         struct MqttMsg msg;
-        strcpy(msg.topic, INTRO_ROOM_PLATFORM_POSITION_TOPIC);
+        // strcpy(msg.topic, "%s/%s/calibrated", roomName, puzzleTypeName);
         strcpy(msg.msg, "TRUE");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         // stepsPerDegree = 350000/360;
@@ -161,7 +151,7 @@ void RotatingPlatform:: calibration()
     
 }
 
-void RotatingPlatform:: goToStartPos()
+void Platform:: goToStartPos()
 {
     stepper->move(startPos);
 
@@ -171,7 +161,7 @@ void RotatingPlatform:: goToStartPos()
 
 }
 
-void RotatingPlatform:: goToHome()
+void Platform:: goToHome()
 {
     stepper->move(1000000);
     while(!isHome)
@@ -190,7 +180,7 @@ void RotatingPlatform:: goToHome()
     stepper->setCurrentPosition(0);
     LOG_INF("Current Position is: %ld", stepper->currentPosition());
 }
-int RotatingPlatform:: calibrateSwitchInit()
+int Platform:: calibrateSwitchInit()
 {
     int ret;
     // ret = device_init(calibrateSwitch.port);
@@ -217,7 +207,7 @@ int RotatingPlatform:: calibrateSwitchInit()
 }
 
 
-void RotatingPlatform:: goToPosition(int position)
+void Platform:: goToPosition(int position)
 {
     struct MqttMsg msg = {0};
     // long position = pos * stepsPerDegree;
@@ -250,7 +240,7 @@ void RotatingPlatform:: goToPosition(int position)
     }
     LOG_INF("moving finished");
 }
-int RotatingPlatform:: stepperInit()
+int Platform:: stepperInit()
 {
     stepper = new AccelStepper(AccelStepper::DRIVER, &stepPin, &directionPin, &directionPin, &directionPin, enablePin); 
     stepper->setMaxSpeed(5000);
@@ -260,20 +250,20 @@ int RotatingPlatform:: stepperInit()
     // calibration();
 } 
 
-void RotatingPlatform:: iStopIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void Platform:: iStopIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, iStop_cb_data);
+    Platform *instance = CONTAINER_OF(cb, Platform, iStop_cb_data);
     k_work_submit(&instance->iStopWork);
 }
 
-void RotatingPlatform:: iStopWorkHandler(struct k_work *work)
+void Platform:: iStopWorkHandler(struct k_work *work)
 {
-    RotatingPlatform *instance = CONTAINER_OF(work, RotatingPlatform, iStopWork);
+    Platform *instance = CONTAINER_OF(work, Platform, iStopWork);
     instance->stepper->stop();
 }
 
 
-int RotatingPlatform:: iStopInit()
+int Platform:: iStopInit()
 {
     // device_init(iStop.port);
     int ret;
@@ -296,19 +286,19 @@ int RotatingPlatform:: iStopInit()
 }
 
 
-void RotatingPlatform:: buttonsIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void Platform:: buttonsIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    RotatingPlatform *instance = CONTAINER_OF(cb, RotatingPlatform, buttons_cb_data);
+    Platform *instance = CONTAINER_OF(cb, Platform, buttons_cb_data);
     instance->buttonsIrq(dev, pins);
 }
 
-void RotatingPlatform:: buttonsIrq(const struct device *dev, uint32_t pins)
+void Platform:: buttonsIrq(const struct device *dev, uint32_t pins)
 {
 
 }
 
 
-int RotatingPlatform:: buttonsInit()
+int Platform:: buttonsInit()
 {
     int ret = 0;
     uint32_t interruptBits = 0;
@@ -335,7 +325,7 @@ int RotatingPlatform:: buttonsInit()
 	gpio_add_callback(buttons[0].port, &buttons_cb_data); 
 	return ret;
 } 
-// int RotatingPlatform:: relaysInit()
+// int Platform:: relaysInit()
 // {
 //     int ret;
 //     // device_init(relays->port);
@@ -352,7 +342,7 @@ int RotatingPlatform:: buttonsInit()
 //     return 0;
 // } 
 
-void RotatingPlatform:: messageHandler(MqttMsg *msg)
+void Platform:: messageHandler(MqttMsg *msg)
 {
     if(calibrated)
     {
@@ -385,7 +375,7 @@ void RotatingPlatform:: messageHandler(MqttMsg *msg)
 }
 
 
-void RotatingPlatform:: stop()
+void Platform:: stop()
 {
     stepper->stop();
     while(stepper->currentPosition() != stepper->targetPosition())

@@ -1,11 +1,12 @@
 #include "puzzle.h"
 
-Puzzle:: Puzzle(const char* room, const char* type):roomName(room), puzzleTypeName(type)
+Puzzle:: Puzzle(const char* room, const char* type)
 {
-    // strncpy(roomName, room, sizeof(roomName) - 1);
-    // roomName[sizeof(roomName) - 1] = '\0'; // Ensure null-termination
-    // strncpy(puzzleTypeName, type, sizeof(puzzleTypeName) - 1);
-    // puzzleTypeName[sizeof(puzzleTypeName) - 1] = '\0'; // Ensure null-termination
+    roomName = new char[strlen(room) + 1];
+    strcpy(roomName, room);
+
+    puzzleTypeName = new char[strlen(type) + 1];
+    strcpy(puzzleTypeName, type);
 }
 
 
@@ -26,4 +27,9 @@ uint16_t Puzzle:: getMqttCount()
 struct mqtt_topic *Puzzle:: getMqttList()
 {
     return mqttList;
+}
+
+Puzzle::~Puzzle() {
+    delete[] roomName;
+    delete[] puzzleTypeName;
 }

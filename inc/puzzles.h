@@ -37,7 +37,7 @@
 #include "unseen.h"
 #include "numbersGuessing.h"
 #include "laboratory.h"
-#include "rotatingPlatform.h"
+#include "platform.h"
 #include "cabinet.h"
 #include "puzzle.h"
 

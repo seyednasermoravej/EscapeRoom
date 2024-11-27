@@ -16,14 +16,15 @@
 #include "topics.h"
 #include "AccelStepper.h"
 #include <zephyr/input/input.h>
+#include "puzzle.h"
 
 #define DT_SPEC_AND_COMMA_CONFIG_DEVICE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
-class RotatingPlatform 
+class Platform: public Puzzle
 {
 public:
-    RotatingPlatform();
+    Platform(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg);
     static void homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     static void calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
@@ -34,7 +35,6 @@ public:
     void buttonsIrq(const struct device *dev, uint32_t pins);
     void goToStartPos();
     void stop();
-    void alive();
 
 private:
     AccelStepper *stepper = NULL;
