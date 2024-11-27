@@ -3,6 +3,7 @@
 
 LOG_MODULE_REGISTER(platform, LOG_LEVEL_INF);
 
+static Platform *instance2 = nullptr;
 
 const struct gpio_dt_spec stepPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_stepper_step), gpios, {0});
 const struct gpio_dt_spec directionPin = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_stepper_direction), gpios, {0});
@@ -12,44 +13,50 @@ const struct gpio_dt_spec homeSwitch = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform
 
 const struct gpio_dt_spec iStop = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(platform_interrupt_stop_button), gpios, {0});
 
-static const struct gpio_dt_spec buttons[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(platform_buttons), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
-};
+static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(platform_buttons));
 // static const struct gpio_dt_spec relays[] = {
 //     DT_FOREACH_PROP_ELEM(DT_NODELABEL(rotating_platform_relays), gpios, DT_SPEC_AND_COMMA_CONFIG_DEVICE)
 // };
 
+void Platform:: buttonsHandlerWrapper(struct input_event *val, void* userData)
+{
+   instance2->buttonsHandler(val);
+}
 
 
-
-void buttonsHandler(struct input_event *val, void* topic)
+void Platform:: buttonsHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_KEY)
     {
         if(val->value)
         {
             struct MqttMsg msg = {0};
-            // sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
+            sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
             sprintf(msg.msg, "TRUE");
             LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
+        /////////////////////////////////end time buttons
     }
 }
 
-static const struct device *const buttonEndTime = DEVICE_DT_GET(DT_NODELABEL(platform_end_time));
 Platform:: Platform(const char * room, const char *type): Puzzle(room, type)
 {
     LOG_INF("Platform Puzzle is selected");
 
     stepperInit();
-    buttonsInit();
     // relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     // device_init(relays->port);
-    device_init(buttonEndTime);
-    INPUT_CALLBACK_DEFINE(buttonEndTime, buttonsHandler, NULL);
+    device_init(buttons);
+    INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 
+}
+
+void Platform:: creatingMqttList()
+{
+    mqttList[0] = introRoom_platform_position_topic;
+    mqttCount = 1;
 }
 
 void Platform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
@@ -286,45 +293,7 @@ int Platform:: iStopInit()
 }
 
 
-void Platform:: buttonsIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    Platform *instance = CONTAINER_OF(cb, Platform, buttons_cb_data);
-    instance->buttonsIrq(dev, pins);
-}
 
-void Platform:: buttonsIrq(const struct device *dev, uint32_t pins)
-{
-
-}
-
-
-int Platform:: buttonsInit()
-{
-    int ret = 0;
-    uint32_t interruptBits = 0;
-    // device_init(buttons -> port);
-
-    for(unsigned int i = 0; i < ARRAY_SIZE(buttons); i++){
-        if (!device_is_ready(buttons[i].port)) {
-		    return -1;
-	    }
-        ret = gpio_pin_configure_dt(&buttons[i], GPIO_INPUT);
-	    if (ret < 0) {
-		    return -1;
-	    }
-        ret = gpio_pin_interrupt_configure_dt(&buttons[i],
-                            GPIO_INT_EDGE_FALLING);
-        if (ret != 0) {
-            printk("Error %d: failed to configure interrupt on %s pin %d\n",
-                ret, buttons[0].port->name, buttons[i].pin);
-            return -1;
-        }
-        interruptBits |= BIT(buttons[i].pin);
-    }
-	gpio_init_callback(&buttons_cb_data, buttonsIrqWrapper, interruptBits);
-	gpio_add_callback(buttons[0].port, &buttons_cb_data); 
-	return ret;
-} 
 // int Platform:: relaysInit()
 // {
 //     int ret;

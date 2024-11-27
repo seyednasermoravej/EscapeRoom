@@ -16,11 +16,11 @@ static const struct gpio_dt_spec console_puzzle_relays[] = {
 };
 
 static Console *instance = nullptr;
-static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
+static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_buttons));
 // static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
 
-static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
-static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
+static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_qdec_lang));
+static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_qdec_room));
 
 void Console:: buttonsHandlerWrapper(struct input_event *val, void *userData)
 {

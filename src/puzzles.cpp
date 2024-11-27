@@ -65,14 +65,14 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("puzzle type is console.");
         deviceSpecified = true;
     }
-    // else if(strcmp(type, "platform") == 0)
-    // {
-    //     sprintf(msg.msg, "Puzzle type is rotating platform");
-    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     rotatingPlatform = new RotatingPlatform;
-    //     LOG_INF("Puzzle type is Rotating Platform.");
-    //     deviceSpecified = true;
-    // }
+    else if(strcmp(type, "platform") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is rotating platform");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Platform("introRoom", "platform");
+        LOG_INF("Puzzle type is Rotating Platform.");
+        deviceSpecified = true;
+    }
     // else if(strcmp(type, "numbers guessing") == 0)
     // {
     //     sprintf(msg.msg, "Puzzle type is numbers guessing");
@@ -184,6 +184,7 @@ int Puzzles:: nvsInit()
             return 0;
         }
 	}
+    return 0;
 }
 
 void Puzzles:: readInfosFromMemory()

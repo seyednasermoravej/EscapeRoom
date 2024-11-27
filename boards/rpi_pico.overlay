@@ -31,18 +31,28 @@
 	};
 	platform
 	{
-		_platform_buttons
+		platform_buttons: platform-buttons
 		{
 			compatible = "gpio-keys";
 			platform_interrupt_stop_button: interrupt-button
 			{
 				gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_KEY_T>;
+				zephyr,code = <INPUT_BTN_0>;
 			};
-			platform_buttons:buttons
+			button1
 			{
-				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_KEY_HOME>;
+				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			button2
+			{
+				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			platform_end_time_button: end-time-button
+			{
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_3>;
 			};
 			zephyr,deferred-init;
 		};
@@ -83,19 +93,6 @@
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
 			};
 			zephyr,deferred-init;
-		};
-		platform_end_time:gpio-keys
-		{
-			compatible = "gpio-keys";
-			debounce-interval-ms=<30>;
-			status = "okay";
-			platform_end_time_button: end-time-button
-			{
-				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_0>;
-			};
-			zephyr,deferred-init;
-
 		};
 	};
 	ledandkeys
@@ -164,9 +161,9 @@
 		
 	};
 
-	config_puzzle
+	console_puzzle
 	{
-		config_puzzle_buttons: buttons
+		console_puzzle_buttons: buttons
 		{
 			compatible = "gpio-keys";
 			button0: button_0
@@ -216,7 +213,7 @@
 			};
 			zephyr,deferred-init;
 		};
-		config_puzzle_qdec_lang: qdec0
+		console_puzzle_qdec_lang: qdec0
 		{
 			compatible = "gpio-qdec";
 			gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
@@ -227,7 +224,7 @@
 			idle-timeout-ms = <200>;
 			zephyr,deferred-init;
 		};
-		config_puzzle_qdec_room: qdec1
+		console_puzzle_qdec_room: qdec1
 		{
 			compatible = "gpio-qdec";
 			gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,

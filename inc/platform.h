@@ -25,16 +25,19 @@ class Platform: public Puzzle
 {
 public:
     Platform(const char * room, const char *type);
-    void messageHandler(struct MqttMsg *msg);
+    void messageHandler(struct MqttMsg *msg) override;
+    void creatingMqttList() override;
     static void homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     static void calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     static void calibrationWorkHandler(struct k_work *work);
     static void iStopIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     void iStopWorkHandler(struct k_work *work);
-    static void buttonsIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
-    void buttonsIrq(const struct device *dev, uint32_t pins);
     void goToStartPos();
     void stop();
+
+   static void buttonsHandlerWrapper(struct input_event *val, void* userData);
+   void buttonsHandler(struct input_event *val);
+
 
 private:
     AccelStepper *stepper = NULL;
@@ -59,15 +62,5 @@ private:
     int startPos = -30000;
 
 };
-
-
-
-
-
-
-
-
-
-
 
 #endif
