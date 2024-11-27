@@ -36,7 +36,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     {
         sprintf(msg.msg, "Puzzle type is cabinet");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = CABINET_PUZZLE;
         puzzle = new Cabinet("introRoom", "cabinet");
         LOG_INF("Puzzle type is cabinet.");
         deviceSpecified = true;
@@ -45,7 +44,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // {
     //     sprintf(msg.msg, "Puzzle type is Servos");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = SERVOS_PUZZLE;
     //     servos = new Servos;
     //     LOG_INF("Puzzle type is Servos");
 
@@ -55,7 +53,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // {
     //     sprintf(msg.msg, "Puzzle type is gate");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = GATE_PUZZLE;
     //     gate = new Gate;
     //     LOG_INF("Puzzle type is Gate.");
     //     deviceSpecified = true;
@@ -64,7 +61,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     {
         sprintf(msg.msg, "Puzzle type is console");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzleType = CONSOLE_PUZZLE;
         puzzle = new Console("introRoom", "console");
         LOG_INF("puzzle type is console.");
         deviceSpecified = true;
@@ -73,7 +69,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // {
     //     sprintf(msg.msg, "Puzzle type is rotating platform");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = ROTATING_PLATFORM_PUZZLE;
     //     rotatingPlatform = new RotatingPlatform;
     //     LOG_INF("Puzzle type is Rotating Platform.");
     //     deviceSpecified = true;
@@ -91,7 +86,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // {
     //     sprintf(msg.msg, "Puzzle type is unseen");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = UNSEEN_PUZZLE;
     //     unseen = new Unseen;
     //     LOG_INF("Puzzle type is unseen.");
     //     deviceSpecified = true;
@@ -100,7 +94,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // {
     //     sprintf(msg.msg, "Puzzle type is labratory");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = LABORATORY_PUZZLE;
     //     laboratory = new Laboratory;
     //     LOG_INF("Puzzle type is laboratory.");
     //     deviceSpecified = true;

@@ -41,21 +41,6 @@
 #include "cabinet.h"
 #include "puzzle.h"
 
-enum PuzzleTypes
-{
-    UNSPECIFIED = 0,
-    SERVOS_PUZZLE,
-    GATE_PUZZLE,
-    CONSOLE_PUZZLE,
-    NUMBERS_GUESSING_PUZZLE,
-    UNSEEN_PUZZLE,
-    LABORATORY_PUZZLE,
-    ROTATING_PLATFORM_PUZZLE,
-    CABINET_PUZZLE,
-
-};
-
-
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)
 #error "Unsupported board: BUILT_IN devicetree alias is not defined"
@@ -79,7 +64,6 @@ public:
     Puzzles(struct nvs_fs *fs);
     void messageHandler(struct MqttMsg *msg);
     bool deviceSpecified = false;
-    PuzzleTypes puzzleType = UNSPECIFIED;
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
     void alive();
