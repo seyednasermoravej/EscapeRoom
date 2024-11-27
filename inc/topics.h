@@ -46,6 +46,8 @@
 #define INTRO_ROOM_CONSOLE_LCD2_TOPIC                                         "introRoom/console/lcd2"
 
 
+#define CODE_RED_DOOR_RELAY1_TOPIC                                       "codeRed/door/relay1" 
+#define CODE_RED_DOOR_RELAY2_TOPIC                                       "codeRed/door/relay2" 
 
 
 #ifdef __cplusplus
@@ -90,6 +92,12 @@ extern struct mqtt_topic introRoom_cabinet_relay1_topic;
 extern struct mqtt_topic introRoom_cabinet_relay2_topic;
 extern struct mqtt_topic introRoom_cabinet_relay3_topic;
 extern struct mqtt_topic introRoom_cabinet_relay4_topic;
+
+
+extern struct mqtt_topic codeRed_door_relay1_topic;
+extern struct mqtt_topic codeRed_door_relay2_topic;
+
+
 
 
 #ifdef __cplusplus

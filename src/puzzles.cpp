@@ -49,14 +49,14 @@ void Puzzles:: puzzleTypeSelection(char *type)
 
     //     deviceSpecified = true;
     // }
-    // else if(strcmp(type, "gate") == 0)
-    // {
-    //     sprintf(msg.msg, "Puzzle type is gate");
-    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     gate = new Gate;
-    //     LOG_INF("Puzzle type is Gate.");
-    //     deviceSpecified = true;
-    // }
+    else if(strcmp(type, "door") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is door");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Door("codeRed", "door");
+        LOG_INF("Puzzle type is Gate.");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "console") == 0)
     {
         sprintf(msg.msg, "Puzzle type is console");

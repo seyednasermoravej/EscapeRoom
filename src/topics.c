@@ -267,3 +267,22 @@ struct mqtt_topic introRoom_cabinet_relay4_topic = {
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
 ////////////////////intro room cabinet end\\\\\\\\\\
+//////////////////////code red door begin///////////
+
+struct mqtt_topic codeRed_door_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_DOOR_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_DOOR_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_door_relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_DOOR_RELAY2_TOPIC,
+    .size = strlen(CODE_RED_DOOR_RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red door end////////////////

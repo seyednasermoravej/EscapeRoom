@@ -39,7 +39,7 @@
 #include "laboratory.h"
 #include "platform.h"
 #include "cabinet.h"
-#include "puzzle.h"
+#include "door.h"
 
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)

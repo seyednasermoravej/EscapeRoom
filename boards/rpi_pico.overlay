@@ -160,7 +160,14 @@
 		gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
 		
 	};
-
+	door
+	{
+		door_relays: door-relay
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>, <&gpio0 3 GPIO_ACTIVE_HIGH>;
+		};
+	};
 	console_puzzle
 	{
 		console_puzzle_buttons: buttons
