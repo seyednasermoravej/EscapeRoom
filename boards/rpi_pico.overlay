@@ -47,14 +47,11 @@
 			zephyr,deferred-init;
 		};
 
-		_platform_relays
+		platform_relays:relays
 		{
-			compatible = "gpio-leds";
-			platform_relays:relays
-			{
-				gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>, 
-						<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;
-			};
+			compatible = "power-switch";
+			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>, 
+					<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;
 		};
 		platform_servos_control_input
 		{
@@ -160,15 +157,11 @@
 		};
 		zephyr,deferred-init;
 	};
-	relay
+	relaycontrol: relay_control
 	{
-		compatible = "gpio-leds";
-		relaycontrol: relay_control
-		{
-			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
-			
-		};
-		zephyr,deferred-init;
+		compatible = "power-switch";
+		gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+		
 	};
 
 	config_puzzle
@@ -245,20 +238,17 @@
 			idle-timeout-ms = <200>;
 			zephyr,deferred-init;
 		};
-		config_puzzle_outputs: config-puzzle-outputs
-		{
-			compatible = "gpio-leds";
-			config_puzzle_relays: config-puzzle-relays{
-				gpios = <&expander 0 (GPIO_ACTIVE_HIGH)>,
-						<&expander 1 (GPIO_ACTIVE_HIGH)>,
-						<&expander 2 (GPIO_ACTIVE_HIGH)>,
-						<&expander 3 (GPIO_ACTIVE_HIGH)>,
-						<&expander 4 (GPIO_ACTIVE_HIGH)>,
-						<&expander 5 (GPIO_ACTIVE_HIGH)>,
-						<&expander 6 (GPIO_ACTIVE_HIGH)>,
-						<&expander 7 (GPIO_ACTIVE_HIGH)>;
-				
-			};
+		console_puzzle_relays: console-puzzle-relays{
+			compatible = "power-switch";
+			gpios = <&expander 0 (GPIO_ACTIVE_HIGH)>,
+					<&expander 1 (GPIO_ACTIVE_HIGH)>,
+					<&expander 2 (GPIO_ACTIVE_HIGH)>,
+					<&expander 3 (GPIO_ACTIVE_HIGH)>,
+					<&expander 4 (GPIO_ACTIVE_HIGH)>,
+					<&expander 5 (GPIO_ACTIVE_HIGH)>,
+					<&expander 6 (GPIO_ACTIVE_HIGH)>,
+					<&expander 7 (GPIO_ACTIVE_HIGH)>;
+			
 		};
 	};
 	cabinet_puzzle
@@ -288,16 +278,13 @@
 			};
 			zephyr,deferred-init;
 		};
-		cabinet_puzzle_outputs: cabinet-puzzle-outputs
+		cabinet_puzzle_relays: cabinet-puzzle-relays
 		{
-			compatible = "gpio-leds";
-			cabinet_puzzle_relays: cabinet-puzzle-relays{
+			compatible = "power-switch";
 				gpios = <&gpio0 3 (GPIO_ACTIVE_HIGH)>,
 						<&gpio0 4 (GPIO_ACTIVE_HIGH)>,
 						<&gpio0 5 (GPIO_ACTIVE_HIGH)>,
 						<&gpio0 6 (GPIO_ACTIVE_HIGH)>;
-				
-			};
 
 		};
 	};

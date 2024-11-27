@@ -11,13 +11,11 @@ LOG_MODULE_REGISTER(configDevice, LOG_LEVEL_INF);
 
 
 //  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
-static const struct gpio_dt_spec config_puzzle_relays[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(config_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+static const struct gpio_dt_spec console_puzzle_relays[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(console_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
-static const char roomName[] = "introRoom";
-static const char puzzleTypeName[] = "console";
-
+Console *instance = nullptr;
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
 // static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
 
