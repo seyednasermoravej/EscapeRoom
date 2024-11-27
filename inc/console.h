@@ -29,7 +29,13 @@ public:
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList() override;
 
+    static void buttonsHandlerWrapper(struct input_event *val, void* userData);
+    static void qdecLangHandlerWrapper(struct input_event *val, void* userData);
+    static void qdecRoomHandlerWrapper(struct input_event *val, void* userData);
 
+    void buttonsHandler(struct input_event *val);
+    void qdecLangHandler(struct input_event *val);
+    void qdecRoomHandler(struct input_event *val);
 
 private:
     Lcd *lcd1;

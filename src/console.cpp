@@ -15,14 +15,18 @@ static const struct gpio_dt_spec console_puzzle_relays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(console_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
-Console *instance = nullptr;
+static Console *instance = nullptr;
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_buttons));
 // static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
 
 static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_lang));
 static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_qdec_room));
 
-static void buttonsHandler(struct input_event *val, void* topic)
+void Console:: buttonsHandlerWrapper(struct input_event *val, void *userData)
+{
+    instance->buttonsHandler(val);
+}
+void Console:: buttonsHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_KEY)
     {
@@ -54,13 +58,17 @@ static void buttonsHandler(struct input_event *val, void* topic)
     }
 }
 
+void Console:: qdecLangHandlerWrapper(struct input_event *val, void* userData)
+{
+    instance->qdecLangHandler(val);
+}
 
-void qdecLangHandler(struct input_event *val, void* topic)
+void Console:: qdecLangHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "introRoom/console/langEncoder");
+        sprintf(msg.topic, "%s/%s/langEncoder", roomName, puzzleTypeName);
         // strcpy(msg.topic, (char *)topic);
         if(val->code == INPUT_REL_WHEEL)
         {
@@ -79,13 +87,17 @@ void qdecLangHandler(struct input_event *val, void* topic)
     } 
 }
 
+void Console:: qdecRoomHandlerWrapper(struct input_event *val, void* topic)
+{
+    instance->qdecRoomHandler(val);
+}
 
-void qdecRoomHandler(struct input_event *val, void* topic)
+void Console:: qdecRoomHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        strcpy(msg.topic, "introRoom/console/roomEncoder");
+        sprintf(msg.topic, "%s/%s/roomEncoder", roomName, puzzleTypeName);
         if(val->code == INPUT_REL_WHEEL)
         {
             if(val->value == 1)
@@ -105,28 +117,24 @@ void qdecRoomHandler(struct input_event *val, void* topic)
 
 Console:: Console(const char * room, const char *type): Puzzle(room, type)
 {
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s", roomName, puzzleTypeName);
-    strcat(msg.topic, deviceId);
 
-    device_init(qdecLang);
-    device_init(qdecRoom);
-    
-    INPUT_CALLBACK_DEFINE(qdecLang, qdecLangHandler, NULL);
-    INPUT_CALLBACK_DEFINE(qdecRoom, qdecRoomHandler, NULL);
-
+    instance = this;
 	device_init(DEVICE_DT_GET(LCD1_NODE));
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd1->firstLine((const char *)"    Language    ");
-    // sprintf(msg.msg, "lcd1 is configured");
-    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
 	device_init(DEVICE_DT_GET(LCD2_NODE));
 	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd2->firstLine("      Room      ");
 
-    // sprintf(msg.msg, "lcd2 is configured");
-    // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    creatingMqttList();
+
+
+    device_init(qdecLang);
+    device_init(qdecRoom);
+    
+    INPUT_CALLBACK_DEFINE(qdecLang, qdecLangHandlerWrapper, (void *)this);
+    INPUT_CALLBACK_DEFINE(qdecRoom, qdecRoomHandlerWrapper, (void *)this);
 
 
     // int ret;
@@ -144,9 +152,8 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
     // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
     device_init(buttons);
-    INPUT_CALLBACK_DEFINE(buttons, buttonsHandler, NULL);
+    INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 
-    creatingMqttList();
 }
 
 void Console:: creatingMqttList()

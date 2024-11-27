@@ -5,7 +5,7 @@
 LOG_MODULE_REGISTER(cabient, LOG_LEVEL_INF);
 
 
-Cabinet *instance = nullptr;
+static Cabinet *instance = nullptr;
 
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
@@ -19,7 +19,6 @@ static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(cabinet_p
 
 void Cabinet:: buttonsHandlerWrapper(struct input_event *val, void *userData)
 {
-
     instance->buttonsHandler(val);
 }
 
