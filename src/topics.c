@@ -2,15 +2,6 @@
 
 
 
-struct mqtt_topic servo_topic = {
-    .topic =
-        {
-
-            .utf8 = (uint8_t*)SERVO0_TOPIC,
-            .size = strlen(SERVO0_TOPIC)
-        },
-    .qos = MQTT_QOS_1_AT_LEAST_ONCE};
-
 struct mqtt_topic k3_topic = {
     .topic =
         {
@@ -359,5 +350,127 @@ struct mqtt_topic codeRed_fridge_relay2_topic = {
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 ////////////////////code red fridge end////////////////
+////////////////////code red blinds begin////////////////
+struct mqtt_topic codeRed_blinds_servo1_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO1_TOPIC,
+    .size = strlen(CODE_RED_BLINDS_SERVO1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_blinds_servo2_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO2_TOPIC,
+    .size = strlen(CODE_RED_BLINDS_SERVO2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_blinds_servo3_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO3_TOPIC,
+    .size = strlen(CODE_RED_BLINDS_SERVO3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_blinds_servo4_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO4_TOPIC,
+    .size = strlen(CODE_RED_BLINDS_SERVO4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red blinds end////////////////
+////////////////////code red power panel begin////////////////
+struct mqtt_topic codeRed_powerPanel_servo1_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_SERVO1_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_SERVO1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_servo2_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_SERVO2_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_SERVO2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_servo3_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_SERVO3_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_SERVO3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_servo4_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_SERVO4_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_SERVO4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
 
-
+struct mqtt_topic codeRed_powerPanel_display1_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY1_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display2_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY2_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display3_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY3_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display4_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY4_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display5_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY5_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY5_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display6_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY6_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY6_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display7_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY7_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY7_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display8_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY8_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY8_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_powerPanel_display9_topic = {
+.topic =
+{
+    .utf8 = (uint8_t*)CODE_RED_POWER_PANEL_DISPLAY9_TOPIC,
+    .size = strlen(CODE_RED_POWER_PANEL_DISPLAY9_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red power panel end////////////////

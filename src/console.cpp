@@ -227,10 +227,10 @@ void Console:: messageHandler(struct MqttMsg *msg)
     else
     {
         char log[] = "Command is not recognized.";
-        MqttMsg msg = {0};
-        strcpy(msg.topic, LOGS_TOPIC);
-        strcpy(msg.msg, log);
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        // MqttMsg msg = {0};
+        // strcpy(msg.topic, LOGS_TOPIC);
+        // strcpy(msg.msg, log);
+        // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         LOG_INF("%s", log);
     }
 }
