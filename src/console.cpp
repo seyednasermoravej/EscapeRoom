@@ -11,16 +11,16 @@ LOG_MODULE_REGISTER(console, LOG_LEVEL_INF);
 
 
 //  //const struct gpio_dt_spec spec = GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(leds), gpios, 1);
-static const struct gpio_dt_spec console_puzzle_relays[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(console_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+static const struct gpio_dt_spec relays[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(console_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
 static Console *instance = nullptr;
-static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_buttons));
+static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(console_buttons));
 // static const struct device *relays = DEVICE_DT_GET(DT_NODELABEL(config_puzzle_outputs));
 
-static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_qdec_lang));
-static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(console_puzzle_qdec_room));
+static const struct device *const qdecLang = DEVICE_DT_GET(DT_NODELABEL(console_qdec_lang));
+static const struct device *const qdecRoom = DEVICE_DT_GET(DT_NODELABEL(console_qdec_room));
 
 void Console:: buttonsHandlerWrapper(struct input_event *val, void *userData)
 {

@@ -10,11 +10,11 @@ static Cabinet *instance = nullptr;
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 static const struct gpio_dt_spec cabinet_puzzle_relays[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(cabinet_puzzle_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(cabinet_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
 
-static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(cabinet_puzzle_input));
+static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(cabinet_input));
 
 
 void Cabinet:: buttonsHandlerWrapper(struct input_event *val, void *userData)
