@@ -15,19 +15,18 @@
 #include "topics.h"
 #include "utils.h"
 
-
-#define STEP PWM_USEC(100)
-#define MAX_NUMBER_OF_SERVO_MOTORS          8
-
 class Servos
 {
 public:
-    Servos();
-    void messageHandler(struct MqttMsg *msg);
-
+    // Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos, uint16_t minPulse, uint16_t maxPulse, uint16_t step);
+    Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos);
+    void move(uint8_t index, uint32_t pulse);
 private:
-    
-
+    const struct pwm_dt_spec *servos;
+    uint8_t numOfservos;
+    // uint16_t minPulse;
+    // uint16_t maxPulse;
+    // uint16_t step;
 };
 
 #endif

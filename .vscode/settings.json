@@ -65,7 +65,8 @@
 			"slist": "c",
 			"initializer_list": "c",
 			"utility": "c",
-			"gate.h": "c"
+			"gate.h": "c",
+			"tftlcd.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

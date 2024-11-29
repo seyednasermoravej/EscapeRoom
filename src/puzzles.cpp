@@ -32,32 +32,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
     strcpy(msg.topic, "pub/");
     strcat(msg.topic, deviceId);
 
-    if(strcmp(type, "cabinet") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is cabinet");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzle = new Cabinet("introRoom", "cabinet");
-        LOG_INF("Puzzle type is cabinet.");
-        deviceSpecified = true;
-    }
-    // else if(strcmp(type, "servos") == 0)
-    // {
-    //     sprintf(msg.msg, "Puzzle type is Servos");
-    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     servos = new Servos;
-    //     LOG_INF("Puzzle type is Servos");
-
-    //     deviceSpecified = true;
-    // }
-    else if(strcmp(type, "door") == 0)
-    {
-        sprintf(msg.msg, "Puzzle type is door");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzle = new Door("codeRed", "door");
-        LOG_INF("Puzzle type is Door.");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "console") == 0)
+    if(strcmp(type, "console") == 0)
     {
         sprintf(msg.msg, "Puzzle type is console");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
@@ -67,35 +42,90 @@ void Puzzles:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "platform") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is rotating platform");
+        sprintf(msg.msg, "Puzzle type is platform");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Platform("introRoom", "platform");
-        LOG_INF("Puzzle type is Rotating Platform.");
+        LOG_INF("Puzzle type is Platform.");
         deviceSpecified = true;
     }
-    // else if(strcmp(type, "numbers guessing") == 0)
+    else if(strcmp(type, "cabinet") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is cabinet");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Cabinet("introRoom", "cabinet");
+        LOG_INF("Puzzle type is cabinet.");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "door") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is door");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Door("codeRed", "door");
+        LOG_INF("Puzzle type is Door.");
+        deviceSpecified = true;
+    }
+    // else if(strcmp(type, "shelf") == 0)
     // {
-    //     sprintf(msg.msg, "Puzzle type is numbers guessing");
+    //     sprintf(msg.msg, "Puzzle type is shelf");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzleType = NUMBERS_GUESSING_PUZZLE;
-    //     numbersGuessing = new NumbersGuessing;
-    //     LOG_INF("Puzzle type is numbers guessing.");
+    //     puzzle = new Shelf("codeRed", "shelf");
+    //     LOG_INF("Puzzle type is shelf.");
     //     deviceSpecified = true;
     // }
-    // else if(strcmp(type, "nuseen") == 0)
+    else if(strcmp(type, "doorKeypad") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is door keypad");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Door("codeRed", "doorKeypad");
+        LOG_INF("Puzzle type is door keypad.");
+        deviceSpecified = true;
+    }
+    // else if(strcmp(type, "xray") == 0)
     // {
-    //     sprintf(msg.msg, "Puzzle type is unseen");
+    //     sprintf(msg.msg, "Puzzle type is xray");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     unseen = new Unseen;
-    //     LOG_INF("Puzzle type is unseen.");
+    //     puzzle = new Xray("codeRed", "xray");
+    //     LOG_INF("Puzzle type is xray.");
     //     deviceSpecified = true;
     // }
-    // else if(strcmp(type, "laboratory") == 0)
+    else if(strcmp(type, "hartMonitor") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is hartMonitor");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new HartMonitor("codeRed", "hartMonitor");
+        LOG_INF("Puzzle type is hartMonitor.");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "vantilator") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is vantilator");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Ventilator("codeRed", "vantilator");
+        LOG_INF("Puzzle type is vantilator.");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "fridge") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is fridge");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Fridge("codeRed", "fridge");
+        LOG_INF("Puzzle type is fridge.");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "blinds") == 0)
+    {
+        sprintf(msg.msg, "Puzzle type is blinds");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        puzzle = new Blinds("codeRed", "blinds");
+        LOG_INF("Puzzle type is blinds");
+        deviceSpecified = true;
+    }
+    // else if(strcmp(type, "powerPanel") == 0)
     // {
-    //     sprintf(msg.msg, "Puzzle type is labratory");
+    //     sprintf(msg.msg, "Puzzle type is powerPanel");
     //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     laboratory = new Laboratory;
-    //     LOG_INF("Puzzle type is laboratory.");
+    //     puzzle = new PowerPanel("codeRed", "powerPanel");
+    //     LOG_INF("Puzzle type is powerPanel");
     //     deviceSpecified = true;
     // }
 

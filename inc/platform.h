@@ -26,7 +26,7 @@ class Platform: public Puzzle
 public:
     Platform(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList() override;
+    void creatingMqttList(uint16_t) override;
     static void homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     static void calibrateSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins);
     static void calibrationWorkHandler(struct k_work *work);

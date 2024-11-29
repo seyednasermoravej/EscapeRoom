@@ -27,7 +27,7 @@ class Console: public Puzzle
 public:
     Console(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList() override;
+    void creatingMqttList(uint16_t mqttCount) override;
 
     static void buttonsHandlerWrapper(struct input_event *val, void* userData);
     static void qdecLangHandlerWrapper(struct input_event *val, void* userData);

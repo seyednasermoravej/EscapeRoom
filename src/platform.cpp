@@ -48,15 +48,15 @@ Platform:: Platform(const char * room, const char *type): Puzzle(room, type)
     // relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     // device_init(relays->port);
+    creatingMqttList(1);
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
-
 }
 
-void Platform:: creatingMqttList()
+void Platform:: creatingMqttList(uint16_t _mqttCount)
 {
     mqttList[0] = introRoom_platform_position_topic;
-    mqttCount = 1;
+    mqttCount = _mqttCount;
 }
 
 void Platform:: homeSwitchIrqWrapper(const struct device *dev, struct gpio_callback *cb, uint32_t pins)

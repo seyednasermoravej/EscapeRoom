@@ -1,5 +1,5 @@
-#ifndef __DOOR__H__
-#define __DOOR__H__
+#ifndef __FRIDGE__H__
+#define __FRIDGE__H__
 
 
 
@@ -16,15 +16,17 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
+#include "keypad.h"
 
-class Door: public Puzzle 
+class Fridge: public Puzzle 
 {
 public:
-    Door(const char * room, const char *type);
+    Fridge(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
 
 private:
+    Keypad *keypad;
 
 
 

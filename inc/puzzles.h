@@ -34,12 +34,16 @@
 #include "gate.h"
 #include "servos.h"
 #include "console.h"
-#include "unseen.h"
+#include "fridge.h"
 #include "numbersGuessing.h"
 #include "laboratory.h"
 #include "platform.h"
 #include "cabinet.h"
 #include "door.h"
+#include "doorKeypad.h"
+#include "ventilator.h"
+#include "hartMonitor.h"
+#include "blinds.h"
 
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)

@@ -7,8 +7,8 @@
 	chosen{
 		zephyr,tracing-uart = &uart0;
 	};
-	motors{
-		servos: servos
+	blinds{
+		blinds_servos: blinds-servos
 		{
 			compatible = "pwm-servo";
 			pwms = <&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 9 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
@@ -165,7 +165,82 @@
 		door_relays: door-relay
 		{
 			compatible = "power-switch";
-			gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>, <&gpio0 4 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>;
+		};
+	};
+	fridge
+	{
+		fridge_relays: fridge-relay
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>, <&gpio0 11 GPIO_ACTIVE_LOW>;
+		};
+
+	};
+	zephyr,user
+	{
+		io-channels = <&adc 2>;
+		zephyr,deferred-init;
+	};
+	ventilator	
+	{
+		ventilator_relays: ventilator-relay
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 22 GPIO_ACTIVE_LOW>, <&gpio0 26 GPIO_ACTIVE_LOW>, <&gpio0 27 GPIO_ACTIVE_LOW>;
+		};
+		ventilator_analog_multiplexer: ventilator-analog-multiplexer
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>, <&gpio0 5 GPIO_ACTIVE_LOW>, <&gpio0 6 GPIO_ACTIVE_LOW>;
+		};
+	};
+	door_keypad
+	{
+		door_keypad_buttons: door-keypad-buttons
+		{
+			compatible = "gpio-keys";
+			door_keypad_button1: door-keypad-button1
+			{
+				gpios = <&gpio0	2	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			door_keypad_button2: door-keypad-button2
+			{
+				gpios = <&gpio0	3	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			door_keypad_button3: door-keypad-button3
+			{
+				gpios = <&gpio0	4	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			door_keypad_button4: door-keypad-button4
+			{
+				gpios = <&gpio0	5	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_3>;
+			};
+			door_keypad_button5: door-keypad-button5
+			{
+				gpios = <&gpio0	6	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_4>;
+			};
+			door_keypad_button6: door-keypad-button6
+			{
+				gpios = <&gpio0	7	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_5>;
+			};
+			door_keypad_button7: door-keypad-button7
+			{
+				gpios = <&gpio0	8	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_6>;
+			};
+			door_keypad_button8: door-keypad-button8
+			{
+				gpios = <&gpio0	9	GPIO_ACTIVE_HIGH>;
+				zephyr,code = <INPUT_BTN_7>;
+			};
+			zephyr,deferred-init;
 		};
 	};
 	console_puzzle
@@ -306,6 +381,7 @@
 		zephyr,display = &display;
 	};
 
+	
 
 	tftlcd
 	{
@@ -342,8 +418,8 @@
 			
 		col-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>,
 			    <&gpio0 8 GPIO_ACTIVE_LOW>,
-			    <&gpio0 9 GPIO_ACTIVE_LOW>,
-			    <&gpio0 10 GPIO_ACTIVE_LOW>;
+			    <&gpio0 9 GPIO_ACTIVE_LOW>;
+			    // <&gpio0 10 GPIO_ACTIVE_LOW>;
 		// col-drive-inactive;
 		// zephyr-code = <0 1 2 4>;		
 		no-ghostkey-check;
@@ -353,22 +429,22 @@
 			        MATRIX_KEY(0, 0, INPUT_KEY_1)
 					MATRIX_KEY(0, 1, INPUT_KEY_2)
 					MATRIX_KEY(0, 2, INPUT_KEY_3)
-					MATRIX_KEY(0, 3, INPUT_KEY_A)
+					// MATRIX_KEY(0, 3, INPUT_KEY_A)
 					MATRIX_KEY(1, 0, INPUT_KEY_4)
 					MATRIX_KEY(1, 1, INPUT_KEY_5)
 					MATRIX_KEY(1, 2, INPUT_KEY_6)
-					MATRIX_KEY(1, 3, INPUT_KEY_B)
+					// MATRIX_KEY(1, 3, INPUT_KEY_B)
 					MATRIX_KEY(2, 0, INPUT_KEY_7)
 					MATRIX_KEY(2, 1, INPUT_KEY_8)
 					MATRIX_KEY(2, 2, INPUT_KEY_9)
-					MATRIX_KEY(2, 3, INPUT_KEY_C)
+					// MATRIX_KEY(2, 3, INPUT_KEY_C)
 					MATRIX_KEY(3, 0, INPUT_KEY_KPASTERISK)
 					MATRIX_KEY(3, 1, INPUT_KEY_0)
 					MATRIX_KEY(3, 2, INPUT_KEY_E)
-					MATRIX_KEY(3, 3, INPUT_KEY_D)
+					// MATRIX_KEY(3, 3, INPUT_KEY_D)
 			>;
 			row-size = <4>;
-			col-size = <4>;
+			col-size = <3>;
 		};
 		zephyr,deferred-init;
 		// debounce-down-ms = <30>;
@@ -404,12 +480,21 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_pins>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-	color_led_strip: ws2812@0 {
+	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
+	display_char: sn74hc595@0
+	{
+		compatible = "ti,sn75hc595";
+		reg = <0>;
+		spi-max-frequency = <1000000>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        ngpios = <8>;
+	};
+	color_led_strip: ws2812@1 {
 		compatible = "worldsemi,ws2812-spi";
 
 		/* SPI */
-		reg = <0>; /* ignored, but necessary for SPI bindings */
+		reg = <1>; /* ignored, but necessary for SPI bindings */
 		spi-max-frequency = <6400000>;
 
 		/* WS2812 */
@@ -578,3 +663,15 @@ pico_spi: &spi0 {};
 	};
   };
 
+&adc {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <10>;
+	};
+};

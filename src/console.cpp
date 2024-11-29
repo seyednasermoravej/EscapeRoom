@@ -1,6 +1,6 @@
 #include "console.h"
 
-LOG_MODULE_REGISTER(configDevice, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(console, LOG_LEVEL_INF);
 
 
 #define LCD1_NODE DT_NODELABEL(lcd1)
@@ -127,7 +127,7 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd2->firstLine("      Room      ");
 
-    creatingMqttList();
+    creatingMqttList(2);
 
 
     device_init(qdecLang);
@@ -156,11 +156,11 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
 }
 
-void Console:: creatingMqttList()
+void Console:: creatingMqttList(uint16_t _mqttCount)
 {
     mqttList[0] = introRoom_console_lcd1_topic;
     mqttList[1] = introRoom_console_lcd2_topic;
-    mqttCount = 2;
+    mqttCount = _mqttCount;
 }
 
 

@@ -20,15 +20,15 @@ Door:: Door(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList();
+    creatingMqttList(2);
 }
 
-void Door:: creatingMqttList()
+void Door:: creatingMqttList(uint16_t _mqttCount)
 {
 
 	mqttList[0] = codeRed_door_relay1_topic;
 	mqttList[1] = codeRed_door_relay2_topic;
-    mqttCount = 2;
+    mqttCount = _mqttCount;
 
 }
 

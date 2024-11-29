@@ -1,5 +1,5 @@
-#ifndef __DOOR__H__
-#define __DOOR__H__
+#ifndef __HART_MONITOR__H__
+#define __HART_MONITOR__H__
 
 
 
@@ -16,16 +16,18 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
+#include "adcs.h"
 
-class Door: public Puzzle 
+class HartMonitor: public Puzzle 
 {
 public:
-    Door(const char * room, const char *type);
+    HartMonitor(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
+    uint16_t readAdc(uint8_t channel);
 
 private:
-
+    Adcs *adcs;
 
 
 };

@@ -27,8 +27,8 @@ int main()
 
     // test();
 
-    // char serverName[] = "mqtt-1.localdomain";
-    char serverName[] = "test.mosquitto.org";
+    char serverName[] = "mqtt-1.localdomain";
+    // char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     dnsResolver(serverName, serverIpAddress);
     

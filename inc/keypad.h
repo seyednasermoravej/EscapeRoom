@@ -9,15 +9,15 @@
 #include "zephyr/logging/log.h"
 #include "messageQueues.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
+class Keypad
+{
+public:
+    Keypad(const char * _prefix);
+    void static handlerWrapper(struct input_event *val, void*);
+    void handler(struct input_event*);
+private:
+    const char *prefix;
+};
 
-void keypad();
-
-
-#ifdef __cplusplus
-}
-#endif
 #endif

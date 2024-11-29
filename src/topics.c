@@ -286,3 +286,78 @@ struct mqtt_topic codeRed_door_relay2_topic = {
 },
 .qos = MQTT_QOS_1_AT_LEAST_ONCE};
 ////////////////////code red door end////////////////
+
+//////////////////////code red door keypad begin///////////
+
+struct mqtt_topic codeRed_doorKeypad_display_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC,
+    .size = strlen(CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red door keypad end////////////////
+//////////////////////code red door ventilator///////////
+
+struct mqtt_topic codeRed_ventilator_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_VENTILATOR_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_VENTILATOR_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_ventilator_relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_VENTILATOR_RELAY2_TOPIC,
+    .size = strlen(CODE_RED_VENTILATOR_RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_ventilator_relay3_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_VENTILATOR_RELAY3_TOPIC,
+    .size = strlen(CODE_RED_VENTILATOR_RELAY3_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_ventilator_relay4_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_VENTILATOR_RELAY4_TOPIC,
+    .size = strlen(CODE_RED_VENTILATOR_RELAY4_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red ventilator end////////////////
+////////////////////code red fridge begin////////////////
+struct mqtt_topic codeRed_fridge_display_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_FRIDGE_DISPLAY_TOPIC,
+    .size = strlen(CODE_RED_FRIDGE_DISPLAY_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_fridge_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_FRIDGE_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_FRIDGE_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+struct mqtt_topic codeRed_fridge_relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_FRIDGE_RELAY2_TOPIC,
+    .size = strlen(CODE_RED_FRIDGE_RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_1_AT_LEAST_ONCE};
+////////////////////code red fridge end////////////////
+
+

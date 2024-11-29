@@ -1,6 +1,6 @@
 #include "puzzle.h"
 
-Puzzle:: Puzzle(const char* room, const char* type)
+Puzzle:: Puzzle(const char* room, const char* type) 
 {
     roomName = new char[strlen(room) + 1];
     strcpy(roomName, room);

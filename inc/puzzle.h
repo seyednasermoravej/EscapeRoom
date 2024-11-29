@@ -25,8 +25,8 @@ protected:
     char *roomName;
     char *puzzleTypeName;
     struct mqtt_topic mqttList[16];
-    uint16_t mqttCount = 0;
-    virtual void creatingMqttList() = 0;
+    uint16_t mqttCount;
+    virtual void creatingMqttList(uint16_t mqttCount) = 0;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName

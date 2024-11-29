@@ -57,19 +57,19 @@ Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList();
+    creatingMqttList(4);
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
 }
 
-void Cabinet:: creatingMqttList()
+void Cabinet:: creatingMqttList(uint16_t _mqttCount)
 {
 
 	mqttList[0] = introRoom_cabinet_relay1_topic;
 	mqttList[1] = introRoom_cabinet_relay2_topic;
 	mqttList[2] = introRoom_cabinet_relay3_topic;
 	mqttList[3] = introRoom_cabinet_relay4_topic;
-    mqttCount = 4;
+    mqttCount = _mqttCount;
 
 }
 void Cabinet:: messageHandler(struct MqttMsg *msg)
