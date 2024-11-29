@@ -37,9 +37,14 @@ void Blinds:: messageHandler(struct MqttMsg *msg)
     if(strcmp(msg->topic, CODE_RED_BLINDS_SERVO1_TOPIC) == 0)
     {
         uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(1, val);
+        servos->move(0, val);
     }
     else if(strcmp(msg->topic, CODE_RED_BLINDS_SERVO2_TOPIC) == 0)
+    {
+        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
+        servos->move(1, val);
+    }
+    else if(strcmp(msg->topic, CODE_RED_BLINDS_SERVO3_TOPIC) == 0)
     {
         uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
         servos->move(2, val);
@@ -48,11 +53,6 @@ void Blinds:: messageHandler(struct MqttMsg *msg)
     {
         uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
         servos->move(3, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_BLINDS_SERVO3_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(4, val);
     }
     else
         LOG_INF("the command is not valid");
