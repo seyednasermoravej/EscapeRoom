@@ -15,14 +15,20 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
     servos = new Servos(allServos, ARRAY_SIZE(allServos));
-    creatingMqttList(4);
+    creatingMqttList(20);
 }
 
 void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
 {
 
-	mqttList[0] = codeRed_door_relay1_topic;
-	mqttList[1] = codeRed_door_relay2_topic;
+	mqttList[0] = codeRed_powerPanel_servo1_topic;
+	mqttList[1] = codeRed_powerPanel_servo2_topic;
+	mqttList[2] = codeRed_powerPanel_servo3_topic;
+	mqttList[3] = codeRed_powerPanel_servo4_topic;
+	mqttList[4] = codeRed_powerPanel_servo5_topic;
+	mqttList[5] = codeRed_powerPanel_servo6_topic;
+	mqttList[6] = codeRed_powerPanel_servo7_topic;
+	mqttList[7] = codeRed_powerPanel_servo8_topic;
     mqttCount = _mqttCount;
 
 }

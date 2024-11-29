@@ -24,7 +24,7 @@ class Puzzle
 protected:
     char *roomName;
     char *puzzleTypeName;
-    struct mqtt_topic mqttList[16];
+    struct mqtt_topic mqttList[20];
     uint16_t mqttCount;
     virtual void creatingMqttList(uint16_t mqttCount) = 0;
 
