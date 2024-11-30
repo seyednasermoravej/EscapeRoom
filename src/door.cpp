@@ -35,7 +35,7 @@ void Door:: creatingMqttList(uint16_t _mqttCount)
 
 void Door:: messageHandler(struct MqttMsg *msg)
 {
-    LOG_INF("Command received");
+    LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(strcmp(msg->topic, CODE_RED_DOOR_RELAY1_TOPIC) == 0)
     {
         if(strcmp(msg->msg, "on") == 0)

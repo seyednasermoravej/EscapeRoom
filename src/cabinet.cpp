@@ -74,7 +74,7 @@ void Cabinet:: creatingMqttList(uint16_t _mqttCount)
 }
 void Cabinet:: messageHandler(struct MqttMsg *msg)
 {
-    LOG_INF("Command received");
+    LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY1_TOPIC) == 0)
     {
         if(strcmp(msg->msg, "on") == 0)

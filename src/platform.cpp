@@ -313,6 +313,7 @@ int Platform:: iStopInit()
 
 void Platform:: messageHandler(MqttMsg *msg)
 {
+    LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(calibrated)
     {
         if(strcmp(msg->topic, INTRO_ROOM_PLATFORM_POSITION_TOPIC) == 0)

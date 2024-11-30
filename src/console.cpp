@@ -167,6 +167,7 @@ void Console:: creatingMqttList(uint16_t _mqttCount)
 void Console:: messageHandler(struct MqttMsg *msg)
 {
 
+    LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(strcmp(msg->topic, INTRO_ROOM_CONSOLE_LCD1_TOPIC) == 0)
     {
         lcd1->secondLine(msg->msg);

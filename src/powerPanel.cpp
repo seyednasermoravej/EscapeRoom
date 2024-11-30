@@ -29,6 +29,16 @@ void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
 	mqttList[5] = codeRed_powerPanel_servo6_topic;
 	mqttList[6] = codeRed_powerPanel_servo7_topic;
 	mqttList[7] = codeRed_powerPanel_servo8_topic;
+
+	mqttList[8] = codeRed_powerPanel_display1_topic;
+	mqttList[9] = codeRed_powerPanel_display2_topic;
+	mqttList[10] = codeRed_powerPanel_display3_topic;
+	mqttList[11] = codeRed_powerPanel_display4_topic;
+	mqttList[12] = codeRed_powerPanel_display5_topic;
+	mqttList[13] = codeRed_powerPanel_display6_topic;
+	mqttList[14] = codeRed_powerPanel_display7_topic;
+	mqttList[15] = codeRed_powerPanel_display8_topic;
+	mqttList[16] = codeRed_powerPanel_display9_topic;
     mqttCount = _mqttCount;
 
 }
@@ -36,7 +46,7 @@ void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
 
 void PowerPanel:: messageHandler(struct MqttMsg *msg)
 {
-    LOG_INF("Command received");
+    LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
 
     if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO1_TOPIC) == 0)
     {

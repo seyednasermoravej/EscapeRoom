@@ -120,6 +120,10 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         if (err != 0) {
             LOG_ERR("Failed to send MQTT PUBREL: %d", err);
         }
+		else
+		{
+			LOG_INF("QoS 2 release");
+		}
 	}
         break;
 	
@@ -138,6 +142,14 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         break;
 
     case MQTT_EVT_PUBLISH: {
+
+        if (evt->param.publish.message.topic.qos == MQTT_QOS_1_AT_LEAST_ONCE) {
+            struct mqtt_puback_param puback = {
+                .message_id = evt->param.publish.message_id
+            };
+			LOG_INF("Command received QoS 1");
+            mqtt_publish_qos1_ack(client, &puback);
+        }
         char payload[MESSAGE_QUEUE_LEN] = {0};
         mqtt_read_publish_payload(client, payload, MESSAGE_QUEUE_LEN);
 
@@ -146,13 +158,6 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         strncpy(msg.topic, (const char *)evt->param.publish.message.topic.topic.utf8, evt->param.publish.message.topic.topic.size);
         strcpy(msg.msg, payload);
         err = k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
-
-        if (evt->param.publish.message.topic.qos == MQTT_QOS_1_AT_LEAST_ONCE) {
-            struct mqtt_puback_param puback = {
-                .message_id = evt->param.publish.message_id
-            };
-            mqtt_publish_qos1_ack(client, &puback);
-        }
         break;
     }
 
@@ -380,7 +385,7 @@ void Mqtt:: publisher(const char *message, const char *topic)
 
 		// rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 
-		rc = publish(MQTT_QOS_1_AT_LEAST_ONCE, message, topic);
+		rc = publish(MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		// rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		PRINT_RESULT("mqtt_publish", rc);
 
