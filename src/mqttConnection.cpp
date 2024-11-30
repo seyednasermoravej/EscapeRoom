@@ -8,7 +8,7 @@
 
 Mqtt *mqtt = nullptr;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_WRN);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 int Mqtt:: subscribe()
 {
@@ -133,23 +133,44 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
             break;
         }
 
-        LOG_INF("PUBCOMP packet id: %u", evt->param.pubcomp.message_id);
+		
         break;
     }
 
+	case MQTT_EVT_PUBREL:{
+		if (evt->result != 0) {
+			LOG_ERR("MQTT PUBREL error [%d]", evt->result);
+			break;
+		}
+
+		LOG_INF("PUBREL packet ID: %u", evt->param.pubrel.message_id);
+
+		const struct mqtt_pubcomp_param rec_param = {
+			.message_id = evt->param.pubrel.message_id
+		};
+
+		mqtt_publish_qos2_complete(client, &rec_param);
+		break;
+	}
     case MQTT_EVT_PINGRESP:
         LOG_INF("PINGRESP packet");
         break;
 
     case MQTT_EVT_PUBLISH: {
 
-        if (evt->param.publish.message.topic.qos == MQTT_QOS_1_AT_LEAST_ONCE) {
-            struct mqtt_puback_param puback = {
-                .message_id = evt->param.publish.message_id
-            };
-			LOG_INF("Command received QoS 1");
-            mqtt_publish_qos1_ack(client, &puback);
-        }
+ 		const struct mqtt_publish_param *p = &evt->param.publish;
+
+		if (p->message.topic.qos == MQTT_QOS_1_AT_LEAST_ONCE) {
+			const struct mqtt_puback_param ack_param = {
+				.message_id = p->message_id
+			};
+			mqtt_publish_qos1_ack(client, &ack_param);
+		} else if (p->message.topic.qos == MQTT_QOS_2_EXACTLY_ONCE) {
+			const struct mqtt_pubrec_param rec_param = {
+				.message_id = p->message_id
+			};
+			mqtt_publish_qos2_receive(client, &rec_param);
+		}
         char payload[MESSAGE_QUEUE_LEN] = {0};
         mqtt_read_publish_payload(client, payload, MESSAGE_QUEUE_LEN);
 
@@ -158,6 +179,7 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         strncpy(msg.topic, (const char *)evt->param.publish.message.topic.topic.utf8, evt->param.publish.message.topic.topic.size);
         strcpy(msg.msg, payload);
         err = k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
+
         break;
     }
 
@@ -230,9 +252,13 @@ void Mqtt:: client_init()
 	/* MQTT client configuration */
 	client->broker = &broker;
 	client->evt_cb = Mqtt:: mqtt_evt_handlerWrapper;
-	client->client_id.utf8 = (uint8_t *)MQTT_CLIENTID;
-	client->client_id.size = strlen(MQTT_CLIENTID);
+	client->client_id.utf8 = (uint8_t *)deviceId;
+	client->client_id.size = strlen(deviceId);
 	client->password = NULL;
+	// client->password->utf8 = (uint8_t *)"District21!";
+	// client->password->size = strlen("District21!");
+	// client->user_name->utf8 = (uint8_t *)"District21";
+	// client->user_name->size = strlen("District21");
 	client->user_name = NULL;
 	client->protocol_version = MQTT_VERSION_3_1_1;
 
@@ -370,7 +396,7 @@ void Mqtt:: publisher(const char *message, const char *topic)
 {
 	int rc = 0;
 
-	LOG_INF("attempting to connect: ");
+	LOG_DBG("attempting to connect: ");
 	LOG_INF("new message");
 	LOG_INF("topic: %s, message: %s", topic, message);
 	rc = try_to_connect();
@@ -386,6 +412,7 @@ void Mqtt:: publisher(const char *message, const char *topic)
 		// rc = process_mqtt_and_sleep(&client_ctx, APP_SLEEP_MSECS);
 
 		rc = publish(MQTT_QOS_2_EXACTLY_ONCE, message, topic);
+		// rc = publish(MQTT_QOS_0_AT_MOST_ONCE, message, topic);
 		// rc = publish(&client_ctx, MQTT_QOS_2_EXACTLY_ONCE, message, topic);
 		PRINT_RESULT("mqtt_publish", rc);
 
@@ -425,7 +452,7 @@ void mqttEntryPoint(void * serverIpAddress, void *mqttList, void *mqttCount)
 		}
 		int rc = 0;
 
-		LOG_INF("attempting to connect: ");
+		LOG_DBG("attempting to connect: ");
 		rc = mqtt->try_to_connect();
 		// rc = try_to_connect(&client_ctx);
 		PRINT_RESULT("try_to_connect", rc);

@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 void i2cScanner();
 void test();
@@ -27,6 +27,7 @@ int main()
 
     // test();
 
+    // char serverName[] = "mqtt-2.localdomain";
     // char serverName[] = "mqtt-1.localdomain";
     char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};

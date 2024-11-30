@@ -21,6 +21,7 @@
 
 #include "messageQueues.h"
 
+#include "main.h"
 
 #define APP_CONNECT_TIMEOUT_MS	3000
 #define APP_SLEEP_MSECS		500
@@ -29,7 +30,6 @@
 
 #define APP_MQTT_BUFFER_SIZE    1024	
 
-#define MQTT_CLIENTID		"escapoom795"
 
 #define MQTT_STACK_SIZE     1024 * 8 
 #define MQTT_PRIORITY      8 
@@ -51,7 +51,7 @@ struct k_mem_domain app_domain;
 
 #define RC_STR(rc) ((rc) == 0 ? "OK" : "ERROR")
 
-#define PRINT_RESULT(func, rc) LOG_INF("%s: %d <%s>", (func), rc, RC_STR(rc))
+#define PRINT_RESULT(func, rc) LOG_DBG("%s: %d <%s>", (func), rc, RC_STR(rc))
 
 #if defined(CONFIG_MQTT_LIB_WEBSOCKET)
 /* Making RX buffer large enough that the full IPv6 packet can fit into it */
