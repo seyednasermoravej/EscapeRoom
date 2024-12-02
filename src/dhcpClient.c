@@ -64,7 +64,13 @@ static void handler(struct net_mgmt_event_callback *cb,
 			// struct in_addr gateway_addr = {192, 168, 0, 1};
 		// 	struct in_addr gateway_addr = {192, 168, 0, 1};
 		// net_if_ipv4_set_gw(iface, &gateway_addr);
-		sem_post(&dhcpActive);
+
+		const struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
+		const uint8_t *mac = link_addr->addr;
+
+		LOG_INF("MAC Address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+			mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+			sem_post(&dhcpActive);
 	}
 }
 
@@ -95,5 +101,8 @@ int dhcpClient(void)
 	net_dhcpv4_add_option_callback(&dhcp_cb);
 
 	net_if_foreach(start_dhcpv4_client, NULL);
+	sem_wait(&dhcpActive);
+
+    sem_destroy(&dhcpActive);
 	return 0;
 }

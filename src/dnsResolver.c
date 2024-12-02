@@ -37,7 +37,7 @@ void dns_result_cb(enum dns_resolve_status status,
 		return;
 	case DNS_EAI_ALLDONE:
 		LOG_INF("DNS resolving finished");
-        sem_post(&dhcpActive);
+        sem_post(&dnsActive);
 		return;
 	case DNS_EAI_INPROGRESS:
 		break;
@@ -181,6 +181,11 @@ static void print_dhcpv4_addr(struct net_if *iface, struct net_if_addr *if_addr,
 		net_addr_ntop(AF_INET,
 			      &iface->config.ip.ipv4->gw,
 			      hr_addr, NET_IPV4_ADDR_LEN));
+	const struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
+    const uint8_t *mac = link_addr->addr;
+
+    LOG_INF("MAC Address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
 	*found = true;
 }
@@ -381,7 +386,7 @@ static void do_mdns_ipv6_lookup(struct k_work *work)
 
 int dnsResolver(char *queryName, char *serverIpAddress)
 {
-    sem_init(&dhcpActive, 0, 0);
+    sem_init(&dnsActive, 0, 0);
     strcpy(serverName, queryName);
 	struct net_if *iface = net_if_get_default();
 
@@ -394,7 +399,7 @@ int dnsResolver(char *queryName, char *serverIpAddress)
 	setup_dhcpv4(iface);
 
 	setup_ipv6(iface);
-    sem_wait(&dhcpActive);
+    sem_wait(&dnsActive);
     strcpy(serverIpAddress, queryAddress);
 	return 0;
 }

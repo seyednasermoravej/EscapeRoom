@@ -30,6 +30,8 @@
 
 #define APP_MQTT_BUFFER_SIZE    1024	
 
+#define MQTT_USERNAME       "District21"
+#define MQTT_PASSWORD       "District21!"
 
 #define MQTT_STACK_SIZE     1024 * 8 
 #define MQTT_PRIORITY      8 

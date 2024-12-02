@@ -255,10 +255,15 @@ void Mqtt:: client_init()
 	client->client_id.utf8 = (uint8_t *)deviceId;
 	client->client_id.size = strlen(deviceId);
 	client->password = NULL;
-	// client->password->utf8 = (uint8_t *)"District21!";
-	// client->password->size = strlen("District21!");
-	// client->user_name->utf8 = (uint8_t *)"District21";
-	// client->user_name->size = strlen("District21");
+
+	// struct mqtt_utf8 password;		
+	// struct mqtt_utf8 username;	
+	// username.utf8 = (uint8_t *)MQTT_USERNAME;
+	// username.size = strlen(MQTT_USERNAME);
+	// password.utf8 = (uint8_t *)MQTT_PASSWORD;
+	// password.size = strlen(MQTT_PASSWORD);
+	// client->password = &password;
+	// client->user_name = &username;
 	client->user_name = NULL;
 	client->protocol_version = MQTT_VERSION_3_1_1;
 

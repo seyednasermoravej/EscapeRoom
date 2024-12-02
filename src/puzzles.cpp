@@ -76,7 +76,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
     {
         sprintf(msg.msg, "Puzzle type is door keypad");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        puzzle = new Door("codeRed", "doorKeypad");
+        puzzle = new DoorKeypad("codeRed", "doorKeypad");
         LOG_INF("Puzzle type is door keypad.");
         deviceSpecified = true;
     }

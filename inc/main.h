@@ -9,6 +9,7 @@
 #include "dnsResolver.h"
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
+#include "dhcpClient.h"
 
 
 

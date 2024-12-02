@@ -27,17 +27,20 @@ int main()
 
     // test();
 
+    // char serverName[] = "localhost";
     // char serverName[] = "mqtt-2.localdomain";
     // char serverName[] = "mqtt-1.localdomain";
-    char serverName[] = "test.mosquitto.org";
-    char serverIpAddress[128] = {0};
-    dnsResolver(serverName, serverIpAddress);
+    // char serverName[] = "test.mosquitto.org";
+    // char serverIpAddress[128] = {0};
+    // dnsResolver(serverName, serverIpAddress);
     
     //http request for getting DFU
     
-    // sem_destroy(&dhcpActive);
+    char serverIpAddress [] = "5.196.78.28";
+    dhcpClient();
 
 
+    // puzzleThreadCreate("10.42.0.1");
     puzzleThreadCreate(serverIpAddress);
 
     while(1)

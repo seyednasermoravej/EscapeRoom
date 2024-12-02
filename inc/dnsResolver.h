@@ -17,6 +17,6 @@
 #include <zephyr/logging/log.h>
 
 int dnsResolver(char *queryName, char *serverIpAddress);
-extern sem_t dhcpActive;
+extern sem_t dnsActive;
 
 #endif
