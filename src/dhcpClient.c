@@ -21,8 +21,8 @@ static struct net_dhcpv4_option_callback dhcp_cb;
 
 static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 {
-	ARG_UNUSED(user_data);
-
+	// ARG_UNUSED(user_data);
+	net_hostname_set((const char*)user_data, strlen((const char*)user_data));
 	LOG_INF("Start on %s: index=%d", net_if_get_device(iface)->name,
 	net_if_get_by_iface(iface));
 	net_dhcpv4_start(iface);
@@ -85,7 +85,7 @@ static void option_handler(struct net_dhcpv4_option_callback *cb,
 		net_addr_ntop(AF_INET, cb->data, buf, sizeof(buf)));
 }
 
-int dhcpClient(void)
+int dhcpClient(char *deviceName)
 {
 	LOG_INF("Run dhcpv4 client");
 
@@ -100,7 +100,7 @@ int dhcpClient(void)
 	
 	net_dhcpv4_add_option_callback(&dhcp_cb);
 
-	net_if_foreach(start_dhcpv4_client, NULL);
+	net_if_foreach(start_dhcpv4_client, deviceName);
 	sem_wait(&dhcpActive);
 
     sem_destroy(&dhcpActive);

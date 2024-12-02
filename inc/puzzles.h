@@ -72,6 +72,7 @@ public:
     int  writeDeviceName(char *name);
     void alive();
     Puzzle *puzzle;
+    char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
 
 private:
 

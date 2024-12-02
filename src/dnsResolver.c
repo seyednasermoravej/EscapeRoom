@@ -222,7 +222,7 @@ static void check_dhcpv4_addr(struct net_if *iface, struct net_if_addr *if_addr,
 	*found = true;
 }
 
-static void setup_dhcpv4(struct net_if *iface)
+static void setup_dhcpv4(struct net_if *iface, char *deviceName)
 {
 	bool found;
 
@@ -240,6 +240,8 @@ static void setup_dhcpv4(struct net_if *iface)
 
 	/* Otherwise, wait for DHCP to assign an address. */
 	LOG_INF("Getting IPv4 address via DHCP before issuing DNS query");
+
+	net_hostname_set(deviceName, strlen(deviceName));
 
 	net_mgmt_init_event_callback(&mgmt4_cb, ipv4_addr_add_handler,
 				     NET_EVENT_IPV4_ADDR_ADD);
@@ -384,7 +386,7 @@ static void do_mdns_ipv6_lookup(struct k_work *work)
 #define setup_ipv6(...)
 #endif /* CONFIG_NET_IPV6 */
 
-int dnsResolver(char *queryName, char *serverIpAddress)
+int dnsResolver(char *deviceName, char *queryName, char *serverIpAddress)
 {
     sem_init(&dnsActive, 0, 0);
     strcpy(serverName, queryName);
@@ -396,7 +398,7 @@ int dnsResolver(char *queryName, char *serverIpAddress)
 
 	setup_ipv4(iface);
 
-	setup_dhcpv4(iface);
+	setup_dhcpv4(iface, deviceName);
 
 	setup_ipv6(iface);
     sem_wait(&dnsActive);

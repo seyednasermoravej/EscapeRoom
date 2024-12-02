@@ -227,7 +227,6 @@ void Puzzles:: readInfosFromMemory()
 
 
     int rc = 0;
-    char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     rc = nvs_read(fs, 0, &name, PUZZLE_TYPE_NAME_MAX_LEN);
     if(rc > 0)
     {
@@ -268,6 +267,7 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
     {
         if(!mqtt)
         { 
+            dhcpClient("not specified");
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
         }
@@ -283,7 +283,7 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 
     }
 
-
+    dhcpClient(puzzles->name);
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     int counter = 0; 
     while(1)
