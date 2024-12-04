@@ -118,6 +118,7 @@ void Console:: qdecRoomHandler(struct input_event *val)
 Console:: Console(const char * room, const char *type): Puzzle(room, type)
 {
 
+	device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     instance = this;
 	device_init(DEVICE_DT_GET(LCD1_NODE));
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);

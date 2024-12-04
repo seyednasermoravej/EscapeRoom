@@ -320,7 +320,8 @@ void Platform:: messageHandler(MqttMsg *msg)
         {
             if(strcmp(msg->msg, "back") == 0)
             {
-                goToPosition(-305000);
+                goToPosition(-152500);
+                // goToPosition(-305000);
             }
             else if(strcmp(msg->msg, "front") == 0)
             {

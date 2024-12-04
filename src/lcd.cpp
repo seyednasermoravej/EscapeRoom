@@ -366,7 +366,6 @@ Lcd:: Lcd(const struct device *const gpioDev, uint8_t RS, uint8_t E, uint8_t BL,
 	lcd_data.row_offsets[1] = 0x00;
 	lcd_data.row_offsets[2] = 0x00;
 	lcd_data.row_offsets[3] = 0x00;
-
 	if (!device_is_ready(gpio_dev)) {
 		printk("Device %s not ready!\n", gpio_dev->name);
 

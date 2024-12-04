@@ -6,7 +6,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 void i2cScanner();
 void test();
 struct mqtt_topic deviceId_topic = {0};
-extern void puzzleThreadCreate(char *serverIpAddress);
+extern void puzzleThreadCreate();
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
@@ -18,29 +18,9 @@ int main()
     LOG_INF("besme allah");
     readingHWinfo(deviceId);
     LOG_INF("Device ID: %s", deviceId);
-    sprintf(deviceIdPub, "sub/%s", deviceId);
-    // dhcpClient();
-
-    deviceId_topic.topic.utf8 = deviceIdPub;
-    deviceId_topic.topic.size = strlen(deviceIdPub);
-    deviceId_topic.qos = MQTT_QOS_1_AT_LEAST_ONCE;
-
     // test();
 
-    // char serverName[] = "localhost";
-    // char serverName[] = "mqtt-2.localdomain";
-    // char serverName[] = "mqtt-1.localdomain";
-    // char serverName[] = "test.mosquitto.org";
-    // char serverIpAddress[128] = {0};
-    // dnsResolver(serverName, serverIpAddress, deviceName);
-    
-    //http request for getting DFU
-    
-    char serverIpAddress [] = "5.196.78.28";
-
-
-    // puzzleThreadCreate("10.42.0.1");
-    puzzleThreadCreate(serverIpAddress);
+    puzzleThreadCreate();
 
     while(1)
     {

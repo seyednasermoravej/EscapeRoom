@@ -3,6 +3,7 @@
 LOG_MODULE_REGISTER(net_dns_resolve_client_sample, LOG_LEVEL_DBG);
 
 
+sem_t dnsActive;
 #if defined(CONFIG_MDNS_RESOLVER)
 #if defined(CONFIG_NET_IPV4)
 static struct k_work_delayable mdns_ipv4_timer;

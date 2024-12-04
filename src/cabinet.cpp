@@ -110,6 +110,8 @@ void Cabinet:: messageHandler(struct MqttMsg *msg)
         if(strcmp(msg->msg, "on") == 0)
         {
             gpio_pin_set_dt(&cabinet_puzzle_relays[2], 1);
+            k_msleep(1000);
+            gpio_pin_set_dt(&cabinet_puzzle_relays[2], 0);
         }
         else if(strcmp(msg->msg, "off") == 0)
         {
@@ -125,6 +127,8 @@ void Cabinet:: messageHandler(struct MqttMsg *msg)
         if(strcmp(msg->msg, "on") == 0)
         {
             gpio_pin_set_dt(&cabinet_puzzle_relays[3], 1);
+            k_msleep(1000);
+            gpio_pin_set_dt(&cabinet_puzzle_relays[3], 0);
         }
         else if(strcmp(msg->msg, "off") == 0)
         {

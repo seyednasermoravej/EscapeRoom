@@ -27,6 +27,7 @@ protected:
     struct mqtt_topic mqttList[20];
     uint16_t mqttCount;
     virtual void creatingMqttList(uint16_t mqttCount) = 0;
+    struct k_timer aliveTimer;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName
@@ -35,7 +36,7 @@ public:
     // Virtual method to be implemented by subclasses
 
     // Common method for all subclasses
-    void alive();
+    static void alive(struct k_timer *);
     virtual void messageHandler(MqttMsg *msg) = 0;
 
     uint16_t getMqttCount();

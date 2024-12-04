@@ -28,38 +28,38 @@ Puzzles *puzzles = nullptr;
 
 void Puzzles:: puzzleTypeSelection(char *type)
 {
-    struct MqttMsg msg = {0};
-    strcpy(msg.topic, "pub/");
-    strcat(msg.topic, deviceId);
+    // struct MqttMsg msg = {0};
+    // strcpy(msg.topic, "pub/");
+    // strcat(msg.topic, deviceId);
 
     if(strcmp(type, "console") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is console");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        // sprintf(msg.msg, "Puzzle type is console");
+        // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Console("introRoom", "console");
         LOG_INF("puzzle type is console.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "platform") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is platform");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        // sprintf(msg.msg, "Puzzle type is platform");
+        // k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Platform("introRoom", "platform");
         LOG_INF("Puzzle type is Platform.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "cabinet") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is cabinet");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is cabinet");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Cabinet("introRoom", "cabinet");
         LOG_INF("Puzzle type is cabinet.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "door") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is door");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is door");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Door("codeRed", "door");
         LOG_INF("Puzzle type is Door.");
         deviceSpecified = true;
@@ -74,8 +74,8 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // }
     else if(strcmp(type, "doorKeypad") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is door keypad");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is door keypad");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new DoorKeypad("codeRed", "doorKeypad");
         LOG_INF("Puzzle type is door keypad.");
         deviceSpecified = true;
@@ -90,32 +90,32 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // }
     else if(strcmp(type, "hartMonitor") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is hartMonitor");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is hartMonitor");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new HartMonitor("codeRed", "hartMonitor");
         LOG_INF("Puzzle type is hartMonitor.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "vantilator") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is vantilator");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is vantilator");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Ventilator("codeRed", "vantilator");
         LOG_INF("Puzzle type is vantilator.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "fridge") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is fridge");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is fridge");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Fridge("codeRed", "fridge");
         LOG_INF("Puzzle type is fridge.");
         deviceSpecified = true;
     }
     else if(strcmp(type, "blinds") == 0)
     {
-        sprintf(msg.msg, "Puzzle type is blinds");
-        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        //sprintf(msg.msg, "Puzzle type is blinds");
+        //k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         puzzle = new Blinds("codeRed", "blinds");
         LOG_INF("Puzzle type is blinds");
         deviceSpecified = true;
@@ -184,10 +184,10 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
 }
 
 
-void Puzzles:: alive()
-{
-    puzzle->alive();
-}
+// void Puzzles:: alive()
+// {
+//     puzzle->alive();
+// }
 int Puzzles:: nvsInit()
 {
     int rc;
@@ -253,10 +253,13 @@ int Puzzles:: builtIntLedInit()
     return ret;
 }
 
-void puzzleEntryPoint(void *serverIpAddress, void *, void *)
+void puzzleEntryPoint(void *, void *, void *)
 {
 
+    // char serverName[] = "mqtt-1.localdomain";
 
+    char serverName[] = "test.mosquitto.org";
+    char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
@@ -267,7 +270,8 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
     {
         if(!mqtt)
         { 
-            dhcpClient("not specified");
+            dnsResolver("not specified", serverName, serverIpAddress);
+            // dhcpClient("not specified");
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
         }
@@ -283,21 +287,22 @@ void puzzleEntryPoint(void *serverIpAddress, void *, void *)
 
     }
 
-    dhcpClient(puzzles->name);
+    dnsResolver(puzzles->name, serverName, serverIpAddress);
+    // dhcpClient(puzzles->name);
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
-    int counter = 0; 
+    // int counter = 0; 
     while(1)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
             puzzles -> messageHandler(msg); 
         }
-        counter++;
-        if(counter > 5)
-        {
-            puzzles -> alive();  
-            counter = 0;
-        }
+        // counter++;
+        // if(counter > 5)
+        // {
+        //     puzzles -> alive();  
+        //     counter = 0;
+        // }
         k_msleep(1000);
     }
 }
@@ -311,11 +316,11 @@ int Puzzles:: writeDeviceName(char *name)
     nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
 }
 
-extern "C" void puzzleThreadCreate(char *serverIpAddress)
+extern "C" void puzzleThreadCreate()
 {
     k_tid_t puzzleTid = k_thread_create(&puzzleThread, puzzleStackArea,
 									K_THREAD_STACK_SIZEOF(puzzleStackArea),
-									puzzleEntryPoint, (void *)serverIpAddress, NULL, NULL,
+									puzzleEntryPoint, NULL, NULL, NULL,
 									PUZZLE_PRIORITY, 0, K_NO_WAIT);
     k_thread_name_set(puzzleTid, "puzzles");
 }

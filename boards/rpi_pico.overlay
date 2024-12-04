@@ -1,7 +1,7 @@
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <zephyr/dt-bindings/input/keymap.h>
 #include <zephyr/dt-bindings/led/led.h>
-
+#include <zephyr/dt-bindings/display/ili9xxx.h>
 
 /{
 	chosen{
@@ -150,17 +150,18 @@
 		};
 		platform_servo_control_output
 		{
-			// compatible = "gpio-leds";
 			platform_stepper_enable: stepper-enable{
+				compatible = "power-switch";
 				gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
 			};
 			platform_stepper_step: stepper-step{
+				compatible = "power-switch";
 				gpios = <&gpio0 14 (GPIO_ACTIVE_HIGH)>;
 			};
 			platform_stepper_direction: stepper-direction{
+				compatible = "power-switch";
 				gpios = <&gpio0 15 (GPIO_ACTIVE_HIGH)>;
 			};
-			zephyr,deferred-init;
 		};
 	};
 
@@ -355,7 +356,16 @@
 			status ="okay";
 			zephyr,deferred-init;
 		};
+		power_panel_switch: power-panel-switch
+		{
+			compatible = "gpio-keys";
+			sw1:sw1
+			{
+				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_6>;
+			};
 
+		};
 	};
 
 	buttons
@@ -530,6 +540,7 @@
 	pinctrl-0 = <&spi1_pins>;
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+	zephyr,deferred-init;
 	// cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
 	// display_char: sn74hc595@0
 	// {
@@ -782,6 +793,7 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_FAST>;
+	zephyr,deferred-init;
 	// clock-frequency = <I2C_BITRATE_STANDARD>;
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";

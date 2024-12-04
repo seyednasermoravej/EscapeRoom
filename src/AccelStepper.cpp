@@ -590,7 +590,17 @@ void    AccelStepper::enableOutputs()
 {
     if (! _interface) 
 	return;
-
+    int ret;
+    for(unsigned int i = 0; i < 2; i++){
+        ret = device_init(_pin[i]->port);
+        if (!device_is_ready(_pin[i]->port)) {
+		    // return -1;
+	    }
+        ret = gpio_pin_configure_dt(_pin[i], GPIO_OUTPUT_INACTIVE);
+	    if (ret < 0) {
+		    // return -1;
+	    }
+    }
     pinMode(_pin[0], OUTPUT);
     pinMode(_pin[1], OUTPUT);
     if (_interface == FULL4WIRE || _interface == HALF4WIRE)

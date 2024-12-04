@@ -77,6 +77,8 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
         if(strcmp(msg->msg, "on") == 0)
         {
             gpio_pin_set_dt(&relays[1], 1);
+            k_msleep(1000);
+            gpio_pin_set_dt(&relays[1], 1);
         }
         else if(strcmp(msg->msg, "off") == 0)
         {

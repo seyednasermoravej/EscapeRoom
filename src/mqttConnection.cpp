@@ -254,6 +254,7 @@ void Mqtt:: client_init()
 	client->evt_cb = Mqtt:: mqtt_evt_handlerWrapper;
 	client->client_id.utf8 = (uint8_t *)deviceId;
 	client->client_id.size = strlen(deviceId);
+
 	client->password = NULL;
 
 	// struct mqtt_utf8 password;		
@@ -264,7 +265,9 @@ void Mqtt:: client_init()
 	// password.size = strlen(MQTT_PASSWORD);
 	// client->password = &password;
 	// client->user_name = &username;
+
 	client->user_name = NULL;
+
 	client->protocol_version = MQTT_VERSION_3_1_1;
 
 	/* MQTT buffers configuration */
