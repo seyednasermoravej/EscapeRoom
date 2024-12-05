@@ -38,11 +38,15 @@ EntranceDoor:: EntranceDoor(const char *room, const char *type): Puzzle(room, ty
 void EntranceDoor:: wiegandTimerHandler(struct k_timer *timer)
 {
     EntranceDoor *instance = CONTAINER_OF(timer, EntranceDoor, wiegandTimer);
-    unsigned long code = instance->wg->getCode();
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s/rfid1", instance->roomName, instance ->puzzleTypeName);
-    sprintf(msg.msg, "%lx", code);
-    k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
+    if(instance->wg->available())
+    {
+        unsigned long code = instance->wg->getCode();
+        struct MqttMsg msg = {0};
+        sprintf(msg.topic, "%s/%s/rfid1", instance->roomName, instance ->puzzleTypeName);
+        sprintf(msg.msg, "%lx", code);
+        k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
+        LOG_INF("New tag read: %lx", code);
+    }
 }
 void EntranceDoor:: creatingMqttList(uint16_t _mqttCount)
 {
