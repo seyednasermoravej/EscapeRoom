@@ -34,24 +34,24 @@ void Console:: buttonsHandler(struct input_event *val)
         if(val->code == INPUT_BTN_6)
         {
             sprintf(msg.topic, "%s/%s/switch1", roomName, puzzleTypeName);
-            val->value ? sprintf(msg.msg, "TRUE"): sprintf(msg.msg, "FALSE");
+            val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "FALSE");
         }
         else if((val->code == INPUT_BTN_7) && (val->value))
         {
             sprintf(msg.topic, "%s/%s/langButton", roomName, puzzleTypeName);
-            sprintf(msg.msg, "TRUE");
+            sprintf(msg.msg, "true");
         }
         else if((val->code == INPUT_BTN_8) && (val->value))
         {
             sprintf(msg.topic, "%s/%s/roomButton", roomName, puzzleTypeName);
-            sprintf(msg.msg, "TRUE");
+            sprintf(msg.msg, "true");
         }
         else
         {
             if(val->value)
             {
                 sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, (val->code - 0x100) + 1);
-                sprintf(msg.msg, "TRUE");
+                sprintf(msg.msg, "true");
             }
         }
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);

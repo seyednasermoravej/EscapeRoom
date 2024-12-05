@@ -81,12 +81,12 @@ void Ventilator:: updateAnalog()
 {
     uint16_t temp;
     struct MqttMsg msg = {0};
-    adcs = new Adcs(adc_channels, 1);
     for (uint8_t i = 0; i < ARRAY_SIZE(analog); i++)
     {
         temp = readAdc(i);
-        if(temp > (analog[i] + 50))
+        if((temp > (analog[i] + 50)) || (temp < analog[i] - 50))
         {
+            LOG_INF("for the channel %u, previous value is: %u, new value: %u", i, analog[i], temp);
             analog[i] = temp;
             sprintf(msg.topic,"%s/%s/analog%d", roomName, puzzleTypeName, i + 1);
             sprintf(msg.msg, "%d", temp);

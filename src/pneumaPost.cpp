@@ -25,14 +25,14 @@ void PneumaPost:: buttonsHandler(struct input_event *val)
         if(val->code == INPUT_BTN_0)
         {
             sprintf(msg.topic, "%s/%s/switch1", roomName, puzzleTypeName);
-            val->value ? sprintf(msg.msg, "TRUE"): sprintf(msg.msg, "FALSE");
+            val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
         }
         else
         {
             if(val->value)
             {
                 sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, (val->code - INPUT_BTN_0));
-                sprintf(msg.msg, "TRUE");
+                sprintf(msg.msg, "true");
             }
         }
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
@@ -51,6 +51,7 @@ PneumaPost:: PneumaPost(const char *room, const char *type): Puzzle(room, type)
 	    }
     }
     creatingMqttList(2);
+    instance = this;
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 }

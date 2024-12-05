@@ -1,0 +1,26 @@
+description: weigand controller
+
+compatible: "wiegand"
+
+properties:
+  inputs:
+    type: phandle-array
+    required: true
+    description: |
+      The GPIO connected to the input0 and input1.
+  led:
+    required: false 
+    type: phandle-array
+    description: |
+      GPIO connectedto the enable pins.
+  buzzer:
+    required: false 
+    type: phandle-array
+    description: |
+      GPIO connectedto the enable pins.
+  
+  mode:
+    required: false 
+    type: phandle-array
+    description: |
+      GPIO connected to mode pin for .

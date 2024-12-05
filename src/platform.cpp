@@ -32,7 +32,7 @@ void Platform:: buttonsHandler(struct input_event *val)
         {
             struct MqttMsg msg = {0};
             sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
-            sprintf(msg.msg, "TRUE");
+            sprintf(msg.msg, "true");
             LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }
@@ -138,7 +138,7 @@ void Platform:: calibration()
         LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
         struct MqttMsg msg;
         // strcpy(msg.topic, "%s/%s/calibrated", roomName, puzzleTypeName);
-        strcpy(msg.msg, "TRUE");
+        strcpy(msg.msg, "true");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         // stepsPerDegree = 350000/360;
         // stepsPerDegree = (double)stepsPerRev / 360; 

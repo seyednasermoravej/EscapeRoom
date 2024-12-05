@@ -31,7 +31,7 @@ void Keypad:: handler(struct input_event *val)
         {
             sprintf(msg.topic, "%skeypad#", prefix);
         }
-        sprintf(msg.msg, "TRUE");
+        sprintf(msg.msg, "true");
         LOG_INF("%s",msg.topic);
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }

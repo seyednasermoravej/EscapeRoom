@@ -28,7 +28,7 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
         if(val->value)
         {
             sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, (val->code - INPUT_BTN_0) + 1);
-            sprintf(msg.msg, "TRUE");
+            sprintf(msg.msg, "true");
             LOG_INF("%s, %s", msg.topic, msg.msg);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         }

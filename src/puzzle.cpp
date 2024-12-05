@@ -18,7 +18,7 @@ void Puzzle:: alive(struct k_timer *timer)
 {
     MqttMsg msg = {0}; // Initialize the message structure
     sprintf(msg.topic, "%s/%s/alive", instance->roomName, instance->puzzleTypeName);
-    sprintf(msg.msg, "TRUE");
+    sprintf(msg.msg, "true");
     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT); // Assuming k_msgq_put is defined elsewhere
 }
 

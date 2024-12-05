@@ -5,7 +5,7 @@ LOG_MODULE_REGISTER(heartMonitor, LOG_LEVEL_INF);
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
 static const struct gpio_dt_spec relays[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(ventilator_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_monitor_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 static const struct gpio_dt_spec multiplexer[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_monitor_analog_multiplexer), gpios, DT_SPEC_AND_COMMA_GATE)
@@ -67,12 +67,12 @@ void HeartMonitor:: updateAnalog()
 {
     uint16_t temp;
     struct MqttMsg msg = {0};
-    adcs = new Adcs(adc_channels, 1);
     for (uint8_t i = 0; i < ARRAY_SIZE(analog); i++)
     {
         temp = readAdc(i);
-        if(temp > (analog[i] + 50))
+        if((temp > (analog[i] + 50)) || (temp < analog[i] - 50))
         {
+            LOG_INF("for the channel %u, previous value is: %u, new value: %u", i, analog[i], temp);
             analog[i] = temp;
             sprintf(msg.topic,"%s/%s/analog%d", roomName, puzzleTypeName, i + 1);
             sprintf(msg.msg, "%d", temp);
@@ -115,13 +115,13 @@ void HeartMonitor:: messageHandler(struct MqttMsg *msg)
 
 uint16_t HeartMonitor:: readAdc(uint8_t channel)
 {
+    uint8_t val;
     for(uint32_t i = 0; i < 3; i++)
     {
-        gpio_pin_set_dt(&multiplexer[i], channel & BIT(i));
+        val = channel & BIT(i) ? 1: 0;
+        gpio_pin_set_dt(&multiplexer[i], channel & BIT(i) ? 1: 0);
     }
-    MqttMsg msg = {0};
-    sprintf(msg.topic, "%s/%s/%u", roomName, puzzleTypeName, channel);
-    sprintf(msg.msg, "%u", adcs->readAdc(2));
+    return adcs->readAdc(0);
 }
 
 
