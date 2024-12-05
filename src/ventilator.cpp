@@ -28,7 +28,6 @@ static const struct gpio_dt_spec multiplexer[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(ventilator_analog_multiplexer), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
-
 Ventilator:: Ventilator(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
@@ -50,10 +49,51 @@ Ventilator:: Ventilator(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    adcs = new Adcs(adc_channels, 1);
     creatingMqttList(4);
+    adcs = new Adcs(adc_channels, 1);
+    for(uint8_t i = 0; i < ARRAY_SIZE(analog); i++)
+    {
+        analog[i] = readAdc(i);
+    }
+
+    k_work_init(&analogWork, analogWorkHanlder);
+    k_timer_init(&analogTimer, analogTimerHandler, NULL);
+    k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(5));
+    // instance = this;
 }
 
+void Ventilator:: analogTimerHandler(struct k_timer *timer)
+{
+    Ventilator *instance = CONTAINER_OF(timer, Ventilator, analogTimer);
+    k_work_submit(&instance -> analogWork);
+}
+void Ventilator:: analogWorkHanlder(struct k_work *work) 
+{
+    // Cast work to the correct type
+    Ventilator *instance = CONTAINER_OF(work, Ventilator, analogWork);
+    // Call the actual calibration function
+    instance->updateAnalog(); // Pass appropriate parameters
+
+
+}
+
+void Ventilator:: updateAnalog()
+{
+    uint16_t temp;
+    struct MqttMsg msg = {0};
+    adcs = new Adcs(adc_channels, 1);
+    for (uint8_t i = 0; i < ARRAY_SIZE(analog); i++)
+    {
+        temp = readAdc(i);
+        if(temp > (analog[i] + 50))
+        {
+            analog[i] = temp;
+            sprintf(msg.topic,"%s/%s/analog%d", roomName, puzzleTypeName, i + 1);
+            sprintf(msg.msg, "%d", temp);
+            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT); // Assuming k_msgq_put is defined elsewhere
+        }
+    }
+}
 void Ventilator:: creatingMqttList(uint16_t _mqttCount)
 {
 
@@ -136,9 +176,11 @@ void Ventilator:: messageHandler(struct MqttMsg *msg)
 
 uint16_t Ventilator:: readAdc(uint8_t channel)
 {
+    uint8_t val;
     for(uint32_t i = 0; i < 3; i++)
     {
-        gpio_pin_set_dt(&multiplexer[i], channel & BIT(i));
+        val = channel & BIT(i) ? 1: 0;
+        gpio_pin_set_dt(&multiplexer[i], channel & BIT(i) ? 1: 0);
     }
     return adcs->readAdc(0);
 }

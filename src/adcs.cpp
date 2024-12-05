@@ -16,7 +16,7 @@ Adcs:: Adcs(const struct adc_dt_spec* _adc_channels, uint8_t _numOfAdcs): adc_ch
 			return;
 		}
 
-	volatile int er = adc_channel_setup_dt(&adc_channels[i]);
+	int er = adc_channel_setup_dt(&adc_channels[i]);
 		if (er < 0) {
 			LOG_ERR("Could not setup channel #%d (%d)\n", i, er);
 			return;
@@ -35,7 +35,7 @@ uint16_t Adcs:: readAdc(uint8_t index)
 		.buffer = &buf,
 		/* buffer size in bytes, not number of samples */
 		.buffer_size = sizeof(buf),
-		.calibrate = true,
+		// .calibrate = true,
 		// .options = adc_sequence_options
 	};
 
@@ -51,7 +51,7 @@ uint16_t Adcs:: readAdc(uint8_t index)
 	if (err < 0) {
 		LOG_INF("Could not read (%d)\n", err);
 	}
-	return buf;
+	return buf>>2;
 
 	// val_mv = (int32_t)buf;
 

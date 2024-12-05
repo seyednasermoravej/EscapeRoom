@@ -1,5 +1,5 @@
-#ifndef __HART_MONITOR__H__
-#define __HART_MONITOR__H__
+#ifndef __PNEUMA_POST__H__
+#define __PNEUMA_POST__H__
 
 
 
@@ -16,18 +16,18 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "adcs.h"
 
-class HartMonitor: public Puzzle 
+class PneumaPost: public Puzzle 
 {
 public:
-    HartMonitor(const char * room, const char *type);
+    PneumaPost(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
-    uint16_t readAdc(uint8_t channel);
+    static void buttonsHandlerWrapper(struct input_event *val, void* userData);
+    void buttonsHandler(struct input_event *val);
 
 private:
-    Adcs *adcs;
+
 
 
 };

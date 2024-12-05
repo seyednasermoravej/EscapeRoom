@@ -1,5 +1,5 @@
-#ifndef __VENTILATOR__H__
-#define __VENTILATOR__H__
+#ifndef __HART_MONITOR__H__
+#define __HART_MONITOR__H__
 
 
 
@@ -18,10 +18,10 @@
 #include "puzzle.h"
 #include "adcs.h"
 
-class Ventilator: public Puzzle 
+class HeartMonitor: public Puzzle 
 {
 public:
-    Ventilator(const char * room, const char *type);
+    HeartMonitor(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
     uint16_t readAdc(uint8_t channel);
@@ -33,9 +33,7 @@ public:
 
 private:
     Adcs *adcs;
-    uint16_t analog[4];
-
-
+    uint16_t analog[5];
 };
 
 #endif 

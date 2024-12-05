@@ -289,7 +289,18 @@ struct mqtt_topic codeRed_doorKeypad_display_topic = {
 },
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red door keypad end////////////////
-//////////////////////code red door ventilator///////////
+//////////////////////code red heart monitor begin///////////
+
+struct mqtt_topic codeRed_heartMonitor_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_HEART_MONITOR_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_HEART_MONITOR_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_2_EXACTLY_ONCE};
+//////////////////////code red heart monitor end///////////
+//////////////////////code red  ventilator///////////
 
 struct mqtt_topic codeRed_ventilator_relay1_topic = {
 .topic =
@@ -474,3 +485,22 @@ struct mqtt_topic codeRed_powerPanel_display9_topic = {
 },
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red power panel end////////////////
+//////////////////////code red pneuma post begin///////////
+
+struct mqtt_topic codeRed_pneumaPost_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_PNEUMA_POST_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_PNEUMA_POST_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_2_EXACTLY_ONCE};
+struct mqtt_topic codeRed_pneumaPost_relay2_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_PNEUMA_POST_RELAY2_TOPIC,
+    .size = strlen(CODE_RED_PNEUMA_POST_RELAY2_TOPIC)
+},
+.qos = MQTT_QOS_2_EXACTLY_ONCE};
+////////////////////code red pneuma post end////////////////

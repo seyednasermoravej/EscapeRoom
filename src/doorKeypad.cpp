@@ -43,7 +43,7 @@ static void lv_btn_click_callback(lv_event_t *e)
 
 	count = 0;
 }
-const struct device *tftLcd = DEVICE_DT_GET(DT_NODELABEL(tft_lcd));
+const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
 {
     LOG_INF("%s/%s", room, type);

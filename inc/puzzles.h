@@ -43,8 +43,11 @@
 #include "door.h"
 #include "doorKeypad.h"
 #include "ventilator.h"
-#include "hartMonitor.h"
+#include "heartMonitor.h"
 #include "blinds.h"
+
+
+#include "pneumaPost.h"
 
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)
@@ -71,7 +74,6 @@ public:
     bool deviceSpecified = false;
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
-    void alive();
     Puzzle *puzzle;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
 

@@ -40,6 +40,10 @@ extern struct mqtt_topic codeRed_door_relay2_topic;
 extern struct mqtt_topic codeRed_doorKeypad_display_topic;
 
 
+#define CODE_RED_HEART_MONITOR_RELAY1_TOPIC                                       "codeRed/heartMonitor/relay1" 
+extern struct mqtt_topic codeRed_heartMonitor_relay1_topic;
+
+
 #define CODE_RED_VENTILATOR_RELAY1_TOPIC                                       "codeRed/ventilator/relay1" 
 extern struct mqtt_topic codeRed_ventilator_relay1_topic;
 #define CODE_RED_VENTILATOR_RELAY2_TOPIC                                       "codeRed/ventilator/relay2" 
@@ -104,6 +108,17 @@ extern struct mqtt_topic codeRed_powerPanel_display7_topic;
 extern struct mqtt_topic codeRed_powerPanel_display8_topic;
 #define CODE_RED_POWER_PANEL_DISPLAY9_TOPIC                                       "codeRed/powerPanel/display9" 
 extern struct mqtt_topic codeRed_powerPanel_display9_topic;
+
+
+
+
+
+
+
+#define CODE_RED_PNEUMA_POST_RELAY1_TOPIC                                       "codeRed/pneumaPost/relay1" 
+extern struct mqtt_topic codeRed_pneumaPost_relay1_topic;
+#define CODE_RED_PNEUMA_POST_RELAY2_TOPIC                                       "codeRed/pneumaPost/relay2" 
+extern struct mqtt_topic codeRed_pneumaPost_relay2_topic;
 
 #define LED1_TOPIC              "sub/led1"
 #define LED2_TOPIC              "sub/led2"

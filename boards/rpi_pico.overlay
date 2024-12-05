@@ -6,7 +6,7 @@
 /{
 	chosen{
 		zephyr,tracing-uart = &uart0;
-		zephyr,display = &display;
+		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
 	};
 
 	console
@@ -217,32 +217,42 @@
 
 	};
 
-		tft_lcd: tft-lcd
-		{
-			compatible = "zephyr,mipi-dbi-spi";
-			dc-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
-			reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
-			spi-dev = <&spi1>;
-			write-only;
-			#address-cells = <1>;
-			#size-cells = <0>;
+		buydisplay_3_5_tft_touch_arduino_mipi_dbi {
+		compatible = "zephyr,mipi-dbi-spi";
+		//////////////////
+		//dc-gpios = <&arduino_header 13 GPIO_ACTIVE_HIGH>; /* D7 */
+		//reset-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>; /* D10 */
 
-			display: ili9488@0{
-				compatible = "ilitek,ili9488";
-				reg = <0x0>;
-				width = <480>;
-				height = <320>;
-				mipi-max-frequency = <25000000>;
-				rotation = <90>;
-				frmctr1 = [a0 11];
-				pwctrl1 = [17 15];
-				pwctrl2 = [41];
-				pgamctrl = [00 03 09 08 16 0a 3f 78 4c 09 0a 08 16 1a 0f];
-				ngamctrl = [00 16 19 03 0f 05 32 45 46 04 0e 0d 35 37 0f];
-				// zephyr,deferred-init;
-			};
-			// zephyr,deferred-init;
+		//spi-dev = <&arduino_spi>;
+		
+		dc-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>; /* D7 */
+		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>; /* D10 */
+
+		spi-dev = <&spi1>;
+		
+		
+		
+		
+		
+		write-only;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@0 {
+			compatible = "ilitek,ili9488";
+			mipi-max-frequency = <25000000>;
+			reg = <0>;
+			pixel-format = <ILI9XXX_PIXEL_FORMAT_RGB888>;
+			width = <320>;
+			height = <480>;
+			rotation = <0>;
+			frmctr1 = [a0 11];
+			pwctrl1 = [17 15];
+			pwctrl2 = [41];
+			pgamctrl = [00 03 09 08 16 0a 3f 78 4c 09 0a 08 16 1a 0f];
+			ngamctrl = [00 16 19 03 0f 05 32 45 46 04 0e 0d 35 37 0f];
 		};
+	};
 	door_keypad
 	{
 		door_keypad_buttons: door-keypad-buttons
@@ -297,10 +307,22 @@
 
 	// };
 
-	// hart_monitor
-	// {
+	heart_monitor
+	{
+		heart_monitor_analog_multiplexer: heart-monitor-analog-multiplexer
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>, <&gpio0 27 GPIO_ACTIVE_HIGH>, <&gpio0 28 GPIO_ACTIVE_HIGH>;
+			// zephyr,deferred-init;
+		};
+		heart_monitor_relays: heart-monitor-relays
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+			// zephyr,deferred-init;
+		};
 
-	// };
+	};
 	
 	ventilator	
 	{
@@ -310,7 +332,7 @@
 			gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>, <&gpio0 26 GPIO_ACTIVE_HIGH>, <&gpio0 27 GPIO_ACTIVE_HIGH>;
 			// zephyr,deferred-init;
 		};
-		ventilator_relays: ventilator-relay
+		ventilator_relays: ventilator-relays
 		{
 			compatible = "power-switch";
 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>, <&gpio0 5 GPIO_ACTIVE_LOW>, <&gpio0 6 GPIO_ACTIVE_LOW>;
@@ -367,6 +389,36 @@
 
 		};
 	};
+
+	pneuma_post	
+	{	
+		pneuma_post_relays: pneuma-post-relay	
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>;
+		};
+		pneuma_post_buttons: pneuma-post-buttons
+		{
+			compatible = "gpio-keys";
+			pneuma_post_buttons_switch1: pneuma-post-buttons-switch1
+			{
+				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			pneuma_post_buttons_button1: pneuma-post-buttons-button1
+			{
+				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			zephyr,deferred-init;
+		};
+	};
+
+
+
+
+
+
 
 	buttons
 	{
@@ -446,7 +498,7 @@
 	zephyr,user
 	{
 		io-channels = <&adc 2>;
-		zephyr,deferred-init;
+		// zephyr,deferred-init;
 	};
 	// };
 	// labratory
@@ -535,12 +587,12 @@
 
 
 &spi1 {
-	clock-frequency = <DT_FREQ_M(20)>;
+	clock-frequency = <DT_FREQ_M(8)>;
 	status = "okay";
-	pinctrl-0 = <&spi1_pins>;
+	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-	zephyr,deferred-init;
+	//zephyr,deferred-init;
 	// cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
 	// display_char: sn74hc595@0
 	// {
@@ -605,7 +657,7 @@ pico_spi: &spi0 {};
 			pinmux =<PWM_1A_P2>, <PWM_1B_P3>, <PWM_2A_P4>, <PWM_2B_P5>, <PWM_3A_P6>, <PWM_3B_P7>, <PWM_4A_P8>, <PWM_4B_P9>;
 		};
 	};
-	spi1_pins: spi1_pins {
+	spi1_default: spi1_default {
 		group1 {
 			pinmux = <SPI1_CSN_P13>, <SPI1_SCK_P10>, <SPI1_TX_P11>;
 		};
@@ -853,11 +905,11 @@ pico_spi: &spi0 {};
 	#address-cells = <1>;
 	#size-cells = <0>;
 
-	channel@0 {
-		reg = <0>;
+	channel@2 {
+		reg = <2>;
 		zephyr,gain = "ADC_GAIN_1";
 		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
-		zephyr,resolution = <10>;
+		zephyr,resolution = <12>;
 	};
 };
