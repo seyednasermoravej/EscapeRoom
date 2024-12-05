@@ -57,6 +57,22 @@ extern struct mqtt_topic codeRed_ventilator_relay4_topic;
 
 #define CODE_RED_FRIDGE_DISPLAY_TOPIC                                       "codeRed/fridge/display" 
 extern struct mqtt_topic codeRed_fridge_display_topic;
+#define CODE_RED_FRIDGE_WS2811A_TOPIC                                       "codeRed/fridge/ws2811a" 
+extern struct mqtt_topic codeRed_fridge_ws2811a_topic;
+#define CODE_RED_FRIDGE_WS2811B_TOPIC                                       "codeRed/fridge/ws2811b" 
+extern struct mqtt_topic codeRed_fridge_ws2811b_topic;
+#define CODE_RED_FRIDGE_WS2811C_TOPIC                                       "codeRed/fridge/ws2811c" 
+extern struct mqtt_topic codeRed_fridge_ws2811c_topic;
+#define CODE_RED_FRIDGE_WS2811D_TOPIC                                       "codeRed/fridge/ws2811d" 
+extern struct mqtt_topic codeRed_fridge_ws2811d_topic;
+#define CODE_RED_FRIDGE_WS2811E_TOPIC                                       "codeRed/fridge/ws2811e" 
+extern struct mqtt_topic codeRed_fridge_ws2811e_topic;
+#define CODE_RED_FRIDGE_WS2811F_TOPIC                                       "codeRed/fridge/ws2811f" 
+extern struct mqtt_topic codeRed_fridge_ws2811f_topic;
+#define CODE_RED_FRIDGE_WS2811G_TOPIC                                       "codeRed/fridge/ws2811g" 
+extern struct mqtt_topic codeRed_fridge_ws2811g_topic;
+#define CODE_RED_FRIDGE_WS2811H_TOPIC                                       "codeRed/fridge/ws2811h" 
+extern struct mqtt_topic codeRed_fridge_ws2811h_topic;
 #define CODE_RED_FRIDGE_RELAY1_TOPIC                                       "codeRed/fridge/relay1" 
 extern struct mqtt_topic codeRed_fridge_relay1_topic;
 #define CODE_RED_FRIDGE_RELAY2_TOPIC                                       "codeRed/fridge/relay2" 
@@ -110,17 +126,95 @@ extern struct mqtt_topic codeRed_powerPanel_display8_topic;
 extern struct mqtt_topic codeRed_powerPanel_display9_topic;
 
 
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION1_TOPIC                              "codeRed/colorTubes/colorPosition1" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition1_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION2_TOPIC                              "codeRed/colorTubes/colorPosition2" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition2_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION3_TOPIC                              "codeRed/colorTubes/colorPosition3" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition3_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION4_TOPIC                              "codeRed/colorTubes/colorPosition4" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition4_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION5_TOPIC                              "codeRed/colorTubes/colorPosition5" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition5_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION6_TOPIC                              "codeRed/colorTubes/colorPosition6" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition6_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION7_TOPIC                              "codeRed/colorTubes/colorPosition7" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition7_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION8_TOPIC                              "codeRed/colorTubes/colorPosition8" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition8_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION9_TOPIC                              "codeRed/colorTubes/colorPosition9" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition9_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION10_TOPIC                             "codeRed/colorTubes/colorPosition10" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition10_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION11_TOPIC                             "codeRed/colorTubes/colorPosition11" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition11_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION12_TOPIC                             "codeRed/colorTubes/colorPosition12" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition12_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION13_TOPIC                             "codeRed/colorTubes/colorPosition13" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition13_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION14_TOPIC                             "codeRed/colorTubes/colorPosition14" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition14_topic;
+#define CODE_RED_COLOR_TUBES_COLOR_POSITION15_TOPIC                             "codeRed/colorTubes/colorPosition15" 
+extern struct mqtt_topic codeRed_colorTubes_colorPosition15_topic;
 
-#define CODE_RED_ENTRANCE_DOOR_RELAY1_TOPIC                                       "codeRed/entranceDoor/relay1" 
+#define CODE_RED_ENTRANCE_DOOR_RELAY1_TOPIC                                      "codeRed/entranceDoor/relay1" 
 extern struct mqtt_topic codeRed_entranceDoor_relay1_topic;
 
-
-
+#define CODE_RED_EXIT_DOOR_RELAY1_TOPIC                                           "codeRed/exitDoor/relay1" 
+extern struct mqtt_topic codeRed_exitDoor_relay1_topic;
 
 #define CODE_RED_PNEUMA_POST_RELAY1_TOPIC                                       "codeRed/pneumaPost/relay1" 
 extern struct mqtt_topic codeRed_pneumaPost_relay1_topic;
 #define CODE_RED_PNEUMA_POST_RELAY2_TOPIC                                       "codeRed/pneumaPost/relay2" 
 extern struct mqtt_topic codeRed_pneumaPost_relay2_topic;
+
+#define CODE_RED_DEFIB_DISPLAY1_TOPIC                                            "codeRed/defib/display1" 
+extern struct mqtt_topic codeRed_defib_display1_topic;
+
+#define CODE_RED_DRAWERS_RELAY1_TOPIC                                            "codeRed/drawers/relay1" 
+extern struct mqtt_topic codeRed_drawers_relay1_topic;
+#define CODE_RED_DRAWERS_RELAY2_TOPIC                                            "codeRed/drawers/relay2" 
+extern struct mqtt_topic codeRed_drawers_relay2_topic;
+#define CODE_RED_DRAWERS_RELAY3_TOPIC                                            "codeRed/drawers/relay3" 
+extern struct mqtt_topic codeRed_drawers_relay3_topic;
+#define CODE_RED_DRAWERS_RELAY4_TOPIC                                            "codeRed/drawers/relay4" 
+extern struct mqtt_topic codeRed_drawers_relay4_topic;
+#define CODE_RED_DRAWERS_RELAY5_TOPIC                                            "codeRed/drawers/relay5" 
+extern struct mqtt_topic codeRed_drawers_relay5_topic;
+#define CODE_RED_DRAWERS_RELAY6_TOPIC                                            "codeRed/drawers/relay6" 
+extern struct mqtt_topic codeRed_drawers_relay6_topic;
+#define CODE_RED_DRAWERS_RELAY7_TOPIC                                            "codeRed/drawers/relay7" 
+extern struct mqtt_topic codeRed_drawers_relay7_topic;
+#define CODE_RED_DRAWERS_RELAY8_TOPIC                                            "codeRed/drawers/relay8" 
+extern struct mqtt_topic codeRed_drawers_relay8_topic;
+
+
+#define CODE_RED_HEART_BOX_DISPLAY1_TOPIC                                          "codeRed/heartBox/display1" 
+extern struct mqtt_topic codeRed_heartBox_display1_topic;
+#define CODE_RED_HEART_BOX_DISPLAY2_TOPIC                                          "codeRed/heartBox/display2" 
+extern struct mqtt_topic codeRed_heartBox_display2_topic;
+#define CODE_RED_HEART_BOX_RELAY1_TOPIC                                           "codeRed/heartBox/relay1" 
+extern struct mqtt_topic codeRed_heartBox_relay1_topic;
+#define CODE_RED_HEART_BOX_WS2811A_TOPIC                                          "codeRed/heartBox/ws2811a" 
+extern struct mqtt_topic codeRed_heartBox_ws2811a_topic;
+#define CODE_RED_HEART_BOX_WS2811B_TOPIC                                          "codeRed/heartBox/ws2811b" 
+extern struct mqtt_topic codeRed_heartBox_ws2811b_topic;
+#define CODE_RED_HEART_BOX_WS2811C_TOPIC                                          "codeRed/heartBox/ws2811c" 
+extern struct mqtt_topic codeRed_heartBox_ws2811c_topic;
+#define CODE_RED_HEART_BOX_WS2811D_TOPIC                                          "codeRed/heartBox/ws2811d" 
+extern struct mqtt_topic codeRed_heartBox_ws2811d_topic;
+#define CODE_RED_HEART_BOX_WS2811E_TOPIC                                          "codeRed/heartBox/ws2811e" 
+extern struct mqtt_topic codeRed_heartBox_ws2811e_topic;
+#define CODE_RED_HEART_BOX_WS2811F_TOPIC                                          "codeRed/heartBox/ws2811f" 
+extern struct mqtt_topic codeRed_heartBox_ws2811f_topic;
+#define CODE_RED_HEART_BOX_WS2811G_TOPIC                                          "codeRed/heartBox/ws2811g" 
+extern struct mqtt_topic codeRed_heartBox_ws2811g_topic;
+#define CODE_RED_HEART_BOX_WS2811H_TOPIC                                          "codeRed/heartBox/ws2811h" 
+extern struct mqtt_topic codeRed_heartBox_ws2811h_topic;
+
+#define CODE_RED_HEART_SERVO_TOPIC                                             "codeRed/heart/servo" 
+extern struct mqtt_topic codeRed_heart_servo_topic;
+
 
 #define LED1_TOPIC              "sub/led1"
 #define LED2_TOPIC              "sub/led2"
