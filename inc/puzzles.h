@@ -46,7 +46,7 @@
 #include "heartMonitor.h"
 #include "blinds.h"
 
-
+#include "entranceDoor.h"
 #include "pneumaPost.h"
 
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)

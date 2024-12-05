@@ -485,6 +485,17 @@ struct mqtt_topic codeRed_powerPanel_display9_topic = {
 },
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red power panel end////////////////
+//////////////////////code red entrance door begin///////////
+
+struct mqtt_topic codeRed_entranceDoor_relay1_topic = {
+.topic =
+{
+
+    .utf8 = (uint8_t*)CODE_RED_ENTRANCE_DOOR_RELAY1_TOPIC,
+    .size = strlen(CODE_RED_ENTRANCE_DOOR_RELAY1_TOPIC)
+},
+.qos = MQTT_QOS_2_EXACTLY_ONCE};
+////////////////////code red entrance door end////////////////
 //////////////////////code red pneuma post begin///////////
 
 struct mqtt_topic codeRed_pneumaPost_relay1_topic = {

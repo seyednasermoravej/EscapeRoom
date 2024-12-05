@@ -389,6 +389,21 @@
 
 		};
 	};
+	entrance_door
+	{
+		entrance_door_relays: entrance-door-relays
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+
+		};
+		entrance_door_rfid: entrance-door-rfid
+		{
+			compatible = "wiegand";
+            gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+    	};
+
+	};
 
 	pneuma_post	
 	{	

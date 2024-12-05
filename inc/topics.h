@@ -111,6 +111,8 @@ extern struct mqtt_topic codeRed_powerPanel_display9_topic;
 
 
 
+#define CODE_RED_ENTRANCE_DOOR_RELAY1_TOPIC                                       "codeRed/entranceDoor/relay1" 
+extern struct mqtt_topic codeRed_entranceDoor_relay1_topic;
 
 
 
