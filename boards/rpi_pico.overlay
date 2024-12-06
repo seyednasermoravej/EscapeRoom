@@ -405,9 +405,25 @@
 
 	};
 
+	exit_door
+	{
+		exit_door_relays: exit-door-relays
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+
+		};
+		exit_door_rfid: exit-door-rfid
+		{
+			compatible = "wiegand";
+            gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>, <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+    	};
+
+	};
+
 	pneuma_post	
 	{	
-		pneuma_post_relays: pneuma-post-relay	
+		pneuma_post_relays: pneuma-post-relays	
 		{
 			compatible = "power-switch";
 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>;
@@ -430,6 +446,62 @@
 	};
 
 
+	drawers	
+	{	
+		drawers_relays: drawers-relays	
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>, <&gpio0 3 GPIO_ACTIVE_LOW>,
+					<&gpio0 4 GPIO_ACTIVE_LOW>, <&gpio0 5 GPIO_ACTIVE_LOW>,
+					<&gpio0 6 GPIO_ACTIVE_LOW>, <&gpio0 7 GPIO_ACTIVE_LOW>,
+					<&gpio0 7 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>;
+		};
+		drawers_buttons: drawers-buttons
+		{
+			compatible = "gpio-keys";
+			drawers_buttons_switch1: drawers-buttons-switch1
+			{
+				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			drawers_buttons_switch2: drawers-buttons-switch2
+			{
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			drawers_buttons_switch3: drawers-buttons-switch3
+			{
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			drawers_buttons_switch4: drawers-buttons-switch4
+			{
+				gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_3>;
+			};
+			drawers_buttons_switch5: drawers-buttons-switch5
+			{
+				gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_4>;
+			};
+			drawers_buttons_switch6: drawers-buttons-switch6
+			{
+				gpios = <&gpio0 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_5>;
+			};
+			drawers_buttons_switch7: drawers-buttons-switch7
+			{
+				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_6>;
+			};
+			drawers_buttons_switch8: drawers-buttons-switch8
+			{
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			zephyr,deferred-init;
+		};
+	};
 
 
 

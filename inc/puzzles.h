@@ -47,7 +47,9 @@
 #include "blinds.h"
 
 #include "entranceDoor.h"
+#include "exitDoor.h"
 #include "pneumaPost.h"
+#include "drawers.h"
 
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)

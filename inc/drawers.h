@@ -1,5 +1,5 @@
-#ifndef __ENTRANCE_DOOR__H__
-#define __ENTRANCE_DOOR__H__
+#ifndef __DRAWERS__H__
+#define __DRAWERS__H__
 
 
 
@@ -16,19 +16,18 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "Wiegand.h"
 
-class EntranceDoor: public Puzzle 
+class Drawers: public Puzzle 
 {
 public:
-    EntranceDoor(const char * room, const char *type);
+    Drawers(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
-    struct k_timer wiegandTimer;
-    static void wiegandTimerHandler(struct k_timer *timer);
+    static void buttonsHandlerWrapper(struct input_event *val, void* userData);
+    void buttonsHandler(struct input_event *val);
 
 private:
-    WIEGAND *wg;
+
 
 
 };

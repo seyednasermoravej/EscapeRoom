@@ -112,10 +112,22 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is entranceDoor");
         deviceSpecified = true;
     }
+    else if(strcmp(type, "exitDoor") == 0)
+    {
+        puzzle = new ExitDoor("codeRed", "exitDoor");
+        LOG_INF("Puzzle type is exitDoor");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "pneumaPost") == 0)
     {
         puzzle = new PneumaPost("codeRed", "pneumaPost");
         LOG_INF("Puzzle type is pneumaPost");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "drawers") == 0)
+    {
+        puzzle = new Drawers("codeRed", "drawers");
+        LOG_INF("Puzzle type is drawers");
         deviceSpecified = true;
     }
 
@@ -246,9 +258,9 @@ int Puzzles:: builtIntLedInit()
 void puzzleEntryPoint(void *, void *, void *)
 {
 
-    // char serverName[] = "mqtt-1.localdomain";
+    char serverName[] = "mqtt-1.localdomain";
 
-    char serverName[] = "test.mosquitto.org";
+    // char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 

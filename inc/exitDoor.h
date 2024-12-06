@@ -1,5 +1,5 @@
-#ifndef __ENTRANCE_DOOR__H__
-#define __ENTRANCE_DOOR__H__
+#ifndef __EXIT_DOOR__H__
+#define __EXIT_DOOR__H__
 
 
 
@@ -18,10 +18,10 @@
 #include "puzzle.h"
 #include "Wiegand.h"
 
-class EntranceDoor: public Puzzle 
+class ExitDoor: public Puzzle 
 {
 public:
-    EntranceDoor(const char * room, const char *type);
+    ExitDoor(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
     struct k_timer wiegandTimer;
