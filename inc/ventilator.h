@@ -26,10 +26,10 @@ public:
     void creatingMqttList(uint16_t) override;
     uint16_t readAdc(uint8_t channel);
     struct k_timer analogTimer;
+    static void analogTimerHandler(struct k_timer *timer);
     void updateAnalog();
     struct k_work analogWork;
     static void analogWorkHanlder(struct k_work *work);
-    static void analogTimerHandler(struct k_timer *timer);
 
 private:
     Adcs *adcs;

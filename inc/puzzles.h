@@ -46,6 +46,7 @@
 #include "heartMonitor.h"
 #include "blinds.h"
 
+#include "scale.h"
 #include "entranceDoor.h"
 #include "exitDoor.h"
 #include "pneumaPost.h"

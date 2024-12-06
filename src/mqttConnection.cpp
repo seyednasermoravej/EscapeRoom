@@ -323,9 +323,9 @@ void Mqtt:: client_init()
 int Mqtt:: try_to_connect()
 
 {
-	int rc, i = 0;
+	int rc;
 
-	while (i++ < APP_CONNECT_TRIES && !connected) {
+	while (!connected) {
 
 		client_init();
 

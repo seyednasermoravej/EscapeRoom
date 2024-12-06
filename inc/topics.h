@@ -125,6 +125,8 @@ extern struct mqtt_topic codeRed_powerPanel_display8_topic;
 #define CODE_RED_POWER_PANEL_DISPLAY9_TOPIC                                       "codeRed/powerPanel/display9" 
 extern struct mqtt_topic codeRed_powerPanel_display9_topic;
 
+#define CODE_RED_SCALE_RELAY1_TOPIC                                             "codeRed/scale/relay1" 
+extern struct mqtt_topic codeRed_scale_relay1_topic;
 
 #define CODE_RED_COLOR_TUBES_COLOR_POSITION1_TOPIC                              "codeRed/colorTubes/colorPosition1" 
 extern struct mqtt_topic codeRed_colorTubes_colorPosition1_topic;

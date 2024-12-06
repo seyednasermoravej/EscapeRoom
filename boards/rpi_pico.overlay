@@ -389,6 +389,23 @@
 
 		};
 	};
+
+	scale{
+		scale_loadcell: scale-loadcell {
+			compatible = "avia,hx711";
+			status = "okay";
+			label = "HX711";
+			dout-gpios = <&gpio0 26 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP) >;
+			sck-gpios = <&gpio0 27 GPIO_ACTIVE_HIGH>;
+			rate-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
+		};
+		scale_relays: scale-relays
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		};
+	};
+
 	entrance_door
 	{
 		entrance_door_relays: entrance-door-relays
@@ -505,7 +522,13 @@
 
 
 
-
+	heart
+	{
+		heart_servo: heart-servo
+		{
+			compatible = "pwm-servo";
+		};
+	};
 
 	buttons
 	{

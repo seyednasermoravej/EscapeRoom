@@ -11,6 +11,7 @@ char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
 
+
 int main()
 { 
     //performing new update on firmware
@@ -18,7 +19,7 @@ int main()
     LOG_INF("besme allah");
     readingHWinfo(deviceId);
     LOG_INF("Device ID: %s", deviceId);
-    // test();
+   // test();
 
     puzzleThreadCreate();
 
@@ -85,10 +86,12 @@ void test()
     // struct MqttMsg mg = {0};
     // sprintf(msg.msg, "Button 0 pressed");
 
-    i2cScanner();
+   // i2cScanner();
     while(1)
     {
+
         k_msleep(1000);
+
     }
 }
 

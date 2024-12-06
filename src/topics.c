@@ -552,6 +552,17 @@ struct mqtt_topic codeRed_powerPanel_display9_topic = {
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red power panel end////////////////
 
+////////////////////code red scale begin////////////////
+struct mqtt_topic codeRed_scale_relay1_topic = {
+    .topic =
+    {
+        .utf8 = (uint8_t*)CODE_RED_SCALE_RELAY1_TOPIC,
+        .size = strlen(CODE_RED_SCALE_RELAY1_TOPIC)
+    },
+    .qos = MQTT_QOS_2_EXACTLY_ONCE
+};
+////////////////////code red scale end////////////////
+
 ////////////////////code red color tubes begin////////////////
 struct mqtt_topic codeRed_colorTubes_colorPosition1_topic = {
     .topic =

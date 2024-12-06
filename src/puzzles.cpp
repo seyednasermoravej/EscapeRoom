@@ -106,6 +106,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
     //     LOG_INF("Puzzle type is powerPanel");
     //     deviceSpecified = true;
     // }
+    else if(strcmp(type, "scale") == 0)
+    {
+        puzzle = new Scale("codeRed", "scale ");
+        LOG_INF("Puzzle type is scale");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "entranceDoor") == 0)
     {
         puzzle = new EntranceDoor("codeRed", "entranceDoor");
@@ -258,9 +264,9 @@ int Puzzles:: builtIntLedInit()
 void puzzleEntryPoint(void *, void *, void *)
 {
 
-    char serverName[] = "mqtt-1.localdomain";
+   // char serverName[] = "mqtt-1.localdomain";
 
-    // char serverName[] = "test.mosquitto.org";
+    char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
