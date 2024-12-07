@@ -26,7 +26,7 @@ LedStrip:: LedStrip(const struct device *_strip, uint8_t _numPixels): strip(_str
     while (1) 
     {
 		for (size_t cursor = 0; cursor < numPixels; cursor++) {
-			memset(&pixels, 0x00, numPixels);
+			memset(&pixels, 0x00, 3 * numPixels);
 			memcpy(&pixels[cursor], &colors[0], sizeof(struct led_rgb));
 			// memcpy(&pixels[cursor], &colors[color], sizeof(struct led_rgb));
 

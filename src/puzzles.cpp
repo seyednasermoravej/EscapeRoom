@@ -1,5 +1,6 @@
 #include "puzzles.h"
 #include "topics.h"
+#include "ledStrip.h"
 
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
 
@@ -271,16 +272,10 @@ static const struct pwm_dt_spec allServos[] = {
     PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
 };
 
-
+static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
 void test()
 {
-
-    DoorKeypad *puzzle = new DoorKeypad("codeRed", "doorKeypad");
-
-    // Display7seg *display8digits = new Display7seg(DEVICE_DT_GET(DT_NODELABEL(display_eight_digits)), 8);
-    const uint8_t val[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    // display8digits->multiplex_display(val);
-
+    LedStrip *ledStrip = new LedStrip(dev, 16);
     Servos *servos = new Servos(allServos, 1, servoMinPulse, servoMaxPulse, servoMaxDegrees);
     while(1)
     {
@@ -294,9 +289,9 @@ void test()
 void puzzleEntryPoint(void *, void *, void *)
 {
 
-    char serverName[] = "mqtt-1";
-    // test();
-    // char serverName[] = "test.mosquitto.org";
+    // char serverName[] = "mqtt-1";
+    test();
+    char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
