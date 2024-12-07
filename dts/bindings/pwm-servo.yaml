@@ -22,3 +22,9 @@ properties:
     required: true
     type: int
     description: Maximum pulse width (nanoseconds).
+    
+  max-degrees:
+    required: true
+    type: int
+    description: Maximum possible rotating in degrees.
+

@@ -1,5 +1,6 @@
 #include "puzzles.h"
 #include "topics.h"
+
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
@@ -8,7 +9,11 @@ struct k_thread puzzleThread;
 
 static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
 							      {0});
-
+//******8888888888888888888 */
+static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(heart_servos), min_pulse);
+static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(heart_servos), max_pulse);
+static const uint16_t servoMaxDegrees = DT_PROP(DT_NODELABEL(heart_servos), max_degrees);
+//******8888888888888888888 */
 
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
 static struct nvs_fs fileSystem;
@@ -261,12 +266,37 @@ int Puzzles:: builtIntLedInit()
     return ret;
 }
 
+
+static const struct pwm_dt_spec allServos[] = {
+    PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
+};
+
+
+void test()
+{
+
+    DoorKeypad *puzzle = new DoorKeypad("codeRed", "doorKeypad");
+
+    // Display7seg *display8digits = new Display7seg(DEVICE_DT_GET(DT_NODELABEL(display_eight_digits)), 8);
+    const uint8_t val[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    // display8digits->multiplex_display(val);
+
+    Servos *servos = new Servos(allServos, 1, servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    while(1)
+    {
+        for(uint8_t i = 0; i < 18; i++)
+        {
+            servos->move(0, i * 10);
+            k_msleep(1000);
+        }
+    }
+}
 void puzzleEntryPoint(void *, void *, void *)
 {
 
-   // char serverName[] = "mqtt-1.localdomain";
-
-    char serverName[] = "test.mosquitto.org";
+    char serverName[] = "mqtt-1";
+    // test();
+    // char serverName[] = "test.mosquitto.org";
     char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 

@@ -18,15 +18,16 @@
 class Servos
 {
 public:
-    // Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos, uint16_t minPulse, uint16_t maxPulse, uint16_t step);
-    Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos);
-    void move(uint8_t index, uint32_t pulse);
+    Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos, uint32_t minPulse, uint32_t maxPulse, uint16_t maxDegrees);
+    // Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos);
+    void move(uint8_t index, uint32_t degrees);
 private:
     const struct pwm_dt_spec *servos;
     uint8_t numOfservos;
-    // uint16_t minPulse;
-    // uint16_t maxPulse;
-    // uint16_t step;
+    uint32_t minPulse;
+    uint32_t maxPulse;
+    uint16_t maxDegrees;
+    float coeff;
 };
 
 #endif

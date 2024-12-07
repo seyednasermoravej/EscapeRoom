@@ -5,7 +5,6 @@ LOG_MODULE_REGISTER(ledStrip, LOG_LEVEL_INF);
 
 #define DELAY_TIME K_MSEC(50)
 
-#define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
 
 const struct led_rgb colors[3] = {
 	RGB(0x0f, 0x00, 0x00), /* red */
@@ -17,7 +16,11 @@ LedStrip:: LedStrip(const struct device *_strip, uint8_t _numPixels): strip(_str
 {
 
     device_init(strip);
-    struct led_rgb pixels[numPixels];
+    pixels = new led_rgb[numPixels];
+	for(uint8_t i = 0; i < numPixels; i++)
+	{
+		pixels[i] = RGB(0, 0, 0);
+	}
     size_t color = 0;
 	int rc;
     while (1) 
@@ -38,4 +41,15 @@ LedStrip:: LedStrip(const struct device *_strip, uint8_t _numPixels): strip(_str
 		// color = (color + 1) % ARRAY_SIZE(colors);
         k_msleep(1000);
 	}
+}
+
+
+int LedStrip:: update(struct led_rgb &rgb, uint8_t number)
+{
+	pixels[number] = rgb;
+	int rc = led_strip_update_rgb(strip, pixels, numPixels);
+	if (rc) {
+		LOG_ERR("couldn't update strip: %d", rc);
+	}
+	return rc;
 }

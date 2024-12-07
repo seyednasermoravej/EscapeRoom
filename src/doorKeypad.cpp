@@ -1,16 +1,15 @@
 #include "doorKeypad.h"
-#include <zephyr/device.h>
-#include <zephyr/devicetree.h>
-#include <zephyr/drivers/display.h>
-#include <zephyr/drivers/gpio.h>
-#include <lvgl.h>
-#include <stdio.h>
-#include <string.h>
-#include <zephyr/kernel.h>
-#include <lvgl_input_device.h>
 
 LOG_MODULE_REGISTER(doorKeypad, LOG_LEVEL_INF);
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(door_keypad_buttons));
+
+#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
+ 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
+static const struct gpio_dt_spec digits[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(door_keypad_display), gpios, DT_SPEC_AND_COMMA_GATE)
+};
+
+
 static DoorKeypad *instance = nullptr;
 
 void DoorKeypad:: buttonsHandlerWrapper(struct input_event *val, void *userData)
@@ -36,14 +35,6 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
     }
 
 }
-static uint32_t count;
-static void lv_btn_click_callback(lv_event_t *e)
-{
-	ARG_UNUSED(e);
-
-	count = 0;
-}
-const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
 {
     LOG_INF("%s/%s", room, type);
@@ -52,39 +43,12 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     device_init(buttons);
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
+	display = new TM74HC595LedTube (digits[0].port, digits[0].pin, digits[1].port, digits[1].pin, digits[2].port, digits[2].pin, true,  8);
+    display->begin();
+	// display->print("98716236");
+	// while(1)
+	// {}	
 
-
-    	char count_str[11] = {0};
-	const struct device *display_dev;
-	lv_obj_t *hello_world_label;
-	lv_obj_t *count_label;
-
-    device_init(tftLcd);
-	display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-	if (!device_is_ready(display_dev)) {
-		LOG_ERR("Device not ready, aborting test");
-		// return 0;
-	}
-		hello_world_label = lv_label_create(lv_scr_act());
-
-	lv_label_set_text(hello_world_label, "Hello world!");
-	lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
-
-	count_label = lv_label_create(lv_scr_act());
-	lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
-
-	lv_task_handler();
-	display_blanking_off(display_dev);
-
-	while (1) {
-		if ((count % 100) == 0U) {
-			sprintf(count_str, "%d", count/100U);
-			lv_label_set_text(count_label, count_str);
-		}
-		lv_task_handler();
-		++count;
-		k_sleep(K_MSEC(10));
-	}
 
 
 }
@@ -101,7 +65,8 @@ void DoorKeypad:: messageHandler(struct MqttMsg *msg)
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(strcmp(msg->topic, CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC) == 0)
     {
-        /**************************************************** */
+		// display->print("6236");	
+		display->print(msg->msg);	
     }
     else
         LOG_INF("the command is not valid");

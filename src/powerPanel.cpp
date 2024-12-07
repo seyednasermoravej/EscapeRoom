@@ -10,11 +10,12 @@ static const struct pwm_dt_spec allServos[] = {
 #define STEP PWM_USEC(100)
 static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(power_panel_servos), min_pulse);
 static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(power_panel_servos), max_pulse);
+static const uint16_t servoMaxDegrees = DT_PROP(DT_NODELABEL(power_panel_servos), max_degrees);
 
 PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
-    servos = new Servos(allServos, ARRAY_SIZE(allServos));
+    servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
     creatingMqttList(17);
 }
 

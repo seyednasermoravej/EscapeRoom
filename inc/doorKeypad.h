@@ -16,6 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
+#include "FourBitLedDigitalTube.h"
 
 class DoorKeypad: public Puzzle 
 {
@@ -27,7 +28,7 @@ public:
     static void buttonsHandlerWrapper(struct input_event *val, void *userData);
 
 private:
-
+    TM74HC595LedTube *display;
 
 
 };

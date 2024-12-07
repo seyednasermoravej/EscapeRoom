@@ -8,6 +8,14 @@ static const struct gpio_dt_spec relays[] = {
 };
 
 
+static uint32_t count;
+static void lv_btn_click_callback(lv_event_t *e)
+{
+	ARG_UNUSED(e);
+
+	count = 0;
+}
+const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
@@ -24,6 +32,40 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     char topic[64];
     sprintf(topic, "%s/%s/", roomName, puzzleTypeName);
     keypad = new Keypad(topic);
+
+
+
+    	char count_str[11] = {0};
+	const struct device *display_dev;
+	lv_obj_t *hello_world_label;
+	lv_obj_t *count_label;
+
+    device_init(tftLcd);
+	display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+	if (!device_is_ready(display_dev)) {
+		LOG_ERR("Device not ready, aborting test");
+		// return 0;
+	}
+		hello_world_label = lv_label_create(lv_scr_act());
+
+	lv_label_set_text(hello_world_label, "Hello world!");
+	lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
+
+	count_label = lv_label_create(lv_scr_act());
+	lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+	lv_task_handler();
+	display_blanking_off(display_dev);
+
+	while (1) {
+		if ((count % 100) == 0U) {
+			sprintf(count_str, "%d", count/100U);
+			lv_label_set_text(count_label, count_str);
+		}
+		lv_task_handler();
+		++count;
+		k_sleep(K_MSEC(10));
+	}
 }
 
 void Fridge:: creatingMqttList(uint16_t _mqttCount)
