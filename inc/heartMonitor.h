@@ -30,6 +30,7 @@ public:
     struct k_work analogWork;
     static void analogWorkHanlder(struct k_work *work);
     static void analogTimerHandler(struct k_timer *timer);
+    void test();
 
 private:
     Adcs *adcs;

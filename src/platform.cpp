@@ -28,13 +28,17 @@ void Platform:: buttonsHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_KEY)
     {
-        if(val->value)
+        if((val->code == INPUT_BTN_1) || (val->code == INPUT_BTN_2))
         {
-            struct MqttMsg msg = {0};
-            sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, val->code - INPUT_BTN_0);
-            sprintf(msg.msg, "true");
-            LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
-            k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+
+            if(val->value)
+            {
+                struct MqttMsg msg = {0};
+                sprintf(msg.topic, "%s/%s/button%d", instance2 ->roomName, instance2->puzzleTypeName, val->code - INPUT_BTN_0);
+                sprintf(msg.msg, "true");
+                LOG_INF("button %d is pressed", val->code - INPUT_BTN_0);
+                k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+            }
         }
         /////////////////////////////////end time buttons
     }
@@ -51,6 +55,7 @@ Platform:: Platform(const char * room, const char *type): Puzzle(room, type)
     creatingMqttList(1);
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
+    instance2 = this;
 }
 
 void Platform:: creatingMqttList(uint16_t _mqttCount)

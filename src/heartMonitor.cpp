@@ -125,3 +125,15 @@ uint16_t HeartMonitor:: readAdc(uint8_t channel)
 }
 
 
+void HeartMonitor:: test()
+{
+    struct MqttMsg msg = {0};
+    sprintf(msg.topic, CODE_RED_HEART_MONITOR_RELAY1_TOPIC);
+    sprintf(msg.msg, "on");
+    while (1)
+    {
+        messageHandler(&msg);
+        k_msleep(3000);
+    }
+    
+}

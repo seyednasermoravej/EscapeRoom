@@ -275,8 +275,10 @@ int Puzzles:: builtIntLedInit()
 static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
 void test()
 {
-    Blinds *blinds = new Blinds("sdf", "sdf");
-    blinds->test();
+    // Blinds *blinds = new Blinds("sdf", "sdf");
+    // blinds->test();
+    HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
+    heartMonitor->test();
     // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
     // LedStrip *ledStrip = new LedStrip(dev, 16);
 }
@@ -284,9 +286,10 @@ void puzzleEntryPoint(void *, void *, void *)
 {
 
     char serverName[] = "mqtt-1";
+    // char serverIpAddress[128] = {0};
+    char serverIpAddress[] = "10.42.0.1";
     // test();
     // char serverName[] = "test.mosquitto.org";
-    char serverIpAddress[128] = {0};
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));
@@ -297,8 +300,8 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(!mqtt)
         { 
-            dnsResolver("not specified", serverName, serverIpAddress);
-            // dhcpClient("not specified");
+            // dnsResolver("not specified", serverName, serverIpAddress);
+            dhcpClient("not specified");
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
         }
@@ -314,8 +317,8 @@ void puzzleEntryPoint(void *, void *, void *)
 
     }
 
-    dnsResolver(puzzles->name, serverName, serverIpAddress);
-    // dhcpClient(puzzles->name);
+    // dnsResolver(puzzles->name, serverName, serverIpAddress);
+    dhcpClient(puzzles->name);
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     // int counter = 0; 
     while(1)
