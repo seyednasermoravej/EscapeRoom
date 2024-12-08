@@ -27,6 +27,7 @@ protected:
     struct mqtt_topic mqttList[20];
     uint16_t mqttCount;
     virtual void creatingMqttList(uint16_t mqttCount) = 0;
+    virtual void test();
     struct k_timer aliveTimer;
 
 public:

@@ -16,6 +16,7 @@ servos(_servos), numOfservos(_numOfServos), minPulse(minPulse), maxPulse(maxPuls
         pwmInit(&servos[i], "Error: PWM channel %i is not ready.");
     }
     coeff = (float)(maxPulse - minPulse) / (float)maxDegrees;
+
 }
 
 
@@ -23,14 +24,15 @@ void Servos:: move(uint8_t index, uint32_t degrees)
 {
     uint32_t pulse = (uint32_t)((float)degrees * coeff) + minPulse;
     // uint32_t pulse = degrees + minPulse;
-    if(pulse < minPulse)
+    if(pulse <= minPulse)
     {
-        pulse = minPulse;
+        pulse = minPulse + 50;
     }
-    if(pulse > maxPulse)
+    if(pulse >= maxPulse)
     {
-        pulse = maxPulse;
+        pulse = maxPulse - 50;
     }
+    LOG_INF("move to pulse: %u", pulse);
     pwm_set_pulse_dt(&servos[index], pulse);
     
 }

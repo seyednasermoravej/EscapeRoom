@@ -37,3 +37,6 @@ Puzzle::~Puzzle() {
     delete[] roomName;
     delete[] puzzleTypeName;
 }
+
+void Puzzle:: test()
+{}

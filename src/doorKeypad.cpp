@@ -45,7 +45,8 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
 	display = new TM74HC595LedTube (digits[0].port, digits[0].pin, digits[1].port, digits[1].pin, digits[2].port, digits[2].pin, true,  8);
     display->begin();
-	// display->print("98716236");
+	display->print("98716236");
+    display->fastRefresh();
 	// while(1)
 	// {}	
 
@@ -67,6 +68,7 @@ void DoorKeypad:: messageHandler(struct MqttMsg *msg)
     {
 		// display->print("6236");	
 		display->print(msg->msg);	
+        display->fastRefresh();
     }
     else
         LOG_INF("the command is not valid");

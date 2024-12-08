@@ -24,6 +24,7 @@ public:
     Heart(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
+    void test() override;
 
 private:
     Servos *servos;

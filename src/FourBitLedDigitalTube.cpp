@@ -43,6 +43,7 @@ TM74HC595LedTube::TM74HC595LedTube(const struct device *sclk_dev, gpio_pin_t scl
 
     set_attributes();
     clear();
+    
 }
 
 // Destructor
@@ -91,7 +92,7 @@ void TM74HC595LedTube::set_attributes() {
 bool TM74HC595LedTube::begin() {
     if (!_intRfrshSrvcStrtd) {
         k_timer_init(&refresh_timer, refresh_callback, nullptr);
-        k_timer_start(&refresh_timer, K_MSEC(2), K_MSEC(2));
+        k_timer_start(&refresh_timer, K_USEC(500), K_USEC(500));
         _intRfrshSrvcStrtd = true;
     }
 
@@ -143,9 +144,19 @@ void TM74HC595LedTube::clear() {
 
 // Fast refresh
 void TM74HC595LedTube::fastRefresh() {
-    for (uint8_t i = 0; i < dsp_digits; i++) {
-        fastSend(digit_ptr[i], 1 << digit_pos_ptr[i]);
-    }
+    // for (uint8_t i = 0; i < dsp_digits; i++) {
+    //     fastSend(digit_ptr[i], 1 << digit_pos_ptr[i]);
+    // }
+        static uint8_t current_digit = 0;
+
+    // Turn off all digits before updating the current one
+    fastSend(0xFF, 0);  // Send blank data to all digits
+
+    // Update the current digit
+    fastSend(digit_ptr[current_digit], 1 << digit_pos_ptr[current_digit]);
+
+    // Move to the next digit
+    current_digit = (current_digit + 1) % dsp_digits;
 }
 
 // Send data to the display

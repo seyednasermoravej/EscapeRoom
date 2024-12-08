@@ -33,9 +33,33 @@ void Heart:: messageHandler(struct MqttMsg *msg)
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(strcmp(msg->topic, CODE_RED_HEART_SERVO_TOPIC) == 0)
     {
-        uint32_t val = atoi(msg->msg) + 90;
-        servos->move(0, val);
+        if(strcmp(msg->msg, "beat") == 0)
+        {
+            for(uint32_t i = 75; i <= 105; i++)
+            {
+                servos->move(0, i);
+                k_msleep(1);
+            }
+            for(uint32_t i = 105; i >= 75; i--)
+            {
+                servos->move(0, i);
+                k_msleep(1);
+            }
+        }
     } 
     else
         LOG_INF("the command is not valid");
+}
+
+
+void Heart:: test()
+{
+    struct MqttMsg msg;
+    sprintf(msg.topic, CODE_RED_HEART_SERVO_TOPIC);
+    while(1)
+    {
+        sprintf(msg.msg, "beat");
+        messageHandler(&msg);
+        k_msleep(100);
+    }
 }
