@@ -43,6 +43,16 @@ HeartMonitor:: HeartMonitor(const char *room, const char *type): Puzzle(room, ty
         analog[i] = readAdc(i);
     }
 
+    
+    for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
+        if (!device_is_ready(relays[i].port)) {
+		    // return -1;
+	    }
+        ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT_INACTIVE);
+	    if (ret < 0) {
+		    // return -1;
+	    }
+    }
     k_work_init(&analogWork, analogWorkHanlder);
     k_timer_init(&analogTimer, analogTimerHandler, NULL);
     k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(5));
