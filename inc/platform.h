@@ -38,7 +38,6 @@ public:
    static void buttonsHandlerWrapper(struct input_event *val, void* userData);
    void buttonsHandler(struct input_event *val);
 
-
 private:
     AccelStepper *stepper = NULL;
     struct k_work calibrationWork;
