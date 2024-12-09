@@ -23,8 +23,8 @@ void Blinds:: creatingMqttList(uint16_t _mqttCount)
 
 	mqttList[0] = codeRed_blinds_servo1_topic;
 	mqttList[1] = codeRed_blinds_servo2_topic;
-	mqttList[3] = codeRed_blinds_servo3_topic;
-	mqttList[4] = codeRed_blinds_servo4_topic;
+	mqttList[2] = codeRed_blinds_servo3_topic;
+	mqttList[3] = codeRed_blinds_servo4_topic;
     mqttCount = _mqttCount;
 
 }

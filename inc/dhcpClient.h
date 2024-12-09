@@ -20,7 +20,7 @@ extern "C" {
 #endif
 #define DHCP_OPTION_NTP (42)
 extern sem_t dhcpActive;
-int dhcpClient(char *deviceName);
+int dhcpClient(const char *deviceName);
 
 #ifdef __cplusplus
 }

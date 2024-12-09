@@ -19,7 +19,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-int dnsResolver(char *deviceName, char *queryName, char *serverIpAddress);
+int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress);
 extern sem_t dnsActive;
 
 #ifdef __cplusplus

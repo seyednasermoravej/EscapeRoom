@@ -29,10 +29,10 @@ public:
     void creatingMqttList(uint16_t) override;
     struct k_timer loadcellTimer;
     static void loadcellTimerHandler(struct k_timer *timer);
+    struct sensor_value weight;
 
 private:
     Hx711 *hx711;
-
 };
 
 

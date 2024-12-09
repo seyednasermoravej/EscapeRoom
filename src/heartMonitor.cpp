@@ -55,7 +55,7 @@ HeartMonitor:: HeartMonitor(const char *room, const char *type): Puzzle(room, ty
     }
     k_work_init(&analogWork, analogWorkHanlder);
     k_timer_init(&analogTimer, analogTimerHandler, NULL);
-    k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(5));
+    k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(1));
 }
 
 void HeartMonitor:: analogTimerHandler(struct k_timer *timer)

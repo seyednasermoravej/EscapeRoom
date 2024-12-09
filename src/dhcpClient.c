@@ -85,7 +85,7 @@ static void option_handler(struct net_dhcpv4_option_callback *cb,
 		net_addr_ntop(AF_INET, cb->data, buf, sizeof(buf)));
 }
 
-int dhcpClient(char *deviceName)
+int dhcpClient(const char *deviceName)
 {
 	LOG_INF("Run dhcpv4 client");
 

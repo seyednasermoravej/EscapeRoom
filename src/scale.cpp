@@ -23,18 +23,25 @@ Scale:: Scale(const char *room, const char *type): Puzzle(room, type)
     }
     creatingMqttList(1);
     hx711 = new Hx711(hx711_dev);
+    weight = hx711->measure();
     k_timer_init(&loadcellTimer, loadcellTimerHandler, NULL);
-    k_timer_start(&loadcellTimer, K_SECONDS(3), K_SECONDS(5));
+    k_timer_start(&loadcellTimer, K_SECONDS(3), K_SECONDS(1));
 }
 
 void Scale:: loadcellTimerHandler(struct k_timer *timer)
 {
     Scale *instance = CONTAINER_OF(timer, Scale, loadcellTimer);
-    struct sensor_value weight = instance->hx711->measure();
-    struct MqttMsg msg = {0};
-    sprintf(msg.topic,"%s/%s/loadcell", instance->roomName, instance->puzzleTypeName);
-    sprintf(msg.msg, "%d", weight.val1);
-    k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    
+    struct sensor_value newWeight = instance->hx711->measure();
+    if(newWeight.val1 != instance->weight.val1)
+    {
+        struct MqttMsg msg = {0};
+        sprintf(msg.topic,"%s/%s/loadcell", instance->roomName, instance->puzzleTypeName);
+        sprintf(msg.msg, "%d", newWeight.val1);
+        instance->weight.val1 = newWeight.val1;
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+        
+    }
 }
 void Scale:: creatingMqttList(uint16_t _mqttCount)
 {

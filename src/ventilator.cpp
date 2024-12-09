@@ -58,7 +58,7 @@ Ventilator:: Ventilator(const char *room, const char *type): Puzzle(room, type)
 
     k_work_init(&analogWork, analogWorkHanlder);
     k_timer_init(&analogTimer, analogTimerHandler, NULL);
-    k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(5));
+    k_timer_start(&analogTimer, K_SECONDS(3), K_SECONDS(1));
     // instance = this;
 }
 

@@ -387,7 +387,7 @@ static void do_mdns_ipv6_lookup(struct k_work *work)
 #define setup_ipv6(...)
 #endif /* CONFIG_NET_IPV6 */
 
-int dnsResolver(char *deviceName, char *queryName, char *serverIpAddress)
+int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress)
 {
     sem_init(&dnsActive, 0, 0);
     strcpy(serverName, queryName);

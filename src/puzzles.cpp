@@ -10,8 +10,8 @@ K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
 
 struct k_thread puzzleThread;
 
-static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
-							      {0});
+// static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
+// 							      {0});
 
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
 static struct nvs_fs fileSystem;
@@ -111,7 +111,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
     // }
     else if(strcmp(type, "scale") == 0)
     {
-        puzzle = new Scale("codeRed", "scale ");
+        puzzle = new Scale("codeRed", "scale");
         LOG_INF("Puzzle type is scale");
         deviceSpecified = true;
     }
@@ -149,13 +149,13 @@ void Puzzles:: puzzleTypeSelection(char *type)
 
     if(deviceSpecified)
     {
-        gpio_pin_set_dt(&builtInLed, 1);
+        // gpio_pin_set_dt(&builtInLed, 1);
     }
     else
     {
         deviceSpecified = false;
         LOG_INF("Puzzle type is not recognized.");
-        gpio_pin_set_dt(&builtInLed, 0);
+        // gpio_pin_set_dt(&builtInLed, 0);
     }
 }
 
@@ -179,12 +179,12 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
             int ret;
             if(strncmp("0", msg->msg, 1) == 0)
             {
-                ret = gpio_pin_set_dt(&builtInLed, 0);
+                // ret = gpio_pin_set_dt(&builtInLed, 0);
                 LOG_INF("Built in led deactivate");
             }
             else if(strncmp("1", msg->msg, 1) == 0)
             {
-                ret = gpio_pin_set_dt(&builtInLed, 1);
+                // ret = gpio_pin_set_dt(&builtInLed, 1);
                 LOG_INF("Built in led activate");
             }
             else
@@ -255,28 +255,28 @@ void Puzzles:: readInfosFromMemory()
 
 int Puzzles:: builtIntLedInit()
 {
-    int ret;
-	if (!gpio_is_ready_dt(&builtInLed)) {
-		printk("Error: button device %s is not ready\n",
-		       builtInLed.port->name);
-		return 0;
-	}
-    ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_INACTIVE);
+    // int ret;
+	// if (!gpio_is_ready_dt(&builtInLed)) {
+	// 	printk("Error: button device %s is not ready\n",
+	// 	       builtInLed.port->name);
+	// 	return 0;
+	// }
+    // ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_INACTIVE);
 
-	if (ret != 0) {
-		printk("Error %d: failed to configure %s pin %d\n",
-		       ret, builtInLed.port->name, builtInLed.pin);
-		return 0;
-	}
-    return ret;
+	// if (ret != 0) {
+	// 	printk("Error %d: failed to configure %s pin %d\n",
+	// 	       ret, builtInLed.port->name, builtInLed.pin);
+	// 	return 0;
+	// }
+    // return ret;
 }
 
 
-static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
+// static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
 void test()
 {
-    // Blinds *blinds = new Blinds("sdf", "sdf");
-    // blinds->test();
+    Blinds *blinds = new Blinds("sdf", "sdf");
+    blinds->test();
     HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
     heartMonitor->test();
     // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
@@ -285,7 +285,8 @@ void test()
 void puzzleEntryPoint(void *, void *, void *)
 {
 
-    char serverName[] = "mqtt-1";
+    // char serverName[] = "localhost";
+    // char serverName[] = "mqtt-1";
     // char serverIpAddress[128] = {0};
     char serverIpAddress[] = "10.42.0.1";
     // test();
@@ -340,10 +341,10 @@ void puzzleEntryPoint(void *, void *, void *)
 int Puzzles:: writeDeviceName(char *name)
 {
     char buf[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
-    char buf2[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
+    // char buf2[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     strcpy(buf, name);
-    nvs_write(fs, 0, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
-    nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
+    return nvs_write(fs, 0, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
+    // nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
 }
 
 extern "C" void puzzleThreadCreate()
