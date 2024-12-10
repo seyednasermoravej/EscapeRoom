@@ -36,12 +36,12 @@ void Heart:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(msg->msg, "beat") == 0)
         {
-            for(uint32_t i = 75; i <= 105; i++)
+            for(uint32_t i = 70; i <= 110; i++)
             {
                 servos->move(0, i);
                 k_msleep(1);
             }
-            for(uint32_t i = 105; i >= 75; i--)
+            for(uint32_t i = 110; i >= 70; i--)
             {
                 servos->move(0, i);
                 k_msleep(1);

@@ -1,9 +1,7 @@
 #include "common.overlay"
 /{
 	aliases{
-		hintbutton = &button0;
 		built-in-led = &led0;
-		keypad = &kbd_matrix;
 	};
 
 };

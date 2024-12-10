@@ -10,12 +10,13 @@
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
 #include "dhcpClient.h"
+#include <zephyr/usb/usbd.h>
 
-
-
-
+#include <zephyr/usb/usb_device.h>
+#include <sample_usbd.h>
 extern char deviceId[17]; 
 
+#define BRAM 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif
 

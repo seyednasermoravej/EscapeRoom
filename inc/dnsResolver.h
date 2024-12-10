@@ -18,6 +18,7 @@
 
 #include <zephyr/net/wifi.h>
 #include <zephyr/net/wifi_mgmt.h>
+#include "main.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

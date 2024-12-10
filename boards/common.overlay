@@ -7,10 +7,16 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		zephyr,console = &cdc_acm_uart0;
-		zephyr,shell-uart = &cdc_acm_uart0;
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		// zephyr,console = &cdc_acm_uart0;
+		// zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
+	aliases{
+		hintbutton = &button0;
+		keypad = &kbd_matrix;
+	};
 	console
 	{
 		console_buttons: buttons
@@ -626,7 +632,7 @@
 			drawers_buttons_switch8: drawers-buttons-switch8
 			{
 				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_BTN_7>;
 			};
 			zephyr,deferred-init;
 		};
@@ -1153,5 +1159,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	status = "disabled";
+	// status = "disabled";
 };

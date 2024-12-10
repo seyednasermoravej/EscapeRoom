@@ -274,6 +274,9 @@ void Puzzles:: readInfosFromMemory()
     }
 }
 
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#else
+
 int Puzzles:: builtIntLedInit()
 {
     int ret;
@@ -291,6 +294,7 @@ int Puzzles:: builtIntLedInit()
 	}
     return ret;
 }
+#endif
 
 
 // static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
@@ -304,7 +308,6 @@ void test()
     // LedStrip *ledStrip = new LedStrip(dev, 16);
 }
 
-#define NASER
 
 
 void puzzleEntryPoint(void *, void *, void *)
@@ -316,13 +319,13 @@ void puzzleEntryPoint(void *, void *, void *)
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif
-#elif POURYA
+#elif defined(POURYA)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         char serverIpAddress[] = "192.168.1.8";
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif
-#elif BRAM
+#elif defined(BRAM)
     char serverName[] = "mqtt-1";
     char serverIpAddress[128] = {0};
 #else
@@ -341,9 +344,9 @@ void puzzleEntryPoint(void *, void *, void *)
         { 
 #ifdef NASER
             dhcpClient("not specified");
-#elif POURYA
+#elif defined(POURYA)
             dhcpClient("not specified");
-#elif BRAM
+#elif defined(BRAM)
             dnsResolver("not specified", serverName, serverIpAddress);
 #else
 #endif
