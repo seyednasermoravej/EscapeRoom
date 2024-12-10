@@ -11,9 +11,40 @@ char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
 
+#if defined(CONFIG_USB_DEVICE_STACK_NEXT)
+static struct usbd_context *sample_usbd;
 
+static int enable_usb_device_next(void)
+{
+	int err;
+
+	sample_usbd = sample_usbd_init_device(NULL);
+	if (sample_usbd == NULL) {
+		return -ENODEV;
+	}
+
+	err = usbd_enable(sample_usbd);
+	if (err) {
+		return err;
+	}
+
+	return 0;
+}
+#endif /* defined(CONFIG_USB_DEVICE_STACK_NEXT) */
 int main()
 { 
+//     const struct device *const dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
+// 	uint32_t dtr = 0;
+
+// #if defined(CONFIG_USB_DEVICE_STACK_NEXT)
+// 	if (enable_usb_device_next()) {
+// 		return 0;
+// 	}
+// #else
+// 	if (usb_enable(NULL)) {
+// 		return 0;
+// 	}
+// #endif
     //performing new update on firmware
     // sys_trace_sys_init_enter();
     LOG_INF("besme allah");

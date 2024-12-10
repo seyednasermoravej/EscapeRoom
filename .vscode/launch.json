@@ -3,7 +3,7 @@
     "configurations": [
  
         {
-            "name": "Launch",
+            "name": "flash w6100-evb-pico",
             "cwd": "${workspaceFolder}",
             "executable": "build/zephyr/zephyr.elf",
             "request": "launch",
@@ -12,13 +12,31 @@
             "servertype": "openocd",
 
             "gdbPath": "${userHome}/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
-            "preLaunchTask": "buildFlash",
+            "preLaunchTask": "w6100-evb-pico",
             "interface": "swd",
             "configFiles": [ "/home/naser/openocd/tcl/interface/ftdi/minimodule-swd.cfg", "/home/naser/openocd/tcl/target/rp2040.cfg"],
             "showDevDebugOutput": "raw",
             "rtos": "Zephyr",
             // "breakAfterReset": true
         }, 
+        {
+            "name": "flash rpi-pico-w",
+            "cwd": "${workspaceFolder}",
+            "executable": "build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+
+            "gdbPath": "${userHome}/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "preLaunchTask": "rpi-pico-w",
+            "interface": "swd",
+            "configFiles": [ "/home/naser/openocd/tcl/interface/ftdi/minimodule-swd.cfg", "/home/naser/openocd/tcl/target/rp2040.cfg"],
+            "showDevDebugOutput": "raw",
+            "rtos": "Zephyr",
+            // "breakAfterReset": true
+        }, 
+ 
  
     ]
 }

@@ -17,6 +17,7 @@ Heart:: Heart(const char *room, const char *type): Puzzle(room, type)
 {
     creatingMqttList(1);
     servos = new Servos(allServos, 1, servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    servos->move(0, 90);
 }
 
 void Heart:: creatingMqttList(uint16_t _mqttCount)

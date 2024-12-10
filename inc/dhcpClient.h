@@ -15,6 +15,10 @@
 #include <zephyr/net/net_mgmt.h>
 #include <semaphore.h>
 
+
+#include <zephyr/net/wifi.h>
+#include <zephyr/net/wifi_mgmt.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

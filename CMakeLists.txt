@@ -22,6 +22,9 @@ target_link_libraries(app PRIVATE set-app-flags)
 #begin for dns resolver
 include(${ZEPHYR_BASE}/samples/net/common/common.cmake)
 #end for dns resolver
+#begin for usb
+include(${ZEPHYR_BASE}/samples/subsys/usb/common/common.cmake)
+#end for usb
 # list(REMOVE_ITEM app_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/unwanted_file.cpp)
 
 #begin rgb driver

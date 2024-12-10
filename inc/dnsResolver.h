@@ -16,6 +16,8 @@
 
 #include <zephyr/logging/log.h>
 
+#include <zephyr/net/wifi.h>
+#include <zephyr/net/wifi_mgmt.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -10,16 +10,22 @@ K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
 
 struct k_thread puzzleThread;
 
-// static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
-// 							      {0});
-
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#else
+static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE, gpios,
+							      {0});
+#endif
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
 static struct nvs_fs fileSystem;
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
+
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#else
     builtIntLedInit();
+#endif
     readInfosFromMemory();
     // puzzleTypeSelection("config");
     // puzzleTypeSelection("rotating platform");
@@ -149,13 +155,19 @@ void Puzzles:: puzzleTypeSelection(char *type)
 
     if(deviceSpecified)
     {
-        // gpio_pin_set_dt(&builtInLed, 1);
+        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        #else
+            gpio_pin_set_dt(&builtInLed, 1);
+        #endif
     }
     else
     {
         deviceSpecified = false;
         LOG_INF("Puzzle type is not recognized.");
-        // gpio_pin_set_dt(&builtInLed, 0);
+        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        #else
+            gpio_pin_set_dt(&builtInLed, 0);
+        #endif
     }
 }
 
@@ -179,12 +191,18 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
             int ret;
             if(strncmp("0", msg->msg, 1) == 0)
             {
-                // ret = gpio_pin_set_dt(&builtInLed, 0);
+        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        #else
+            gpio_pin_set_dt(&builtInLed, 0);
+        #endif
                 LOG_INF("Built in led deactivate");
             }
             else if(strncmp("1", msg->msg, 1) == 0)
             {
-                // ret = gpio_pin_set_dt(&builtInLed, 1);
+        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        #else
+            gpio_pin_set_dt(&builtInLed, 1);
+        #endif
                 LOG_INF("Built in led activate");
             }
             else
@@ -238,7 +256,10 @@ int Puzzles:: nvsInit()
 void Puzzles:: readInfosFromMemory()
 {
     // nvs_delete(fs, 0);
-    // gpio_pin_set_dt(&builtInLed, 1);
+        // #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        // #else
+        //     gpio_pin_set_dt(&builtInLed, 1);
+        // #endif
     // while(1);
 
 
@@ -255,20 +276,20 @@ void Puzzles:: readInfosFromMemory()
 
 int Puzzles:: builtIntLedInit()
 {
-    // int ret;
-	// if (!gpio_is_ready_dt(&builtInLed)) {
-	// 	printk("Error: button device %s is not ready\n",
-	// 	       builtInLed.port->name);
-	// 	return 0;
-	// }
-    // ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_INACTIVE);
+    int ret;
+	if (!gpio_is_ready_dt(&builtInLed)) {
+		printk("Error: button device %s is not ready\n",
+		       builtInLed.port->name);
+		return 0;
+	}
+    ret = gpio_pin_configure_dt(&builtInLed, GPIO_OUTPUT_INACTIVE);
 
-	// if (ret != 0) {
-	// 	printk("Error %d: failed to configure %s pin %d\n",
-	// 	       ret, builtInLed.port->name, builtInLed.pin);
-	// 	return 0;
-	// }
-    // return ret;
+	if (ret != 0) {
+		printk("Error %d: failed to configure %s pin %d\n",
+		       ret, builtInLed.port->name, builtInLed.pin);
+		return 0;
+	}
+    return ret;
 }
 
 
@@ -282,13 +303,29 @@ void test()
     // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
     // LedStrip *ledStrip = new LedStrip(dev, 16);
 }
+
+#define NASER
+
+
 void puzzleEntryPoint(void *, void *, void *)
 {
+#ifdef NASER
 
-    // char serverName[] = "localhost";
-    // char serverName[] = "mqtt-1";
-    // char serverIpAddress[128] = {0};
-    char serverIpAddress[] = "10.42.0.1";
+    #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        char serverIpAddress[] = "192.168.1.8";
+    #else
+        char serverIpAddress[] = "10.42.0.1";
+    #endif
+#elif POURYA
+    #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        char serverIpAddress[] = "192.168.1.8";
+    #else
+        char serverIpAddress[] = "10.42.0.1";
+    #endif
+#else
+    char serverName[] = "mqtt-1";
+    char serverIpAddress[128] = {0};
+#endif
     // test();
     // char serverName[] = "test.mosquitto.org";
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
@@ -301,8 +338,13 @@ void puzzleEntryPoint(void *, void *, void *)
     {
         if(!mqtt)
         { 
-            // dnsResolver("not specified", serverName, serverIpAddress);
+#ifdef NASER
             dhcpClient("not specified");
+#elif POURYA
+            dhcpClient("not specified");
+#else
+            dnsResolver("not specified", serverName, serverIpAddress);
+#endif
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
         }
@@ -318,8 +360,13 @@ void puzzleEntryPoint(void *, void *, void *)
 
     }
 
-    // dnsResolver(puzzles->name, serverName, serverIpAddress);
-    dhcpClient(puzzles->name);
+#ifdef NASER
+            dhcpClient("not specified");
+#elif POURYA
+            dhcpClient("not specified");
+#else
+            dnsResolver("not specified", serverName, serverIpAddress);
+#endif
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     // int counter = 0; 
     while(1)

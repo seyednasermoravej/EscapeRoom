@@ -393,6 +393,16 @@ int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress)
     strcpy(serverName, queryName);
 	struct net_if *iface = net_if_get_default();
 
+	#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+		struct wifi_connect_req_params connect_params = {
+        .ssid = "Safineh-2",
+        .ssid_length = strlen("Safineh-2"),
+        .psk = "gXvNavG4mg@9c9Z8",
+        .psk_length = strlen("gXvNavG4mg@9c9Z8"),
+		.security = WIFI_SECURITY_TYPE_PSK,
+    };	
+	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
+	#endif
 	LOG_INF("Starting DNS resolve sample");
 
 	wait_for_network();

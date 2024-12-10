@@ -67,7 +67,8 @@
 			"utility": "c",
 			"gate.h": "c",
 			"tftlcd.h": "c",
-			"exitdoor.h": "c"
+			"exitdoor.h": "c",
+			"dnsresolver.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

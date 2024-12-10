@@ -52,9 +52,11 @@
 #include "pneumaPost.h"
 #include "drawers.h"
 
+#ifdef CONFIG_BOARD_ETHERNET
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)
 #error "Unsupported board: BUILT_IN devicetree alias is not defined"
+#endif
 #endif
 
 // enum Servos

@@ -15,6 +15,11 @@ Blinds:: Blinds(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
     servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    servos->move(0, 0);
+    servos->move(1, 0);
+    servos->move(2, 0);
+    servos->move(3, 0);
+
     creatingMqttList(4);
 }
 
