@@ -322,9 +322,10 @@ void puzzleEntryPoint(void *, void *, void *)
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif
-#else
+#elif BRAM
     char serverName[] = "mqtt-1";
     char serverIpAddress[128] = {0};
+#else
 #endif
     // test();
     // char serverName[] = "test.mosquitto.org";
@@ -342,8 +343,9 @@ void puzzleEntryPoint(void *, void *, void *)
             dhcpClient("not specified");
 #elif POURYA
             dhcpClient("not specified");
-#else
+#elif BRAM
             dnsResolver("not specified", serverName, serverIpAddress);
+#else
 #endif
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
