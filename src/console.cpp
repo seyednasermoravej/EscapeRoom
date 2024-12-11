@@ -159,6 +159,7 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
 void Console:: creatingMqttList(uint16_t _mqttCount)
 {
+    
     mqttList[0] = introRoom_console_lcd1_topic;
     mqttList[1] = introRoom_console_lcd2_topic;
     mqttCount = _mqttCount;
