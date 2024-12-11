@@ -34,7 +34,7 @@ void Heart:: creatingMqttList(uint16_t _mqttCount)
 void Heart:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, CODE_RED_HEART_SERVO_TOPIC) == 0)
+    if(strcmp(msg->topic, (char *)mqttList[0].topic.utf8) == 0)
     {
         if(strcmp(msg->msg, "beat") == 0)
         {
