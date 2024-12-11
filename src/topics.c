@@ -900,12 +900,4 @@ struct mqtt_topic codeRed_heartBox_ws2811h_topic = {
 //////////////////////code red heart box end///////////
 
 //////////////////////code red heart begin///////////
-struct mqtt_topic codeRed_heart_servo_topic = {
-    .topic =
-    {
-        .utf8 = (uint8_t*)CODE_RED_HEART_SERVO_TOPIC,
-        .size = strlen(CODE_RED_HEART_SERVO_TOPIC)
-    },
-    .qos = MQTT_QOS_2_EXACTLY_ONCE
-};
 //////////////////////code red heart end///////////

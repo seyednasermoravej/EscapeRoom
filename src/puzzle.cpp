@@ -40,3 +40,19 @@ Puzzle::~Puzzle() {
 
 void Puzzle:: test()
 {}
+
+
+
+mqtt_topic* Puzzle:: createMqttTopic(const char *topicName)
+{
+    char *topic = new char[strlen(topicName) + 1];
+    strcpy(topic, topicName);
+    return new mqtt_topic {
+        .topic =
+        {
+            .utf8 = (uint8_t*)topic,
+            .size = strlen(topic)
+        },
+        .qos = MQTT_QOS_2_EXACTLY_ONCE
+    };
+}

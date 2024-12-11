@@ -29,6 +29,7 @@ protected:
     virtual void creatingMqttList(uint16_t mqttCount) = 0;
     virtual void test();
     struct k_timer aliveTimer;
+    mqtt_topic *createMqttTopic(const char *topicName);
 
 public:
     // Constructor to initialize roomName and puzzleTypeName

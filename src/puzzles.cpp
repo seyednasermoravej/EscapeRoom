@@ -146,10 +146,28 @@ void Puzzles:: puzzleTypeSelection(char *type)
         deviceSpecified = true;
     }
 
-    else if(strcmp(type, "heart") == 0)
+    else if(strcmp(type, "heart1") == 0)
     {
-        puzzle = new Heart("codeRed", "heart");
-        LOG_INF("Puzzle type is heart");
+        puzzle = new Heart("codeRed", "heart1");
+        LOG_INF("Puzzle type is heart1");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heart2") == 0)
+    {
+        puzzle = new Heart("codeRed", "heart2");
+        LOG_INF("Puzzle type is heart2");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heart3") == 0)
+    {
+        puzzle = new Heart("codeRed", "heart3");
+        LOG_INF("Puzzle type is heart3");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heart4") == 0)
+    {
+        puzzle = new Heart("codeRed", "heart4");
+        LOG_INF("Puzzle type is heart4");
         deviceSpecified = true;
     }
 

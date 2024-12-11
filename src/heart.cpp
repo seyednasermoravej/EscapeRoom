@@ -21,9 +21,11 @@ Heart:: Heart(const char *room, const char *type): Puzzle(room, type)
 }
 
 void Heart:: creatingMqttList(uint16_t _mqttCount)
-{
+{ 
+    char topic[128] = {0};
+    sprintf(topic, "%s/%s/servo", roomName, puzzleTypeName);
 
-	mqttList[0] = codeRed_heart_servo_topic;
+	mqttList[0] = *createMqttTopic(topic);
     mqttCount = _mqttCount;
 
 }
