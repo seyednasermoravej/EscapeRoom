@@ -27,6 +27,6 @@ config SHIELD_BUYDISPLAY_3_5_TFT_TOUCH_ARDUINO
 	def_bool $(shields_list_contains,buydisplay_3_5_tft_touch_arduino)
 
 endmenu
-
+source "samples/subsys/usb/common/Kconfig.sample_usbd"
 source "Kconfig.zephyr"
 # source "drivers/tcs34725/Kconfig"
