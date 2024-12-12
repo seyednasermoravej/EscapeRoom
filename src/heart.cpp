@@ -58,7 +58,7 @@ void Heart:: messageHandler(struct MqttMsg *msg)
 void Heart:: test()
 {
     struct MqttMsg msg;
-    sprintf(msg.topic, CODE_RED_HEART_SERVO_TOPIC);
+    sprintf(msg.topic, (char *)mqttList[0].topic.utf8);
     while(1)
     {
         sprintf(msg.msg, "beat");

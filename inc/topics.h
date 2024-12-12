@@ -78,18 +78,6 @@ extern struct mqtt_topic codeRed_fridge_relay1_topic;
 #define CODE_RED_FRIDGE_RELAY2_TOPIC                                       "codeRed/fridge/relay2" 
 extern struct mqtt_topic codeRed_fridge_relay2_topic;
 
-
-
-#define CODE_RED_BLINDS_SERVO1_TOPIC                                       "codeRed/blinds/servo1" 
-extern struct mqtt_topic codeRed_blinds_servo1_topic;
-#define CODE_RED_BLINDS_SERVO2_TOPIC                                       "codeRed/blinds/servo2" 
-extern struct mqtt_topic codeRed_blinds_servo2_topic;
-#define CODE_RED_BLINDS_SERVO3_TOPIC                                       "codeRed/blinds/servo3" 
-extern struct mqtt_topic codeRed_blinds_servo3_topic;
-#define CODE_RED_BLINDS_SERVO4_TOPIC                                       "codeRed/blinds/servo4" 
-extern struct mqtt_topic codeRed_blinds_servo4_topic;
-
-
 #define CODE_RED_POWER_PANEL_SERVO1_TOPIC                                       "codeRed/powerPanel/servo1" 
 extern struct mqtt_topic codeRed_powerPanel_servo1_topic;
 #define CODE_RED_POWER_PANEL_SERVO2_TOPIC                                       "codeRed/powerPanel/servo2" 
@@ -214,8 +202,6 @@ extern struct mqtt_topic codeRed_heartBox_ws2811g_topic;
 #define CODE_RED_HEART_BOX_WS2811H_TOPIC                                          "codeRed/heartBox/ws2811h" 
 extern struct mqtt_topic codeRed_heartBox_ws2811h_topic;
 
-#define CODE_RED_HEART_SERVO_TOPIC                                             "codeRed/heart/servo" 
-extern struct mqtt_topic codeRed_heart_servo_topic;
 
 
 #define LED1_TOPIC              "sub/led1"

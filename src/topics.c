@@ -426,37 +426,6 @@ struct mqtt_topic codeRed_fridge_relay2_topic = {
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red fridge end////////////////
 
-////////////////////code red blinds begin////////////////
-struct mqtt_topic codeRed_blinds_servo1_topic = {
-.topic =
-{
-    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO1_TOPIC,
-    .size = strlen(CODE_RED_BLINDS_SERVO1_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-struct mqtt_topic codeRed_blinds_servo2_topic = {
-.topic =
-{
-    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO2_TOPIC,
-    .size = strlen(CODE_RED_BLINDS_SERVO2_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-struct mqtt_topic codeRed_blinds_servo3_topic = {
-.topic =
-{
-    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO3_TOPIC,
-    .size = strlen(CODE_RED_BLINDS_SERVO3_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-struct mqtt_topic codeRed_blinds_servo4_topic = {
-.topic =
-{
-    .utf8 = (uint8_t*)CODE_RED_BLINDS_SERVO4_TOPIC,
-    .size = strlen(CODE_RED_BLINDS_SERVO4_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-////////////////////code red blinds end////////////////
-
 ////////////////////code red power panel begin////////////////
 struct mqtt_topic codeRed_powerPanel_servo1_topic = {
 .topic =
