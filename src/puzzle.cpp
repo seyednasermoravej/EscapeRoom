@@ -1,5 +1,7 @@
 #include "puzzle.h"
 
+LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_DBG);
+
 Puzzle *instance = nullptr;
 Puzzle:: Puzzle(const char* room, const char* type) 
 {
@@ -9,6 +11,7 @@ Puzzle:: Puzzle(const char* room, const char* type)
 
     puzzleTypeName = new char[strlen(type) + 1];
     strcpy(puzzleTypeName, type);
+    sprintf(mqttCommand, "%s/%s/", roomName, puzzleTypeName);
     k_timer_init(&aliveTimer, Puzzle:: alive, NULL);
     k_timer_start(&aliveTimer, K_SECONDS(4), K_SECONDS(4));
 }
@@ -55,4 +58,31 @@ mqtt_topic* Puzzle:: createMqttTopic(const char *topicName)
         },
         .qos = MQTT_QOS_2_EXACTLY_ONCE
     };
+}
+int Puzzle::validTopic(char *topic, char *command)
+{
+    int ret = -1;
+    if(strstr(topic, mqttCommand))
+    {
+        strcpy(command, &topic[strlen(mqttCommand)]);
+        ret = 0;
+    }
+    else
+        LOG_INF("the command is not valid");
+    return ret;
+}
+
+int Puzzle:: peripheralIdx(const char *field, char *command)
+{
+    int idx = -1;
+    if(strstr(command, field))
+    {
+        char fieldNumStr[4];
+        strcpy(fieldNumStr, &command[strlen(field)]);
+        idx = atoi(fieldNumStr);
+    }
+    else
+        LOG_ERR("no valid index");
+    return idx;
+
 }

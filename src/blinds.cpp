@@ -49,95 +49,91 @@ void Blinds:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
 
-    if(strcmp(msg->topic, (char *)mqttList[0].topic.utf8) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        uint32_t val = atoi(msg->msg) + 90;
-        servos->move(0, val);
+        char field[] = "servo";
+        int commandIdx = peripheralIdx(field, command);
+        int servoIdx = commandIdx - 1;
+        if((commandIdx > 0 ) && (servoIdx < ARRAY_SIZE(allServos)))
+        {
+            uint32_t val = atoi(msg->msg) + 90;
+            servos->move(servoIdx, val);
+        }
+        else
+        {
+            LOG_ERR("Not a valid index");
+        }
     }
-    else if(strcmp(msg->topic, (char *)mqttList[1].topic.utf8) == 0)
-    {
-        uint32_t val = atoi(msg->msg) + 90;
-        servos->move(1, val);
-    }
-    else if(strcmp(msg->topic, (char *)mqttList[2].topic.utf8) == 0)
-    {
-        uint32_t val = atoi(msg->msg) + 90;
-        servos->move(2, val);
-    }
-    else if(strcmp(msg->topic, (char *)mqttList[3].topic.utf8) == 0)
-    {
-        uint32_t val = atoi(msg->msg) + 90;
-        servos->move(3, val);
-    }
-    else
-        LOG_INF("the command is not valid");
+
 }
 
 void Blinds:: test()
 {
-    struct MqttMsg msg = {0};
+    // struct MqttMsg msg = {0};
     while(1)
     {
-        sprintf(msg.topic, (char *)mqttList[0].topic.utf8);
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.topic, (char *)mqttList[0].topic.utf8);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
         
-        sprintf(msg.msg, "0");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.msg, "0");
+        // messageHandler(&msg);
+        // k_msleep(1000);
 
-        sprintf(msg.msg, "90");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.msg, "90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
         
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(2000);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(2000);
 
-        sprintf(msg.topic, (char *)mqttList[1].topic.utf8);
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "0");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "90");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.topic, (char *)mqttList[1].topic.utf8);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "0");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
         
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(2000);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(2000);
 
-        sprintf(msg.topic, (char *)mqttList[2].topic.utf8);
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "0");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "90");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.topic, (char *)mqttList[2].topic.utf8);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "0");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
         
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(2000);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(2000);
 
-        sprintf(msg.topic, (char *)mqttList[3].topic.utf8);
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "0");
-        messageHandler(&msg);
-        k_msleep(1000);
-        sprintf(msg.msg, "90");
-        messageHandler(&msg);
-        k_msleep(1000);
+        // sprintf(msg.topic, (char *)mqttList[3].topic.utf8);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "0");
+        // messageHandler(&msg);
+        // k_msleep(1000);
+        // sprintf(msg.msg, "90");
+        // messageHandler(&msg);
+        // k_msleep(1000);
         
-        sprintf(msg.msg, "-90");
-        messageHandler(&msg);
-        k_msleep(2000);
+        // sprintf(msg.msg, "-90");
+        // messageHandler(&msg);
+        // k_msleep(2000);
     }
 }

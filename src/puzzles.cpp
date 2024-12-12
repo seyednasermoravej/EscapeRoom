@@ -4,7 +4,7 @@
 #include "FourBitLedDigitalTube.h"
 #include "heart.h"
 
-LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
 

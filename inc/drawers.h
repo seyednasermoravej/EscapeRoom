@@ -27,6 +27,7 @@ public:
     void buttonsHandler(struct input_event *val);
 
 private:
+    size_t startRelaysCommand;
 
 
 

@@ -161,24 +161,6 @@ extern struct mqtt_topic codeRed_pneumaPost_relay2_topic;
 #define CODE_RED_DEFIB_DISPLAY1_TOPIC                                            "codeRed/defib/display1" 
 extern struct mqtt_topic codeRed_defib_display1_topic;
 
-#define CODE_RED_DRAWERS_RELAY1_TOPIC                                            "codeRed/drawers/relay1" 
-extern struct mqtt_topic codeRed_drawers_relay1_topic;
-#define CODE_RED_DRAWERS_RELAY2_TOPIC                                            "codeRed/drawers/relay2" 
-extern struct mqtt_topic codeRed_drawers_relay2_topic;
-#define CODE_RED_DRAWERS_RELAY3_TOPIC                                            "codeRed/drawers/relay3" 
-extern struct mqtt_topic codeRed_drawers_relay3_topic;
-#define CODE_RED_DRAWERS_RELAY4_TOPIC                                            "codeRed/drawers/relay4" 
-extern struct mqtt_topic codeRed_drawers_relay4_topic;
-#define CODE_RED_DRAWERS_RELAY5_TOPIC                                            "codeRed/drawers/relay5" 
-extern struct mqtt_topic codeRed_drawers_relay5_topic;
-#define CODE_RED_DRAWERS_RELAY6_TOPIC                                            "codeRed/drawers/relay6" 
-extern struct mqtt_topic codeRed_drawers_relay6_topic;
-#define CODE_RED_DRAWERS_RELAY7_TOPIC                                            "codeRed/drawers/relay7" 
-extern struct mqtt_topic codeRed_drawers_relay7_topic;
-#define CODE_RED_DRAWERS_RELAY8_TOPIC                                            "codeRed/drawers/relay8" 
-extern struct mqtt_topic codeRed_drawers_relay8_topic;
-
-
 #define CODE_RED_HEART_BOX_DISPLAY1_TOPIC                                          "codeRed/heartBox/display1" 
 extern struct mqtt_topic codeRed_heartBox_display1_topic;
 #define CODE_RED_HEART_BOX_DISPLAY2_TOPIC                                          "codeRed/heartBox/display2" 

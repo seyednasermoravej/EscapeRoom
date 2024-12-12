@@ -17,7 +17,7 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/net/mqtt.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 class Puzzle 
 {
@@ -30,6 +30,9 @@ protected:
     virtual void test();
     struct k_timer aliveTimer;
     mqtt_topic *createMqttTopic(const char *topicName);
+    char mqttCommand[128];
+    int validTopic(char *topic, char *command);
+    int peripheralIdx(const char *field, char *command);
 
 public:
     // Constructor to initialize roomName and puzzleTypeName
