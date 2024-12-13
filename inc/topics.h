@@ -153,11 +153,6 @@ extern struct mqtt_topic codeRed_entranceDoor_relay1_topic;
 #define CODE_RED_EXIT_DOOR_RELAY1_TOPIC                                           "codeRed/exitDoor/relay1" 
 extern struct mqtt_topic codeRed_exitDoor_relay1_topic;
 
-#define CODE_RED_PNEUMA_POST_RELAY1_TOPIC                                       "codeRed/pneumaPost/relay1" 
-extern struct mqtt_topic codeRed_pneumaPost_relay1_topic;
-#define CODE_RED_PNEUMA_POST_RELAY2_TOPIC                                       "codeRed/pneumaPost/relay2" 
-extern struct mqtt_topic codeRed_pneumaPost_relay2_topic;
-
 #define CODE_RED_DEFIB_DISPLAY1_TOPIC                                            "codeRed/defib/display1" 
 extern struct mqtt_topic codeRed_defib_display1_topic;
 

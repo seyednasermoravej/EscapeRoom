@@ -677,25 +677,6 @@ struct mqtt_topic codeRed_exitDoor_relay1_topic = {
 };
 //////////////////////code red exit door end///////////
 
-//////////////////////code red pneuma post begin///////////
-struct mqtt_topic codeRed_pneumaPost_relay1_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)CODE_RED_PNEUMA_POST_RELAY1_TOPIC,
-    .size = strlen(CODE_RED_PNEUMA_POST_RELAY1_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-struct mqtt_topic codeRed_pneumaPost_relay2_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)CODE_RED_PNEUMA_POST_RELAY2_TOPIC,
-    .size = strlen(CODE_RED_PNEUMA_POST_RELAY2_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-////////////////////code red pneuma post end////////////////
-
 //////////////////////code red dfib begin///////////
 struct mqtt_topic codeRed_defib_display1_topic = {
     .topic =

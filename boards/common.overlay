@@ -315,10 +315,21 @@
 		};
 	};
 
-	// xray
-	// {
-
-	// };
+	xray
+	{
+		xray_i2c: i2c0;
+		xray_i2c_mux: mux0;
+		xray_i2c_multiplexer: xray-i2c-mutliplexer
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>, <&gpio0 2 GPIO_ACTIVE_HIGH>, <&gpio0 3 GPIO_ACTIVE_HIGH>;
+		};
+		xray_rfid1: rfid1;
+		xray_rfid2: rfid2;
+		xray_rfid3: rfid3;
+		xray_rfid4: rfid4;
+		
+	};
 
 	heart_monitor
 	{
@@ -910,6 +921,7 @@ pico_spi: &spi0 {};
 &i2c0{
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
+	zephyr,deferred-init;
 	rfidin: pn532@24{
 		compatible = "nxp,pn532";
 		status = "okay";
@@ -924,7 +936,7 @@ pico_spi: &spi0 {};
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		reset-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
 
 		mux_i2c@0 {
 			compatible = "ti,tca9546a-channel";
@@ -937,9 +949,8 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
+				int-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
 			};
 
 		};
@@ -955,9 +966,8 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 8 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
+				int-gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@2 {
@@ -971,9 +981,8 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
+				int-gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@3 {
@@ -987,9 +996,8 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
+				int-gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@4 {
@@ -1003,9 +1011,8 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 14 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
+				int-gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 15 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@5{
@@ -1021,7 +1028,6 @@ pico_spi: &spi0 {};
 				reg = <0x24>;
 				int-gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				reset-gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
 			};
 		};
 		mux_i2c@6 {
@@ -1037,7 +1043,6 @@ pico_spi: &spi0 {};
 				reg = <0x24>;
 				int-gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				reset-gpios = <&gpio0 28 (GPIO_ACTIVE_LOW)>;
-				zephyr,deferred-init;
 			};
 		};
 		zephyr,deferred-init;
