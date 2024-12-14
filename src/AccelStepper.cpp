@@ -420,8 +420,7 @@ void AccelStepper::step1(long step)
     // digitalWrite(_pin[0], LOW);
     // Caution 200ns setup time 
     // Delay the minimum allowed pulse width
-    // delayMicroseconds(_minPulseWidth);
-    k_sleep(K_NSEC(500));
+    delayMicroseconds(_minPulseWidth);
     setOutputPins(_direction ? 0b10 : 0b00); // step LOW
     // digitalWrite(_pin[0], HIGH);
 }

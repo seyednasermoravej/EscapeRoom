@@ -58,8 +58,8 @@ private:
     double stepsPerDegree = 0;
     void goToPosition(int pos);
     bool calibrated = false;
-    int startPos = -15000;
-    // int startPos = -30000;
+    // int startPos = -15000;
+    int startPos = -30000;
 
 };
 

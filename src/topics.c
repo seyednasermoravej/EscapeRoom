@@ -209,18 +209,6 @@ struct mqtt_topic seg8_topic = {
 },
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 
-////////////////////intro room platfrom begin\\\\\\\\\\
-
-struct mqtt_topic introRoom_platform_position_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)INTRO_ROOM_PLATFORM_POSITION_TOPIC,
-    .size = strlen(INTRO_ROOM_PLATFORM_POSITION_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-
-////////////////////intro room platfrom end\\\\\\\\\/
 
 ////////////////////intro room cabinet begin\\\\\\\\\/
 

@@ -46,19 +46,21 @@ Platform:: Platform(const char * room, const char *type): Puzzle(room, type)
 {
     LOG_INF("Platform Puzzle is selected");
 
+    device_init(buttons);
+    instance2 = this;
+    INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
     stepperInit();
     // relaysInit();
     k_work_init(&calibrationWork, calibrationWorkHandler);
     // device_init(relays->port);
     creatingMqttList(1);
-    device_init(buttons);
-    INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
-    instance2 = this;
 }
 
 void Platform:: creatingMqttList(uint16_t _mqttCount)
 {
-    mqttList[0] = introRoom_platform_position_topic;
+    char topic[128] = {0};
+    sprintf(topic, "%s/%s/position", roomName, puzzleTypeName);
+    mqttList[0] = *createMqttTopic(topic);
     mqttCount = _mqttCount;
 }
 
@@ -140,7 +142,7 @@ void Platform:: calibration()
         calibrated = true;
         LOG_INF("calibrated. The steps per degree is: %lf", stepsPerDegree);
         struct MqttMsg msg;
-        // strcpy(msg.topic, "%s/%s/calibrated", roomName, puzzleTypeName);
+        sprintf(msg.topic, "%s/%s/calibrated", instance2->roomName, instance2->puzzleTypeName);
         strcpy(msg.msg, "true");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         // stepsPerDegree = 350000/360;
@@ -319,12 +321,12 @@ void Platform:: messageHandler(MqttMsg *msg)
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
     if(calibrated)
     {
-        if(strcmp(msg->topic, INTRO_ROOM_PLATFORM_POSITION_TOPIC) == 0)
+        if(strcmp(msg->topic, "introRoom/platform/position") == 0)
         {
             if(strcmp(msg->msg, "back") == 0)
             {
-                goToPosition(-152500);
-                // goToPosition(-305000);
+                // goToPosition(-152500);
+                goToPosition(-305000);
             }
             else if(strcmp(msg->msg, "front") == 0)
             {

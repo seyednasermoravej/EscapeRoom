@@ -16,10 +16,6 @@ extern struct mqtt_topic introRoom_console_lcd1_topic;
 #define INTRO_ROOM_CONSOLE_LCD2_TOPIC                                         "introRoom/console/lcd2"
 extern struct mqtt_topic introRoom_console_lcd2_topic;
 
-#define INTRO_ROOM_PLATFORM_POSITION_TOPIC                                    "introRoom/platform/position"
-extern struct mqtt_topic introRoom_platform_position_topic;
-
-
 #define INTRO_ROOM_CABINET_RELAY1_TOPIC                                       "introRoom/cabinet/relay1" 
 extern struct mqtt_topic introRoom_cabinet_relay1_topic;
 #define INTRO_ROOM_CABINET_RELAY2_TOPIC                                       "introRoom/cabinet/relay2" 
