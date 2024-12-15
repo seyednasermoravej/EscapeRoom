@@ -64,9 +64,6 @@ LOG_MODULE_REGISTER(rfidIn, LOG_LEVEL_INF);
 K_THREAD_STACK_DEFINE(rfidInStackArea, RFID_IN_STACK_SIZE);
 
 struct k_thread rfidInThread;
-const struct gpio_dt_spec irq = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), int_gpios, {0});
-const struct gpio_dt_spec reset = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), reset_gpios, {0});
-const struct i2c_dt_spec dev_i2c = I2C_DT_SPEC_GET(DT_NODELABEL(rfidin));
 
 byte pn532ack[] = {0x00, 0x00, 0xFF,
                    0x00, 0xFF, 0x00}; ///< ACK message from PN532
@@ -114,8 +111,8 @@ byte pn532_packetbuffer[PN532_PACKBUFFSIZ]; ///< Packet buffer used in various
     @param  theWire   pointer to I2C bus to use
 */
 /**************************************************************************/
-Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, struct k_msgq *_queue, const struct gpio_dt_spec irq, const struct gpio_dt_spec reset)
-    :i2c_dev(&i2cDev), queue(_queue), _irq(&irq), _reset(&reset) {
+Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, const struct gpio_dt_spec irq, const struct gpio_dt_spec reset)
+    :i2c_dev(&i2cDev), _irq(&irq), _reset(&reset) {
   pinMode(_irq, INPUT);
   pinMode(_reset, OUTPUT);
   begin();
@@ -152,7 +149,6 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, struct k_msgq *_
     LOG_INF("UID Value: ");
     LOG_HEXDUMP_INF(uid, uidLength, "Tag:");
     hex2stringMac(uid, uidLength, message.msg);
-    k_msgq_put(&msqSendToMQTT, &message, K_NO_WAIT);
     memset(message.msg, 0, MESSAGE_QUEUE_LEN);
 	// Wait 1 second before continuing
 	delay(1000);
@@ -1887,21 +1883,4 @@ void Adafruit_PN532::writecommand(uint8_t *cmd, uint8_t cmdlen) {
       ser_dev->write(packet, 8 + cmdlen);
     }*/
   }
-}
-
-
-void rfidInEntryPoint(void *, void *, void *)
-{
-    Adafruit_PN532 *nfc = new Adafruit_PN532(dev_i2c, &msqSendToMQTT, irq, reset);
-}
-
-
-
-void rfidInThreadCreate()
-{
-    k_tid_t rfidInTid = k_thread_create(&rfidInThread, rfidInStackArea,
-									K_THREAD_STACK_SIZEOF(rfidInStackArea),
-									rfidInEntryPoint, NULL, NULL, NULL,
-									RFID_IN_PRIORITY, 0, K_NO_WAIT);
-    k_thread_name_set(rfidInTid, "RFID in");
 }

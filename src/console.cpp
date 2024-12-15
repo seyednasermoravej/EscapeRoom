@@ -34,7 +34,7 @@ void Console:: buttonsHandler(struct input_event *val)
         if(val->code == INPUT_BTN_6)
         {
             sprintf(msg.topic, "%s/%s/switch1", roomName, puzzleTypeName);
-            val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "FALSE");
+            val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
         }
         else if((val->code == INPUT_BTN_7) && (val->value))
         {

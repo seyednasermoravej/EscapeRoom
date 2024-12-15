@@ -206,7 +206,6 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
         
         if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
         {   
-            int ret;
             if(strncmp("0", msg->msg, 1) == 0)
             {
         #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
