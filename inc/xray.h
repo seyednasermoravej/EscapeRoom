@@ -24,7 +24,9 @@ public:
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
     struct k_timer cardsReaderTimer;
-    static void cardsReader(struct k_timer *timer);
+    struct k_work cardsReaderWork;
+    static void cardsReaderTimerHandler(struct k_timer *timer);
+    static void cardsReaderWorkHandler(struct k_work *work);
 
 private:
     Adafruit_PN532 *rfids; 

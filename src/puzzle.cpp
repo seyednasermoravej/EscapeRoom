@@ -2,7 +2,7 @@
 
 LOG_MODULE_REGISTER(puzzle, LOG_LEVEL_DBG);
 
-Puzzle *instance = nullptr;
+static Puzzle *instance = nullptr;
 Puzzle:: Puzzle(const char* room, const char* type) 
 {
     instance = this;
@@ -96,19 +96,20 @@ int Puzzle:: relayOperation(char *command, const gpio_dt_spec *relay, bool momen
         {
             gpio_pin_set_dt(relay, 1);
             k_msleep(1000);
-            gpio_pin_set_dt(relay, 0);
+            return gpio_pin_set_dt(relay, 0);
         }
         else
         {
-            gpio_pin_set_dt(relay, 1);
+            return gpio_pin_set_dt(relay, 1);
         }
     }
     else if(strcmp(command, "off") == 0)
     {
-        gpio_pin_set_dt(relay, 0);
+        return gpio_pin_set_dt(relay, 0);
     }
     else
     {
         LOG_INF("The command is not valid");
     }
+    return -1;
 }

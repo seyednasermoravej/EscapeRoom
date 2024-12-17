@@ -111,8 +111,8 @@ byte pn532_packetbuffer[PN532_PACKBUFFSIZ]; ///< Packet buffer used in various
     @param  theWire   pointer to I2C bus to use
 */
 /**************************************************************************/
-Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec irq, const struct gpio_dt_spec reset)
-    :i2c_dev(i2cDev), _irq(&irq), _reset(&reset) {
+Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec *irq, const struct gpio_dt_spec *reset)
+    :i2c_dev(i2cDev), _irq(irq), _reset(reset) {
   pinMode(_irq, INPUT);
   pinMode(_reset, OUTPUT);
   begin();
@@ -222,7 +222,8 @@ bool Adafruit_PN532::begin() {
   //   return false;
   // }
   reset(); // HW reset - put in known state
-  delay(10);
+  k_msleep(100);
+  // delay(100);
   wakeup(); // hey! wakeup!
   return true;
 }
@@ -1610,7 +1611,8 @@ bool Adafruit_PN532::isready() {
   } else*/ if (i2c_dev) {
     // I2C ready check via reading RDY byte
     uint8_t rdy[1];
-    i2c_read_dt(i2c_dev, rdy,  1);
+    int ret = -1;
+    ret = i2c_read_dt(i2c_dev, rdy,  1);
     // i2c_dev->read(rdy, 1);
     return rdy[0] == PN532_I2C_READY;
   // } else if (ser_dev) {

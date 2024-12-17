@@ -54,12 +54,12 @@ int main()
 
     puzzleThreadCreate();
 
-    while(1)
-    {
-        k_sleep(K_SECONDS(120));
-        // sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
-        // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
-    }
+    // while(1)
+    // {
+    //     k_sleep(K_SECONDS(120));
+    //     // sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
+    //     // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
+    // }
 }
 
 void i2cScanner()

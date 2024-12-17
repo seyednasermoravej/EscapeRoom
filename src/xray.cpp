@@ -6,28 +6,29 @@ const struct gpio_dt_spec irq = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), int_gp
 const struct gpio_dt_spec reset = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), reset_gpios, {0});
 const struct i2c_dt_spec rfid1I2c = I2C_DT_SPEC_GET(DT_NODELABEL(rfidin));
 const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
-// #define DT_SPEC_AND_COMMA(node_id, prop, idx) \
-	// PWM_DT_SPEC_GET_BY_IDX(node_id, idx),
 // static const c allRfidIns[] = {
 //     PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
 // };
 
-
+// static Xray *instance = nullptr;
 Xray:: Xray(const char * room, const char *type): Puzzle(room, type)
 {
 	device_init(dev_i2c);
 	k_msleep(1);
-	rfids = new Adafruit_PN532(&rfid1I2c, irq, reset);
+	rfids = new Adafruit_PN532(&rfid1I2c, &irq, &reset);
 	createMqttTopic(0);
-while(1)
-{
-	char buff[17];
-	rfids->readCard(buff);
-	k_msleep(1000);
+	// instance = this;
+	// char buff[17];
+	// rfids->readCard(buff);
+	// while(1)
+	// {
+	// 	instance->rfids->readCard(buff);
+	// 	k_msleep(1000);
 
-}
-    k_timer_init(&cardsReaderTimer, cardsReader, NULL);
-    k_timer_start(&cardsReaderTimer, K_SECONDS(10), K_SECONDS(5));
+	// }
+    k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
+    k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
+    k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(5));
 }
 
 
@@ -41,20 +42,28 @@ void Xray:: messageHandler(struct MqttMsg *msg)
 	LOG_INF("the command is not valid");
 }
 
-void Xray:: cardsReader(struct k_timer *timer)
+void Xray:: cardsReaderTimerHandler(struct k_timer *timer)
 {
+	LOG_INF("Enterd card reader timer");
 	Xray *instance = CONTAINER_OF(timer, Xray, cardsReaderTimer);
+	k_work_submit(&instance->cardsReaderWork);
+}
+void Xray:: cardsReaderWorkHandler(struct k_work *work)
+{
 	bool read = false;
 	char buff[17];
+	Xray *instance = CONTAINER_OF(work, Xray, cardsReaderWork);
+	// instance->rfids->begin();
 	read = instance->rfids->readCard(buff);
-	// if(read)
-	// {
-	// 	int idx = 0;
-	// 	struct MqttMsg msg = {0};
-	// 	sprintf(msg.topic, "%s/%s/rfid%d", instance->roomName, instance->puzzleTypeName, idx);
-	// 	sprintf(msg.msg, "%s", buff);
-	// 	LOG_INF("The card is: %s", buff);
-	// 	k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+	if(read)
+	{
+		int idx = 1;
+		struct MqttMsg msg = {0};
+		sprintf(msg.topic, "%s/%s/rfid%d", instance->roomName, instance->puzzleTypeName, idx);
+		sprintf(msg.msg, "%s", buff);
+		LOG_INF("The card is: %s", buff);
+		k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 
-	// }
+	}
+
 }
