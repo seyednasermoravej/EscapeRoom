@@ -33,7 +33,7 @@ static int enable_usb_device_next(void)
 #endif /* defined(CONFIG_USB_DEVICE_STACK_NEXT) */
 int main()
 { 
-    const struct device *const dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
+    // const struct device *const dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
 // 	uint32_t dtr = 0;
 
 #if defined(CONFIG_USB_DEVICE_STACK_NEXT)
@@ -50,7 +50,7 @@ int main()
     LOG_INF("besme allah");
     readingHWinfo(deviceId);
     LOG_INF("Device ID: %s", deviceId);
-   // test();
+//    test();
 
     puzzleThreadCreate();
 
@@ -68,8 +68,8 @@ void i2cScanner()
     const struct device *i2c_dev;
     uint8_t addr;
     int ret;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
-    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
     if (!i2c_dev) {
         printf("Error: I2C device not found\n");
         return;
@@ -117,7 +117,7 @@ void test()
     // struct MqttMsg mg = {0};
     // sprintf(msg.msg, "Button 0 pressed");
 
-   // i2cScanner();
+   i2cScanner();
     while(1)
     {
 

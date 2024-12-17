@@ -12,15 +12,21 @@ LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 int Mqtt:: subscribe()
 {
-	const struct mqtt_subscription_list subscription_list = {
-		.list = mqttList, .list_count = mqttCount, .message_id = 34};
-	for(uint8_t i = 0; i < subscription_list.list_count; i++)
+	if(mqttCount == 0)
 	{
-	LOG_INF("Subscribing to: %s", subscription_list.list[i].topic.utf8);
-
+		return 0;
 	}
+	else
+	{
+		const struct mqtt_subscription_list subscription_list = {
+			.list = mqttList, .list_count = mqttCount, .message_id = 34};
+		for(uint8_t i = 0; i < subscription_list.list_count; i++)
+		{
+		LOG_INF("Subscribing to: %s", subscription_list.list[i].topic.utf8);
 
-	return mqtt_subscribe(client, &subscription_list);
+		}
+		return mqtt_subscribe(client, &subscription_list);
+	}
 }
 void Mqtt:: prepare_fds()
 {

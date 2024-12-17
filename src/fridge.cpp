@@ -3,7 +3,7 @@
 LOG_MODULE_REGISTER(fridge, LOG_LEVEL_INF);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-static const struct gpio_dt_spec relays[] = {
+static const struct gpio_dt_spec allRelays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(fridge_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
@@ -19,11 +19,11 @@ const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
-    for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
-        if (!device_is_ready(relays[i].port)) {
+    for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
+        if (!device_is_ready(allRelays[i].port)) {
 		    // return -1;
 	    }
-        ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT_INACTIVE);
+        ret = gpio_pin_configure_dt(&allRelays[i], GPIO_OUTPUT_INACTIVE);
 	    if (ret < 0) {
 		    // return -1;
 	    }
@@ -71,9 +71,15 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 void Fridge:: creatingMqttList(uint16_t _mqttCount)
 {
 
-	mqttList[0] = codeRed_fridge_display_topic;
-	mqttList[1] = codeRed_fridge_relay1_topic;
-	mqttList[2] = codeRed_fridge_relay2_topic;
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
+    {
+        sprintf(topic, "%s/%s/relay%d", roomName, puzzleTypeName, i + 1);
+        mqttList[i] = *createMqttTopic(topic);
+    }
+
+    sprintf(topic, "%s/%s/display", roomName, puzzleTypeName);
+    mqttList[2] = *createMqttTopic(topic);
     mqttCount = _mqttCount;
 
 }
@@ -82,55 +88,37 @@ void Fridge:: creatingMqttList(uint16_t _mqttCount)
 void Fridge:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, CODE_RED_FRIDGE_DISPLAY_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        //??????????????????logic is unknown
-        // if(strcmp(msg->msg, "on") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 1);
-        // }
-        // else if(strcmp(msg->msg, "off") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 0);
-        // }
-        // else
-        // {
-        //     LOG_INF("The command is not valid");
-        // }
-        //??????????????????logic is unknown
+        if(strcmp(command, "display") == 0)
+        {
+            ////display logic
+        }
+        else if(strcmp(command, "relay") == 0)
+        {
+            char field[] = "relay";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t relayIdx = commandIdx - 1;
+            if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
+            {
+                if(relayIdx == 1)
+                {
+                    relayOperation(msg->msg, &allRelays[relayIdx], true);
+                }
+                else
+                {
+                    relayOperation(msg->msg, &allRelays[0], false);
+                }
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
     }
-    else if(strcmp(msg->topic, CODE_RED_FRIDGE_RELAY1_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&relays[0], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&relays[0], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
-    }
-    else if(strcmp(msg->topic, CODE_RED_FRIDGE_RELAY2_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&relays[1], 1);
-            k_msleep(1000);
-            gpio_pin_set_dt(&relays[1], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&relays[1], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
-    } 
     else
         LOG_INF("the command is not valid");
 }

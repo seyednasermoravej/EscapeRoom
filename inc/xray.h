@@ -23,6 +23,8 @@ public:
     Xray(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
+    struct k_timer cardsReaderTimer;
+    static void cardsReader(struct k_timer *timer);
 
 private:
     Adafruit_PN532 *rfids; 

@@ -111,8 +111,8 @@ byte pn532_packetbuffer[PN532_PACKBUFFSIZ]; ///< Packet buffer used in various
     @param  theWire   pointer to I2C bus to use
 */
 /**************************************************************************/
-Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, const struct gpio_dt_spec irq, const struct gpio_dt_spec reset)
-    :i2c_dev(&i2cDev), _irq(&irq), _reset(&reset) {
+Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec irq, const struct gpio_dt_spec reset)
+    :i2c_dev(i2cDev), _irq(&irq), _reset(&reset) {
   pinMode(_irq, INPUT);
   pinMode(_reset, OUTPUT);
   begin();
@@ -128,15 +128,14 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, const struct gpi
   // This prevents us from waiting forever for a card, which is
   // the default behaviour of the PN532.
   // setPassiveActivationRetries(0xFF);
+}
 
+bool Adafruit_PN532::readCard(char *buff)
+{
   LOG_INF("Waiting for an ISO14443A card");
-  bool success;
+  bool success  = false;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };	// Buffer to store the returned UID
   uint8_t uidLength;				// Length of the UID (4 or 7 bytes depending on ISO14443A card type)
-  struct MqttMsg message = {0};
-  strcpy(message.topic, RFID_IN_TOPIC);
-  while(1)
-  {
 
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
@@ -148,24 +147,17 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec i2cDev, const struct gpi
     LOG_INF("UID Length: %d", uidLength);
     LOG_INF("UID Value: ");
     LOG_HEXDUMP_INF(uid, uidLength, "Tag:");
-    hex2stringMac(uid, uidLength, message.msg);
-    memset(message.msg, 0, MESSAGE_QUEUE_LEN);
+    hex2stringMac(uid, uidLength, buff);
 	// Wait 1 second before continuing
-	delay(1000);
+	// delay(1000);
   }
   else
   {
     // PN532 probably timed out waiting for a card
     LOG_INF("Timed out waiting for a card");
   }
-  }
-
-
-
-
-
+  return success; 
 }
-
 /**************************************************************************/
 /*!
     @brief  Instantiates a new PN532 class using hardware SPI.
@@ -389,7 +381,9 @@ bool Adafruit_PN532::sendCommandCheckAck(uint8_t *cmd, uint8_t cmdlen,
   uint8_t SLOWDOWN = 0;
   if (i2c_dev)
     SLOWDOWN = 1;
-
+// size_t stack_size;
+//  k_thread_stack_space_get(&usbd@50110000, &stack_size);
+// printk("Remaining stack: %zu bytes\n", stack_size);
   // write the command
   writecommand(cmd, cmdlen);
 
@@ -1874,11 +1868,11 @@ void Adafruit_PN532::writecommand(uint8_t *cmd, uint8_t cmdlen) {
 //     }
 //     Serial.println();
 // #endif
-
+  int ret;
     if (i2c_dev) {
       // i2c_dev->write(packet, 8 + cmdlen);
 
-    i2c_write_dt(i2c_dev, packet, 8 + cmdlen);
+    ret = i2c_write_dt(i2c_dev, packet, 8 + cmdlen);
     } /*else {
       ser_dev->write(packet, 8 + cmdlen);
     }*/

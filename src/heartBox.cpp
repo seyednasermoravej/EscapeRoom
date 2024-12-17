@@ -103,23 +103,6 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
 
         // char rStr[4];
 
-    }
-    else if(strcmp(msg->topic, CODE_RED_FRIDGE_RELAY2_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&relays[1], 1);
-            k_msleep(1000);
-            gpio_pin_set_dt(&relays[1], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&relays[1], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
     } 
     else
         LOG_INF("the command is not valid");

@@ -41,6 +41,7 @@
 #include "platform.h"
 #include "cabinet.h"
 #include "door.h"
+#include "xray.h"
 #include "doorKeypad.h"
 #include "ventilator.h"
 #include "heartMonitor.h"
@@ -51,6 +52,8 @@
 #include "exitDoor.h"
 #include "pneumaPost.h"
 #include "drawers.h"
+
+#include "heart.h"
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #else

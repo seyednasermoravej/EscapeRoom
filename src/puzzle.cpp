@@ -86,3 +86,29 @@ int Puzzle:: peripheralIdx(const char *field, char *command)
     return idx;
 
 }
+
+
+int Puzzle:: relayOperation(char *command, const gpio_dt_spec *relay, bool momentry)
+{
+    if(strcmp(command, "on") == 0)
+    {
+        if(momentry)
+        {
+            gpio_pin_set_dt(relay, 1);
+            k_msleep(1000);
+            gpio_pin_set_dt(relay, 0);
+        }
+        else
+        {
+            gpio_pin_set_dt(relay, 1);
+        }
+    }
+    else if(strcmp(command, "off") == 0)
+    {
+        gpio_pin_set_dt(relay, 0);
+    }
+    else
+    {
+        LOG_INF("The command is not valid");
+    }
+}

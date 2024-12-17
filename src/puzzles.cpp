@@ -1,8 +1,6 @@
 #include "puzzles.h"
 #include "topics.h"
-#include "ledStrip.h"
 #include "FourBitLedDigitalTube.h"
-#include "heart.h"
 
 LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_INF);
 
@@ -79,12 +77,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is door keypad.");
         deviceSpecified = true;
     }
-    // else if(strcmp(type, "xray") == 0)
-    // {
-    //     puzzle = new Xray("codeRed", "xray");
-    //     LOG_INF("Puzzle type is xray.");
-    //     deviceSpecified = true;
-    // }
+    else if(strcmp(type, "xray") == 0)
+    {
+        puzzle = new Xray("codeRed", "xray");
+        LOG_INF("Puzzle type is xray.");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "heartMonitor") == 0)
     {
         puzzle = new HeartMonitor("codeRed", "heartMonitor");

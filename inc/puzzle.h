@@ -19,13 +19,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 class Puzzle 
 {
 protected:
     char *roomName;
     char *puzzleTypeName;
     struct mqtt_topic mqttList[20];
-    uint16_t mqttCount;
+    uint16_t mqttCount = 0;
     virtual void creatingMqttList(uint16_t mqttCount) = 0;
     virtual void test();
     struct k_timer aliveTimer;
@@ -33,6 +34,7 @@ protected:
     char mqttCommand[128];
     int validTopic(char *topic, char *command);
     int peripheralIdx(const char *field, char *command);
+    int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
 
 public:
     // Constructor to initialize roomName and puzzleTypeName

@@ -49,31 +49,6 @@ extern struct mqtt_topic codeRed_ventilator_relay3_topic;
 #define CODE_RED_VENTILATOR_RELAY4_TOPIC                                       "codeRed/ventilator/relay4" 
 extern struct mqtt_topic codeRed_ventilator_relay4_topic;
 
-
-
-#define CODE_RED_FRIDGE_DISPLAY_TOPIC                                       "codeRed/fridge/display" 
-extern struct mqtt_topic codeRed_fridge_display_topic;
-#define CODE_RED_FRIDGE_WS2811A_TOPIC                                       "codeRed/fridge/ws2811a" 
-extern struct mqtt_topic codeRed_fridge_ws2811a_topic;
-#define CODE_RED_FRIDGE_WS2811B_TOPIC                                       "codeRed/fridge/ws2811b" 
-extern struct mqtt_topic codeRed_fridge_ws2811b_topic;
-#define CODE_RED_FRIDGE_WS2811C_TOPIC                                       "codeRed/fridge/ws2811c" 
-extern struct mqtt_topic codeRed_fridge_ws2811c_topic;
-#define CODE_RED_FRIDGE_WS2811D_TOPIC                                       "codeRed/fridge/ws2811d" 
-extern struct mqtt_topic codeRed_fridge_ws2811d_topic;
-#define CODE_RED_FRIDGE_WS2811E_TOPIC                                       "codeRed/fridge/ws2811e" 
-extern struct mqtt_topic codeRed_fridge_ws2811e_topic;
-#define CODE_RED_FRIDGE_WS2811F_TOPIC                                       "codeRed/fridge/ws2811f" 
-extern struct mqtt_topic codeRed_fridge_ws2811f_topic;
-#define CODE_RED_FRIDGE_WS2811G_TOPIC                                       "codeRed/fridge/ws2811g" 
-extern struct mqtt_topic codeRed_fridge_ws2811g_topic;
-#define CODE_RED_FRIDGE_WS2811H_TOPIC                                       "codeRed/fridge/ws2811h" 
-extern struct mqtt_topic codeRed_fridge_ws2811h_topic;
-#define CODE_RED_FRIDGE_RELAY1_TOPIC                                       "codeRed/fridge/relay1" 
-extern struct mqtt_topic codeRed_fridge_relay1_topic;
-#define CODE_RED_FRIDGE_RELAY2_TOPIC                                       "codeRed/fridge/relay2" 
-extern struct mqtt_topic codeRed_fridge_relay2_topic;
-
 #define CODE_RED_POWER_PANEL_SERVO1_TOPIC                                       "codeRed/powerPanel/servo1" 
 extern struct mqtt_topic codeRed_powerPanel_servo1_topic;
 #define CODE_RED_POWER_PANEL_SERVO2_TOPIC                                       "codeRed/powerPanel/servo2" 
