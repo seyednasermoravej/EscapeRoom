@@ -113,7 +113,7 @@ byte pn532_packetbuffer[PN532_PACKBUFFSIZ]; ///< Packet buffer used in various
 /**************************************************************************/
 Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec *irq, const struct gpio_dt_spec *reset)
     :i2c_dev(i2cDev), _irq(irq), _reset(reset) {
-  pinMode(_irq, INPUT);
+  // pinMode(_irq, INPUT);
   pinMode(_reset, OUTPUT);
   begin();
   uint32_t versiondata = getFirmwareVersion();

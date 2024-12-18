@@ -970,132 +970,131 @@ pico_spi: &spi0 {};
 &i2c0{
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
-	// zephyr,deferred-init;
+	zephyr,deferred-init;
 	rfidin: pn532@24{
 		compatible = "nxp,pn532";
 		status = "okay";
 		reg = <0x24>;
 		int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 		reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 	};
-	// mux: tca9548a@70 {
-	// 	compatible = "ti,tca9548a";
-	// 	reg = <0x70>;
-	// 	status = "okay";
-	// 	#address-cells = <1>;
-	// 	#size-cells = <0>;
-	// 	reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+	mux: tca9548a@70 {
+		compatible = "ti,tca9548a";
+		reg = <0x70>;
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		mux_i2c@0 {
+			compatible = "ti,tca9548a-channel";
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			zephyr,deferred-init;
 
-	// 	mux_i2c@0 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <0>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		zephyr,deferred-init;
+			rfid1: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
+			};
 
-	// 		rfid1: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
-	// 		};
+		};
 
-	// 	};
+		mux_i2c@1 {
+		compatible = "ti,tca9548a-channel";
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 	mux_i2c@1 {
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <1>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
+			zephyr,deferred-init;
+			rfid2: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		mux_i2c@2 {
+		compatible = "ti,tca9548a-channel";
+			reg = <2>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 		zephyr,deferred-init;
-	// 		rfid2: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	mux_i2c@2 {
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <2>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
+			zephyr,deferred-init;
+			rfid3: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		mux_i2c@3 {
+		compatible = "ti,tca9548a-channel";
+			reg = <3>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 		zephyr,deferred-init;
-	// 		rfid3: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	mux_i2c@3 {
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <3>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
+			zephyr,deferred-init;
+			rfid4: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		mux_i2c@4 {
+		compatible = "ti,tca9548a-channel";
+			reg = <4>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 		zephyr,deferred-init;
-	// 		rfid4: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	mux_i2c@4 {
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <4>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
+			zephyr,deferred-init;
+			rfid5: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 15 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		mux_i2c@5{
+		compatible = "ti,tca9548a-channel";
+			reg = <5>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 		zephyr,deferred-init;
-	// 		rfid5: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 15 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	mux_i2c@5{
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <5>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
+			zephyr,deferred-init;
+			rfid6: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		mux_i2c@6 {
+		compatible = "ti,tca9548a-channel";
+			reg = <6>;
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-	// 		zephyr,deferred-init;
-	// 		rfid6: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 26 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	mux_i2c@6 {
-	// 	compatible = "ti,tca9548a-channel";
-	// 		reg = <6>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-
-	// 		zephyr,deferred-init;
-	// 		rfid7: pn532@24{
-	// 			compatible = "nxp,pn532";
-	// 			status = "okay";
-	// 			reg = <0x24>;
-	// 			int-gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 			reset-gpios = <&gpio0 28 (GPIO_ACTIVE_LOW)>;
-	// 		};
-	// 	};
-	// 	zephyr,deferred-init;
-	// };
+			zephyr,deferred-init;
+			rfid7: pn532@24{
+				compatible = "nxp,pn532";
+				status = "okay";
+				reg = <0x24>;
+				int-gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 28 (GPIO_ACTIVE_LOW)>;
+			};
+		};
+		zephyr,deferred-init;
+	};
 
 	// mux0: tca9546a@77
 	// {
@@ -1114,7 +1113,7 @@ pico_spi: &spi0 {};
 	// 		#size-cells = <0>;
 	// 		status = "okay";
 	// 		color_sensor0: tcs34725@29{
-	// 			compatible = "taos,tcs34725"
+	// 			compatible = "taos,tcs34725";
 	// 			reg = <0x29>;
 	// 		};
 			

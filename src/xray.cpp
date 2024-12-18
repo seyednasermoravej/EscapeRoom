@@ -2,30 +2,20 @@
 
 LOG_MODULE_REGISTER(xray, LOG_LEVEL_INF);
 
-const struct gpio_dt_spec irq = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), int_gpios, {0});
-const struct gpio_dt_spec reset = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfidin), reset_gpios, {0});
-const struct i2c_dt_spec rfid1I2c = I2C_DT_SPEC_GET(DT_NODELABEL(rfidin));
 const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
 //     PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
 // };
 
-// static Xray *instance = nullptr;
 Xray:: Xray(const char * room, const char *type): Puzzle(room, type)
 {
 	device_init(dev_i2c);
+	const struct gpio_dt_spec *irq = new gpio_dt_spec(GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid1), int_gpios, {0}));
+	const struct gpio_dt_spec *reset = new gpio_dt_spec(GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid1), reset_gpios, {0}));
+	const struct i2c_dt_spec *rfid1I2c = new i2c_dt_spec(I2C_DT_SPEC_GET(DT_NODELABEL(rfid1)));
 	k_msleep(1);
-	rfids = new Adafruit_PN532(&rfid1I2c, &irq, &reset);
+	rfids = new Adafruit_PN532(rfid1I2c, irq, reset);
 	createMqttTopic(0);
-	// instance = this;
-	// char buff[17];
-	// rfids->readCard(buff);
-	// while(1)
-	// {
-	// 	instance->rfids->readCard(buff);
-	// 	k_msleep(1000);
-
-	// }
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
     k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(5));
@@ -53,7 +43,6 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 	bool read = false;
 	char buff[17];
 	Xray *instance = CONTAINER_OF(work, Xray, cardsReaderWork);
-	// instance->rfids->begin();
 	read = instance->rfids->readCard(buff);
 	if(read)
 	{
