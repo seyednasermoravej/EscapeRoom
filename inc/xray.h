@@ -29,7 +29,8 @@ public:
     static void cardsReaderWorkHandler(struct k_work *work);
 
 private:
-    Adafruit_PN532 *rfids; 
+    Adafruit_PN532 **rfids; 
+    uint8_t numRfids;
 
 
 

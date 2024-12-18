@@ -971,14 +971,14 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
 	zephyr,deferred-init;
-	rfidin: pn532@24{
-		compatible = "nxp,pn532";
-		status = "okay";
-		reg = <0x24>;
-		int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-		reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
-		zephyr,deferred-init;
-	};
+	// rfidin: pn532@24{
+	// 	compatible = "nxp,pn532";
+	// 	status = "okay";
+	// 	reg = <0x24>;
+	// 	int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+	// 	reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
+	// 	zephyr,deferred-init;
+	// };
 	mux: tca9548a@70 {
 		compatible = "ti,tca9548a";
 		reg = <0x70>;
@@ -997,7 +997,6 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				int-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
 			};
 

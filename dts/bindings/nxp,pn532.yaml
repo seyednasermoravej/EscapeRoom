@@ -6,7 +6,7 @@ include: [i2c-device.yaml]
 
 properties:
   int-gpios:
-    required: true
+    required: false 
     type: phandle-array
     description: |
       GPIO connected to the controller IRQ pin. This pin is active-low.

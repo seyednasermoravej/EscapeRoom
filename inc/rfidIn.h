@@ -192,7 +192,8 @@ class Adafruit_PN532 {
 public:
 
 //   Adafruit_PN532(uint8_t ss, SPIClass *theSPI = &SPI); // Hardware SPI
-  Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec *irq, const struct gpio_dt_spec *reset);              // Hardware I2C
+  Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec *reset);              // Hardware I2C
+  // Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gpio_dt_spec *irq, const struct gpio_dt_spec *reset);              // Hardware I2C
 //   Adafruit_PN532(uint8_t reset, HardwareSerial *theSer); // Hardware UART
   bool begin(void);
   bool readCard(char *buff);
