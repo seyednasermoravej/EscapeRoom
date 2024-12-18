@@ -79,7 +79,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "xray") == 0)
     {
-        puzzle = new Xray("codeRed", "xray");
+        puzzle = new Xray("codeRed", "xray", 2);
         LOG_INF("Puzzle type is xray.");
         deviceSpecified = true;
     }

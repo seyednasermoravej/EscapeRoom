@@ -142,7 +142,7 @@ bool Adafruit_PN532::readCard(char *buff)
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
   // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
-  success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
+  success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000);
 
   if (success) {
     LOG_INF("Found a card!");
