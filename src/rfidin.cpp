@@ -132,9 +132,9 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gp
   // setPassiveActivationRetries(0xFF);
 }
 
-bool Adafruit_PN532::readCard(char *buff)
+bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
 {
-  LOG_INF("Waiting for an ISO14443A card");
+  LOG_DBG("Waiting for an ISO14443A card");
   bool success  = false;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };	// Buffer to store the returned UID
   uint8_t uidLength;				// Length of the UID (4 or 7 bytes depending on ISO14443A card type)
@@ -142,12 +142,12 @@ bool Adafruit_PN532::readCard(char *buff)
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
   // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
-  success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000);
+  success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, timeout);
 
   if (success) {
-    LOG_INF("Found a card!");
-    LOG_INF("UID Length: %d", uidLength);
-    LOG_INF("UID Value: ");
+    LOG_DBG("Found a card!");
+    LOG_DBG("UID Length: %d", uidLength);
+    LOG_DBG("UID Value: ");
     LOG_HEXDUMP_INF(uid, uidLength, "Tag:");
     hex2stringMac(uid, uidLength, buff);
 	// Wait 1 second before continuing
@@ -156,7 +156,7 @@ bool Adafruit_PN532::readCard(char *buff)
   else
   {
     // PN532 probably timed out waiting for a card
-    LOG_INF("Timed out waiting for a card");
+    LOG_DBG("Timed out waiting for a card");
   }
   return success; 
 }

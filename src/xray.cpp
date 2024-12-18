@@ -1,6 +1,6 @@
 #include "xray.h"
 
-LOG_MODULE_REGISTER(xray, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(xray, LOG_LEVEL_INF);
 
 const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
@@ -38,7 +38,7 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 	createMqttTopic(0);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
-    k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(3));
+    k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(1));
 }
 
 
@@ -67,7 +67,7 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 	for(uint8_t i = 0; i < instance->numRfids; i++)
 	{
 	// uint8_t i = 0;
-		read = instance->rfids[i]->readCard(buff);
+		read = instance->rfids[i]->readCard(buff, 1000);
 		if(read)
 		{
 			struct MqttMsg msg = {0};

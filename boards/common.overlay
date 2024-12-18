@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		zephyr,console = &uart0;
-		zephyr,shell-uart = &uart0;
-		// zephyr,console = &cdc_acm_uart0;
-		// zephyr,shell-uart = &cdc_acm_uart0;
+		// zephyr,console = &uart0;
+		// zephyr,shell-uart = &uart0;
+		zephyr,console = &cdc_acm_uart0;
+		zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -997,7 +997,7 @@ pico_spi: &spi0 {};
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
-				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>;
 			};
 
 		};
@@ -1014,7 +1014,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 8 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@2 {
@@ -1029,7 +1029,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 8 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@3 {
@@ -1044,7 +1044,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@4 {
@@ -1059,7 +1059,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@5{
@@ -1074,7 +1074,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		mux_i2c@6 {
@@ -1089,7 +1089,7 @@ pico_spi: &spi0 {};
 				status = "okay";
 				reg = <0x24>;
 				// int-gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				reset-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW)>;
+				reset-gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
 			};
 		};
 		zephyr,deferred-init;
@@ -1213,5 +1213,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	// status = "disabled";
+	status = "disabled";
 };

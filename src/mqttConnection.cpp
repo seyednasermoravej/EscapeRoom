@@ -97,7 +97,7 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
             break;
         }
 
-        LOG_INF("PUBACK packet id: %u", evt->param.puback.message_id);
+        LOG_DBG("PUBACK packet id: %u", evt->param.puback.message_id);
         break;
 
     case MQTT_EVT_SUBACK:
@@ -116,7 +116,7 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
             break;
         }
 
-        LOG_INF("PUBREC packet id: %u", evt->param.pubrec.message_id);
+        LOG_DBG("PUBREC packet id: %u", evt->param.pubrec.message_id);
 
         const struct mqtt_pubrel_param rel_param = {
             .message_id = evt->param.pubrec.message_id
@@ -126,10 +126,6 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         if (err != 0) {
             LOG_ERR("Failed to send MQTT PUBREL: %d", err);
         }
-		else
-		{
-			LOG_INF("QoS 2 release");
-		}
 	}
         break;
 	
@@ -411,8 +407,8 @@ void Mqtt:: publisher(const char *message, const char *topic)
 	int rc = 0;
 
 	LOG_DBG("attempting to connect: ");
-	LOG_INF("new message");
-	LOG_INF("topic: %s, message: %s", topic, message);
+	LOG_DBG("new message");
+	LOG_DBG("topic: %s, message: %s", topic, message);
 	rc = try_to_connect();
 	PRINT_RESULT("try_to_connect", rc);
 	SUCCESS_OR_EXIT(rc);
