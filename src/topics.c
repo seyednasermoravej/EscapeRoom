@@ -266,17 +266,6 @@ struct mqtt_topic codeRed_door_relay2_topic = {
 .qos = MQTT_QOS_2_EXACTLY_ONCE};
 ////////////////////code red door end////////////////
 
-//////////////////////code red door keypad begin///////////
-
-struct mqtt_topic codeRed_doorKeypad_display_topic = {
-.topic =
-{
-
-    .utf8 = (uint8_t*)CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC,
-    .size = strlen(CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC)
-},
-.qos = MQTT_QOS_2_EXACTLY_ONCE};
-////////////////////code red door keypad end////////////////
 //////////////////////code red heart monitor begin///////////
 
 struct mqtt_topic codeRed_heartMonitor_relay1_topic = {

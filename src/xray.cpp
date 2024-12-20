@@ -1,6 +1,6 @@
 #include "xray.h"
 
-LOG_MODULE_REGISTER(xray, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(xray, LOG_LEVEL_DBG);
 
 const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
@@ -8,22 +8,22 @@ const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // };
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid1)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rfid2)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid2))
     // I2C_DT_SPEC_GET(DT_NODELABEL(rfid3)),
     // I2C_DT_SPEC_GET(DT_NODELABEL(rfid4)),
     // I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
     // I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid7)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
 };
 
 static const struct gpio_dt_spec gpio_specs[] = {
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid1), reset_gpios, {0}),
-    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0})
     // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid3), reset_gpios, {0}),
     // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid4), reset_gpios, {0}),
     // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
     // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0}),
+    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
 };
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
@@ -34,6 +34,7 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 	{
 		LOG_INF("Initializing RFID %d", i + 1);
 		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]);
+		k_msleep(100);
 	}
 	createMqttTopic(0);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
@@ -76,7 +77,7 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
 		}
-	// 	// k_msleep(1000);
+		k_msleep(100);
 
 	}
 

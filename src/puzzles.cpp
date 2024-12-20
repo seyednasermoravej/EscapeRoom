@@ -63,14 +63,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is Door.");
         deviceSpecified = true;
     }
-    // else if(strcmp(type, "shelf") == 0)
-    // {
-    //     sprintf(msg.msg, "Puzzle type is shelf");
-    //     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-    //     puzzle = new Shelf("codeRed", "shelf");
-    //     LOG_INF("Puzzle type is shelf.");
-    //     deviceSpecified = true;
-    // }
+    else if(strcmp(type, "shelf") == 0)
+    {
+        puzzle = new Xray("codeRed", "shelf", 4);
+        LOG_INF("Puzzle type is shelf.");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "doorKeypad") == 0)
     {
         puzzle = new DoorKeypad("codeRed", "doorKeypad");
@@ -330,7 +328,7 @@ void puzzleEntryPoint(void *, void *, void *)
 #ifdef NASER
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.1.8";
+        char serverIpAddress[] = "192.168.1.6";
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif
@@ -345,7 +343,7 @@ void puzzleEntryPoint(void *, void *, void *)
     char serverIpAddress[128] = {0};
 #else
 #endif
-    // test();
+    test();
     // char serverName[] = "test.mosquitto.org";
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 

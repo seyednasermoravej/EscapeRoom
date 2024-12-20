@@ -237,10 +237,7 @@
 		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>; /* D10 */
 
 		spi-dev = <&spi1>;
-		
-		
-		
-		
+			
 		
 		write-only;
 		#address-cells = <1>;

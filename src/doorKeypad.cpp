@@ -47,8 +47,8 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     display->begin();
 	display->print("98716236");
     display->fastRefresh();
-	// while(1)
-	// {}	
+	while(1)
+	{}	
 
 
 
@@ -56,20 +56,26 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
 
 void DoorKeypad:: creatingMqttList(uint16_t _mqttCount)
 {
-
-	mqttList[0] = codeRed_doorKeypad_display_topic;
+    char topic[128] = {0};
+    sprintf(topic, "%s/%s/display", roomName, puzzleTypeName);
+    mqttList[0] = *createMqttTopic(topic);
     mqttCount = _mqttCount;
-
 }
 void DoorKeypad:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-		// display->print("6236");	
-		display->print(msg->msg);	
-        display->fastRefresh();
+        char field[] = "display";
+        if((strcmp(field, command) == 0))
+        {
+            display->print(msg->msg);
+        }
+        else
+        {
+            LOG_ERR("Not a valid index");
+        }
     }
-    else
-        LOG_INF("the command is not valid");
 }

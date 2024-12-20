@@ -31,11 +31,6 @@ extern struct mqtt_topic codeRed_door_relay1_topic;
 #define CODE_RED_DOOR_RELAY2_TOPIC                                       "codeRed/door/relay2" 
 extern struct mqtt_topic codeRed_door_relay2_topic;
 
-
-#define CODE_RED_DOOR_KEYPAD_DISPLAY_TOPIC                                       "codeRed/doorKeypad/display" 
-extern struct mqtt_topic codeRed_doorKeypad_display_topic;
-
-
 #define CODE_RED_HEART_MONITOR_RELAY1_TOPIC                                       "codeRed/heartMonitor/relay1" 
 extern struct mqtt_topic codeRed_heartMonitor_relay1_topic;
 
