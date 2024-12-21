@@ -27,6 +27,8 @@
 #include <string.h>
 #include <zephyr/kernel.h>
 #include <lvgl_input_device.h>
+#include "ledStrip.h"
+
 class Fridge: public Puzzle 
 {
 public:
@@ -36,7 +38,7 @@ public:
 
 private:
     Keypad *keypad;
-
+    LedStrip *ledstrip;
 
 
 };

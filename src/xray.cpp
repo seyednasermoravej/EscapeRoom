@@ -34,7 +34,7 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 	{
 		LOG_INF("Initializing RFID %d", i + 1);
 		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]);
-		k_msleep(100);
+		k_msleep(10);
 	}
 	createMqttTopic(0);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
@@ -77,7 +77,7 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
 		}
-		k_msleep(100);
+		k_msleep(10);
 
 	}
 

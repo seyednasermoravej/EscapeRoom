@@ -237,7 +237,10 @@
 		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>; /* D10 */
 
 		spi-dev = <&spi1>;
-			
+		
+		
+		
+		
 		
 		write-only;
 		#address-cells = <1>;
@@ -936,6 +939,36 @@ pico_spi: &spi0 {};
 
 };
 
+
+&pio1 {
+	status = "okay";
+	//zephyr,deferred-init;
+	pio-ws2812 {
+		compatible = "worldsemi,ws2812-rpi_pico-pio";
+		status = "okay";
+		pinctrl-0 = <&ws2812_pio1_default>;
+		pinctrl-names = "default";
+		bit-waveform = <3>, <3>, <4>;
+		ws2812: ws2812 {
+			status = "okay";
+			gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>;
+			chain-length = <16>;
+			color-mapping = <1 2 3>;
+			reset-delay = <280>;
+			frequency = <800000>;
+		};
+	};
+};
+
+&pinctrl{
+	ws2812_pio1_default: ws2812_pio1_default{
+		ws2812{
+			pinmux = <PIO1_P22>;
+		};
+	};
+};
+
+
 &pinctrl{
 	pwm_pins: pwm_pins
 	{
@@ -952,7 +985,6 @@ pico_spi: &spi0 {};
 			input-enable;
 		};
 	};
-
 };
 
 &i2c1_default {
@@ -974,7 +1006,6 @@ pico_spi: &spi0 {};
 	// 	reg = <0x24>;
 	// 	int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 	// 	reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
-	// 	zephyr,deferred-init;
 	// };
 	mux: tca9548a@70 {
 		compatible = "ti,tca9548a";
@@ -983,13 +1014,11 @@ pico_spi: &spi0 {};
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-		//zephyr,deferred-init;
 		mux_i2c@0 {
 			compatible = "ti,tca9548a-channel";
 			reg = <0>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-			//zephyr,deferred-init;
 
 			rfid1: pn532@24{
 				compatible = "nxp,pn532";
@@ -1006,7 +1035,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid2: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";
@@ -1021,7 +1049,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid3: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";
@@ -1036,7 +1063,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid4: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";
@@ -1051,7 +1077,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid5: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";
@@ -1066,7 +1091,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid6: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";
@@ -1081,7 +1105,6 @@ pico_spi: &spi0 {};
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			//zephyr,deferred-init;
 			rfid7: pn532@24{
 				compatible = "nxp,pn532";
 				status = "okay";

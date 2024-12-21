@@ -18,6 +18,7 @@
 #include <zephyr/net/mqtt.h>
 #include <stdlib.h>
 #include <string.h>
+#include <zephyr/drivers/led_strip.h>
 
 
 class Puzzle 
@@ -35,7 +36,7 @@ protected:
     int validTopic(char *topic, char *command);
     int peripheralIdx(const char *field, char *command);
     int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
-
+    struct led_rgb retrieveColors(char *str);
 public:
     // Constructor to initialize roomName and puzzleTypeName
     Puzzle(const char* room, const char* type);
@@ -50,6 +51,8 @@ public:
     struct mqtt_topic *getMqttList();
     // Virtual destructor for proper cleanup of derived classes
     virtual ~Puzzle(); 
+
+    
 };
 
 #endif

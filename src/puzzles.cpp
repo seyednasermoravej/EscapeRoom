@@ -310,11 +310,15 @@ int Puzzles:: builtIntLedInit()
 #endif
 
 
-// static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
-void test()
-{
-    Fridge *fridge = new Fridge("sdf", "sdf");
-}
+// void test()
+// {
+//     // Blinds *blinds = new Blinds("sdf", "sdf");
+//     // blinds->test();
+//     // HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
+//     // heartMonitor->test();
+//     // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
+//     LedStrip *ledStrip = new LedStrip(dev, 16);
+// }
 
 
 
@@ -329,16 +333,16 @@ void puzzleEntryPoint(void *, void *, void *)
     #endif
 #elif defined(POURYA)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.1.8";
+        char serverIpAddress[] = "192.168.1.2";
     #else
-        char serverIpAddress[] = "10.42.0.1";
+        char serverIpAddress[] = "192.168.1.2";
     #endif
 #elif defined(BRAM)
     char serverName[] = "mqtt-1";
     char serverIpAddress[128] = {0};
 #else
 #endif
-    // test();
+   // test();
     // char serverName[] = "test.mosquitto.org";
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
@@ -375,7 +379,7 @@ void puzzleEntryPoint(void *, void *, void *)
 
 #ifdef NASER
             dhcpClient("not specified");
-#elif POURYA
+#elif defined(POURYA)
             dhcpClient("not specified");
 #else
             dnsResolver("not specified", serverName, serverIpAddress);

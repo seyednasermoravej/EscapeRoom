@@ -4,6 +4,8 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/drivers/led_strip.h>
+#include <zephyr/sys/util.h>
+#include <zephyr/device.h>
 
 #define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
 
