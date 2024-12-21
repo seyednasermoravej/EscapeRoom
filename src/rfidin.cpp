@@ -134,6 +134,7 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gp
 
 bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
 {
+  
   LOG_DBG("Waiting for an ISO14443A card");
   bool success  = false;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };	// Buffer to store the returned UID
@@ -142,6 +143,20 @@ bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
   // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+  begin();
+  uint32_t versiondata = getFirmwareVersion();
+    if (! versiondata) {
+    LOG_INF("Didn't find PN53x board");
+    while (1)// halt
+    {
+      begin();
+      versiondata = getFirmwareVersion();
+      if(versiondata)
+      {
+        break;
+      }
+    } 
+  }
   success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, timeout);
 
   if (success) {
@@ -224,7 +239,7 @@ bool Adafruit_PN532::begin() {
   //   return false;
   // }
   reset(); // HW reset - put in known state
-  k_msleep(100);
+  k_msleep(10);
   // delay(100);
   wakeup(); // hey! wakeup!
   return true;

@@ -8,22 +8,22 @@ const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // };
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid1)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rfid2))
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid3)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid4)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid2)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid3)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid4)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
 };
 
 static const struct gpio_dt_spec gpio_specs[] = {
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid1), reset_gpios, {0}),
-    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0})
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid3), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid4), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid3), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid4), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
 };
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
@@ -68,14 +68,14 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 	for(uint8_t i = 0; i < instance->numRfids; i++)
 	{
 	// uint8_t i = 0;
+		instance->rfids[i]->begin();
 		read = instance->rfids[i]->readCard(buff, 1000);
 		if(read)
 		{
-			struct MqttMsg msg = {0};
-			sprintf(msg.topic, "%s/%s/rfid%d", instance->roomName, instance->puzzleTypeName, i + 1);
-			sprintf(msg.msg, "%s", buff);
+			sprintf(instance->msgReader.topic, "%s/%s/rfid%d", instance->roomName, instance->puzzleTypeName, i + 1);
+			sprintf(instance->msgReader.msg, "%s", buff);
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
-			k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
 		}
 		k_msleep(100);
 

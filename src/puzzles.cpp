@@ -313,12 +313,7 @@ int Puzzles:: builtIntLedInit()
 // static const struct device *dev = DEVICE_DT_GET(DT_NODELABEL(color_led_strip));
 void test()
 {
-    Blinds *blinds = new Blinds("sdf", "sdf");
-    blinds->test();
-    HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
-    heartMonitor->test();
-    // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
-    // LedStrip *ledStrip = new LedStrip(dev, 16);
+    Fridge *fridge = new Fridge("sdf", "sdf");
 }
 
 
@@ -343,7 +338,7 @@ void puzzleEntryPoint(void *, void *, void *)
     char serverIpAddress[128] = {0};
 #else
 #endif
-    test();
+    // test();
     // char serverName[] = "test.mosquitto.org";
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
