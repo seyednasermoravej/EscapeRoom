@@ -28,7 +28,6 @@ public:
     static void buttonsHandlerWrapper(struct input_event *val, void *userData);
 
 private:
-    TM74HC595LedTube *display;
 
 
 };

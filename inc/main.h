@@ -16,7 +16,7 @@
 #include <sample_usbd.h>
 extern char deviceId[17]; 
 
-#define BRAM
+#define NASER 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif
 

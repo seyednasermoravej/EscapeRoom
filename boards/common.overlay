@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		// zephyr,console = &uart0;
-		// zephyr,shell-uart = &uart0;
-		zephyr,console = &cdc_acm_uart0;
-		zephyr,shell-uart = &cdc_acm_uart0;
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		// zephyr,console = &cdc_acm_uart0;
+		// zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -245,7 +245,7 @@
 		write-only;
 		#address-cells = <1>;
 		#size-cells = <0>;
-
+		zephyr,deferred-init;
 		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@0 {
 			compatible = "ilitek,ili9488";
 			mipi-max-frequency = <25000000>;
@@ -311,7 +311,12 @@
 		door_keypad_display: door-keypad-display
 		{
 			compatible = "power-switch";
-			gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>, <&gpio0 11 GPIO_ACTIVE_HIGH>, <&gpio0 12 GPIO_ACTIVE_HIGH>;
+			gpios = <&sevensegment 0 GPIO_ACTIVE_HIGH>, <&sevensegment 1 GPIO_ACTIVE_HIGH>, <&sevensegment 2 GPIO_ACTIVE_HIGH>,
+					<&sevensegment 3 GPIO_ACTIVE_HIGH>, <&sevensegment 4 GPIO_ACTIVE_HIGH>, <&sevensegment 5 GPIO_ACTIVE_HIGH>,
+					<&sevensegment 6 GPIO_ACTIVE_HIGH>, <&sevensegment 7 GPIO_ACTIVE_HIGH>, <&sevensegment 8 GPIO_ACTIVE_HIGH>,
+					<&sevensegment 9 GPIO_ACTIVE_HIGH>, <&sevensegment 10 GPIO_ACTIVE_HIGH>, <&sevensegment 11 GPIO_ACTIVE_HIGH>,
+					<&sevensegment 12 GPIO_ACTIVE_HIGH>, <&sevensegment 13 GPIO_ACTIVE_HIGH>, <&sevensegment 14 GPIO_ACTIVE_HIGH>,
+					<&sevensegment 15 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -889,27 +894,19 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-	zephyr,deferred-init;
-	// cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
-	color_led_strip: ws2812@0 {
-		compatible = "worldsemi,ws2812-spi";
-
-		/* SPI */
-		reg = <0>; /* ignored, but necessary for SPI bindings */
-		spi-max-frequency = <6400000>;
-
-		/* WS2812 */
-		chain-length = <16>; /* arbitrary; change at will */
-		spi-cpha;
-		spi-one-frame = <0xf0>; /* 11110000: 625 ns high and 625 ns low */
-		spi-zero-frame = <0xc0>; /* 11000000: 312.5 ns high and 937.5 ns low */
-		color-mapping = <LED_COLOR_ID_GREEN
-				 LED_COLOR_ID_RED
-				 LED_COLOR_ID_BLUE>;
-		zephyr,deferred-init;
+	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
+	// zephyr,deferred-init;
+	sevensegment: shift-expander@1
+	{
 		status = "okay";
+		compatible = "zmk,gpio-595";
+		reg = <1>;
+		ngpios = <16>;
+		#gpio-cells = <2>; 
+		gpio-controller;
+		spi-max-frequency = <1000000>;
 	};
+
 
 };
 
@@ -1233,5 +1230,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	status = "disabled";
+	// status = "disabled";
 };

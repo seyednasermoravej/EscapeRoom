@@ -3,8 +3,101 @@
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
+
+
+
+#define DATA_PIN    22  /* Replace with your GPIO pin */
+#define CLOCK_PIN   26  /* Replace with your GPIO pin */
+#define LATCH_PIN   27  /* Replace with your GPIO pin */
+
+/* GPIO devices */
+const struct device *gpio_dev;
+
+/* 7-segment digit mapping (common cathode example) */
+const uint8_t digit_map[10] = {
+    0b00111111, // 0
+    0b00000110, // 1
+    0b01011011, // 2
+    0b01001111, // 3
+    0b01100110, // 4
+    0b01101101, // 5
+    0b01111101, // 6
+    0b00000111, // 7
+    0b01111111, // 8
+    0b01101111  // 9
+};
+
+/* Function to send data to the shift registers */
+void shift_out(uint16_t data) {
+    for (int i = 15; i >= 0; i--) {
+        /* Set DATA pin */
+        gpio_pin_set(gpio_dev, DATA_PIN, (data >> i) & 0x01);
+
+        /* Pulse CLOCK pin */
+        gpio_pin_set(gpio_dev, CLOCK_PIN, 1);
+        k_sleep(K_USEC(1));
+        gpio_pin_set(gpio_dev, CLOCK_PIN, 0);
+    }
+
+    /* Latch data */
+    gpio_pin_set(gpio_dev, LATCH_PIN, 1);
+    k_sleep(K_USEC(1));
+    gpio_pin_set(gpio_dev, LATCH_PIN, 0);
+}
+
+/* Function to display a number */
+void display_number(uint32_t number) {
+    uint16_t data = 0;
+
+    for (int digit = 0; digit < 8; digit++) {
+        if (number > 0) {
+            uint8_t digit_value = number % 10;
+            data |= (digit_map[digit_value] << (digit * 8));
+            number /= 10;
+        }
+    }
+
+    shift_out(data);
+}
+
+void test(void) {
+    gpio_dev = DEVICE_DT_GET(DT_NODELABEL(gpio0));
+
+    if (!gpio_dev) {
+        printk("Error: Cannot find GPIO device\n");
+        return;
+    }
+
+    gpio_pin_configure(gpio_dev, DATA_PIN, GPIO_OUTPUT_ACTIVE);
+    gpio_pin_configure(gpio_dev, CLOCK_PIN, GPIO_OUTPUT_ACTIVE);
+    gpio_pin_configure(gpio_dev, LATCH_PIN, GPIO_OUTPUT_ACTIVE);
+
+    while (1) {
+        for (uint32_t i = 0; i <= 99999999; i++) {
+            display_number(i);
+            k_sleep(K_MSEC(2000)); /* Update every 500ms */
+            LOG_INF("value is: %u", i);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void i2cScanner();
-void test();
 struct mqtt_topic deviceId_topic = {0};
 extern void puzzleThreadCreate();
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
@@ -112,19 +205,19 @@ void i2cScanner()
     }
 }
 
-void test()
-{
-    // struct MqttMsg mg = {0};
-    // sprintf(msg.msg, "Button 0 pressed");
+// void test()
+// {
+//     // struct MqttMsg mg = {0};
+//     // sprintf(msg.msg, "Button 0 pressed");
 
-   i2cScanner();
-    while(1)
-    {
+//    i2cScanner();
+//     while(1)
+//     {
 
-        k_msleep(1000);
+//         k_msleep(1000);
 
-    }
-}
+//     }
+// }
 
 
 void readingHWinfo(char *idStr)
