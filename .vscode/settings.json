@@ -69,7 +69,8 @@
 			"tftlcd.h": "c",
 			"exitdoor.h": "c",
 			"dnsresolver.h": "c",
-			"compare": "cpp"
+			"compare": "cpp",
+			"cstring": "cpp"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

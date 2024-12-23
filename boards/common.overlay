@@ -894,13 +894,13 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
-	zephyr,deferred-init;
-	sevensegment: shift-expander@1
+	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>, <&gpio0 15 GPIO_ACTIVE_LOW>;
+	// zephyr,deferred-init;
+	sevensegment: shift-expander@2
 	{
 		status = "okay";
 		compatible = "zmk,gpio-595";
-		reg = <1>;
+		reg = <2>;
 		ngpios = <16>;
 		#gpio-cells = <2>; 
 		gpio-controller;
