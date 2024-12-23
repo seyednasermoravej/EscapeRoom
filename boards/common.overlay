@@ -895,7 +895,7 @@
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>;
-	// zephyr,deferred-init;
+	zephyr,deferred-init;
 	sevensegment: shift-expander@1
 	{
 		status = "okay";
