@@ -40,7 +40,7 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 	if (!device_is_ready(strip)) {
 		LOG_ERR("strip Device not ready, aborting test");
 	}    
-    ledstrip = new LedStrip(strip, STRIP_NUM_PIXELS);
+    ledStrip = new LedStrip(strip, STRIP_NUM_PIXELS);
 
     int ret;
     for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
@@ -166,7 +166,7 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
                 struct led_rgb color_leds = retrieveColors(msg->msg);
                 LOG_INF("r: %u g: %u b: %u", color_leds.r, color_leds.g, color_leds.b);
 
-                rc = ledstrip->update(color_leds, ws2811Idx);
+                rc = ledStrip->update(color_leds, ws2811Idx);
                 if (rc) {
 				    LOG_ERR("couldn't update strip: %d", rc);
 			    }

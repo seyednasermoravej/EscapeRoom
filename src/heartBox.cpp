@@ -3,44 +3,66 @@
 LOG_MODULE_REGISTER(heartBox, LOG_LEVEL_INF);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-static const struct gpio_dt_spec relays[] = {
+static const struct gpio_dt_spec allRelays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_box_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
+#define DISPLAY4_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(holtek_ht16k33)
+
+
+#define STRIP_NODE		DT_NODELABEL(ws2812)
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(ws2812), chain_length)
+const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length);
+#else
+#error Unable to determine length of LED strip
+#endif
 
 HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
-    for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
-        if (!device_is_ready(relays[i].port)) {
+    for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
+        if (!device_is_ready(allRelays[i].port)) {
 		    // return -1;
 	    }
-        ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT_INACTIVE);
+        ret = gpio_pin_configure_dt(&allRelays[i], GPIO_OUTPUT_INACTIVE);
 	    if (ret < 0) {
 		    // return -1;
 	    }
     }
+    display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
     creatingMqttList(11);
     char topic[64];
     sprintf(topic, "%s/%s/", roomName, puzzleTypeName);
     keypad = new Keypad(topic);
-    // ledStrip = new LedStrip()
+
+    static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
+    // device_init(strip); 
+	if (!device_is_ready(strip)) {
+		LOG_ERR("strip Device not ready, aborting test");
+	}    
+    ledStrip = new LedStrip(strip, wsChainLength);
 }
 
 void HeartBox:: creatingMqttList(uint16_t _mqttCount)
 {
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < wsChainLength; i++) /// chain length in overlay
+    {
+        sprintf(topic, "%sws2811_%d", mqttCommand, i + 1);
+        mqttList[i] = *createMqttTopic(topic);
+    }
 
-	mqttList[0] = codeRed_heartBox_display1_topic;
-	mqttList[1] = codeRed_heartBox_display2_topic;
-	mqttList[2] = codeRed_heartBox_relay1_topic;
-	mqttList[3] = codeRed_heartBox_ws2811a_topic;
-	mqttList[4] = codeRed_heartBox_ws2811b_topic;
-	mqttList[5] = codeRed_heartBox_ws2811c_topic;
-	mqttList[6] = codeRed_heartBox_ws2811d_topic;
-	mqttList[7] = codeRed_heartBox_ws2811e_topic;
-	mqttList[8] = codeRed_heartBox_ws2811f_topic;
-	mqttList[9] = codeRed_heartBox_ws2811g_topic;
-	mqttList[10] = codeRed_heartBox_ws2811h_topic;
+    for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
+    {
+        sprintf(topic, "%srelay%d", mqttCommand, i + 1);
+        mqttList[i + wsChainLength] = *createMqttTopic(topic);
+    }
+    sprintf(topic, "%sdisplay1", mqttCommand);
+    mqttList[wsChainLength + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
+
+    sprintf(topic, "%sdisplay2", mqttCommand);
+	mqttList[wsChainLength + ARRAY_SIZE(allRelays) + 1] = *createMqttTopic(topic);
     mqttCount = _mqttCount;
 
 }
@@ -48,62 +70,65 @@ void HeartBox:: creatingMqttList(uint16_t _mqttCount)
 
 void HeartBox:: messageHandler(struct MqttMsg *msg)
 {
+    int rc;
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, CODE_RED_HEART_BOX_DISPLAY1_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        //??????????????????logic is unknown
-        // if(strcmp(msg->msg, "on") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 1);
-        // }
-        // else if(strcmp(msg->msg, "off") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 0);
-        // }
-        // else
-        // {
-        //     LOG_INF("The command is not valid");
-        // }
-        //??????????????????logic is unknown
-    }
-    else if(strcmp(msg->topic, CODE_RED_HEART_BOX_DISPLAY2_TOPIC) == 0)
-    {
-        //??????????????????logic is unknown
-        // if(strcmp(msg->msg, "on") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 1);
-        // }
-        // else if(strcmp(msg->msg, "off") == 0)
-        // {
-        //     gpio_pin_set_dt(&relays[0], 0);
-        // }
-        // else
-        // {
-        //     LOG_INF("The command is not valid");
-        // }
-        //??????????????????logic is unknown
-    }
-    else if(strcmp(msg->topic, CODE_RED_HEART_BOX_RELAY1_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
+        if(strcmp(command, "display1") == 0)
         {
-            gpio_pin_set_dt(&relays[0], 1);
+            display4->print(msg->msg);
+            LOG_ERR("display logic");
         }
-        else if(strcmp(msg->msg, "off") == 0)
+        else if(strstr(command, "relay") != NULL)
         {
-            gpio_pin_set_dt(&relays[0], 0);
+            char field[] = "relay";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t relayIdx = commandIdx - 1;
+            if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
+            {
+                if(relayIdx == 1)
+                {
+                    relayOperation(msg->msg, &allRelays[relayIdx], true);
+                }
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
+        else if(strstr(command, "ws2811_") != NULL)
+        {
+            char field[] = "ws2811_";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t ws2811Idx = commandIdx - 1;
+            if((commandIdx > 0 ) && (ws2811Idx < 8))
+            {
+                 //LOG_ERR("a valid index");
+                struct led_rgb color_leds = retrieveColors(msg->msg);
+                LOG_INF("r: %u g: %u b: %u", color_leds.r, color_leds.g, color_leds.b);
+
+                rc = ledStrip->update(color_leds, ws2811Idx);
+                if (rc) {
+				    LOG_ERR("couldn't update strip: %d", rc);
+			    }
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+        }
+        else if(strstr(command, "display2") != NULL)
+        {
+            LOG_INF("Display2");
         }
         else
         {
-            LOG_INF("The command is not valid");
+            LOG_INF("the command is not valid");
         }
     }
-    else if(strcmp(msg->topic, CODE_RED_HEART_BOX_WS2811A_TOPIC) == 0)
-    {
-
-        // char rStr[4];
-
-    } 
     else
         LOG_INF("the command is not valid");
 }

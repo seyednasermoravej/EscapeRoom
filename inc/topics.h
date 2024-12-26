@@ -122,30 +122,6 @@ extern struct mqtt_topic codeRed_exitDoor_relay1_topic;
 #define CODE_RED_DEFIB_DISPLAY1_TOPIC                                            "codeRed/defib/display1" 
 extern struct mqtt_topic codeRed_defib_display1_topic;
 
-#define CODE_RED_HEART_BOX_DISPLAY1_TOPIC                                          "codeRed/heartBox/display1" 
-extern struct mqtt_topic codeRed_heartBox_display1_topic;
-#define CODE_RED_HEART_BOX_DISPLAY2_TOPIC                                          "codeRed/heartBox/display2" 
-extern struct mqtt_topic codeRed_heartBox_display2_topic;
-#define CODE_RED_HEART_BOX_RELAY1_TOPIC                                           "codeRed/heartBox/relay1" 
-extern struct mqtt_topic codeRed_heartBox_relay1_topic;
-#define CODE_RED_HEART_BOX_WS2811A_TOPIC                                          "codeRed/heartBox/ws2811a" 
-extern struct mqtt_topic codeRed_heartBox_ws2811a_topic;
-#define CODE_RED_HEART_BOX_WS2811B_TOPIC                                          "codeRed/heartBox/ws2811b" 
-extern struct mqtt_topic codeRed_heartBox_ws2811b_topic;
-#define CODE_RED_HEART_BOX_WS2811C_TOPIC                                          "codeRed/heartBox/ws2811c" 
-extern struct mqtt_topic codeRed_heartBox_ws2811c_topic;
-#define CODE_RED_HEART_BOX_WS2811D_TOPIC                                          "codeRed/heartBox/ws2811d" 
-extern struct mqtt_topic codeRed_heartBox_ws2811d_topic;
-#define CODE_RED_HEART_BOX_WS2811E_TOPIC                                          "codeRed/heartBox/ws2811e" 
-extern struct mqtt_topic codeRed_heartBox_ws2811e_topic;
-#define CODE_RED_HEART_BOX_WS2811F_TOPIC                                          "codeRed/heartBox/ws2811f" 
-extern struct mqtt_topic codeRed_heartBox_ws2811f_topic;
-#define CODE_RED_HEART_BOX_WS2811G_TOPIC                                          "codeRed/heartBox/ws2811g" 
-extern struct mqtt_topic codeRed_heartBox_ws2811g_topic;
-#define CODE_RED_HEART_BOX_WS2811H_TOPIC                                          "codeRed/heartBox/ws2811h" 
-extern struct mqtt_topic codeRed_heartBox_ws2811h_topic;
-
-
 
 #define LED1_TOPIC              "sub/led1"
 #define LED2_TOPIC              "sub/led2"

@@ -38,7 +38,7 @@ public:
 
 private:
     Keypad *keypad;
-    LedStrip *ledstrip;
+    LedStrip *ledStrip;
 
 
 };

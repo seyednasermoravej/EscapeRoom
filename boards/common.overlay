@@ -1145,6 +1145,7 @@ pico_spi: &spi0 {};
 	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_FAST>;
 	zephyr,deferred-init;
+
 	// clock-frequency = <I2C_BITRATE_STANDARD>;
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
@@ -1188,7 +1189,13 @@ pico_spi: &spi0 {};
 		reg = <0x29>;
 		zephyr,deferred-init;
 	};
-  
+	ht16k33@70 {
+		compatible = "holtek,ht16k33";
+		reg = <0x70>;
+		/* Uncomment to use IRQ instead of polling: */
+		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */
+
+	};
 
 };
 /delete-node/ &code_partition;

@@ -16,7 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "FourBitLedDigitalTube.h"
+#include "display8.h"
 
 class DoorKeypad: public Puzzle 
 {
@@ -26,10 +26,8 @@ public:
     void creatingMqttList(uint16_t) override;
     void buttonsHandler(struct input_event *val);
     static void buttonsHandlerWrapper(struct input_event *val, void *userData);
-
 private:
-
-
+    Display8 *display8;
 };
 
 #endif 
