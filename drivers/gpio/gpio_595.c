@@ -49,11 +49,26 @@ static int reg_595_write_registers(const struct device *dev, uint32_t value) {
     int ret = 0;
 
     uint8_t nwrite = config->ngpios / 8;
-    uint32_t reg_data = sys_cpu_to_be32(value);
+    ////////////////
+    // uint32_t reg_data = sys_cpu_to_be32(value);
+    uint8_t maxNumOf595 = 24;
+    uint8_t buf[24];
+    memcpy(buf, &value, maxNumOf595);
+    uint8_t temp;
 
+    for (size_t i = 0; i < maxNumOf595 / 2; i++) {
+        // Swap elements at positions i and (n - i - 1)
+        temp = buf[i];
+        buf[i] = buf[maxNumOf595 - i - 1];
+        buf[maxNumOf595 - i - 1] = temp;
+    }
+//////////////////////////////
     /* Allow a sequence of 1-4 registers in sequence, lowest byte is for the first in the chain */
     const struct spi_buf tx_buf[1] = {{
-        .buf = ((uint8_t *)&reg_data) + (4 - nwrite),
+        //////////////////////
+        // .buf = ((uint8_t *)&reg_data) + (4 - nwrite),
+        .buf = &buf[maxNumOf595 - nwrite],
+        /////////////////////////////
         .len = nwrite,
     }};
 
