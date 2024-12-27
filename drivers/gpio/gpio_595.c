@@ -24,8 +24,8 @@
 LOG_MODULE_REGISTER(gpio_595);
 
 /* Define the maximum number of SN74HC595 shift registers */
-#define MAX_NUM_OF_595 4
-
+#define MAX_NUM_OF_595 24
+#define MAX_GPIO_COUNT (MAX_NUM_OF_595 * 8) /* 192 GPIOs */
 /** Configuration data */
 struct reg_595_config {
     /* gpio_driver_data needs to be first */
@@ -71,7 +71,8 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
         buf[MAX_NUM_OF_595 - i - 1] = temp;
     }
     const struct spi_buf tx_buf[1] = {{
-        // .buf = value,
+
+        //.buf = buf + (MAX_NUM_OF_595 - nwrite),
         &buf[MAX_NUM_OF_595 - nwrite],
         .len = nwrite,
     }};
@@ -120,7 +121,8 @@ static int reg_595_port_get_raw(const struct device *dev, uint32_t *value) {
     return -ENOTSUP; /* SN74HC595 does not support reading GPIO states */
 }
 
-static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t mask, uint32_t value) {
+// static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t mask, uint32_t value) {
+static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t *mask, uint32_t *value) {
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595]; /* Temporary buffer for GPIO states */
     int ret;
@@ -133,25 +135,30 @@ static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t mask, 
     k_sem_take(&drv_data->lock, K_FOREVER);
 
     memcpy(buf, drv_data->gpio_cache, sizeof(buf));
+    // for (int i = 0; i < MAX_NUM_OF_595; i++) {
+    //     buf[i] = (buf[i] & ~(mask >> (i * 8))) | ((value >> (i * 8)) & (mask >> (i * 8)));
+    // }
     for (int i = 0; i < MAX_NUM_OF_595; i++) {
-        buf[i] = (buf[i] & ~(mask >> (i * 8))) | ((value >> (i * 8)) & (mask >> (i * 8)));
+        buf[i] = (buf[i] & ~mask[i]) | (value[i] & mask[i]);
     }
-
     ret = reg_595_write_registers(dev, buf);
 
     k_sem_give(&drv_data->lock);
     return ret;
 }
 
-static int reg_595_port_set_bits_raw(const struct device *dev, uint32_t mask) {
+// static int reg_595_port_set_bits_raw(const struct device *dev, uint32_t mask) {
+static int reg_595_port_set_bits_raw(const struct device *dev, uint32_t *mask) {
     return reg_595_port_set_masked_raw(dev, mask, mask);
 }
 
-static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t mask) {
+// static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t mask) {
+static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t *mask) {
     return reg_595_port_set_masked_raw(dev, mask, 0);
 }
 
-static int reg_595_port_toggle_bits(const struct device *dev, uint32_t mask) {
+// static int reg_595_port_toggle_bits(const struct device *dev, uint32_t mask) {
+static int reg_595_port_toggle_bits(const struct device *dev, uint32_t *mask) {
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595];
     int ret;
@@ -165,7 +172,8 @@ static int reg_595_port_toggle_bits(const struct device *dev, uint32_t mask) {
 
     memcpy(buf, drv_data->gpio_cache, sizeof(buf));
     for (int i = 0; i < MAX_NUM_OF_595; i++) {
-        buf[i] ^= (mask >> (i * 8));
+        // buf[i] ^= (mask >> (i * 8));
+        buf[i] ^= mask[i];
     }
 
     ret = reg_595_write_registers(dev, buf);

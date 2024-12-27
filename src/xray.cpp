@@ -2,7 +2,7 @@
 
 LOG_MODULE_REGISTER(xray, LOG_LEVEL_DBG);
 
-const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
+static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
 //     PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
 // };
