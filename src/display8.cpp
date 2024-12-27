@@ -61,10 +61,18 @@ void Display8:: displayStr(const char *_str)
 
 void Display8:: displayChar(uint8_t pos, char c)
 {
-    gpio_port_clear_bits(display->port, 0xffff);
-    uint16_t data = (1<< pos) | segment_map[(uint8_t)c] << 8;
+    uint8_t buf[2];
+    buf[0] = 0xff;
+    buf[1] = 0xff;
 
-    gpio_port_set_bits(display->port, data);
+    // gpio_port_clear_bits(display->port, 0xffff);
+    reg_595_port_clear_bits_raw(display->port, buf);
+    uint16_t data = (1<< pos) | segment_map[(uint8_t)c] << 8;
+    uint8_t buf2[2];
+    buf2[0] = (data >> 8) & 0x00ff;
+    buf2[1] = (data)  & 0x00ff;
+    reg_595_port_set_bits_raw(display->port, buf2);
+    // gpio_port_set_bits(display->port, data);
 
 }
 

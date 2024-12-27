@@ -13,6 +13,9 @@
 
 extern const uint8_t segment_map[128];
 
+extern "C" int reg_595_port_set_bits_raw(const struct device *dev, uint8_t *mask);
+
+extern "C" int reg_595_port_clear_bits_raw(const struct device *dev, uint8_t *mask);
 class Display8
 {
 public:

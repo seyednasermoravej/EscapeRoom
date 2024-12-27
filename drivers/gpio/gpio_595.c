@@ -72,8 +72,8 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     }
     const struct spi_buf tx_buf[1] = {{
 
-        //.buf = buf + (MAX_NUM_OF_595 - nwrite),
-        &buf[MAX_NUM_OF_595 - nwrite],
+        .buf = buf + (MAX_NUM_OF_595 - nwrite),
+        // &buf[MAX_NUM_OF_595 - nwrite],
         .len = nwrite,
     }};
 
@@ -122,7 +122,7 @@ static int reg_595_port_get_raw(const struct device *dev, uint32_t *value) {
 }
 
 // static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t mask, uint32_t value) {
-static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t *mask, uint32_t *value) {
+static int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, uint8_t *value) {
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595]; /* Temporary buffer for GPIO states */
     int ret;
@@ -148,17 +148,17 @@ static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t *mask,
 }
 
 // static int reg_595_port_set_bits_raw(const struct device *dev, uint32_t mask) {
-static int reg_595_port_set_bits_raw(const struct device *dev, uint32_t *mask) {
+int reg_595_port_set_bits_raw(const struct device *dev, uint8_t *mask) {
     return reg_595_port_set_masked_raw(dev, mask, mask);
 }
 
 // static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t mask) {
-static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t *mask) {
+int reg_595_port_clear_bits_raw(const struct device *dev, uint8_t *mask) {
     return reg_595_port_set_masked_raw(dev, mask, 0);
 }
 
 // static int reg_595_port_toggle_bits(const struct device *dev, uint32_t mask) {
-static int reg_595_port_toggle_bits(const struct device *dev, uint32_t *mask) {
+static int reg_595_port_toggle_bits(const struct device *dev, uint8_t *mask) {
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595];
     int ret;
