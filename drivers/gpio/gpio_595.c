@@ -60,7 +60,7 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     int ret = 0;
 
     uint8_t nwrite = config->ngpios / 8; /* Number of bytes to write */
-    uint8_t buf[MAX_NUM_OF_595];
+    uint8_t buf[MAX_NUM_OF_595] = {0};
     memcpy(buf, value, MAX_NUM_OF_595);
     uint8_t temp;
 
@@ -72,8 +72,8 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     }
     const struct spi_buf tx_buf[1] = {{
 
-        .buf = buf + (MAX_NUM_OF_595 - nwrite),
-        // &buf[MAX_NUM_OF_595 - nwrite],
+        // .buf = buf + (MAX_NUM_OF_595 - nwrite),
+        &buf[MAX_NUM_OF_595 - nwrite],
         .len = nwrite,
     }};
 
