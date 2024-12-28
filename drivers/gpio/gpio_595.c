@@ -73,7 +73,7 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     const struct spi_buf tx_buf[1] = {{
 
         // .buf = buf + (MAX_NUM_OF_595 - nwrite),
-        &buf[MAX_NUM_OF_595 - nwrite],
+        .buf = &buf[MAX_NUM_OF_595 - nwrite],
         .len = nwrite,
     }};
 
@@ -126,6 +126,7 @@ static int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, 
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595]; /* Temporary buffer for GPIO states */
     int ret;
+    const struct reg_595_config *config = dev->config;
 
     /* Can't do SPI bus operations from an ISR */
     if (k_is_in_isr()) {
@@ -138,7 +139,7 @@ static int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, 
     // for (int i = 0; i < MAX_NUM_OF_595; i++) {
     //     buf[i] = (buf[i] & ~(mask >> (i * 8))) | ((value >> (i * 8)) & (mask >> (i * 8)));
     // }
-    for (int i = 0; i < MAX_NUM_OF_595; i++) {
+    for (int i = 0; i < config->ngpios / 8; i++) {
         buf[i] = (buf[i] & ~mask[i]) | (value[i] & mask[i]);
     }
     ret = reg_595_write_registers(dev, buf);
@@ -154,7 +155,8 @@ int reg_595_port_set_bits_raw(const struct device *dev, uint8_t *mask) {
 
 // static int reg_595_port_clear_bits_raw(const struct device *dev, uint32_t mask) {
 int reg_595_port_clear_bits_raw(const struct device *dev, uint8_t *mask) {
-    return reg_595_port_set_masked_raw(dev, mask, 0);
+    uint8_t buf[MAX_NUM_OF_595] = {0};
+    return reg_595_port_set_masked_raw(dev, mask, buf);
 }
 
 // static int reg_595_port_toggle_bits(const struct device *dev, uint32_t mask) {
