@@ -2,6 +2,8 @@
 
 static char c = segment_map[0x20];
 
+extern "C" int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, uint8_t *value);
+
 Display24::Display24(const struct gpio_dt_spec *_display): display(_display)
 {
     int ret;
@@ -14,6 +16,8 @@ Display24::Display24(const struct gpio_dt_spec *_display): display(_display)
 		    // return -1;
 	    }
     }
+    uint8_t buf[24] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+    reg_595_port_clear_bits_raw(display->port, buf);
 }
 
 
@@ -28,16 +32,16 @@ void Display24:: displayStr(const char *_str)
     }
     else
     {
-        strncpy(str, _str, 8);
+        strncpy(str, _str, 24);
         strLen = 8;
     }
-    uint8_t buf[24] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-    reg_595_port_clear_bits_raw(display->port, buf);
-
     uint8_t buf2[24] = {0};
-    // for(u)
-    // {segment_map[(uint8_t)c], ((uint8_t)1<< pos)};
-    // reg_595_port_set_bits_raw(display->port, buf2);
+    for(uint8_t i = 0; i < strlen(str); i++)
+    {
+        buf2[i] = segment_map[(uint8_t)str[i]];
+    }
+
+    reg_595_port_set_bits_raw(display->port, buf2);
 }
 
 

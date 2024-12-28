@@ -28,7 +28,7 @@ private:
 
     static void displayWorkHandler(struct k_work *work);
     const struct gpio_dt_spec *display;
-    char str[25];
+    char str[25] = {0};
     uint8_t strLen = 0;
 };
 #endif

@@ -62,14 +62,6 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     uint8_t nwrite = config->ngpios / 8; /* Number of bytes to write */
     uint8_t buf[MAX_NUM_OF_595] = {0};
     memcpy(buf, value, MAX_NUM_OF_595);
-    uint8_t temp;
-
-    // for (size_t i = 0; i < MAX_NUM_OF_595 / 2; i++) {
-    //     // Swap elements at positions i and (n - i - 1)
-    //     temp = buf[i];
-    //     buf[i] = buf[MAX_NUM_OF_595 - i - 1];
-    //     buf[MAX_NUM_OF_595 - i - 1] = temp;
-    // }
     const struct spi_buf tx_buf[1] = {{
 
         // .buf = buf + (MAX_NUM_OF_595 - nwrite),
@@ -123,7 +115,7 @@ static int reg_595_port_get_raw(const struct device *dev, uint32_t *value) {
 }
 
 // static int reg_595_port_set_masked_raw(const struct device *dev, uint32_t mask, uint32_t value) {
-static int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, uint8_t *value) {
+int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, uint8_t *value) {
     struct reg_595_drv_data *const drv_data = (struct reg_595_drv_data *const)dev->data;
     uint8_t buf[MAX_NUM_OF_595]; /* Temporary buffer for GPIO states */
     int ret;

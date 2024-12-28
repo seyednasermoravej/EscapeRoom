@@ -14,6 +14,8 @@ Display8::Display8(const struct gpio_dt_spec *_display): display(_display)
 		    // return -1;
 	    }
     }
+    uint8_t buf[2] = {0xff, 0xff};
+    reg_595_port_clear_bits_raw(display->port, buf);
     k_timer_init(&displayTimer, Display8:: displayTimerHandler, NULL);
     k_work_init(&displayWork, Display8:: displayWorkHandler);
 }
@@ -41,9 +43,50 @@ void Display8:: displayRefresh()
     // {
     //     pos = 0;
     // }
+
+
+
     static uint8_t pos = 0;
+    uint8_t vPos;
+    switch (pos)
+    {
+    case 0:
+        vPos = 3;
+        break;
+    
+    case 1:
+        vPos = 2;
+        break;
+    
+    case 2:
+        vPos = 1;
+        break;
+    
+    case 3:
+        vPos = 0;
+        break;
+    
+    case 4:
+        vPos = 7;
+        break;
+    
+    case 5:
+        vPos = 6;
+        break;
+    
+    case 6:
+        vPos = 5;
+        break;
+    
+    case 7:
+        vPos = 4;
+        break;
+    
+    default:
+        break;
+    }
     c = str[strLen - 1 - pos];
-    displayChar(pos, c);
+    displayChar(vPos, c);
     pos++;
     if(pos >= strLen)
     {
@@ -53,6 +96,9 @@ void Display8:: displayRefresh()
 void Display8:: displayStr(const char *_str)
 {
     k_timer_stop(&displayTimer);
+
+
+
     strLen = strlen(_str);
     if(strLen < 9)
     {
@@ -63,16 +109,17 @@ void Display8:: displayStr(const char *_str)
         strncpy(str, _str, 8);
         strLen = 8;
     }
-    k_timer_start(&displayTimer, K_SECONDS(1), K_MSEC(1));
+    k_timer_start(&displayTimer, K_SECONDS(1), K_USEC(50));
 }
 
 
 void Display8:: displayChar(uint8_t pos, char c)
 {
-    uint8_t buf[2] = {0xff, 0xff};
-    reg_595_port_clear_bits_raw(display->port, buf);
-    uint8_t buf2[2] = {segment_map[(uint8_t)c], ((uint8_t)1<< pos)};
-    reg_595_port_set_bits_raw(display->port, buf2);
+    // reg_595_port_clear_bits_raw(display->port, clearMask);
+
+    uint8_t buf2[2] = {segment_map[(uint8_t)c], (((uint8_t)1<< pos))};
+    // uint8_t buf2[2] = {segment_map[(uint8_t)c], (uint8_t)(~(1<< pos))};
+    reg_595_port_set_masked_raw(display->port, clearMask, buf2);
 
 }
 
@@ -88,7 +135,7 @@ const uint8_t segment_map[128] = {
     0xFF, 0xFF, 0xFF, 0xFF, // 0x21–0x24
     0xFF, 0xFF, 0xFF, 0xFF, // 0x25–0x28
     0xFF, 0xFF, 0xFF, 0xFF, // 0x29–0x2C
-    0xFF, 0xFF, 0xFF,       // 0x2D–0x2C
+    0xBF, 0xFF, 0xFF,       // 0x2D–0x2C
 
     // Numeric digits (0–9, ASCII 49–57)
     0xC0, // 0x30 (0) => A, B, C, D, E, F
@@ -103,7 +150,7 @@ const uint8_t segment_map[128] = {
     0x90, // 0x39 (9) => A, B, C, D, F, G
 
     0xFF, 0xFF, 0xFF,
-    0xFF, 0xFF, 0xFF,
+    0xb7, 0xFF, 0xFF,
     0xFF, 
 
     // Characters 'A'–'Z', ASCII 65–90

@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		zephyr,console = &uart0;
-		zephyr,shell-uart = &uart0;
-		// zephyr,console = &cdc_acm_uart0;
-		// zephyr,shell-uart = &cdc_acm_uart0;
+		// zephyr,console = &uart0;
+		// zephyr,shell-uart = &uart0;
+		zephyr,console = &cdc_acm_uart0;
+		zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -909,7 +909,7 @@
 		ngpios = <16>;
 		#gpio-cells = <2>; 
 		gpio-controller;
-		spi-max-frequency = <1000000>;
+		spi-max-frequency = <8000000>;
 		zephyr,deferred-init;
 	};
 
@@ -1243,5 +1243,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	// status = "disabled";
+	status = "disabled";
 };
