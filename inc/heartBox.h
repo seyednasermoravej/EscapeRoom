@@ -19,6 +19,7 @@
 #include "keypad.h"
 #include "ledStrip.h"
 #include "display4ht16k33.h"
+#include "display8.h"
 
 class HeartBox: public Puzzle 
 {
@@ -33,6 +34,7 @@ private:
     Keypad *keypad;
     LedStrip *ledStrip;
     Display4 *display4;
+    Display8 *display8;
     
 };
 

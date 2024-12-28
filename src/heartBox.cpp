@@ -7,6 +7,10 @@ static const struct gpio_dt_spec allRelays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_box_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
+const struct gpio_dt_spec display2[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_box_display2), gpios, DT_SPEC_AND_COMMA_GATE)
+};
+
 #define DISPLAY4_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(holtek_ht16k33)
 
 
@@ -37,11 +41,16 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     keypad = new Keypad(topic);
 
     static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
-    // device_init(strip); 
+    device_init(strip); 
 	if (!device_is_ready(strip)) {
 		LOG_ERR("strip Device not ready, aborting test");
 	}    
     ledStrip = new LedStrip(strip, wsChainLength);
+
+
+    device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegment)));
+    display8 = new Display8(display2);
 }
 
 void HeartBox:: creatingMqttList(uint16_t _mqttCount)
@@ -123,6 +132,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
         else if(strstr(command, "display2") != NULL)
         {
             LOG_INF("Display2");
+            display8->displayStr(msg->msg);
         }
         else
         {

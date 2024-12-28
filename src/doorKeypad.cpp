@@ -47,6 +47,10 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegment)));
     display8 = new Display8(display);
+    // while(1)
+    // {
+    //     display8->displayChar(0, '8');
+    // }
 
 
 

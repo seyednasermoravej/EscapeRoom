@@ -33,6 +33,14 @@ void Display8:: displayWorkHandler(k_work *work)
 }
 void Display8:: displayRefresh()
 {
+    // static uint8_t pos = 0;
+    // c = str[strLen - 1 - pos];
+    // displayChar(pos, c);
+    // pos++;
+    // if(pos >= strLen)
+    // {
+    //     pos = 0;
+    // }
     static uint8_t pos = 0;
     c = str[strLen - 1 - pos];
     displayChar(pos, c);
@@ -55,7 +63,7 @@ void Display8:: displayStr(const char *_str)
         strncpy(str, _str, 8);
         strLen = 8;
     }
-    k_timer_start(&displayTimer, K_SECONDS(1), K_MSEC(2));
+    k_timer_start(&displayTimer, K_SECONDS(1), K_MSEC(1));
 }
 
 
@@ -63,7 +71,7 @@ void Display8:: displayChar(uint8_t pos, char c)
 {
     uint8_t buf[2] = {0xff, 0xff};
     reg_595_port_clear_bits_raw(display->port, buf);
-    uint8_t buf2[2] = {segment_map[(uint8_t)c], (1<< pos)};
+    uint8_t buf2[2] = {segment_map[(uint8_t)c], ((uint8_t)1<< pos)};
     reg_595_port_set_bits_raw(display->port, buf2);
 
 }
