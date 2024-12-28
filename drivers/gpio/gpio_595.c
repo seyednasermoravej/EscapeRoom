@@ -64,16 +64,17 @@ static int reg_595_write_registers(const struct device *dev, uint8_t *value) {
     memcpy(buf, value, MAX_NUM_OF_595);
     uint8_t temp;
 
-    for (size_t i = 0; i < MAX_NUM_OF_595 / 2; i++) {
-        // Swap elements at positions i and (n - i - 1)
-        temp = buf[i];
-        buf[i] = buf[MAX_NUM_OF_595 - i - 1];
-        buf[MAX_NUM_OF_595 - i - 1] = temp;
-    }
+    // for (size_t i = 0; i < MAX_NUM_OF_595 / 2; i++) {
+    //     // Swap elements at positions i and (n - i - 1)
+    //     temp = buf[i];
+    //     buf[i] = buf[MAX_NUM_OF_595 - i - 1];
+    //     buf[MAX_NUM_OF_595 - i - 1] = temp;
+    // }
     const struct spi_buf tx_buf[1] = {{
 
         // .buf = buf + (MAX_NUM_OF_595 - nwrite),
-        .buf = &buf[MAX_NUM_OF_595 - nwrite],
+        .buf = buf,
+        // .buf = &buf[MAX_NUM_OF_595 - nwrite],
         .len = nwrite,
     }};
 
