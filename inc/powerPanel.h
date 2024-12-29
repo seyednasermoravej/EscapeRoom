@@ -17,6 +17,8 @@
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
 #include "servos.h"
+#include "display24.h"
+#include "display4ht16k33.h"
 
 class PowerPanel: public Puzzle 
 {
@@ -27,6 +29,8 @@ public:
 
 private:
     Servos *servos;
+    Display24 *display24;
+    Display4 *display4;
 };
 
 #endif 

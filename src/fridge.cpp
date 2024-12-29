@@ -10,7 +10,7 @@ static const struct gpio_dt_spec allRelays[] = {
 #define STRIP_NODE		DT_NODELABEL(ws2812)
 
 #if DT_NODE_HAS_PROP(DT_NODELABEL(ws2812), chain_length)
-#define STRIP_NUM_PIXELS	DT_PROP(DT_NODELABEL(ws2812), chain_length)
+static const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length);
 #else
 #error Unable to determine length of LED strip
 #endif
@@ -40,7 +40,7 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 	if (!device_is_ready(strip)) {
 		LOG_ERR("strip Device not ready, aborting test");
 	}    
-    ledStrip = new LedStrip(strip, STRIP_NUM_PIXELS);
+    ledStrip = new LedStrip(strip, wsChainLength);
 
     int ret;
     for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
@@ -98,6 +98,7 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 
 void Fridge:: creatingMqttList(uint16_t _mqttCount)
 {
+    uint8_t numOfDisplays = 1;
 
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
@@ -105,18 +106,21 @@ void Fridge:: creatingMqttList(uint16_t _mqttCount)
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
         mqttList[i] = *createMqttTopic(topic);
     }
-
-    sprintf(topic, "%sdisplay", mqttCommand);
-    mqttList[2] = *createMqttTopic(topic);
-
-    for(uint8_t i = 0; i < 8; i++) /// chain length in overlay
+    for(uint8_t i = 0; i < wsChainLength; i++) /// chain length in overlay
     {
         sprintf(topic, "%sws2811_%d", mqttCommand, i + 1);
-        mqttList[i+3] = *createMqttTopic(topic);
+        mqttList[i + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
     }
 
-    mqttCount = _mqttCount;
+    // for(uint8_t i = 0; i < numOfDisplays; i++)
+    // {
+    //     sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
+    //     mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i] = *createMqttTopic(topic);
+    // }
+    sprintf(topic, "%sdisplay", mqttCommand);
+    mqttList[wsChainLength + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
 
+    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays;
 }
 
 

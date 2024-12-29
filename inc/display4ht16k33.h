@@ -17,17 +17,20 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
+#include <zephyr/drivers/led.h>
+extern const uint8_t segment_map[128];
 
 class Display4
 {
 public:
-    Display4(const struct device *const _display): display(_display){}
-    void print(char *);
+    Display4(const struct device *const _display);
+    void displayStr(char *);
     void setBrightness();
+    void displayChar(char c, uint8_t pos);
 
 private:
     const struct device *const display;
-
+    
 };
 
 #endif 

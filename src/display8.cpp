@@ -4,6 +4,7 @@ static char c = segment_map[0x20];
 
 Display8::Display8(const struct gpio_dt_spec *_display): display(_display)
 {
+    device_init(_display->port);
     int ret;
     for(unsigned int i = 0; i < ARRAY_SIZE(display); i++){
         if (!device_is_ready(display[i].port)) {

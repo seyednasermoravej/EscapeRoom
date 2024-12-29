@@ -17,7 +17,7 @@ const struct gpio_dt_spec display2[] = {
 #define STRIP_NODE		DT_NODELABEL(ws2812)
 
 #if DT_NODE_HAS_PROP(DT_NODELABEL(ws2812), chain_length)
-const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length);
+static const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length);
 #else
 #error Unable to determine length of LED strip
 #endif
@@ -34,8 +34,18 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
     creatingMqttList(11);
+
+    // while(1)
+    // {
+    //     display4->displayStr("hi");
+    // }
+
+
+
+
     char topic[64];
     sprintf(topic, "%s/%s/", roomName, puzzleTypeName);
     keypad = new Keypad(topic);
@@ -49,12 +59,12 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegment)));
     display8 = new Display8(display2);
 }
 
 void HeartBox:: creatingMqttList(uint16_t _mqttCount)
 {
+    uint8_t numOfDisplays = 2;
     char topic[128] = {0};
     for(uint8_t i = 0; i < wsChainLength; i++) /// chain length in overlay
     {
@@ -65,15 +75,15 @@ void HeartBox:: creatingMqttList(uint16_t _mqttCount)
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[i + wsChainLength] = *createMqttTopic(topic);
+        mqttList[wsChainLength + i] = *createMqttTopic(topic);
     }
-    sprintf(topic, "%sdisplay1", mqttCommand);
-    mqttList[wsChainLength + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
 
-    sprintf(topic, "%sdisplay2", mqttCommand);
-	mqttList[wsChainLength + ARRAY_SIZE(allRelays) + 1] = *createMqttTopic(topic);
-    mqttCount = _mqttCount;
-
+    for(uint8_t i = 0; i < numOfDisplays; i++)
+    {
+        sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
+        mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i] = *createMqttTopic(topic);
+    }
+    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays;
 }
 
 
@@ -87,8 +97,8 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(command, "display1") == 0)
         {
-            display4->print(msg->msg);
-            LOG_ERR("display logic");
+            display4->displayStr(msg->msg);
+            // LOG_ERR("display logic");
         }
         else if(strstr(command, "relay") != NULL)
         {
@@ -113,7 +123,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
             char field[] = "ws2811_";
             int commandIdx = peripheralIdx(field, command);
             uint8_t ws2811Idx = commandIdx - 1;
-            if((commandIdx > 0 ) && (ws2811Idx < 8))
+            if((commandIdx > 0 ) && (ws2811Idx < wsChainLength))
             {
                  //LOG_ERR("a valid index");
                 struct led_rgb color_leds = retrieveColors(msg->msg);

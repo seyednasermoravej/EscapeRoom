@@ -61,6 +61,7 @@ void display_number(uint32_t number) {
 }
 
 void test(void) {
+    i2cScanner();
     gpio_dev = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 
     if (!gpio_dev) {
@@ -161,8 +162,8 @@ void i2cScanner()
     const struct device *i2c_dev;
     uint8_t addr;
     int ret;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
-    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
     if (!i2c_dev) {
         printf("Error: I2C device not found\n");
         return;

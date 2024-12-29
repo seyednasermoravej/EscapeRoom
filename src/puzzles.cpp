@@ -140,7 +140,13 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is drawers");
         deviceSpecified = true;
     }
-
+    
+    else if(strcmp(type, "heartBox1") == 0)
+    {
+        puzzle = new HeartBox("codeRed", "heartBox1");
+        LOG_INF("Puzzle type is heartBox1");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "heart1") == 0)
     {
         puzzle = new Heart("codeRed", "heart1");

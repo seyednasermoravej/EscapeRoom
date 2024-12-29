@@ -7,41 +7,42 @@ static const struct pwm_dt_spec allServos[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_servos), pwms, DT_SPEC_AND_COMMA)
 };
 
+#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
+ 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
+#define DISPLAY4_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(holtek_ht16k33)
+
+const struct gpio_dt_spec display1_8[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_display24), gpios, DT_SPEC_AND_COMMA_GATE)
+};
 #define STEP PWM_USEC(100)
 static const uint32_t servoMinPulse = DT_PROP(DT_NODELABEL(power_panel_servos), min_pulse);
 static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(power_panel_servos), max_pulse);
 static const uint16_t servoMaxDegrees = DT_PROP(DT_NODELABEL(power_panel_servos), max_degrees);
+static const uint8_t numOfDisplays = 9;
 
 PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
     servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    display24 = new Display24(display1_8);
+    display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
     creatingMqttList(17);
 }
 
 void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
 {
-
-	mqttList[0] = codeRed_powerPanel_servo1_topic;
-	mqttList[1] = codeRed_powerPanel_servo2_topic;
-	mqttList[2] = codeRed_powerPanel_servo3_topic;
-	mqttList[3] = codeRed_powerPanel_servo4_topic;
-	mqttList[4] = codeRed_powerPanel_servo5_topic;
-	mqttList[5] = codeRed_powerPanel_servo6_topic;
-	mqttList[6] = codeRed_powerPanel_servo7_topic;
-	mqttList[7] = codeRed_powerPanel_servo8_topic;
-
-	mqttList[8] = codeRed_powerPanel_display1_topic;
-	mqttList[9] = codeRed_powerPanel_display2_topic;
-	mqttList[10] = codeRed_powerPanel_display3_topic;
-	mqttList[11] = codeRed_powerPanel_display4_topic;
-	mqttList[12] = codeRed_powerPanel_display5_topic;
-	mqttList[13] = codeRed_powerPanel_display6_topic;
-	mqttList[14] = codeRed_powerPanel_display7_topic;
-	mqttList[15] = codeRed_powerPanel_display8_topic;
-	mqttList[16] = codeRed_powerPanel_display9_topic;
-    mqttCount = _mqttCount;
-
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
+    {
+        sprintf(topic, "%s/%s/servo%d", roomName, puzzleTypeName, i + 1);
+        mqttList[i] = *createMqttTopic(topic);
+    }
+    for(uint8_t i = 0; i < numOfDisplays; i++)
+    {
+        sprintf(topic, "%s/%s/display%d", roomName, puzzleTypeName, i + 1);
+        mqttList[ARRAY_SIZE(allServos) + i] = *createMqttTopic(topic);
+    }
+    mqttCount = ARRAY_SIZE(allServos) + numOfDisplays;
 }
 
 
@@ -49,46 +50,52 @@ void PowerPanel:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
 
-    if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO1_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(0, val);
+        if(strstr(command, "servo") != NULL)
+        {
+            char field[] = "servo";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t servoIdx = commandIdx - 1;
+            if((commandIdx > 0 ) && (servoIdx < ARRAY_SIZE(allServos)))
+            {
+                uint32_t val = atoi(msg->msg) + 90;
+                servos->move(servoIdx, val);
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
+        else if(strstr(command, "display") != NULL)
+        {
+            char field[] = "display";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t fieldIdx = commandIdx - 1;
+            
+            if((commandIdx > 0 ) && (fieldIdx < numOfDisplays))
+            {
+                if(fieldIdx == 9)
+                {
+                    display4->displayStr(msg->msg);
+                }
+                else
+                {
+                    display24->displayStr(msg->msg);
+                }
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
+        else
+        {
+            LOG_ERR("Command not found");
+        }
     }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO2_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(1, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO3_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(2, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO4_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(3, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO5_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(4, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO6_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(5, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO7_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(6, val);
-    }
-    else if(strcmp(msg->topic, CODE_RED_POWER_PANEL_SERVO8_TOPIC) == 0)
-    {
-        uint32_t val = (((atoi(msg->msg)/ 10) + 9) * STEP) + servoMinPulse;
-        servos->move(7, val);
-    }
-    else
-        LOG_INF("the command is not valid");
 }

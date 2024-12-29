@@ -45,14 +45,8 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegment)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegments8)));
     display8 = new Display8(display);
-    // while(1)
-    // {
-    //     display8->displayChar(0, '8');
-    // }
-
-
 
 }
 void DoorKeypad:: creatingMqttList(uint16_t _mqttCount)

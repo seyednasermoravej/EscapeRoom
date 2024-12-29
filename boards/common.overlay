@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		// zephyr,console = &uart0;
-		// zephyr,shell-uart = &uart0;
-		zephyr,console = &cdc_acm_uart0;
-		zephyr,shell-uart = &cdc_acm_uart0;
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		// zephyr,console = &cdc_acm_uart0;
+		// zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -246,10 +246,10 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		zephyr,deferred-init;
-		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@0 {
+		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@1 {
 			compatible = "ilitek,ili9488";
 			mipi-max-frequency = <25000000>;
-			reg = <0>;
+			reg = <1>;
 			pixel-format = <ILI9XXX_PIXEL_FORMAT_RGB888>;
 			width = <320>;
 			height = <480>;
@@ -311,12 +311,12 @@
 		door_keypad_display: door-keypad-display
 		{
 			compatible = "power-switch";
-			gpios = <&sevensegment 0 GPIO_ACTIVE_HIGH>, <&sevensegment 1 GPIO_ACTIVE_HIGH>, <&sevensegment 2 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 3 GPIO_ACTIVE_HIGH>, <&sevensegment 4 GPIO_ACTIVE_HIGH>, <&sevensegment 5 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 6 GPIO_ACTIVE_HIGH>, <&sevensegment 7 GPIO_ACTIVE_HIGH>, <&sevensegment 8 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 9 GPIO_ACTIVE_HIGH>, <&sevensegment 10 GPIO_ACTIVE_HIGH>, <&sevensegment 11 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 12 GPIO_ACTIVE_HIGH>, <&sevensegment 13 GPIO_ACTIVE_HIGH>, <&sevensegment 14 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 15 GPIO_ACTIVE_HIGH>;
+			gpios = <&sevensegments8 0 GPIO_ACTIVE_HIGH>, <&sevensegments8 1 GPIO_ACTIVE_HIGH>, <&sevensegments8 2 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 3 GPIO_ACTIVE_HIGH>, <&sevensegments8 4 GPIO_ACTIVE_HIGH>, <&sevensegments8 5 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 6 GPIO_ACTIVE_HIGH>, <&sevensegments8 7 GPIO_ACTIVE_HIGH>, <&sevensegments8 8 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 9 GPIO_ACTIVE_HIGH>, <&sevensegments8 10 GPIO_ACTIVE_HIGH>, <&sevensegments8 11 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 12 GPIO_ACTIVE_HIGH>, <&sevensegments8 13 GPIO_ACTIVE_HIGH>, <&sevensegments8 14 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 15 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -419,6 +419,74 @@
 				zephyr,code = <INPUT_BTN_6>;
 			};
 
+		};
+		power_panel_display24: power-panel-display-24
+		{
+			compatible = "power-switch";
+			gpios = <&sevensegments24 0 GPIO_ACTIVE_HIGH>, <&sevensegments24 1 GPIO_ACTIVE_HIGH>, <&sevensegments24 2 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 3 GPIO_ACTIVE_HIGH>, <&sevensegments24 4 GPIO_ACTIVE_HIGH>, <&sevensegments24 5 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 6 GPIO_ACTIVE_HIGH>, <&sevensegments24 7 GPIO_ACTIVE_HIGH>, <&sevensegments24 8 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 9 GPIO_ACTIVE_HIGH>, <&sevensegments24 10 GPIO_ACTIVE_HIGH>, <&sevensegments24 11 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 12 GPIO_ACTIVE_HIGH>, <&sevensegments24 13 GPIO_ACTIVE_HIGH>, <&sevensegments24 14 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 15 GPIO_ACTIVE_HIGH>, <&sevensegments24 16 GPIO_ACTIVE_HIGH>, <&sevensegments24 17 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 18 GPIO_ACTIVE_HIGH>, <&sevensegments24 19 GPIO_ACTIVE_HIGH>, <&sevensegments24 20 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 21 GPIO_ACTIVE_HIGH>, <&sevensegments24 22 GPIO_ACTIVE_HIGH>, <&sevensegments24 23 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 24 GPIO_ACTIVE_HIGH>, <&sevensegments24 25 GPIO_ACTIVE_HIGH>, <&sevensegments24 26 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 27 GPIO_ACTIVE_HIGH>, <&sevensegments24 28 GPIO_ACTIVE_HIGH>, <&sevensegments24 29 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 30 GPIO_ACTIVE_HIGH>, <&sevensegments24 31 GPIO_ACTIVE_HIGH>, <&sevensegments24 32 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 33 GPIO_ACTIVE_HIGH>, <&sevensegments24 34 GPIO_ACTIVE_HIGH>, <&sevensegments24 35 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 36 GPIO_ACTIVE_HIGH>, <&sevensegments24 37 GPIO_ACTIVE_HIGH>, <&sevensegments24 38 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 39 GPIO_ACTIVE_HIGH>, <&sevensegments24 40 GPIO_ACTIVE_HIGH>, <&sevensegments24 41 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 42 GPIO_ACTIVE_HIGH>, <&sevensegments24 43 GPIO_ACTIVE_HIGH>, <&sevensegments24 44 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 45 GPIO_ACTIVE_HIGH>, <&sevensegments24 46 GPIO_ACTIVE_HIGH>, <&sevensegments24 47 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 48 GPIO_ACTIVE_HIGH>, <&sevensegments24 49 GPIO_ACTIVE_HIGH>, <&sevensegments24 50 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 51 GPIO_ACTIVE_HIGH>, <&sevensegments24 52 GPIO_ACTIVE_HIGH>, <&sevensegments24 53 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 54 GPIO_ACTIVE_HIGH>, <&sevensegments24 55 GPIO_ACTIVE_HIGH>, <&sevensegments24 56 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 57 GPIO_ACTIVE_HIGH>, <&sevensegments24 58 GPIO_ACTIVE_HIGH>, <&sevensegments24 59 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 60 GPIO_ACTIVE_HIGH>, <&sevensegments24 61 GPIO_ACTIVE_HIGH>, <&sevensegments24 62 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 63 GPIO_ACTIVE_HIGH>, <&sevensegments24 64 GPIO_ACTIVE_HIGH>, <&sevensegments24 65 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 66 GPIO_ACTIVE_HIGH>, <&sevensegments24 67 GPIO_ACTIVE_HIGH>, <&sevensegments24 68 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 69 GPIO_ACTIVE_HIGH>, <&sevensegments24 70 GPIO_ACTIVE_HIGH>, <&sevensegments24 71 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 72 GPIO_ACTIVE_HIGH>, <&sevensegments24 73 GPIO_ACTIVE_HIGH>, <&sevensegments24 74 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 75 GPIO_ACTIVE_HIGH>, <&sevensegments24 76 GPIO_ACTIVE_HIGH>, <&sevensegments24 77 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 78 GPIO_ACTIVE_HIGH>, <&sevensegments24 79 GPIO_ACTIVE_HIGH>, <&sevensegments24 80 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 81 GPIO_ACTIVE_HIGH>, <&sevensegments24 82 GPIO_ACTIVE_HIGH>, <&sevensegments24 83 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 84 GPIO_ACTIVE_HIGH>, <&sevensegments24 85 GPIO_ACTIVE_HIGH>, <&sevensegments24 86 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 87 GPIO_ACTIVE_HIGH>, <&sevensegments24 88 GPIO_ACTIVE_HIGH>, <&sevensegments24 89 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 90 GPIO_ACTIVE_HIGH>, <&sevensegments24 91 GPIO_ACTIVE_HIGH>, <&sevensegments24 92 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 93 GPIO_ACTIVE_HIGH>, <&sevensegments24 94 GPIO_ACTIVE_HIGH>, <&sevensegments24 95 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 96 GPIO_ACTIVE_HIGH>, <&sevensegments24 97 GPIO_ACTIVE_HIGH>, <&sevensegments24 98 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 99 GPIO_ACTIVE_HIGH>, <&sevensegments24 100 GPIO_ACTIVE_HIGH>, <&sevensegments24 101 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 102 GPIO_ACTIVE_HIGH>, <&sevensegments24 103 GPIO_ACTIVE_HIGH>, <&sevensegments24 104 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 105 GPIO_ACTIVE_HIGH>, <&sevensegments24 106 GPIO_ACTIVE_HIGH>, <&sevensegments24 107 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 108 GPIO_ACTIVE_HIGH>, <&sevensegments24 109 GPIO_ACTIVE_HIGH>, <&sevensegments24 110 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 111 GPIO_ACTIVE_HIGH>, <&sevensegments24 112 GPIO_ACTIVE_HIGH>, <&sevensegments24 113 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 114 GPIO_ACTIVE_HIGH>, <&sevensegments24 115 GPIO_ACTIVE_HIGH>, <&sevensegments24 116 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 117 GPIO_ACTIVE_HIGH>, <&sevensegments24 118 GPIO_ACTIVE_HIGH>, <&sevensegments24 119 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 120 GPIO_ACTIVE_HIGH>, <&sevensegments24 121 GPIO_ACTIVE_HIGH>, <&sevensegments24 122 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 123 GPIO_ACTIVE_HIGH>, <&sevensegments24 124 GPIO_ACTIVE_HIGH>, <&sevensegments24 125 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 126 GPIO_ACTIVE_HIGH>, <&sevensegments24 127 GPIO_ACTIVE_HIGH>, <&sevensegments24 128 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 129 GPIO_ACTIVE_HIGH>, <&sevensegments24 130 GPIO_ACTIVE_HIGH>, <&sevensegments24 131 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 132 GPIO_ACTIVE_HIGH>, <&sevensegments24 133 GPIO_ACTIVE_HIGH>, <&sevensegments24 134 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 135 GPIO_ACTIVE_HIGH>, <&sevensegments24 136 GPIO_ACTIVE_HIGH>, <&sevensegments24 137 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 138 GPIO_ACTIVE_HIGH>, <&sevensegments24 139 GPIO_ACTIVE_HIGH>, <&sevensegments24 140 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 141 GPIO_ACTIVE_HIGH>, <&sevensegments24 142 GPIO_ACTIVE_HIGH>, <&sevensegments24 143 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 144 GPIO_ACTIVE_HIGH>, <&sevensegments24 145 GPIO_ACTIVE_HIGH>, <&sevensegments24 146 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 147 GPIO_ACTIVE_HIGH>, <&sevensegments24 148 GPIO_ACTIVE_HIGH>, <&sevensegments24 149 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 150 GPIO_ACTIVE_HIGH>, <&sevensegments24 151 GPIO_ACTIVE_HIGH>, <&sevensegments24 152 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 153 GPIO_ACTIVE_HIGH>, <&sevensegments24 154 GPIO_ACTIVE_HIGH>, <&sevensegments24 155 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 156 GPIO_ACTIVE_HIGH>, <&sevensegments24 157 GPIO_ACTIVE_HIGH>, <&sevensegments24 158 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 159 GPIO_ACTIVE_HIGH>, <&sevensegments24 160 GPIO_ACTIVE_HIGH>, <&sevensegments24 161 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 162 GPIO_ACTIVE_HIGH>, <&sevensegments24 163 GPIO_ACTIVE_HIGH>, <&sevensegments24 164 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 165 GPIO_ACTIVE_HIGH>, <&sevensegments24 166 GPIO_ACTIVE_HIGH>, <&sevensegments24 167 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 168 GPIO_ACTIVE_HIGH>, <&sevensegments24 169 GPIO_ACTIVE_HIGH>, <&sevensegments24 170 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 171 GPIO_ACTIVE_HIGH>, <&sevensegments24 172 GPIO_ACTIVE_HIGH>, <&sevensegments24 173 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 174 GPIO_ACTIVE_HIGH>, <&sevensegments24 175 GPIO_ACTIVE_HIGH>, <&sevensegments24 176 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 177 GPIO_ACTIVE_HIGH>, <&sevensegments24 178 GPIO_ACTIVE_HIGH>, <&sevensegments24 179 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 180 GPIO_ACTIVE_HIGH>, <&sevensegments24 181 GPIO_ACTIVE_HIGH>, <&sevensegments24 182 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 183 GPIO_ACTIVE_HIGH>, <&sevensegments24 184 GPIO_ACTIVE_HIGH>, <&sevensegments24 185 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 186 GPIO_ACTIVE_HIGH>, <&sevensegments24 187 GPIO_ACTIVE_HIGH>, <&sevensegments24 188 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 189 GPIO_ACTIVE_HIGH>, <&sevensegments24 190 GPIO_ACTIVE_HIGH>, <&sevensegments24 191 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -732,17 +800,17 @@
 		heart_box_display2: heart-box-display2
 		{
 			compatible = "power-switch";
-			gpios = <&sevensegment 0 GPIO_ACTIVE_HIGH>, <&sevensegment 1 GPIO_ACTIVE_HIGH>, <&sevensegment 2 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 3 GPIO_ACTIVE_HIGH>, <&sevensegment 4 GPIO_ACTIVE_HIGH>, <&sevensegment 5 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 6 GPIO_ACTIVE_HIGH>, <&sevensegment 7 GPIO_ACTIVE_HIGH>, <&sevensegment 8 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 9 GPIO_ACTIVE_HIGH>, <&sevensegment 10 GPIO_ACTIVE_HIGH>, <&sevensegment 11 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 12 GPIO_ACTIVE_HIGH>, <&sevensegment 13 GPIO_ACTIVE_HIGH>, <&sevensegment 14 GPIO_ACTIVE_HIGH>,
-					<&sevensegment 15 GPIO_ACTIVE_HIGH>;	
+			gpios = <&sevensegments8 0 GPIO_ACTIVE_HIGH>, <&sevensegments8 1 GPIO_ACTIVE_HIGH>, <&sevensegments8 2 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 3 GPIO_ACTIVE_HIGH>, <&sevensegments8 4 GPIO_ACTIVE_HIGH>, <&sevensegments8 5 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 6 GPIO_ACTIVE_HIGH>, <&sevensegments8 7 GPIO_ACTIVE_HIGH>, <&sevensegments8 8 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 9 GPIO_ACTIVE_HIGH>, <&sevensegments8 10 GPIO_ACTIVE_HIGH>, <&sevensegments8 11 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 12 GPIO_ACTIVE_HIGH>, <&sevensegments8 13 GPIO_ACTIVE_HIGH>, <&sevensegments8 14 GPIO_ACTIVE_HIGH>,
+					<&sevensegments8 15 GPIO_ACTIVE_HIGH>;	
 		};
 		heart_box_relays: heart-box-relays
 		{
 			compatible = "power-switch";
-			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 26 GPIO_ACTIVE_LOW>;
 			
 		};
 		heart_box_ws: heart-box-ws
@@ -899,14 +967,25 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>, <&gpio0 15 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
-	sevensegment: shift-expander@2
+	sevensegments8: shift-expander@0
 	{
 		status = "okay";
 		compatible = "zmk,gpio-595";
-		reg = <2>;
+		reg = <0>;
 		ngpios = <16>;
+		#gpio-cells = <2>; 
+		gpio-controller;
+		spi-max-frequency = <8000000>;
+		zephyr,deferred-init;
+	};
+	sevensegments24: shift-expander@3
+	{
+		status = "okay";
+		compatible = "zmk,gpio-595";
+		reg = <3>;
+		ngpios = <192>;
 		#gpio-cells = <2>; 
 		gpio-controller;
 		spi-max-frequency = <8000000>;
@@ -1197,6 +1276,7 @@ pico_spi: &spi0 {};
 	ht16k33@70 {
 		compatible = "holtek,ht16k33";
 		reg = <0x70>;
+		zephyr,deferred-init;
 		/* Uncomment to use IRQ instead of polling: */
 		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */
 
@@ -1243,5 +1323,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	status = "disabled";
+	// status = "disabled";
 };
