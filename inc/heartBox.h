@@ -27,9 +27,6 @@ public:
     HeartBox(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
-
-    struct led_rgb retrieveColors(char *str);
-
 private:
     Keypad *keypad;
     LedStrip *ledStrip;

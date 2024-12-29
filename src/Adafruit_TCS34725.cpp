@@ -109,6 +109,10 @@ void Adafruit_TCS34725::disable() {
  *          Gain
  */
 Adafruit_TCS34725::Adafruit_TCS34725(const struct i2c_dt_spec *i2cDev, uint8_t it, tcs34725Gain_t gain): i2c_dev(i2cDev) {
+  	device_init(i2cDev->bus);
+    if (!device_is_ready(i2cDev->bus)) {
+        LOG_ERR("Sensor device not ready");
+    }
   _tcs34725Initialised = false;
   _tcs34725IntegrationTime = it;
   _tcs34725Gain = gain;

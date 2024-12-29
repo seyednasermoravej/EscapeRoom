@@ -1024,7 +1024,7 @@ pico_spi: &spi0 {};
 
 &pio1 {
 	status = "okay";
-	//zephyr,deferred-init;
+	// zephyr,deferred-init;
 	pio-ws2812 {
 		compatible = "worldsemi,ws2812-rpi_pico-pio";
 		status = "okay";
@@ -1033,8 +1033,8 @@ pico_spi: &spi0 {};
 		bit-waveform = <3>, <3>, <4>;
 		ws2812: ws2812 {
 			status = "okay";
-			gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>;
-			chain-length = <16>;
+			gpios = <&gpio0 27 GPIO_ACTIVE_HIGH>;
+			chain-length = <8>;
 			color-mapping = <1 2 3>;
 			reset-delay = <280>;
 			frequency = <800000>;
@@ -1045,7 +1045,7 @@ pico_spi: &spi0 {};
 &pinctrl{
 	ws2812_pio1_default: ws2812_pio1_default{
 		ws2812{
-			pinmux = <PIO1_P22>;
+			pinmux = <PIO1_P27>;
 		};
 	};
 };
@@ -1077,7 +1077,6 @@ pico_spi: &spi0 {};
 
   };
 
-
 &i2c0{
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
@@ -1089,7 +1088,7 @@ pico_spi: &spi0 {};
 	// 	int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 	// 	reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
 	// };
-	mux: tca9548a@70 {
+	mux: tca9548a1@70 {
 		compatible = "ti,tca9548a";
 		reg = <0x70>;
 		status = "okay";
@@ -1197,6 +1196,105 @@ pico_spi: &spi0 {};
 		};
 	};
 
+	mux2: tca9548a2@70 {
+		compatible = "ti,tca9548a";
+		reg = <0x70>;
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		mux2_i2c@0 {
+			compatible = "ti,tca9548a-channel";
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor8: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@1 {
+			compatible = "ti,tca9548a-channel";
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor9: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@2 {
+			compatible = "ti,tca9548a-channel";
+			reg = <2>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor10: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@3 {
+			compatible = "ti,tca9548a-channel";
+			reg = <3>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor11: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@4 {
+			compatible = "ti,tca9548a-channel";
+			reg = <4>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor12: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@5 {
+			compatible = "ti,tca9548a-channel";
+			reg = <5>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor13: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux2_i2c@6 {
+			compatible = "ti,tca9548a-channel";
+			reg = <6>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor14: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};										
+	};	
 	// mux0: tca9546a@77
 	// {
 	// 	compatible = "ti,tca9546a";
@@ -1220,17 +1318,18 @@ pico_spi: &spi0 {};
 			
 	// 	};
 	// };
-
 };
 
 
 &i2c1{
 	status = "okay";
-	pinctrl-0 = <&i2c1_default>;
-	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c1_default>;	
+	//clock-frequency = <50000>;
+	clock-frequency = <I2C_BITRATE_STANDARD>;
+	//clock-frequency = <I2C_BITRATE_FAST>;
 	zephyr,deferred-init;
 
-	// clock-frequency = <I2C_BITRATE_STANDARD>;
+
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
@@ -1266,13 +1365,118 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-	rgb_sensor0: tcs34725@29
-	{
+	mux1: tca9548a@70 {
+		compatible = "ti,tca9548a";
+		reg = <0x70>;
 		status = "okay";
-		compatible = "ams,tcs34725";
-		reg = <0x29>;
-		zephyr,deferred-init;
-	};
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		mux1_i2c@0 {
+			compatible = "ti,tca9548a-channel";
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor0: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@1 {
+			compatible = "ti,tca9548a-channel";
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor1: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@2 {
+			compatible = "ti,tca9548a-channel";
+			reg = <2>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor2: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@3 {
+			compatible = "ti,tca9548a-channel";
+			reg = <3>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor3: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@4 {
+			compatible = "ti,tca9548a-channel";
+			reg = <4>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor4: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@5 {
+			compatible = "ti,tca9548a-channel";
+			reg = <5>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor5: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};
+		mux1_i2c@6 {
+			compatible = "ti,tca9548a-channel";
+			reg = <6>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor6: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};						
+		mux1_i2c@7 {
+			compatible = "ti,tca9548a-channel";
+			reg = <7>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor7: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};				
+	};	
 	ht16k33@70 {
 		compatible = "holtek,ht16k33";
 		reg = <0x70>;

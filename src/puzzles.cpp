@@ -1,5 +1,6 @@
 #include "puzzles.h"
 #include "topics.h"
+// #include "Adafruit_TCS34725.h"
 
 LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_INF);
 
@@ -14,6 +15,8 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 #endif
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
 static struct nvs_fs fileSystem;
+
+
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
@@ -30,10 +33,16 @@ Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 
 
 
+    // device_init(tcs34725_dev);
+
+
+
 Puzzles *puzzles = nullptr;
 
 void Puzzles:: puzzleTypeSelection(char *type)
 {
+
+
     // struct MqttMsg msg = {0};
     // strcpy(msg.topic, "pub/");
     // strcat(msg.topic, deviceId);
@@ -116,6 +125,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is scale");
         deviceSpecified = true;
     }
+    else if(strcmp(type, "colorTubes") == 0)
+    {
+        puzzle = new colorTubes("codeRed", "colorTubes", 15);
+        LOG_INF("Puzzle type is colorTubes.");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "entranceDoor") == 0)
     {
         puzzle = new EntranceDoor("codeRed", "entranceDoor");
@@ -140,7 +155,6 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is drawers");
         deviceSpecified = true;
     }
-    
     else if(strcmp(type, "heartBox1") == 0)
     {
         puzzle = new HeartBox("codeRed", "heartBox1");
@@ -315,8 +329,50 @@ int Puzzles:: builtIntLedInit()
 #endif
 
 
-// void test()
-// {
+//  void test()
+//  {
+//     static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c1));
+//     device_init(dev_i2c);
+    
+//     //const struct i2c_dt_spec *tcs34725_dev = I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0));
+//     static const struct i2c_dt_spec tcs34725_i2c = I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0));
+//     device_init(tcs34725_i2c.bus);
+//     if (!device_is_ready(tcs34725_i2c.bus)) {
+//         LOG_ERR("Sensor device not ready");
+//     }
+
+//     Adafruit_TCS34725 tcs = Adafruit_TCS34725(&tcs34725_i2c, TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
+//     if (tcs.begin()) {
+//         LOG_INF("Found sensor");
+//     }
+//     uint16_t r, g, b, c, colorTemp, lux;
+
+//     tcs.getRawData(&r, &g, &b, &c);
+//     colorTemp = tcs.calculateColorTemperature(r, g, b);
+//     colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
+//     lux = tcs.calculateLux(r, g, b);
+
+//     LOG_INF("Color Temp: "); 
+//     LOG_INF("%d", colorTemp); 
+//     LOG_INF(" K - ");
+//     LOG_INF("Lux: "); 
+//     LOG_INF("%d", lux); 
+//     LOG_INF(" - ");
+//     LOG_INF("R: "); 
+//     LOG_INF("%d", r); 
+//     LOG_INF(" ");
+//     LOG_INF("G: "); 
+//     LOG_INF("%d", g); 
+//     LOG_INF(" ");
+//     LOG_INF("B: "); 
+//     LOG_INF("%d", b); 
+//     LOG_INF(" ");
+//     LOG_INF("C: "); 
+//     LOG_INF("%d", c); 
+//     LOG_INF(" ");
+//     LOG_INF(" ");
+
+// }
 //     // Blinds *blinds = new Blinds("sdf", "sdf");
 //     // blinds->test();
 //     // HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
@@ -340,14 +396,14 @@ void puzzleEntryPoint(void *, void *, void *)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         char serverIpAddress[] = "192.168.1.2";
     #else
-        char serverIpAddress[] = "192.168.1.2";
+        char serverIpAddress[] = "192.168.1.5";
     #endif
 #elif defined(BRAM)
     char serverName[] = "mqtt-1";
     char serverIpAddress[128] = {0};
 #else
 #endif
-   // test();
+    //test();
     // char serverName[] = "test.mosquitto.org";
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 

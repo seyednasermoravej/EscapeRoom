@@ -51,7 +51,7 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     keypad = new Keypad(topic);
 
     static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
-    device_init(strip); 
+    // device_init(strip); 
 	if (!device_is_ready(strip)) {
 		LOG_ERR("strip Device not ready, aborting test");
 	}    
@@ -123,7 +123,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
             char field[] = "ws2811_";
             int commandIdx = peripheralIdx(field, command);
             uint8_t ws2811Idx = commandIdx - 1;
-            if((commandIdx > 0 ) && (ws2811Idx < wsChainLength))
+            if((commandIdx > 0 ) && (ws2811Idx < 8))
             {
                  //LOG_ERR("a valid index");
                 struct led_rgb color_leds = retrieveColors(msg->msg);
@@ -151,36 +151,4 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
     }
     else
         LOG_INF("the command is not valid");
-}
-
-struct led_rgb HeartBox:: retrieveColors(char *str)
-{
-    struct led_rgb rgb;
-    char buf[4];
-    uint8_t i = 0;
-    while(str[i] != 'G')
-    {
-        buf[i - 1] = str[i];
-        i++;
-    }
-    buf[i] = '\0';
-    rgb.r = atoi(buf);
-    memset(buf, 0, 4);
-    while(str[i] != 'B')
-    {
-        buf[i - 1] = str[i];
-        i++;
-    }
-    buf[i] = '\0';
-    rgb.g = atoi(buf);
-    memset(buf, 0, 4);
-    while(str[i] != strlen(str))
-    {
-        buf[i - 1] = str[i];
-        i++;
-    }
-    buf[i] = '\0';
-    rgb.b = atoi(buf);
-    return rgb;
-
 }
