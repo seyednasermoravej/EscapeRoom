@@ -1080,123 +1080,185 @@ pico_spi: &spi0 {};
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
 	zephyr,deferred-init;
-	// rfidin: pn532@24{
-	// 	compatible = "nxp,pn532";
-	// 	status = "okay";
-	// 	reg = <0x24>;
-	// 	int-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-	// 	reset-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>;
-	// };
-	mux: tca9548a1@70 {
+	mux0: tca9548a0@70
+	{
 		compatible = "ti,tca9548a";
 		reg = <0x70>;
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-		mux_i2c@0 {
+		mux0_i2c@0
+		{
 			compatible = "ti,tca9548a-channel";
 			reg = <0>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-
-			rfid1: pn532@24{
+			rfid1: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor0: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 
 		};
 
-		mux_i2c@1 {
-		compatible = "ti,tca9548a-channel";
+		mux0_i2c@1
+		{
+			compatible = "ti,tca9548a-channel";
 			reg = <1>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-
-			rfid2: pn532@24{
+			rfid2: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor1: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
-		mux_i2c@2 {
+		mux0_i2c@2 {
 		compatible = "ti,tca9548a-channel";
 			reg = <2>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-
-			rfid3: pn532@24{
+			rfid3: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 8 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor2: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
-		mux_i2c@3 {
+		mux0_i2c@3 {
 		compatible = "ti,tca9548a-channel";
 			reg = <3>;
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			rfid4: pn532@24{
+			rfid4: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor3: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
-		mux_i2c@4 {
+		mux0_i2c@4 {
 		compatible = "ti,tca9548a-channel";
 			reg = <4>;
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			rfid5: pn532@24{
+			rfid5: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 10 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor4: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
-		mux_i2c@5{
+		mux0_i2c@5{
 		compatible = "ti,tca9548a-channel";
 			reg = <5>;
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			rfid6: pn532@24{
+			rfid6: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor5: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
-		mux_i2c@6 {
+		mux0_i2c@6 {
 		compatible = "ti,tca9548a-channel";
 			reg = <6>;
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			rfid7: pn532@24{
+			rfid7: pn532@24
+			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 12 (GPIO_ACTIVE_LOW)>;
 			};
+			rgb_sensor6: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
 		};
+		mux0_i2c@7 {
+			compatible = "ti,tca9548a-channel";
+			reg = <7>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			rgb_sensor7: tcs34725@29
+			{
+				compatible = "ams,tcs34725";
+				status = "okay";
+				reg = <0x29>;
+				zephyr,deferred-init;
+			};
+		};				
 	};
 
-	mux2: tca9548a2@70 {
+	mux1: tca9548a1@70 {
 		compatible = "ti,tca9548a";
 		reg = <0x70>;
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-		mux2_i2c@0 {
+		mux1_i2c@0 {
 			compatible = "ti,tca9548a-channel";
 			reg = <0>;
 			#address-cells = <1>;
@@ -1209,7 +1271,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@1 {
+		mux1_i2c@1 {
 			compatible = "ti,tca9548a-channel";
 			reg = <1>;
 			#address-cells = <1>;
@@ -1222,7 +1284,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@2 {
+		mux1_i2c@2 {
 			compatible = "ti,tca9548a-channel";
 			reg = <2>;
 			#address-cells = <1>;
@@ -1235,7 +1297,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@3 {
+		mux1_i2c@3 {
 			compatible = "ti,tca9548a-channel";
 			reg = <3>;
 			#address-cells = <1>;
@@ -1248,7 +1310,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@4 {
+		mux1_i2c@4 {
 			compatible = "ti,tca9548a-channel";
 			reg = <4>;
 			#address-cells = <1>;
@@ -1261,7 +1323,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@5 {
+		mux1_i2c@5 {
 			compatible = "ti,tca9548a-channel";
 			reg = <5>;
 			#address-cells = <1>;
@@ -1274,7 +1336,7 @@ pico_spi: &spi0 {};
 				zephyr,deferred-init;
 			};
 		};
-		mux2_i2c@6 {
+		mux1_i2c@6 {
 			compatible = "ti,tca9548a-channel";
 			reg = <6>;
 			#address-cells = <1>;
@@ -1288,41 +1350,14 @@ pico_spi: &spi0 {};
 			};
 		};										
 	};	
-	// mux0: tca9546a@77
-	// {
-	// 	compatible = "ti,tca9546a";
-	// 	reg = <0x77>;
-	// 	status = "okay";
-	// 	label = "i2c_mux";
-	// 	#address-cells = <1>;
-	// 	#size-cells = <0>;
-	// 	reset-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-	// 	mux_i2c@0
-	// 	{
-	// 		compatible = "ti,tca9546a-channel";
-	// 		reg = <0>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		status = "okay";
-	// 		color_sensor0: tcs34725@29{
-	// 			compatible = "taos,tcs34725";
-	// 			reg = <0x29>;
-	// 		};
-			
-	// 	};
-	// };
 };
 
 
 &i2c1{
 	status = "okay";
 	pinctrl-0 = <&i2c1_default>;	
-	//clock-frequency = <50000>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
-	//clock-frequency = <I2C_BITRATE_FAST>;
 	zephyr,deferred-init;
-
-
 		lcd1: pcf857x@27 {
 		compatible = "nxp,pcf857x";
 		status = "okay";
@@ -1358,118 +1393,6 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-	// mux1: tca9548a@70 {
-	// 	compatible = "ti,tca9548a";
-	// 	reg = <0x70>;
-	// 	status = "okay";
-	// 	#address-cells = <1>;
-	// 	#size-cells = <0>;
-	// 	reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-	// 	mux1_i2c@0 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <0>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor0: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@1 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <1>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor1: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@2 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <2>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor2: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@3 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <3>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor3: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@4 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <4>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor4: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@5 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <5>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor5: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};
-	// 	mux1_i2c@6 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <6>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor6: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};						
-	// 	mux1_i2c@7 {
-	// 		compatible = "ti,tca9548a-channel";
-	// 		reg = <7>;
-	// 		#address-cells = <1>;
-	// 		#size-cells = <0>;
-	// 		rgb_sensor7: tcs34725@29
-	// 		{
-	// 			compatible = "ams,tcs34725";
-	// 			status = "okay";
-	// 			reg = <0x29>;
-	// 			zephyr,deferred-init;
-	// 		};
-	// 	};				
-	// };	
 	ht16k33@70 {
 		compatible = "holtek,ht16k33";
 		reg = <0x70>;
