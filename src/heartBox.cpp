@@ -7,11 +7,12 @@ static const struct gpio_dt_spec allRelays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_box_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
-const struct gpio_dt_spec display2[] = {
+static const struct gpio_dt_spec display2[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(heart_box_display2), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
 #define DISPLAY4_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(holtek_ht16k33)
+static const struct device *const display4ht16k33 = DEVICE_DT_GET(DISPLAY4_NODE);
 
 
 #define STRIP_NODE		DT_NODELABEL(ws2812)
@@ -38,17 +39,7 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
     creatingMqttList(11);
 
-    // while(1)
-    // {
-    //     display4->displayStr("hi");
-    // }
-
-
-
-
-    char topic[64];
-    sprintf(topic, "%s/%s/", roomName, puzzleTypeName);
-    keypad = new Keypad(topic);
+    keypad = new Keypad(mqttCommand);
 
     static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
     // device_init(strip); 
@@ -56,6 +47,8 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 		LOG_ERR("strip Device not ready, aborting test");
 	}    
     ledStrip = new LedStrip(strip, wsChainLength);
+
+
 
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
@@ -98,7 +91,6 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
         if(strcmp(command, "display1") == 0)
         {
             display4->displayStr(msg->msg);
-            // LOG_ERR("display logic");
         }
         else if(strstr(command, "relay") != NULL)
         {

@@ -27,9 +27,16 @@ public:
     void displayStr(char *);
     void setBrightness();
     void displayChar(char c, uint8_t pos);
+    void blink();
+
+    struct k_timer blinkTimer;
+    static void blinkTimerHandler(struct k_timer *timer);
+
+    struct k_work blinkWork;
+    static void blinkWorkHandler(struct k_work *work);
 
 private:
-    const struct device *const display;
+    const struct device *display;
     
 };
 

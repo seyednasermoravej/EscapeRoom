@@ -30,9 +30,6 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
 
     device_init(pio1_dev);
-    // if (!device_is_ready(pio1_dev)) {
-	// 	LOG_ERR("strip Device not ready, aborting test");
-	// } 
     ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
 
     int ret;
@@ -46,8 +43,6 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 	    }
     }
     creatingMqttList(11);
-    //char topic[64];
-    //sprintf(topic, "%s/%s/", roomName, puzzleTypeName);
     keypad = new Keypad(mqttCommand);
    
 

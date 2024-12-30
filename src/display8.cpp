@@ -36,17 +36,6 @@ void Display8:: displayWorkHandler(k_work *work)
 }
 void Display8:: displayRefresh()
 {
-    // static uint8_t pos = 0;
-    // c = str[strLen - 1 - pos];
-    // displayChar(pos, c);
-    // pos++;
-    // if(pos >= strLen)
-    // {
-    //     pos = 0;
-    // }
-
-
-
     static uint8_t pos = 0;
     uint8_t vPos;
     switch (pos)
@@ -87,6 +76,7 @@ void Display8:: displayRefresh()
         break;
     }
     c = str[strLen - 1 - pos];
+    // displayChar(pos, c);
     displayChar(vPos, c);
     pos++;
     if(pos >= strLen)

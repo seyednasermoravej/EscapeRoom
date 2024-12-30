@@ -967,7 +967,7 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 14 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>, <&gpio0 28 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
 	sevensegments8: shift-expander@0
 	{
@@ -1036,7 +1036,8 @@ pico_spi: &spi0 {};
 			chain-length = <8>;
 			color-mapping = <1 2 3>;
 			reset-delay = <280>;
-			frequency = <800000>;
+			frequency = <400000>;//ws2811
+			// frequency = <800000>;/ws2812
 		};
 	};
 };
