@@ -15,7 +15,7 @@ static const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length)
 #error Unable to determine length of LED strip
 #endif
 
-// static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
+static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 
 
 static uint32_t count;
@@ -29,18 +29,11 @@ const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
 
-    // device_init(pio1_dev);
+    device_init(pio1_dev);
     // if (!device_is_ready(pio1_dev)) {
 	// 	LOG_ERR("strip Device not ready, aborting test");
 	// } 
-
-
-    static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
-    // device_init(strip); 
-	if (!device_is_ready(strip)) {
-		LOG_ERR("strip Device not ready, aborting test");
-	}    
-    ledStrip = new LedStrip(strip, wsChainLength);
+    ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
 
     int ret;
     for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){

@@ -107,7 +107,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
             uint8_t relayIdx = commandIdx - 1;
             if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
             {
-                if(relayIdx == 1)
+                if(commandIdx == 1)
                 {
                     relayOperation(msg->msg, &allRelays[relayIdx], true);
                 }

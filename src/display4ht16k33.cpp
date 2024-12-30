@@ -33,11 +33,19 @@ void Display4:: displayStr(char *text)
 
 void Display4:: displayChar(char c, uint8_t pos)
 {
-    uint8_t code = segment_map[c];
+    uint8_t code = segment_map[(uint8_t)c];
     uint8_t base = 8;
     for(uint8_t i = 0; i < 8; i++)
     {
-        ((c >> i) & 0x01) ? led_on(display, base + (pos * 8) + i): led_off(display, base + (pos * 8) + i);
+        // ((c >> i) & 0x01) ? led_on(display, base + (pos * 8) + i): led_off(display, base + (pos * 8) + i);
+        if((code >> i) & 0x01)
+        {
+            led_on(display, base + (pos * 8) + i);
+        }
+        else
+        {
+            led_off(display, base + (pos * 8) + i);
+        }
     }
 
 }
