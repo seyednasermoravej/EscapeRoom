@@ -7,20 +7,20 @@ static const struct device *dev1_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c1));
 
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14))
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
+	// I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
+	// I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14))
 };
 
 
@@ -30,8 +30,8 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 	device_init(dev1_i2c);
 	k_msleep(1);
 
-	rgbsensors = new Adafruit_TCS34725 * [numRGBsensors];
-	for (uint8_t i = 0; i < numRGBsensors; i++) 
+	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
+	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++) 
 	{
 		// device_init(i2c_specs[i].bus);
     	// if (!device_is_ready(i2c_specs[i].bus)) {
@@ -72,7 +72,7 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
 	uint8_t r8, g8, b8, c8, colorTemp8, lux8;
 	LOG_DBG("Enterd rgb Sensor work");
 	colorTubes *instance = CONTAINER_OF(work, colorTubes, rgbSensorWork);
-	for(uint8_t i = 0; i < instance->numRGBsensors; i++)
+	for(uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
 	{
 	// uint8_t i = 0;
         if (instance->rgbsensors[i]->begin()) {

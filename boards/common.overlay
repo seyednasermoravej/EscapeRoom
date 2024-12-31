@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		zephyr,console = &uart0;
-		zephyr,shell-uart = &uart0;
-		// zephyr,console = &cdc_acm_uart0;
-		// zephyr,shell-uart = &cdc_acm_uart0;
+		// zephyr,console = &uart0;
+		// zephyr,shell-uart = &uart0;
+		zephyr,console = &cdc_acm_uart0;
+		zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -1077,10 +1077,11 @@ pico_spi: &spi0 {};
 
   };
 
-&i2c0{
+&i2c0
+{
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
-	zephyr,deferred-init;
+	// zephyr,deferred-init;
 	mux0: tca9548a0@70
 	{
 		compatible = "ti,tca9548a";
@@ -1107,7 +1108,7 @@ pico_spi: &spi0 {};
 				compatible = "ams,tcs34725";
 				status = "okay";
 				reg = <0x29>;
-				zephyr,deferred-init;
+				// zephyr,deferred-init;
 			};
 
 		};
@@ -1252,9 +1253,9 @@ pico_spi: &spi0 {};
 		};				
 	};
 
-	mux1: tca9548a1@70 {
+	mux1: tca9548a1@71 {
 		compatible = "ti,tca9548a";
-		reg = <0x70>;
+		reg = <0x71>;
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -1269,7 +1270,7 @@ pico_spi: &spi0 {};
 				compatible = "ams,tcs34725";
 				status = "okay";
 				reg = <0x29>;
-				zephyr,deferred-init;
+				// zephyr,deferred-init;
 			};
 		};
 		mux1_i2c@1 {
@@ -1444,5 +1445,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	// status = "disabled";
+	status = "disabled";
 };
