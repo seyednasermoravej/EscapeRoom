@@ -1081,7 +1081,7 @@ pico_spi: &spi0 {};
 {
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
-	// zephyr,deferred-init;
+	zephyr,deferred-init;
 	mux0: tca9548a0@70
 	{
 		compatible = "ti,tca9548a";
@@ -1090,25 +1090,28 @@ pico_spi: &spi0 {};
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-		mux0_i2c@0
+		zephyr,deferred-init;
+		mux0_channel0: mux0-i2c@0
 		{
 			compatible = "ti,tca9548a-channel";
 			reg = <0>;
 			#address-cells = <1>;
 			#size-cells = <0>;
+			zephyr,deferred-init;
 			rfid1: pn532@24
 			{
 				compatible = "nxp,pn532";
 				status = "okay";
 				reg = <0x24>;
 				reset-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW)>;
+				zephyr,deferred-init;
 			};
 			rgb_sensor0: tcs34725@29
 			{
 				compatible = "ams,tcs34725";
 				status = "okay";
 				reg = <0x29>;
-				// zephyr,deferred-init;
+				zephyr,deferred-init;
 			};
 
 		};
