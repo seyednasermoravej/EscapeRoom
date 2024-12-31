@@ -350,6 +350,7 @@ int Mqtt:: try_to_connect()
 	}
 
 	if (connected) {
+		wdt_feed(wdt, wdt_channel_id);
 		return 0;
 	}
 

@@ -403,6 +403,7 @@ int Puzzles:: builtIntLedInit()
 
 void puzzleEntryPoint(void *, void *, void *)
 {
+    
 #ifdef NASER
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
@@ -429,6 +430,7 @@ void puzzleEntryPoint(void *, void *, void *)
     puzzles = new Puzzles(&fileSystem);
     bool mqtt = false;
 
+    puzzles->enableWatchDog();
     while(!puzzles->deviceSpecified)
     {
         if(!mqtt)
@@ -464,7 +466,6 @@ void puzzleEntryPoint(void *, void *, void *)
             dnsResolver("not specified", serverName, serverIpAddress);
 #endif
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
-    // int counter = 0; 
     while(1)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
@@ -499,4 +500,40 @@ extern "C" void puzzleThreadCreate()
     k_thread_name_set(puzzleTid, "puzzles");
 }
 
+int Puzzles:: enableWatchDog()
+{
+
+	int err;
+
+	printk("Watchdog sample application\n");
+
+	if (!device_is_ready(wdt)) {
+		printk("%s: device not ready.\n", wdt->name);
+		// return 0;
+	}
+
+	struct wdt_timeout_cfg wdt_config;
+    wdt_config.window = { WDT_MIN_WINDOW, WDT_MAX_WINDOW};
+		/* Reset SoC when watchdog timer expires. */
+    wdt_config.flags = WDT_FLAG_RESET_SOC;
+
+	wdt_channel_id = wdt_install_timeout(wdt, &wdt_config);
+	if (wdt_channel_id == -ENOTSUP) {
+		/* IWDG driver for STM32 doesn't support callback */
+		printk("Callback support rejected, continuing anyway\n");
+		wdt_config.callback = NULL;
+		wdt_channel_id = wdt_install_timeout(wdt, &wdt_config);
+	}
+	if (wdt_channel_id < 0) {
+		printk("Watchdog install error\n");
+		return 0;
+	}
+
+	err = wdt_setup(wdt, WDT_OPT);
+	if (err < 0) {
+		printk("Watchdog setup error\n");
+		return 0;
+	}
+    wdt_feed(wdt, wdt_channel_id);
+}
 

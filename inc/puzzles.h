@@ -86,6 +86,7 @@ public:
     int  writeDeviceName(char *name);
     Puzzle *puzzle;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
+    int enableWatchDog();
 
 private:
 
