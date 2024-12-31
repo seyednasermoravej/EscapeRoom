@@ -61,7 +61,6 @@
 
 LOG_MODULE_REGISTER(rfidIn, LOG_LEVEL_INF);
 
-K_THREAD_STACK_DEFINE(rfidInStackArea, RFID_IN_STACK_SIZE);
 
 struct k_thread rfidInThread;
 

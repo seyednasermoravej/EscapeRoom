@@ -72,7 +72,7 @@
 //     SERVO
 // }
 
-#define PUZZLE_STACK_SIZE                  8192 
+#define PUZZLE_STACK_SIZE                  4096 + 1024 
 #define PUZZLE_PRIORITY                    9 
 #define PUZZLE_TYPE_NAME_MAX_LEN           128
 

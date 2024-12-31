@@ -407,7 +407,7 @@ void puzzleEntryPoint(void *, void *, void *)
 #ifdef NASER
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.1.6";
+        char serverIpAddress[] = "192.168.1.7";
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif
@@ -429,8 +429,9 @@ void puzzleEntryPoint(void *, void *, void *)
     memset(msg, 0, sizeof(struct MqttMsg));
     puzzles = new Puzzles(&fileSystem);
     bool mqtt = false;
-
+#ifdef WATCH_DOG
     puzzles->enableWatchDog();
+#endif
     while(!puzzles->deviceSpecified)
     {
         if(!mqtt)

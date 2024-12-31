@@ -33,7 +33,7 @@
 #define MQTT_USERNAME       "District21"
 #define MQTT_PASSWORD       "District21!"
 
-#define MQTT_STACK_SIZE     1024 * 8 
+#define MQTT_STACK_SIZE     4096 
 #define MQTT_PRIORITY      8 
 // #define SERVER_IP_ADDRESS    "192.168.100.169"
 #define SERVER_IP_ADDRESS    "5.196.78.28"

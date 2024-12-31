@@ -350,7 +350,9 @@ int Mqtt:: try_to_connect()
 	}
 
 	if (connected) {
+#ifdef WATCH_DOG
 		wdt_feed(wdt, wdt_channel_id);
+#endif
 		return 0;
 	}
 
@@ -444,6 +446,7 @@ K_THREAD_DEFINE(app_thread, STACK_SIZE, start_app, NULL, NULL, NULL, THREAD_PRIO
 static K_HEAP_DEFINE(app_mem_pool, 1024 * 2);
 #endif
 
+
 void mqttEntryPoint(void * serverIpAddress, void *mqttList, void *mqttCount)
 {
 #if defined(CONFIG_MQTT_LIB_TLS)
@@ -454,10 +457,11 @@ void mqttEntryPoint(void * serverIpAddress, void *mqttList, void *mqttCount)
 #endif
 	struct MqttMsg msg = {0};
 	mqtt = new Mqtt((const char*)serverIpAddress, (struct mqtt_topic*)mqttList, *(uint16_t *)mqttCount);
-	// memset(&msg, 0, sizeof(struct MqttMsg));
+#ifdef WATCH_DOG
+	wdt_feed(wdt, wdt_channel_id);
+#endif
 	while (1) {
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
-			// publisher(msg.msg, msg.topic);
 			mqtt->publisher(msg.msg, msg.topic);
 			memset(&msg, 0, sizeof(struct MqttMsg));
 		}

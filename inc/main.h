@@ -24,9 +24,9 @@
 #include <zephyr/drivers/watchdog.h>
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
-
-#define WDT_FEED_TRIES 5
-
+#include <zephyr/sys/sys_heap.h>
+#define NASER 
+#define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
  */
@@ -90,7 +90,6 @@ extern const struct device *const wdt;
 
 extern char deviceId[17]; 
 
-#define NASER 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif
 
