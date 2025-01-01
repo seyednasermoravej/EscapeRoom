@@ -2,9 +2,6 @@
 
 LOG_MODULE_REGISTER(colorTubes, LOG_LEVEL_DBG);
 
-static const struct device *dev0_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
-static const struct device *dev1_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c1));
-
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0)),
     // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
@@ -26,20 +23,9 @@ static const struct i2c_dt_spec i2c_specs[] = {
 
 colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsensors): Puzzle(room, type), numRGBsensors(_numRGBsensors)
 {
-	int ret;
-	ret = device_init(dev0_i2c);
-	LOG_DBG("ret i2c0: %d");
-	k_msleep(1);
 
-	ret= device_init(DEVICE_DT_GET(DT_NODELABEL(mux0)));
-	device_init(DEVICE_DT_GET(DT_NODELABEL(mux0_channel0)));
-
-	k_msleep(1);
-	LOG_DBG("ret mux0: %d");
-	ret= device_init(dev1_i2c);
-	LOG_DBG("ret i2c1: %d");
-	k_msleep(1);
-
+	activateI2c0Mux0Channels();
+	activateI2c0Mux1Channels();
 	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
 	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++) 
 	{

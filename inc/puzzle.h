@@ -37,6 +37,9 @@ protected:
     int peripheralIdx(const char *field, char *command);
     int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
     struct led_rgb retrieveColors(char *str);
+    int activateI2c0Mux0Channels();
+    int activateI2c0Mux1Channels();
+
 public:
     // Constructor to initialize roomName and puzzleTypeName
     Puzzle(const char* room, const char* type);

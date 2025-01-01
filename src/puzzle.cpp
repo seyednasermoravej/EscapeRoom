@@ -154,3 +154,71 @@ struct led_rgb Puzzle:: retrieveColors(char *str)
     return rgb;
 
 }
+
+int Puzzle:: activateI2c0Mux0Channels()
+{
+
+	int ret;
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0)));
+    // Array of devices for all mux0 channels
+    const struct device *channels[] = {
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel0)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel1)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel2)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel3)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel4)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel5)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel6)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel7)),
+    };
+
+    for (uint8_t i = 0; i < ARRAY_SIZE(channels); i++) {
+        if (!device_is_ready(channels[i])) {
+            LOG_ERR("Channel %d is not ready", i);
+            continue;
+        }
+
+        int ret = device_init(channels[i]);
+        if (ret < 0) {
+            LOG_ERR("Failed to initialize channel %d: %d", i, ret);
+            return ret;
+        } else {
+            LOG_INF("Channel %d initialized successfully", i);
+        }
+    }
+}
+
+int Puzzle:: activateI2c0Mux1Channels()
+{
+
+	int ret;
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1)));
+    // Array of devices for all mux0 channels
+    const struct device *channels[] = {
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel0)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel1)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel2)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel3)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel4)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel5)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel6)),
+        // DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel7)),
+    };
+
+    for (uint8_t i = 0; i < ARRAY_SIZE(channels); i++) {
+        if (!device_is_ready(channels[i])) {
+            LOG_ERR("Channel %d is not ready", i);
+            continue;
+        }
+
+        int ret = device_init(channels[i]);
+        if (ret < 0) {
+            LOG_ERR("Failed to initialize channel %d: %d", i, ret);
+            return ret;
+        } else {
+            LOG_INF("Channel %d initialized successfully", i);
+        }
+    }
+}
