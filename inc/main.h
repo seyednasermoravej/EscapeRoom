@@ -25,7 +25,7 @@
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
-#define NASER 
+#define BRAM 
 #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.

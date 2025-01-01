@@ -1249,7 +1249,7 @@ pico_spi: &spi0 {};
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
 		zephyr,deferred-init;
 		i2c0_mux1_channel0: mux1-i2c@0 {
 			compatible = "ti,tca9548a-channel";

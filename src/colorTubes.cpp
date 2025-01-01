@@ -4,20 +4,20 @@ LOG_MODULE_REGISTER(colorTubes, LOG_LEVEL_DBG);
 
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
-	// I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
-	// I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14))
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
+	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
+	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14))
 };
 
 
@@ -29,10 +29,6 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
 	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++) 
 	{
-		// device_init(i2c_specs[i].bus);
-    	// if (!device_is_ready(i2c_specs[i].bus)) {
-        // 	LOG_ERR("Sensor device not ready");
-    	// }
 		LOG_INF("Initializing RGB_Sensor %d", i + 1);
 		rgbsensors[i] = new Adafruit_TCS34725(&i2c_specs[i],TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
 		k_msleep(10);
