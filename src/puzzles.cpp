@@ -113,12 +113,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is blinds");
         deviceSpecified = true;
     }
-    // else if(strcmp(type, "powerPanel") == 0)
-    // {
-    //     puzzle = new PowerPanel("codeRed", "powerPanel");
-    //     LOG_INF("Puzzle type is powerPanel");
-    //     deviceSpecified = true;
-    // }
+    else if(strcmp(type, "powerPanel") == 0)
+    {
+        puzzle = new PowerPanel("codeRed", "powerPanel");
+        LOG_INF("Puzzle type is powerPanel");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "scale") == 0)
     {
         puzzle = new Scale("codeRed", "scale");

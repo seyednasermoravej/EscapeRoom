@@ -4,14 +4,15 @@
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 
-void test(void) {
-    i2cScanner();
-}
-
 
 
 
 void i2cScanner();
+
+void test(void) {
+    i2cScanner();
+}
+
 struct mqtt_topic deviceId_topic = {0};
 extern void puzzleThreadCreate();
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
@@ -83,8 +84,8 @@ void i2cScanner()
     const struct device *i2c_dev;
     uint8_t addr;
     int ret;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
-    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
     if (!i2c_dev) {
         printf("Error: I2C device not found\n");
         return;

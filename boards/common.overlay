@@ -400,12 +400,16 @@
 		power_panel_servos: power-panel-servos
 		{
 			compatible = "pwm-servo";
-			pwms = <&pwm 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-					<&pwm 4 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 5 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-					<&pwm 6 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 7 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-					<&pwm 8 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&pwm 9 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			pwms = <&servo_driver 0 PWM_MSEC(20)>, <&servo_driver 1 PWM_MSEC(20)>,
+					<&servo_driver 2 PWM_MSEC(20)>, <&servo_driver 3 PWM_MSEC(20)>,
+					<&servo_driver 4 PWM_MSEC(20)>, <&servo_driver 5 PWM_MSEC(20)>,
+					<&servo_driver 6 PWM_MSEC(20)>, <&servo_driver 7 PWM_MSEC(20)>;
+			// pwms = <&servo_driver 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+			// 		<&servo_driver 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+			// 		<&servo_driver 4 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 5 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+			// 		<&servo_driver 6 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 7 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			min-pulse = <PWM_USEC(600)>;
-			max-pulse = <PWM_USEC(2500)>;
+			max-pulse = <PWM_USEC(2700)>;
 			max-degrees = <180>;
 			status ="okay";
 			zephyr,deferred-init;
@@ -988,7 +992,7 @@
 		ngpios = <192>;
 		#gpio-cells = <2>; 
 		gpio-controller;
-		spi-max-frequency = <8000000>;
+		spi-max-frequency = <1000000>;
 		zephyr,deferred-init;
 	};
 
@@ -1343,6 +1347,14 @@ pico_spi: &spi0 {};
 			};
 		};
 	};
+	servo_driver: pca9685@40
+	{
+		compatible = "nxp,pca9685-pwm";
+        reg = <0x40>;        // I2C address of the PCA9685
+        #pwm-cells = <2>;    // Two cells: channel and duty cycle
+		status = "okay"; 
+		zephyr,deferred-init;
+	};
 };
 
 
@@ -1352,7 +1364,8 @@ pico_spi: &spi0 {};
 	pinctrl-0 = <&i2c1_default>;	
 	clock-frequency = <I2C_BITRATE_STANDARD>;
 	zephyr,deferred-init;
-		lcd1: pcf857x@27 {
+	lcd1: pcf857x@27
+	{
 		compatible = "nxp,pcf857x";
 		status = "okay";
 		reg = <0x27>;
@@ -1361,7 +1374,8 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-		lcd2: pcf857x@26{
+	lcd2: pcf857x@26
+	{
 		compatible = "nxp,pcf857x";
 		reg = <0x26>;
 		gpio-controller;
@@ -1369,7 +1383,8 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-		expander1: pcf857x@20 {
+	expander1: pcf857x@20
+	{
 		compatible = "nxp,pcf857x";
 		status = "okay";
 		reg = <0x20>;
@@ -1378,7 +1393,8 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-		expander2: pcf857x@21 {
+	expander2: pcf857x@21
+	{
 		compatible = "nxp,pcf857x";
 		status = "okay";
 		reg = <0x21>;
@@ -1387,13 +1403,13 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-	ht16k33@70 {
+	ht16k33@70
+	{
 		compatible = "holtek,ht16k33";
 		reg = <0x70>;
 		zephyr,deferred-init;
 		/* Uncomment to use IRQ instead of polling: */
 		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */
-
 	};
 
 };

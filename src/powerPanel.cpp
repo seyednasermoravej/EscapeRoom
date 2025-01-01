@@ -1,6 +1,6 @@
 #include "powerPanel.h"
 
-LOG_MODULE_REGISTER(powerPanel, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(powerPanel, LOG_LEVEL_DBG);
 #define DT_SPEC_AND_COMMA(node_id, prop, idx) \
 	PWM_DT_SPEC_GET_BY_IDX(node_id, idx),
 static const struct pwm_dt_spec allServos[] = {
@@ -23,8 +23,15 @@ static const uint8_t numOfDisplays = 9;
 PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
     servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+
+    device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegments24)));
     display24 = new Display24(display1_8);
+
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
     creatingMqttList(17);
 }

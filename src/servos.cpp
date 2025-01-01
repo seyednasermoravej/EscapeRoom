@@ -7,13 +7,12 @@ LOG_MODULE_REGISTER(servos, LOG_LEVEL_INF);
 
 Servos:: Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos, uint32_t minPulse, uint32_t maxPulse, uint16_t maxDegrees):
 servos(_servos), numOfservos(_numOfServos), minPulse(minPulse), maxPulse(maxPulse), maxDegrees(maxDegrees)
-
-// Servos:: Servos(const struct pwm_dt_spec *_servos, uint8_t _numOfServos):
-// servos(_servos), numOfservos(_numOfServos)
 {
     device_init(servos->dev);
     for (size_t i = 0; i < numOfservos; i++) {
-        pwmInit(&servos[i], "Error: PWM channel %i is not ready.");
+        char message[64];
+        sprintf(message, "Error: PWM channel %d is not ready.", i);
+        pwmInit(&servos[i], message);
     }
     coeff = (float)(maxPulse - minPulse) / (float)maxDegrees;
 

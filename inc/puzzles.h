@@ -46,7 +46,7 @@
 #include "ventilator.h"
 #include "heartMonitor.h"
 #include "blinds.h"
-
+#include "powerPanel.h"
 #include "scale.h"
 #include "colorTubes.h"
 #include "entranceDoor.h"
@@ -64,15 +64,7 @@
 #endif
 #endif
 
-// enum Servos
-// {
-//     SERVO0 = 0,
-//     SERVO1,
-//     SERVO2,
-//     SERVO
-// }
-
-#define PUZZLE_STACK_SIZE                  4096 + 1024 
+#define PUZZLE_STACK_SIZE                  4096
 #define PUZZLE_PRIORITY                    9 
 #define PUZZLE_TYPE_NAME_MAX_LEN           128
 
@@ -99,8 +91,4 @@ private:
 
 
 };
-
-// #ifdef __cplusplus
-// }
-// #endif
 #endif

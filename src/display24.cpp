@@ -41,7 +41,8 @@ void Display24:: displayStr(const char *_str)
         buf2[i] = segment_map[(uint8_t)str[i]];
     }
 
-    reg_595_port_set_bits_raw(display->port, buf2);
+    uint8_t buf[24] = {0};
+    reg_595_port_set_bits_raw(display->port, buf);
 }
 
 
