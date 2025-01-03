@@ -16,7 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "display8.h"
+#include "display8ht16k33.h"
 
 class DoorKeypad: public Puzzle 
 {

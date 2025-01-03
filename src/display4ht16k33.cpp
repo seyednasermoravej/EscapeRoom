@@ -1,6 +1,6 @@
 #include "display4ht16k33.h"
 
-#define DOUBLE_DOTS 1
+#define DOUBLE_DOTS 36//16 + 16 + 1
 LOG_MODULE_REGISTER(display4ht16k33, LOG_LEVEL_INF);
 
 Display4:: Display4(const device *_display): display(_display)
@@ -69,18 +69,18 @@ void Display4:: displayChar(char c, uint8_t _pos)
     uint8_t base = 16;
     uint8_t val = 0;
     uint8_t pos;
-    // if(_pos == 3)
-    // {
-    //     _pos = 4;
-    // }
-    // if(_pos == 2)
-    // {
-    //     _pos = 3;
-    // }
+    if(_pos == 3)
+    {
+        _pos = 4;
+    }
+    if(_pos == 2)
+    {
+        _pos = 3;
+    }
     for(uint8_t i = 0; i < 8; i++)
     {
-        // pos = ((_pos) * base) + i;
-        pos = ((_pos + 1) * base) + i;
+        pos = ((_pos) * base) + i;
+        // pos = ((_pos + 1) * base) + i;
         val = (code >> i) & 0x01;
         // ((c >> i) & 0x01) ? led_on(display, base + (pos * 8) + i): led_off(display, base + (pos * 8) + i);
 

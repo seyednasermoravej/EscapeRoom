@@ -308,16 +308,6 @@
 			};
 			zephyr,deferred-init;
 		};
-		door_keypad_display: door-keypad-display
-		{
-			compatible = "power-switch";
-			gpios = <&sevensegments8 0 GPIO_ACTIVE_HIGH>, <&sevensegments8 1 GPIO_ACTIVE_HIGH>, <&sevensegments8 2 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 3 GPIO_ACTIVE_HIGH>, <&sevensegments8 4 GPIO_ACTIVE_HIGH>, <&sevensegments8 5 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 6 GPIO_ACTIVE_HIGH>, <&sevensegments8 7 GPIO_ACTIVE_HIGH>, <&sevensegments8 8 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 9 GPIO_ACTIVE_HIGH>, <&sevensegments8 10 GPIO_ACTIVE_HIGH>, <&sevensegments8 11 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 12 GPIO_ACTIVE_HIGH>, <&sevensegments8 13 GPIO_ACTIVE_HIGH>, <&sevensegments8 14 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 15 GPIO_ACTIVE_HIGH>;
-		};
 	};
 
 	xray
@@ -448,7 +438,8 @@
 				<&sevensegments24 54 GPIO_ACTIVE_HIGH>, <&sevensegments24 55 GPIO_ACTIVE_HIGH>, <&sevensegments24 56 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 57 GPIO_ACTIVE_HIGH>, <&sevensegments24 58 GPIO_ACTIVE_HIGH>, <&sevensegments24 59 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 60 GPIO_ACTIVE_HIGH>, <&sevensegments24 61 GPIO_ACTIVE_HIGH>, <&sevensegments24 62 GPIO_ACTIVE_HIGH>,
-				<&sevensegments24 63 GPIO_ACTIVE_HIGH>, <&sevensegments24 64 GPIO_ACTIVE_HIGH>, <&sevensegments24 65 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 63 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 64 GPIO_ACTIVE_HIGH>, <&sevensegments24 65 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 66 GPIO_ACTIVE_HIGH>, <&sevensegments24 67 GPIO_ACTIVE_HIGH>, <&sevensegments24 68 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 69 GPIO_ACTIVE_HIGH>, <&sevensegments24 70 GPIO_ACTIVE_HIGH>, <&sevensegments24 71 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 72 GPIO_ACTIVE_HIGH>, <&sevensegments24 73 GPIO_ACTIVE_HIGH>, <&sevensegments24 74 GPIO_ACTIVE_HIGH>,
@@ -516,49 +507,49 @@
 			compatible = "gpio-keys";
 			switch_position1: switch-position1
 			{
-				gpios = <&expander2 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x100>;
 			};
 
 			switch_position2: switch-position2
 			{
-				gpios = <&expander2 1 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 1 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x101>;
 			};
 
 			switch_position3: switch-position3
 			{
-				gpios = <&expander2 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x102>;
 			};
 
 			switch_position4: switch-position4
 			{
-				gpios = <&expander2 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x103>;
 			};
 
 			switch_position5: switch-position5
 			{
-				gpios = <&expander2 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x104>;
 			};
 
 			switch_position6: switch-position6
 			{
-				gpios = <&expander2 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x105>;
 			};
 
 			switch_position7: switch-position7
 			{
-				gpios = <&expander2 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x106>;
 			};
 
 			switch_position8: switch-position8
 			{
-				gpios = <&expander2 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x107>;
 			};
 
@@ -801,16 +792,6 @@
 		{
 
 		};
-		heart_box_display2: heart-box-display2
-		{
-			compatible = "power-switch";
-			gpios = <&sevensegments8 0 GPIO_ACTIVE_HIGH>, <&sevensegments8 1 GPIO_ACTIVE_HIGH>, <&sevensegments8 2 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 3 GPIO_ACTIVE_HIGH>, <&sevensegments8 4 GPIO_ACTIVE_HIGH>, <&sevensegments8 5 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 6 GPIO_ACTIVE_HIGH>, <&sevensegments8 7 GPIO_ACTIVE_HIGH>, <&sevensegments8 8 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 9 GPIO_ACTIVE_HIGH>, <&sevensegments8 10 GPIO_ACTIVE_HIGH>, <&sevensegments8 11 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 12 GPIO_ACTIVE_HIGH>, <&sevensegments8 13 GPIO_ACTIVE_HIGH>, <&sevensegments8 14 GPIO_ACTIVE_HIGH>,
-					<&sevensegments8 15 GPIO_ACTIVE_HIGH>;	
-		};
 		heart_box_relays: heart-box-relays
 		{
 			compatible = "power-switch";
@@ -971,32 +952,20 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>, <&gpio0 28 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
-	sevensegments8: shift-expander@0
+	sevensegments24: shift-expander@0
 	{
 		status = "okay";
 		compatible = "zmk,gpio-595";
 		reg = <0>;
-		ngpios = <16>;
-		#gpio-cells = <2>; 
-		gpio-controller;
-		spi-max-frequency = <8000000>;
-		zephyr,deferred-init;
-	};
-	sevensegments24: shift-expander@3
-	{
-		status = "okay";
-		compatible = "zmk,gpio-595";
-		reg = <3>;
+		// ngpios = <64>;
 		ngpios = <192>;
 		#gpio-cells = <2>; 
 		gpio-controller;
 		spi-max-frequency = <1000000>;
 		zephyr,deferred-init;
 	};
-
-
 };
 
 
@@ -1393,20 +1362,18 @@ pico_spi: &spi0 {};
 		ngpios = <8>;
 		zephyr,deferred-init;
 	};
-	expander2: pcf857x@21
-	{
-		compatible = "nxp,pcf857x";
-		status = "okay";
-		reg = <0x21>;
-		gpio-controller;
-		#gpio-cells = <2>;
-		ngpios = <8>;
-		zephyr,deferred-init;
-	};
-	ht16k33@70
+	display4: ht16k33@70
 	{
 		compatible = "holtek,ht16k33";
 		reg = <0x70>;
+		zephyr,deferred-init;
+		/* Uncomment to use IRQ instead of polling: */
+		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */
+	};
+	display8: ht16k33@71
+	{
+		compatible = "holtek,ht16k33";
+		reg = <0x71>;
 		zephyr,deferred-init;
 		/* Uncomment to use IRQ instead of polling: */
 		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */

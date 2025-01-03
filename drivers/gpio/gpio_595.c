@@ -25,7 +25,6 @@ LOG_MODULE_REGISTER(gpio_595);
 
 /* Define the maximum number of SN74HC595 shift registers */
 #define MAX_NUM_OF_595 24
-#define MAX_GPIO_COUNT (MAX_NUM_OF_595 * 8) /* 192 GPIOs */
 /** Configuration data */
 struct reg_595_config {
     /* gpio_driver_data needs to be first */

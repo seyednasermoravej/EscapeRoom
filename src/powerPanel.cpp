@@ -9,7 +9,6 @@ static const struct pwm_dt_spec allServos[] = {
 
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-#define DISPLAY4_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(holtek_ht16k33)
 
 const struct gpio_dt_spec display1_8[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_display24), gpios, DT_SPEC_AND_COMMA_GATE)
@@ -23,16 +22,17 @@ static const uint8_t numOfDisplays = 9;
 PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
-    servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
-
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegments24)));
     display24 = new Display24(display1_8);
 
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
+    // servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+
+
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
-    display4 = new Display4(DEVICE_DT_GET(DISPLAY4_NODE));
+    display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)));
     creatingMqttList(17);
 }
 

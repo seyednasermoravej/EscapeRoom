@@ -3,12 +3,6 @@
 LOG_MODULE_REGISTER(doorKeypad, LOG_LEVEL_INF);
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(door_keypad_buttons));
 
-#define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
- 	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-
-const struct gpio_dt_spec display[] = {
-    DT_FOREACH_PROP_ELEM(DT_NODELABEL(door_keypad_display), gpios, DT_SPEC_AND_COMMA_GATE)
-};
 static DoorKeypad *instance = nullptr;
 
 void DoorKeypad:: buttonsHandlerWrapper(struct input_event *val, void *userData)
@@ -44,9 +38,8 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     device_init(buttons);
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
-    device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegments8)));
-    display8 = new Display8(display);
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    display8 = new Display8(DEVICE_DT_GET(DT_NODELABEL(display8)));
 
 }
 void DoorKeypad:: creatingMqttList(uint16_t _mqttCount)

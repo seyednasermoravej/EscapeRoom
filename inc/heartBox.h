@@ -19,7 +19,7 @@
 #include "keypad.h"
 #include "ledStrip.h"
 #include "display4ht16k33.h"
-#include "display8.h"
+#include "display8ht16k33.h"
 
 class HeartBox: public Puzzle 
 {
