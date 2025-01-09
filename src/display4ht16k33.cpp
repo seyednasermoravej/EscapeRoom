@@ -1,6 +1,6 @@
 #include "display4ht16k33.h"
 
-#define DOUBLE_DOTS 36//16 + 16 + 1
+#define DOUBLE_DOTS 33//16 + 16 + 1
 LOG_MODULE_REGISTER(display4ht16k33, LOG_LEVEL_INF);
 
 Display4:: Display4(const device *_display): display(_display)

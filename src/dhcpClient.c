@@ -27,10 +27,14 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 	net_if_get_by_iface(iface));
 	#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 		struct wifi_connect_req_params connect_params = {
-        .ssid = "Safineh-2",
-        .ssid_length = strlen("Safineh-2"),
-        .psk = "gXvNavG4mg@9c9Z8",
-        .psk_length = strlen("gXvNavG4mg@9c9Z8"),
+        .ssid = "Naser",
+        .ssid_length = strlen("Naser"),
+        .psk = "nasimore",
+        .psk_length = strlen("nasimore"),
+        // .ssid = "Safineh-2",
+        // .ssid_length = strlen("Safineh-2"),
+        // .psk = "gXvNavG4mg@9c9Z8",
+        // .psk_length = strlen("gXvNavG4mg@9c9Z8"),
 		.security = WIFI_SECURITY_TYPE_PSK,
     };	
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));

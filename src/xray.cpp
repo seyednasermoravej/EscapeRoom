@@ -27,7 +27,35 @@ static const struct gpio_dt_spec gpio_specs[] = {
 };
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
-	device_init(dev_i2c);
+	int ret;
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0)));
+    // Array of devices for all mux0 channels
+    const struct device *channels[] = {
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel0)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel1)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel2)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel3)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel4)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel5)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel6)),
+    };
+
+    for (uint8_t i = 0; i < ARRAY_SIZE(channels); i++) {
+        if (!device_is_ready(channels[i])) {
+            LOG_ERR("Channel %d is not ready", i);
+            continue;
+        }
+
+        int ret = device_init(channels[i]);
+        if (ret < 0) {
+            LOG_ERR("Failed to initialize channel %d: %d", i, ret);
+            // return ret;
+        } else {
+            LOG_INF("Channel %d initialized successfully", i);
+        }
+    }
+	
 	k_msleep(1);
 	rfids = new Adafruit_PN532 * [numRfids];
 	for (uint8_t i = 0; i < numRfids; i++) 

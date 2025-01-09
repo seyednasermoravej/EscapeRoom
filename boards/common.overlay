@@ -1009,8 +1009,8 @@ pico_spi: &spi0 {};
 			chain-length = <8>;
 			color-mapping = <1 2 3>;
 			reset-delay = <280>;
-			frequency = <400000>;//ws2811
-			// frequency = <800000>;/ws2812
+			// frequency = <400000>;//ws2811
+			frequency = <800000>;//ws2812
 		};
 	};
 };
