@@ -85,7 +85,7 @@ void Puzzles:: puzzleTypeSelection(char *type)
     }
     else if(strcmp(type, "xray") == 0)
     {
-        puzzle = new Xray("codeRed", "xray", 7);
+        puzzle = new Xray("codeRed", "xray", 3);
         LOG_INF("Puzzle type is xray.");
         deviceSpecified = true;
     }
@@ -407,8 +407,8 @@ void puzzleEntryPoint(void *, void *, void *)
 #ifdef NASER
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.124.142";
-        // char serverIpAddress[] = "192.168.1.7";
+        // char serverIpAddress[] = "192.168.175.142";
+        char serverIpAddress[] = "192.168.1.11";
     #else
         char serverIpAddress[] = "10.42.0.1";
     #endif

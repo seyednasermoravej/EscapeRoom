@@ -407,10 +407,45 @@
 		power_panel_switch: power-panel-switch
 		{
 			compatible = "gpio-keys";
-			sw1:sw1
+			power_panel_sw0: power-panel-sw0
+			{
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_0>;
+			};
+			power_panel_sw1: power-panel-sw1
 			{
 				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_1>;
+			};
+			power_panel_sw2: power-panel-sw2
+			{
+				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_2>;
+			};
+			power_panel_sw3: power-panel-sw3
+			{
+				gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_3>;
+			};
+			power_panel_sw4: power-panel-sw4
+			{
+				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_4>;
+			};
+			power_panel_sw5: power-panel-sw5
+			{
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_5>;
+			};
+			power_panel_sw6: power-panel-sw6
+			{
+				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_6>;
+			};
+			power_panel_sw7: power-panel-sw7
+			{
+				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				zephyr,code = <INPUT_BTN_7>;
 			};
 
 		};
@@ -1397,6 +1432,57 @@ pico_spi: &spi0 {};
 		};
 	};
   };
+
+
+// &flash0 {
+//     reg = <0x10000000 DT_SIZE_M(2)>; /* 2 MB total flash */
+
+//     partitions {
+//         compatible = "fixed-partitions";
+//         #address-cells = <1>;
+//         #size-cells = <1>;
+
+//         /* Second-stage bootloader (mandatory for RP2040) */
+//         second_stage_bootloader: partition@0 {
+//             label = "second_stage_bootloader";
+//             reg = <0x00000000 0x1000>; /* 4 KB */
+//             read-only;
+//         };
+
+//         /* Bootloader partition */
+//         boot_partition: partition@1000 {
+//             label = "mcuboot";
+//             reg = <0x00001000 0x8000>; /* 32 KB */
+//             read-only;
+//         };
+
+//         /* Primary application image */
+//         slot0_partition: partition@9000 {
+//             label = "image-0";
+//             reg = <0x00009000 0xF3000>; /* 972 KB */
+//         };
+
+//         /* Secondary application image */
+//         slot1_partition: partition@fc000 {
+//             label = "image-1";
+//             reg = <0x000FC000 0xF3000>; /* 972 KB */
+//         };
+
+//         /* Scratch space */
+//         scratch_partition: partition@1ef000 {
+//             label = "image-scratch";
+//             reg = <0x001EF000 0x10000>; /* 64 KB */
+//         };
+
+//         /* Storage partition */
+//         storage_partition: partition@1ff000 {
+//             label = "storage";
+//             reg = <0x001FF000 0x1000>; /* 4 KB */
+//         };
+//     };
+// };
+
+
 
 &adc {
 	#address-cells = <1>;

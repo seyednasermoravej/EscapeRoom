@@ -1,6 +1,6 @@
 #include "xray.h"
 
-LOG_MODULE_REGISTER(xray, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(xray, LOG_LEVEL_INF);
 
 static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
@@ -11,9 +11,9 @@ static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid2)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid3)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid4)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
+    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
 };
 
 static const struct gpio_dt_spec gpio_specs[] = {
@@ -21,40 +21,13 @@ static const struct gpio_dt_spec gpio_specs[] = {
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0}),
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid3), reset_gpios, {0}),
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid4), reset_gpios, {0}),
-    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
-    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
-    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
+    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
+    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
+    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
 };
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
-	int ret;
-	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
-	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0)));
-    // Array of devices for all mux0 channels
-    const struct device *channels[] = {
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel0)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel1)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel2)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel3)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel4)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel5)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux0_channel6)),
-    };
-
-    for (uint8_t i = 0; i < ARRAY_SIZE(channels); i++) {
-        if (!device_is_ready(channels[i])) {
-            LOG_ERR("Channel %d is not ready", i);
-            continue;
-        }
-
-        int ret = device_init(channels[i]);
-        if (ret < 0) {
-            LOG_ERR("Failed to initialize channel %d: %d", i, ret);
-            // return ret;
-        } else {
-            LOG_INF("Channel %d initialized successfully", i);
-        }
-    }
+    activateI2c0Mux0Channels();
 	
 	k_msleep(1);
 	rfids = new Adafruit_PN532 * [numRfids];
