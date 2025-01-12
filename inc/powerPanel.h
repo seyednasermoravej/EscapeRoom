@@ -26,6 +26,8 @@ public:
     PowerPanel(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
+    static void switchesHandlerWrapper(struct input_event *val, void* userData);
+    void switchesHandler(struct input_event *val);
 
 private:
     Servos *servos;

@@ -24,38 +24,55 @@ static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(power_panel_servos), 
 static const uint16_t servoMaxDegrees = DT_PROP(DT_NODELABEL(power_panel_servos), max_degrees);
 static const uint8_t numOfDisplays = 9;
 
+
+static PowerPanel *instance = nullptr;
+
 PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 {
-    // int ret;
+    instance = this;
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(sevensegments24)));
     display24 = new Display24(display1_8);
 
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
-    // servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
+    servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
 
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)));
 
-    // device_init(switches);
-    // INPUT_CALLBACK_DEFINE(switches, switchesHandlerWrapper, (void *)this);
+    device_init(switches);
+    INPUT_CALLBACK_DEFINE(switches, switchesHandlerWrapper, (void *)this);
 
     creatingMqttList(17);
 }
 
+void PowerPanel:: switchesHandlerWrapper(struct input_event *val, void *userData)
+{
+    instance->switchesHandler(val);
+}
+void PowerPanel:: switchesHandler(struct input_event *val)
+{
+    if (val->type == INPUT_EV_KEY)
+    {
+        struct MqttMsg msg = {0};
+        sprintf(msg.topic, "%sswitch%d", mqttCommand, val->type - INPUT_BTN_0 + 1);
+        val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
+        k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+    }
+}
 void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
 {
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
     {
-        sprintf(topic, "%s/%s/servo%d", roomName, puzzleTypeName, i + 1);
+        sprintf(topic, "%sservo%d", mqttCommand, i + 1);
         mqttList[i] = *createMqttTopic(topic);
     }
     for(uint8_t i = 0; i < numOfDisplays; i++)
     {
-        sprintf(topic, "%s/%s/display%d", roomName, puzzleTypeName, i + 1);
+        sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
         mqttList[ARRAY_SIZE(allServos) + i] = *createMqttTopic(topic);
     }
     mqttCount = ARRAY_SIZE(allServos) + numOfDisplays;
@@ -100,7 +117,7 @@ void PowerPanel:: messageHandler(struct MqttMsg *msg)
                 }
                 else
                 {
-                    display24->displayStr(msg->msg);
+                    display24->displayStr(msg->msg, fieldIdx);
                 }
             }
             else

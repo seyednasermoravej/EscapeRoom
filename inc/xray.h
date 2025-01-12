@@ -16,6 +16,7 @@
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
 #include "rfidIn.h"
+#include "main.h"
 
 class Xray: public Puzzle 
 {

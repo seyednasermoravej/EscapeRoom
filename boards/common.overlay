@@ -314,11 +314,6 @@
 	{
 		xray_i2c: i2c0;
 		xray_i2c_mux: mux0;
-		xray_i2c_multiplexer: xray-i2c-mutliplexer
-		{
-			compatible = "power-switch";
-			gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>, <&gpio0 1 GPIO_ACTIVE_HIGH>, <&gpio0 0 GPIO_ACTIVE_HIGH>;
-		};
 		xray_rfid1: rfid1;
 		xray_rfid2: rfid2;
 		xray_rfid3: rfid3;
@@ -458,12 +453,14 @@
 				<&sevensegments24 6 GPIO_ACTIVE_HIGH>, <&sevensegments24 7 GPIO_ACTIVE_HIGH>, <&sevensegments24 8 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 9 GPIO_ACTIVE_HIGH>, <&sevensegments24 10 GPIO_ACTIVE_HIGH>, <&sevensegments24 11 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 12 GPIO_ACTIVE_HIGH>, <&sevensegments24 13 GPIO_ACTIVE_HIGH>, <&sevensegments24 14 GPIO_ACTIVE_HIGH>,
-				<&sevensegments24 15 GPIO_ACTIVE_HIGH>, <&sevensegments24 16 GPIO_ACTIVE_HIGH>, <&sevensegments24 17 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 15 GPIO_ACTIVE_HIGH>, 
+				<&sevensegments24 16 GPIO_ACTIVE_HIGH>, <&sevensegments24 17 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 18 GPIO_ACTIVE_HIGH>, <&sevensegments24 19 GPIO_ACTIVE_HIGH>, <&sevensegments24 20 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 21 GPIO_ACTIVE_HIGH>, <&sevensegments24 22 GPIO_ACTIVE_HIGH>, <&sevensegments24 23 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 24 GPIO_ACTIVE_HIGH>, <&sevensegments24 25 GPIO_ACTIVE_HIGH>, <&sevensegments24 26 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 27 GPIO_ACTIVE_HIGH>, <&sevensegments24 28 GPIO_ACTIVE_HIGH>, <&sevensegments24 29 GPIO_ACTIVE_HIGH>,
-				<&sevensegments24 30 GPIO_ACTIVE_HIGH>, <&sevensegments24 31 GPIO_ACTIVE_HIGH>, <&sevensegments24 32 GPIO_ACTIVE_HIGH>,
+				<&sevensegments24 30 GPIO_ACTIVE_HIGH>, <&sevensegments24 31 GPIO_ACTIVE_HIGH>,
+				 <&sevensegments24 32 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 33 GPIO_ACTIVE_HIGH>, <&sevensegments24 34 GPIO_ACTIVE_HIGH>, <&sevensegments24 35 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 36 GPIO_ACTIVE_HIGH>, <&sevensegments24 37 GPIO_ACTIVE_HIGH>, <&sevensegments24 38 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 39 GPIO_ACTIVE_HIGH>, <&sevensegments24 40 GPIO_ACTIVE_HIGH>, <&sevensegments24 41 GPIO_ACTIVE_HIGH>,
@@ -990,12 +987,12 @@
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
-	sevensegments24: shift-expander@0
+	sevensegments24: shift-expander@2
 	{
 		status = "okay";
 		compatible = "zmk,gpio-595";
-		reg = <0>;
-		// ngpios = <64>;
+		reg = <2>;
+		// ngpios = <32>;
 		ngpios = <192>;
 		#gpio-cells = <2>; 
 		gpio-controller;

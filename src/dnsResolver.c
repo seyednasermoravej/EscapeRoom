@@ -412,14 +412,28 @@ int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress)
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
 	#endif
 	LOG_INF("Starting DNS resolve sample");
-
+#ifdef WATCH_DOG
+		wdt_feed(wdt, wdt_channel_id);
+#endif
 	wait_for_network();
+#ifdef WATCH_DOG
+		wdt_feed(wdt, wdt_channel_id);
+#endif
 
 	setup_ipv4(iface);
+#ifdef WATCH_DOG
+		wdt_feed(wdt, wdt_channel_id);
+#endif
 
 	setup_dhcpv4(iface, deviceName);
+#ifdef WATCH_DOG
+		wdt_feed(wdt, wdt_channel_id);
+#endif
 
 	setup_ipv6(iface);
+#ifdef WATCH_DOG
+		wdt_feed(wdt, wdt_channel_id);
+#endif
     sem_wait(&dnsActive);
     strcpy(serverIpAddress, queryAddress);
 	return 0;

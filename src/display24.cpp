@@ -1,5 +1,7 @@
 #include "display24.h"
 
+LOG_MODULE_REGISTER(display24, LOG_LEVEL_DBG);
+
 static char c = segment_map[0x20];
 
 extern "C" int reg_595_port_set_masked_raw(const struct device *dev, uint8_t *mask, uint8_t *value);
@@ -16,45 +18,34 @@ Display24::Display24(const struct gpio_dt_spec *_display): display(_display)
 		    // return -1;
 	    }
     }
-    while(1)
-    {
 
-    uint8_t buf[2] = {0xff, 0xff};
-    // uint8_t buf[24] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-    reg_595_port_clear_bits_raw(display->port, buf);
-    k_msleep(1000);
-    uint8_t buf2[2] = {0x0f, 0x0f};     // uint8_t buf2[24] = {0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
-    reg_595_port_clear_bits_raw(display->port, buf2);
-    k_msleep(1000);
-    uint8_t buf3[2] = {0xf0, 0xf0};     // uint8_t buf3[24] = {0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0};
-    reg_595_port_clear_bits_raw(display->port, buf3);
-    k_msleep(1000);
-    }
+    // uint8_t buf[4] = {0xff, 0xff, 0xff, 0xff};
+    reg_595_port_clear_bits_raw(display->port, mask);
 }
 
 
-void Display24:: displayStr(const char *_str)
+void Display24:: displayStr(const char *_str, uint8_t pos)
 {
-    static uint8_t pos = 0;
-    c = str[strLen - 1 - pos];
+    LOG_DBG("_str is: %s", _str);
+    uint8_t temp[3] = {0};
     strLen = strlen(_str);
-    if(strLen < 25)
+    if(strLen < 3)
     {
-        strcpy(str, _str);
+        memcpy(temp, _str, strLen);
     }
     else
     {
-        strncpy(str, _str, 24);
-        strLen = 8;
+        memcpy(temp, _str, 3);
+        strLen = 3;
     }
-    uint8_t buf2[24] = {0};
-    for(uint8_t i = 0; i < strlen(str); i++)
+    for(uint8_t i = 0; i < strLen; i++)
     {
-        buf2[i] = segment_map[(uint8_t)str[i]];
+        str[(pos * 3) + i] = segment_map[(uint8_t)temp[i]];
+        LOG_DBG("temp char %d is: %c", i, temp[i]);
+        
     }
 
-    uint8_t buf[24] = {0};
-    reg_595_port_set_bits_raw(display->port, buf);
+    reg_595_port_set_masked_raw(display->port, mask, (uint8_t *)str);
 }
 
 

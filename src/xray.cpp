@@ -2,7 +2,7 @@
 
 LOG_MODULE_REGISTER(xray, LOG_LEVEL_INF);
 
-static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
+// static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 // static const c allRfidIns[] = {
 //     PWM_DT_SPEC_GET(DT_NODELABEL(heart_servos))
 // };
@@ -34,7 +34,10 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 	for (uint8_t i = 0; i < numRfids; i++) 
 	{
 		LOG_INF("Initializing RFID %d", i + 1);
-		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]);
+		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]); 
+#ifdef WATCH_DOG
+        wdt_feed(wdt, wdt_channel_id);
+#endif
 		k_msleep(10);
 	}
 	createMqttTopic(0);
@@ -70,10 +73,10 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 	{
 	// uint8_t i = 0;
 		instance->rfids[i]->begin();
-		read = instance->rfids[i]->readCard(buff, 1000);
+		read = instance->rfids[i]->readCard(buff, 200);
 		if(read)
 		{
-			sprintf(instance->msgReader.topic, "%s/%s/rfid%d", instance->roomName, instance->puzzleTypeName, i + 1);
+			sprintf(instance->msgReader.topic, "%srfid%d", instance->mqttCommand, i + 1);
 			sprintf(instance->msgReader.msg, "%s", buff);
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
