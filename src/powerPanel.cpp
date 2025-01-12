@@ -1,8 +1,13 @@
 #include "powerPanel.h"
 
 LOG_MODULE_REGISTER(powerPanel, LOG_LEVEL_DBG);
+
+
+static const struct device *const switches = DEVICE_DT_GET(DT_NODELABEL(power_panel_switches));
+
 #define DT_SPEC_AND_COMMA(node_id, prop, idx) \
 	PWM_DT_SPEC_GET_BY_IDX(node_id, idx),
+
 static const struct pwm_dt_spec allServos[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_servos), pwms, DT_SPEC_AND_COMMA)
 };
@@ -33,6 +38,10 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)));
+
+    // device_init(switches);
+    // INPUT_CALLBACK_DEFINE(switches, switchesHandlerWrapper, (void *)this);
+
     creatingMqttList(17);
 }
 

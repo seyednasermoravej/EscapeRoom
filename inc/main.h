@@ -26,7 +26,7 @@
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
 #define BRAM 
-// #define WATCH_DOG
+#define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
  */

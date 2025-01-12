@@ -11,9 +11,9 @@ static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid2)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid3)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rfid4)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
-    // I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid5)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid6)),
+    I2C_DT_SPEC_GET(DT_NODELABEL(rfid7))
 };
 
 static const struct gpio_dt_spec gpio_specs[] = {
@@ -21,9 +21,9 @@ static const struct gpio_dt_spec gpio_specs[] = {
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid2), reset_gpios, {0}),
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid3), reset_gpios, {0}),
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid4), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
-    // GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid5), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
+    GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
 };
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {

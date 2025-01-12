@@ -404,9 +404,10 @@
 			status ="okay";
 			zephyr,deferred-init;
 		};
-		power_panel_switch: power-panel-switch
+		power_panel_switches: power-panel-switches
 		{
 			compatible = "gpio-keys";
+			zephyr,deferred-init;
 			power_panel_sw0: power-panel-sw0
 			{
 				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
