@@ -19,13 +19,13 @@ Display24::Display24(const struct gpio_dt_spec *_display): display(_display)
 	    }
     }
 
-    // uint8_t buf[4] = {0xff, 0xff, 0xff, 0xff};
-    reg_595_port_clear_bits_raw(display->port, mask);
+    reg_595_port_set_masked_raw(display->port, mask, mask);
 }
 
 
 void Display24:: displayStr(const char *_str, uint8_t pos)
 {
+    pos = 7 - pos;
     LOG_DBG("_str is: %s", _str);
     uint8_t temp[3] = {0};
     strLen = strlen(_str);
@@ -40,7 +40,7 @@ void Display24:: displayStr(const char *_str, uint8_t pos)
     }
     for(uint8_t i = 0; i < strLen; i++)
     {
-        str[(pos * 3) + i] = segment_map[(uint8_t)temp[i]];
+        str[(pos * 3) + i] = segment_map[(uint8_t)temp[strLen - i - 1]];
         LOG_DBG("temp char %d is: %c", i, temp[i]);
         
     }

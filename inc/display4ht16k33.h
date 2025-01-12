@@ -23,11 +23,10 @@ extern const uint8_t segment_map[128];
 class Display4
 {
 public:
-    Display4(const struct device *const _display);
+    Display4(const struct device *const _display, bool blink);
     void displayStr(char *);
     void setBrightness();
     void displayChar(char c, uint8_t pos);
-    void blink();
 
     struct k_timer blinkTimer;
     static void blinkTimerHandler(struct k_timer *timer);
@@ -37,6 +36,7 @@ public:
 
 private:
     const struct device *display;
+    bool blink = false;
     
 };
 

@@ -40,7 +40,7 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
-    display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)));
+    display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)), false);
 
     device_init(switches);
     INPUT_CALLBACK_DEFINE(switches, switchesHandlerWrapper, (void *)this);
@@ -57,7 +57,7 @@ void PowerPanel:: switchesHandler(struct input_event *val)
     if (val->type == INPUT_EV_KEY)
     {
         struct MqttMsg msg = {0};
-        sprintf(msg.topic, "%sswitch%d", mqttCommand, val->type - INPUT_BTN_0 + 1);
+        sprintf(msg.topic, "%sswitch%d", mqttCommand, val->code - INPUT_BTN_0 + 1);
         val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
@@ -111,7 +111,7 @@ void PowerPanel:: messageHandler(struct MqttMsg *msg)
             
             if((commandIdx > 0 ) && (fieldIdx < numOfDisplays))
             {
-                if(fieldIdx == 9)
+                if(commandIdx == 9)
                 {
                     display4->displayStr(msg->msg);
                 }

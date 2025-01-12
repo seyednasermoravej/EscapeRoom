@@ -3,16 +3,18 @@
 #define DOUBLE_DOTS 33//16 + 16 + 1
 LOG_MODULE_REGISTER(display4ht16k33, LOG_LEVEL_INF);
 
-Display4:: Display4(const device *_display): display(_display)
+Display4:: Display4(const device *_display, bool _blink): display(_display), blink(_blink)
 {
     device_init(display);
     if (!device_is_ready(display)) {
 		LOG_ERR("LED device not ready");
 		return;
     }
-    
-    k_timer_init(&blinkTimer, Display4:: blinkTimerHandler, NULL);
-    k_work_init(&blinkWork, Display4:: blinkWorkHandler);
+    if(blink)
+    {
+        k_timer_init(&blinkTimer, Display4:: blinkTimerHandler, NULL);
+        k_work_init(&blinkWork, Display4:: blinkWorkHandler);
+    }
 }
 
 
@@ -24,9 +26,9 @@ void Display4:: blinkTimerHandler(struct k_timer *timer)
 
 void Display4:: blinkWorkHandler(k_work *work)
 {
-    static bool blink = false;
+    static bool blinking = false;
     Display4 *instance = CONTAINER_OF(work, Display4, blinkWork);
-    if(blink)
+    if(blinking)
     {
         led_on(instance->display, DOUBLE_DOTS);
     }
@@ -34,14 +36,17 @@ void Display4:: blinkWorkHandler(k_work *work)
     {
         led_off(instance->display, DOUBLE_DOTS);
     }
-    blink = !blink;
+    blinking = !blinking;
     
 
 }
 
 void Display4:: displayStr(char *text)
 {
-    k_timer_start(&blinkTimer, K_SECONDS(1), K_SECONDS(1));
+    if(blink)
+    {
+        k_timer_start(&blinkTimer, K_SECONDS(1), K_SECONDS(1));
+    }
     for (uint8_t i = 0; i < 128; i++) {
         if(i == DOUBLE_DOTS)
         {
