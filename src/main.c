@@ -13,7 +13,7 @@ void test(void) {
     i2cScanner();
 }
 
-struct mqtt_topic deviceId_topic = {0};
+// struct mqtt_topic deviceId_topic = {0};
 extern void puzzleThreadCreate();
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
 char deviceIdPub[32];

@@ -23,7 +23,7 @@ void Drawers:: buttonsHandler(struct input_event *val)
     if (val->type == INPUT_EV_KEY)
     {
         struct MqttMsg msg = {0};
-        sprintf(msg.topic, "%s/%s/switch%d", roomName, puzzleTypeName, (val->code - INPUT_BTN_0 + 1));
+        sprintf(msg.topic, "%sswitch%d", mqttCommand, (val->code - INPUT_BTN_0 + 1));
         val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
@@ -50,12 +50,12 @@ Drawers:: Drawers(const char *room, const char *type): Puzzle(room, type)
 void Drawers:: creatingMqttList(uint16_t _mqttCount)
 {
     char topic[128] = {0};
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
-        sprintf(topic, "%s/%s/relay%d", roomName, puzzleTypeName, i + 1);
+        sprintf(topic, "%srelay%d", mqttCommand, i + 1);
         mqttList[i] = *createMqttTopic(topic);
     }
-    mqttCount = _mqttCount;
+    mqttCount = ARRAY_SIZE(allRelays);
 
 }
 

@@ -15,10 +15,10 @@ Blinds:: Blinds(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
     servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
-    servos->move(0, 0);
-    servos->move(1, 0);
-    servos->move(2, 0);
-    servos->move(3, 0);
+    servos->move(0, 90);
+    servos->move(1, 90);
+    servos->move(2, 90);
+    servos->move(3, 90);
 
     creatingMqttList(4);
 }
@@ -27,21 +27,12 @@ void Blinds:: creatingMqttList(uint16_t _mqttCount)
 {
 
     char topic[128] = {0};
-
-    sprintf(topic, "%s/%s/servo1", roomName, puzzleTypeName);
-	mqttList[0] = *createMqttTopic(topic);
-
-    sprintf(topic, "%s/%s/servo2", roomName, puzzleTypeName);
-	mqttList[1] = *createMqttTopic(topic);
-
-    sprintf(topic, "%s/%s/servo3", roomName, puzzleTypeName);
-	mqttList[2] = *createMqttTopic(topic);
-
-    sprintf(topic, "%s/%s/servo4", roomName, puzzleTypeName);
-	mqttList[3] = *createMqttTopic(topic);
-
-    mqttCount = _mqttCount;
-
+    for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
+    {
+        sprintf(topic, "%sservo%d", mqttCommand, i + 1);
+        mqttList[i] = *createMqttTopic(topic);
+    }
+    mqttCount = ARRAY_SIZE(allServos);
 }
 
 
@@ -59,6 +50,14 @@ void Blinds:: messageHandler(struct MqttMsg *msg)
         if((commandIdx > 0 ) && (servoIdx < ARRAY_SIZE(allServos)))
         {
             uint32_t val = atoi(msg->msg) + 90;
+            if(val < 15)
+            {
+                val = 15;
+            }
+            if(val > 165)
+            {
+                val = 165;
+            }
             servos->move(servoIdx, val);
         }
         else

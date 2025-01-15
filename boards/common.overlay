@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		// zephyr,console = &uart0;
-		// zephyr,shell-uart = &uart0;
-		zephyr,console = &cdc_acm_uart0;
-		zephyr,shell-uart = &cdc_acm_uart0;
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		// zephyr,console = &cdc_acm_uart0;
+		// zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -225,31 +225,23 @@
 
 	};
 
-		buydisplay_3_5_tft_touch_arduino_mipi_dbi {
+	display_mipi_dbi: display-mipi-dbi{
 		compatible = "zephyr,mipi-dbi-spi";
-		//////////////////
-		//dc-gpios = <&arduino_header 13 GPIO_ACTIVE_HIGH>; /* D7 */
-		//reset-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>; /* D10 */
-
-		//spi-dev = <&arduino_spi>;
 		
 		dc-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>; /* D7 */
 		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>; /* D10 */
 
-		spi-dev = <&spi1>;
-		
-		
-		
-		
-		
+		spi-dev = <&spi1>;	
 		write-only;
 		#address-cells = <1>;
 		#size-cells = <0>;
-		zephyr,deferred-init;
-		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@1 {
+		// zephyr,deferred-init;
+		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@0
+		{///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// zephyr,deferred-init;
 			compatible = "ilitek,ili9488";
 			mipi-max-frequency = <25000000>;
-			reg = <1>;
+			reg = <0>;
 			pixel-format = <ILI9XXX_PIXEL_FORMAT_RGB888>;
 			width = <320>;
 			height = <480>;
@@ -538,6 +530,7 @@
 		sticks_switch_position: sticks-switch-position
 		{
 			compatible = "gpio-keys";
+			zephyr,deferred-init;
 			switch_position1: switch-position1
 			{
 				gpios = <&expander1 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
@@ -969,10 +962,6 @@
 			col-size = <3>;
 		};
 		zephyr,deferred-init;
-		// debounce-down-ms = <30>;
-		// debounce-up-ms = <30>;
-		// settle-time-us = <50>;
-		// idle-mode = "interrupt";
 
 	};
 
@@ -985,8 +974,8 @@
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
-	zephyr,deferred-init;
+	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
+	// zephyr,deferred-init;
 	sevensegments24: shift-expander@2
 	{
 		status = "okay";
@@ -1421,12 +1410,12 @@ pico_spi: &spi0 {};
 		#size-cells = <1>;
 		code_partition: partition@100 {
 			label = "code-partition";
-			reg = <0x100 (DT_SIZE_M(1) - 0x100)>;
+			reg = <0x100 (DT_SIZE_M(1) + DT_SIZE_K(32) - 0x100)>;
 			read-only;
 		};
-		storage_partition: partition@100000 {
+		storage_partition: partition@108000 {
 			label = "storage";
-			reg = <0x100000 DT_SIZE_M(1)>;
+			reg = <0x108000 (DT_SIZE_M(1) - DT_SIZE_K(32))>;
 		};
 	};
   };
@@ -1504,5 +1493,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	status = "disabled";
+	// status = "disabled";
 };

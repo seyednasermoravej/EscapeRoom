@@ -37,6 +37,10 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(servo_driver)));
     servos = new Servos(allServos, ARRAY_SIZE(allServos), servoMinPulse, servoMaxPulse, servoMaxDegrees);
+    for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
+    {
+        servos->move(i, 90);
+    }
 
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
@@ -95,7 +99,17 @@ void PowerPanel:: messageHandler(struct MqttMsg *msg)
             if((commandIdx > 0 ) && (servoIdx < ARRAY_SIZE(allServos)))
             {
                 uint32_t val = atoi(msg->msg) + 90;
+                if(val < 15)
+                {
+                    val = 15;
+                }
+                if(val > 165)
+                {
+                    val = 165;
+                }
                 servos->move(servoIdx, val);
+                k_msleep(500);
+                servos->move(servoIdx, 90);
             }
             else
             {

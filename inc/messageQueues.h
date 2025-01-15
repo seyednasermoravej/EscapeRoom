@@ -3,7 +3,6 @@
 
 // #include <mqueue.h>
 #include "zephyr/kernel.h"
-#include "aasdDriver.h"
 
 #ifdef __cplusplus
 extern "C" {

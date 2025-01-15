@@ -221,33 +221,11 @@ int Platform:: calibrateSwitchInit()
 
 void Platform:: goToPosition(int position)
 {
-    struct MqttMsg msg = {0};
-    // long position = pos * stepsPerDegree;
-
-
-
     stepper->setAcceleration(500);
-
-
-
-
-
     stepper->moveTo(position);
     LOG_DBG("current position is: %ld, target is: %ld", stepper->currentPosition(), stepper->targetPosition());
     while ((stepper->currentPosition() != position)) // Full speed up to 300
     {
-        // if(k_msgq_get(&msqReceivedFromMQTT, &msg, K_NO_WAIT))
-        // {
-        //     if(strcmp(msg.topic, SET_STEPPER_STOP) == 0)
-        //     {
-        //         stepper->stop();
-        //         break;
-        //     }
-        //     else
-        //     {
-        //         k_msgq_put(&msqReceivedFromMQTT, &msg, K_NO_WAIT);
-        //     }
-        // }
         stepper->run();
     }
     LOG_INF("moving finished");

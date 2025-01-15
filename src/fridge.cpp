@@ -1,6 +1,6 @@
 #include "fridge.h"
 
-LOG_MODULE_REGISTER(fridge, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(fridge, LOG_LEVEL_DBG);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 static const struct gpio_dt_spec allRelays[] = {
@@ -18,16 +18,55 @@ static const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length)
 static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 
 
-static uint32_t count;
-static void lv_btn_click_callback(lv_event_t *e)
-{
-	ARG_UNUSED(e);
 
-	count = 0;
-}
-const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+#include <zephyr/sys/mem_stats.h>
+#include <zephyr/sys/sys_heap.h>
+
+
+// void check_lvgl_memory(void)
+// {
+//     lv_mem_monitor_t mem_mon;
+//     lv_mem_monitor(&mem_mon);
+
+//     LOG_DBG("LVGL Memory Statistics:\n");
+//     LOG_DBG("  Total memory:   %zu bytes\n", mem_mon.total_size);
+//     // printk("  Used memory:    %zu bytes\n", mem_mon.used_size);
+//     LOG_DBG("  Free memory:    %zu bytes\n", mem_mon.free_size);
+//     LOG_DBG("  Largest free block: %zu bytes\n", mem_mon.free_biggest_size);
+//     // printk("  Memory fragmentation: %u%%\n", mem_mon.frag_percent);
+// }
+
+static uint32_t count;
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
+    const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+	if (!device_is_ready(tftLcd)) {
+		LOG_ERR("Device not ready, aborting test");
+		// return 0;
+	}
+    // printk("LVGL custom allocator: %d\n", CONFIG_LV_MEM_CUSTOM);
+    // lv_init();
+    LOG_DBG("LVGL memory pool size: %d\n", CONFIG_LV_Z_MEM_POOL_SIZE); 
+    // while(1)
+    // {
+    // check_lvgl_memory();
+    // k_msleep(1000);
+    LV_IMG_DECLARE(bram);
+    // check_lvgl_memory();
+
+    // }
+	lv_obj_t * my_bram = lv_img_create(lv_scr_act());
+	lv_img_set_src(my_bram, &bram);
+	lv_obj_align(my_bram, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_set_size(my_bram,320,480);
+    // /////////////////
+	lv_task_handler();
+	display_blanking_off(tftLcd);
+
+	while (1) {
+		lv_task_handler();
+		k_sleep(K_MSEC(10));
+	} 
 
     device_init(pio1_dev);
     ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
@@ -44,10 +83,10 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     }
     creatingMqttList(11);
     keypad = new Keypad(mqttCommand);
-   
 
-
-    
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
+    // device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
 
 
 
@@ -58,10 +97,6 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 
     //device_init(tftLcd);
 	//display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-	// if (!device_is_ready(display_dev)) {
-	// 	LOG_ERR("Device not ready, aborting test");
-	// 	// return 0;
-	// }
 	// 	hello_world_label = lv_label_create(lv_scr_act());
 
 	// lv_label_set_text(hello_world_label, "Hello world!");

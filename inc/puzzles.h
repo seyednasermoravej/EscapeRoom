@@ -32,12 +32,9 @@
 
 
 #include "main.h"
-#include "gate.h"
 #include "servos.h"
 #include "console.h"
 #include "fridge.h"
-#include "numbersGuessing.h"
-#include "laboratory.h"
 #include "platform.h"
 #include "cabinet.h"
 #include "door.h"
