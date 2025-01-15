@@ -39,34 +39,18 @@ static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 static uint32_t count;
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
-    const struct device *tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
+    
+    tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 	if (!device_is_ready(tftLcd)) {
 		LOG_ERR("Device not ready, aborting test");
 		// return 0;
 	}
-    // printk("LVGL custom allocator: %d\n", CONFIG_LV_MEM_CUSTOM);
-    // lv_init();
+    lv_init();
     LOG_DBG("LVGL memory pool size: %d\n", CONFIG_LV_Z_MEM_POOL_SIZE); 
-    // while(1)
-    // {
-    // check_lvgl_memory();
-    // k_msleep(1000);
-    LV_IMG_DECLARE(bram);
-    // check_lvgl_memory();
 
-    // }
-	lv_obj_t * my_bram = lv_img_create(lv_scr_act());
-	lv_img_set_src(my_bram, &bram);
-	lv_obj_align(my_bram, LV_ALIGN_CENTER, 0, 0);
-	lv_obj_set_size(my_bram,320,480);
-    // /////////////////
-	lv_task_handler();
-	display_blanking_off(tftLcd);
-
-	while (1) {
-		lv_task_handler();
-		k_sleep(K_MSEC(10));
-	} 
 
     device_init(pio1_dev);
     ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
@@ -81,42 +65,10 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList(11);
     keypad = new Keypad(mqttCommand);
 
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
-    // device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
 
-
-
-    // 	char count_str[11] = {0};
-	// const struct device *display_dev;
-	// lv_obj_t *hello_world_label;
-	// lv_obj_t *count_label;
-
-    //device_init(tftLcd);
-	//display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-	// 	hello_world_label = lv_label_create(lv_scr_act());
-
-	// lv_label_set_text(hello_world_label, "Hello world!");
-	// lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
-
-	// count_label = lv_label_create(lv_scr_act());
-	// lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
-
-	// lv_task_handler();
-	// display_blanking_off(display_dev);
-
-	// while (1) {
-	// 	if ((count % 100) == 0U) {
-	// 		sprintf(count_str, "%d", count/100U);
-	// 		lv_label_set_text(count_label, count_str);
-	// 	}
-	// 	lv_task_handler();
-	// 	++count;
-	// 	k_sleep(K_MSEC(10));
-	// }
+    creatingMqttList(11);
 }
 
 void Fridge:: creatingMqttList(uint16_t _mqttCount)
@@ -157,7 +109,16 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(command, "display") == 0)
         {
-            ////display logic
+            LV_IMG_DECLARE(bram);
+            lv_obj_t * my_bram = lv_img_create(lv_scr_act());
+            lv_img_set_src(my_bram, &bram);
+            lv_obj_align(my_bram, LV_ALIGN_CENTER, 0, 0);
+            lv_obj_set_size(my_bram,320,480);
+            lv_task_handler();
+            display_blanking_off(tftLcd);
+            lv_task_handler();
+            k_sleep(K_MSEC(10));
+
             LOG_ERR("display logic");
         }
         else if(strstr(command, "relay") != NULL)

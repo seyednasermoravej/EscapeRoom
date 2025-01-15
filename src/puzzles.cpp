@@ -1,6 +1,5 @@
 #include "puzzles.h"
 #include "topics.h"
-// #include "Adafruit_TCS34725.h"
 
 LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_INF);
 

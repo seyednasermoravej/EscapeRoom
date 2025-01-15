@@ -237,7 +237,7 @@
 		#size-cells = <0>;
 		// zephyr,deferred-init;
 		ili9488_buydisplay_3_5_tft_touch_arduino: ili9488@0
-		{///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		{
 			// zephyr,deferred-init;
 			compatible = "ilitek,ili9488";
 			mipi-max-frequency = <25000000>;
@@ -351,7 +351,7 @@
 		fridge_relays: fridge-relay
 		{
 			compatible = "power-switch";
-			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>, <&gpio0 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 26 GPIO_ACTIVE_LOW>, <&gpio0 28 GPIO_ACTIVE_LOW>;
 		};
 
 	};
@@ -533,49 +533,49 @@
 			zephyr,deferred-init;
 			switch_position1: switch-position1
 			{
-				gpios = <&expander1 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 0 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x100>;
 			};
 
 			switch_position2: switch-position2
 			{
-				gpios = <&expander1 1 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 1 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x101>;
 			};
 
 			switch_position3: switch-position3
 			{
-				gpios = <&expander1 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 2 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x102>;
 			};
 
 			switch_position4: switch-position4
 			{
-				gpios = <&expander1 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 3 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x103>;
 			};
 
 			switch_position5: switch-position5
 			{
-				gpios = <&expander1 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 4 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x104>;
 			};
 
 			switch_position6: switch-position6
 			{
-				gpios = <&expander1 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 5 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x105>;
 			};
 
 			switch_position7: switch-position7
 			{
-				gpios = <&expander1 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 6 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x106>;
 			};
 
 			switch_position8: switch-position8
 			{
-				gpios = <&expander1 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 7 (GPIO_ACTIVE_LOW)>;
 				zephyr,code = <0x107>;
 			};
 
@@ -926,14 +926,14 @@
 	kbd_matrix: kbd-matrix
 	{
 		compatible = "gpio-kbd-matrix";
-		row-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+		row-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-			    <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-			    <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			    <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			
-		col-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>,
-			    <&gpio0 8 GPIO_ACTIVE_LOW>,
-			    <&gpio0 9 GPIO_ACTIVE_LOW>;
+		col-gpios = <&gpio0 6 GPIO_ACTIVE_LOW>,
+			    <&gpio0 7 GPIO_ACTIVE_LOW>,
+			    <&gpio0 8 GPIO_ACTIVE_LOW>;
 			    // <&gpio0 10 GPIO_ACTIVE_LOW>;
 		// col-drive-inactive;
 		// zephyr-code = <0 1 2 4>;		
@@ -1382,6 +1382,7 @@ pico_spi: &spi0 {};
 		gpio-controller;
 		#gpio-cells = <2>;
 		ngpios = <8>;
+		int-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		zephyr,deferred-init;
 	};
 	display4: ht16k33@70

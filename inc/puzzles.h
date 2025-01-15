@@ -18,7 +18,6 @@
 
 #include "dnsResolver.h"
 
-#include <zephyr/kernel.h>
 #include <zephyr/sys/reboot.h>
 #include <zephyr/device.h>
 #include <string.h>
@@ -32,6 +31,7 @@
 
 
 #include "main.h"
+#include "gate.h"
 #include "servos.h"
 #include "console.h"
 #include "fridge.h"
@@ -46,6 +46,7 @@
 #include "powerPanel.h"
 #include "scale.h"
 #include "colorTubes.h"
+#include "sticks.h"
 #include "entranceDoor.h"
 #include "exitDoor.h"
 #include "pneumaPost.h"
