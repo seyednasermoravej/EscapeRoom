@@ -31,7 +31,6 @@
 
 
 #include "main.h"
-#include "gate.h"
 #include "servos.h"
 #include "console.h"
 #include "fridge.h"

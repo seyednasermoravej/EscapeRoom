@@ -29,8 +29,8 @@ include(${ZEPHYR_BASE}/samples/subsys/usb/common/common.cmake)
 
 #begin rgb driver
 
-zephyr_library_sources_ifdef(CONFIG_TCS34725		${CMAKE_CURRENT_SOURCE_DIR}/drivers/tcs34725.c)
-zephyr_include_directories(include)
+# zephyr_library_sources_ifdef(CONFIG_TCS34725		${CMAKE_CURRENT_SOURCE_DIR}/drivers/tcs34725.c)
+# zephyr_include_directories(include)
 
 add_subdirectory(drivers)
 #end rgb driver

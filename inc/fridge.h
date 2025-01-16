@@ -29,6 +29,22 @@
 #include <lvgl_input_device.h>
 #include "ledStrip.h"
 
+
+
+
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
+#include <lvgl.h>
+#include "lvgl_display.h"
+#include "lvgl_common_input.h"
+#include "lvgl_zephyr.h"
+
+
+
+
+
+
+
 class Fridge: public Puzzle 
 {
 public:
@@ -39,7 +55,7 @@ public:
 private:
     Keypad *keypad;
     LedStrip *ledStrip;
-    const struct device *tftLcd;
+    const struct device *display_dev;
 
 
 };

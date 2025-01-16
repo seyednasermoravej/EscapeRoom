@@ -1,5 +1,5 @@
 #include "fridge.h"
-
+#include "lvgl_mem.h"
 LOG_MODULE_REGISTER(fridge, LOG_LEVEL_DBG);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
@@ -23,6 +23,213 @@ static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 #include <zephyr/sys/sys_heap.h>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// int lvgl_init(void)
+// {
+//     const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+//     static lv_display_t *display;
+//     int err = 0;
+
+//     // Check if display device is ready
+//     if (!device_is_ready(display_dev)) {
+//         printk("Display device not ready\n");
+//         return -ENODEV;
+//     }
+
+//     // Initialize LVGL memory management
+//     lv_mem_init();
+
+//     // Initialize LVGL library
+//     lv_init();
+    
+//     // Set tick interface for LVGL
+//     lv_tick_set_cb(k_uptime_get_32);
+
+//     // Initialize display data structure
+//     static struct lvgl_disp_data disp_data = {
+//         .blanking_on = false,
+//     };
+//     disp_data.display_dev = display_dev;
+    
+//     // Get display capabilities
+//     display_get_capabilities(display_dev, &disp_data.cap);
+
+//     // Create display
+//     display = lv_display_create(disp_data.cap.x_resolution, disp_data.cap.y_resolution);
+//     if (!display) {
+//         printk("Failed to create display\n");
+//         return -ENOMEM;
+//     }
+    
+//     // Set display user data
+//     lv_display_set_user_data(display, &disp_data);
+
+//     // Set rendering callback
+//     if (set_lvgl_rendering_cb(display) != 0) {
+//         printk("Display not supported\n");
+//         return -ENOTSUP;
+//     }
+
+//     // Calculate buffer size based on display properties
+//     uint16_t buf_nbr_pixels = (CONFIG_LV_Z_VDB_SIZE * disp_data.cap.x_resolution * 
+//                               disp_data.cap.y_resolution) / 100;
+    
+//     // Ensure minimum buffer size of one horizontal line
+//     if (buf_nbr_pixels < disp_data.cap.x_resolution) {
+//         buf_nbr_pixels = disp_data.cap.x_resolution;
+//     }
+
+//     // Calculate actual buffer size based on pixel format
+//     uint32_t buf_size;
+//     switch (disp_data.cap.current_pixel_format) {
+//         case PIXEL_FORMAT_ARGB_8888:
+//             buf_size = 4 * buf_nbr_pixels;
+//             break;
+//         case PIXEL_FORMAT_RGB_888:
+//             buf_size = 3 * buf_nbr_pixels;
+//             break;
+//         case PIXEL_FORMAT_RGB_565:
+//             buf_size = 2 * buf_nbr_pixels;
+//             break;
+//         case PIXEL_FORMAT_MONO01:
+//         case PIXEL_FORMAT_MONO10:
+//             buf_size = (buf_nbr_pixels / 8) + 8;
+//             buf_size += (buf_nbr_pixels % 8) == 0 ? 0 : 1;
+//             break;
+//         default:
+//             printk("Unsupported pixel format\n");
+//             return -ENOTSUP;
+//     }
+
+//     // Allocate buffer(s)
+//     void *buf0 = lv_malloc(buf_size);
+//     if (buf0 == NULL) {
+//         printk("Failed to allocate memory for rendering buffer\n");
+//         return -ENOMEM;
+//     }
+
+// #ifdef CONFIG_LV_Z_DOUBLE_VDB
+//     void *buf1 = lv_malloc(buf_size);
+//     if (buf1 == NULL) {
+//         lv_free(buf0);
+//         printk("Failed to allocate memory for second rendering buffer\n");
+//         return -ENOMEM;
+//     }
+// #else
+//     void *buf1 = NULL;
+// #endif
+
+//     // Set display buffers
+//     lv_display_set_buffers(display, buf0, buf1, buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
+
+//     // Initialize input devices
+//     err = lvgl_init_input_devices();
+//     if (err < 0) {
+//         printk("Failed to initialize input devices\n");
+//         lv_free(buf0);
+//         if (buf1) {
+//             lv_free(buf1);
+//         }
+//         return err;
+//     }
+
+//     return 0;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+#define DISPLAY_NODE          DT_CHOSEN(zephyr_display)
+#define DISPLAY_WIDTH  DT_PROP(DISPLAY_NODE, width)
+#define DISPLAY_HEIGHT DT_PROP(DISPLAY_NODE, height)
+
+
+static lv_display_t *display;
+static struct lvgl_disp_data disp_data = {0};
+
+static int lvgl_allocate_rendering_buffers(lv_display_t *display)
+{
+	void *buf0 = NULL;
+	void *buf1 = NULL;
+	uint16_t buf_nbr_pixels;
+	uint32_t buf_size;
+	struct lvgl_disp_data *data = (struct lvgl_disp_data *)lv_display_get_user_data(display);
+	uint16_t hor_res = lv_display_get_horizontal_resolution(display);
+	uint16_t ver_res = lv_display_get_vertical_resolution(display);
+
+	buf_nbr_pixels = (CONFIG_LV_Z_VDB_SIZE * hor_res * ver_res) / 100;
+	/* one horizontal line is the minimum buffer requirement for lvgl */
+	if (buf_nbr_pixels < hor_res) {
+		buf_nbr_pixels = hor_res;
+	}
+
+	switch (data->cap.current_pixel_format) {
+	case PIXEL_FORMAT_ARGB_8888:
+		buf_size = 4 * buf_nbr_pixels;
+		break;
+	case PIXEL_FORMAT_RGB_888:
+		buf_size = 3 * buf_nbr_pixels;
+		break;
+	case PIXEL_FORMAT_RGB_565:
+		buf_size = 2 * buf_nbr_pixels;
+		break;
+	case PIXEL_FORMAT_MONO01:
+	case PIXEL_FORMAT_MONO10:
+		buf_size = buf_nbr_pixels / 8 + 8;
+		buf_size += (buf_nbr_pixels % 8) == 0 ? 0 : 1;
+		break;
+	default:
+		return -ENOTSUP;
+	}
+
+	buf0 = lv_malloc(buf_size);
+	if (buf0 == NULL) {
+		LOG_ERR("Failed to allocate memory for rendering buffer");
+		return -ENOMEM;
+	}
+
+
+	buf1 = lv_malloc(buf_size);
+	if (buf1 == NULL) {
+		lv_free(buf0);
+		LOG_ERR("Failed to allocate memory for rendering buffer");
+		return -ENOMEM;
+	}
+
+
+	lv_display_set_buffers(display, buf0, buf1, buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
+	return 0;
+}
+
+
+
+
+
 // void check_lvgl_memory(void)
 // {
 //     lv_mem_monitor_t mem_mon;
@@ -35,7 +242,7 @@ static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 //     LOG_DBG("  Largest free block: %zu bytes\n", mem_mon.free_biggest_size);
 //     // printk("  Memory fragmentation: %u%%\n", mem_mon.frag_percent);
 // }
-
+extern int lvgl_init();
 static uint32_t count;
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
@@ -43,13 +250,16 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
     
-    tftLcd = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-	if (!device_is_ready(tftLcd)) {
+
+    int err = 0;
+
+    display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+	if (!device_is_ready(display_dev)) {
 		LOG_ERR("Device not ready, aborting test");
 		// return 0;
 	}
-    lv_init();
-    LOG_DBG("LVGL memory pool size: %d\n", CONFIG_LV_Z_MEM_POOL_SIZE); 
+    lvgl_init();
+
 
 
     device_init(pio1_dev);
@@ -109,16 +319,20 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(command, "display") == 0)
         {
-            LV_IMG_DECLARE(bram);
-            lv_obj_t * my_bram = lv_img_create(lv_scr_act());
-            lv_img_set_src(my_bram, &bram);
+
+            LV_IMAGE_DECLARE(bram);
+            lv_obj_t * my_bram = lv_image_create(lv_scr_act());
+            lv_image_set_src(my_bram, &bram);
             lv_obj_align(my_bram, LV_ALIGN_CENTER, 0, 0);
             lv_obj_set_size(my_bram,320,480);
-            lv_task_handler();
-            display_blanking_off(tftLcd);
-            lv_task_handler();
-            k_sleep(K_MSEC(10));
 
+            lv_task_handler();
+            display_blanking_off(display_dev);
+
+            // while (1) {
+                lv_task_handler();
+                // k_sleep(K_MSEC(10));
+            // }
             LOG_ERR("display logic");
         }
         else if(strstr(command, "relay") != NULL)
