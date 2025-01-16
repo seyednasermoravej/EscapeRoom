@@ -22,10 +22,25 @@ static const struct device *const pio1_dev = DEVICE_DT_GET(DT_NODELABEL(pio1));
 #include <zephyr/sys/mem_stats.h>
 #include <zephyr/sys/sys_heap.h>
 
+#include <zephyr/storage/disk_access.h>
+#include <zephyr/fs/fs.h>
+#include <ff.h>
 
 
+#define DISK_DRIVE_NAME "SD"
+#define DISK_MOUNT_PT "/"DISK_DRIVE_NAME":"
+#define FS_RET_OK FR_OK
+
+static FATFS fat_fs;
+
+/* mounting info */
+static struct fs_mount_t mp = {
+	.type = FS_FATFS,
+	.fs_data = &fat_fs,
+};
 
 
+static const char *disk_mount_pt = DISK_MOUNT_PT;
 
 
 
@@ -261,6 +276,30 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     lvgl_init();
 
 
+    device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
+
+
+
+
+	mp.mnt_point = disk_mount_pt;
+	int res = fs_mount(&mp);
+	if (res == FS_RET_OK) {
+		printk("Disk mounted.\n");
+		}
+	else {
+		printk("Error mounting disk.\n");
+	}
+
+
+
+
+
+
+
+
+
+
 
     device_init(pio1_dev);
     ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
@@ -321,10 +360,39 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
         {
 
             LV_IMAGE_DECLARE(bram);
-            lv_obj_t * my_bram = lv_image_create(lv_scr_act());
-            lv_image_set_src(my_bram, &bram);
-            lv_obj_align(my_bram, LV_ALIGN_CENTER, 0, 0);
-            lv_obj_set_size(my_bram,320,480);
+            lv_obj_t * my_screen = lv_image_create(lv_scr_act());
+            if(strcmp(msg->msg, "sd bram") == 0)
+            {
+                lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
+                LOG_INF("from sd card");
+            }
+            else if(strcmp(msg->msg, "internal bram") == 0)
+            {
+                lv_image_set_src(my_screen, &bram);
+                LOG_INF("from internal memory");
+            }
+            else if(strcmp(msg->msg, "sd Bram") == 0)
+            {
+                lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
+                LOG_INF("from sd card");
+            }
+            else if(strcmp(msg->msg, "lion") == 0)
+            {
+                lv_image_set_src(my_screen, DISK_MOUNT_PT"/lion.bin");
+                LOG_INF("from sd card");
+            }
+            else if(strcmp(msg->msg, "rainbow") == 0)
+            {
+                lv_image_set_src(my_screen, DISK_MOUNT_PT"/rainbow.bin");
+                LOG_INF("from sd card");
+            }
+            else if(strcmp(msg->msg, "raspbbery") == 0)
+            {
+                lv_image_set_src(my_screen, DISK_MOUNT_PT"/raspbbery.bin");
+                LOG_INF("from sd card");
+            }
+            lv_obj_align(my_screen, LV_ALIGN_CENTER, 0, 0);
+            lv_obj_set_size(my_screen,320,480);
 
             lv_task_handler();
             display_blanking_off(display_dev);
@@ -333,7 +401,6 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
                 lv_task_handler();
                 // k_sleep(K_MSEC(10));
             // }
-            LOG_ERR("display logic");
         }
         else if(strstr(command, "relay") != NULL)
         {

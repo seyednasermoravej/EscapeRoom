@@ -976,6 +976,20 @@
 	pinctrl-names = "default";
 	cs-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
+	sdhc0: sdhc@1
+	{
+		compatible = "zephyr,sdhc-spi-slot";
+		reg = <1>;
+		status = "okay";
+		zephyr,deferred-init;
+		mmc: mmc{
+			compatible = "zephyr,sdmmc-disk";
+			disk-name = "SD";
+			status = "okay";
+			zephyr,deferred-init;
+		};
+		spi-max-frequency = <24000000>;
+	};
 	sevensegments24: shift-expander@2
 	{
 		status = "okay";
