@@ -133,6 +133,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is colorTubes.");
         deviceSpecified = true;
     }
+    else if(strcmp(type, "sticks") == 0)
+    {
+        puzzle = new Sticks("codeRed", "sticks");
+        LOG_INF("Puzzle type is sticks.");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "entranceDoor") == 0)
     {
         puzzle = new EntranceDoor("codeRed", "entranceDoor");
@@ -348,59 +354,6 @@ int Puzzles:: builtIntLedInit()
     return ret;
 }
 #endif
-
-
-//  void test()
-//  {
-//     static const struct device *dev_i2c = DEVICE_DT_GET(DT_NODELABEL(i2c1));
-//     device_init(dev_i2c);
-    
-//     //const struct i2c_dt_spec *tcs34725_dev = I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0));
-//     static const struct i2c_dt_spec tcs34725_i2c = I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0));
-//     device_init(tcs34725_i2c.bus);
-//     if (!device_is_ready(tcs34725_i2c.bus)) {
-//         LOG_ERR("Sensor device not ready");
-//     }
-
-//     Adafruit_TCS34725 tcs = Adafruit_TCS34725(&tcs34725_i2c, TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
-//     if (tcs.begin()) {
-//         LOG_INF("Found sensor");
-//     }
-//     uint16_t r, g, b, c, colorTemp, lux;
-
-//     tcs.getRawData(&r, &g, &b, &c);
-//     colorTemp = tcs.calculateColorTemperature(r, g, b);
-//     colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
-//     lux = tcs.calculateLux(r, g, b);
-
-//     LOG_INF("Color Temp: "); 
-//     LOG_INF("%d", colorTemp); 
-//     LOG_INF(" K - ");
-//     LOG_INF("Lux: "); 
-//     LOG_INF("%d", lux); 
-//     LOG_INF(" - ");
-//     LOG_INF("R: "); 
-//     LOG_INF("%d", r); 
-//     LOG_INF(" ");
-//     LOG_INF("G: "); 
-//     LOG_INF("%d", g); 
-//     LOG_INF(" ");
-//     LOG_INF("B: "); 
-//     LOG_INF("%d", b); 
-//     LOG_INF(" ");
-//     LOG_INF("C: "); 
-//     LOG_INF("%d", c); 
-//     LOG_INF(" ");
-//     LOG_INF(" ");
-
-// }
-//     // Blinds *blinds = new Blinds("sdf", "sdf");
-//     // blinds->test();
-//     // HeartMonitor *heartMonitor = new HeartMonitor("asdf", "sdf");
-//     // heartMonitor->test();
-//     // DoorKeypad *doorKeypad = new DoorKeypad("saf", "lks");
-//     LedStrip *ledStrip = new LedStrip(dev, 16);
-// }
 
 
 
