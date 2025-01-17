@@ -419,7 +419,7 @@ void puzzleEntryPoint(void *, void *, void *)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         char serverIpAddress[] = "192.168.1.2";
     #else
-        char serverIpAddress[] = "192.168.1.5";
+        char serverIpAddress[] = "192.168.1.2";
     #endif
 #elif defined(BRAM)
     char serverName[] = "mqtt-1";

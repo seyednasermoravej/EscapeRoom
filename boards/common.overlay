@@ -1043,8 +1043,8 @@ pico_spi: &spi0 {};
 			status = "okay";
 			gpios = <&gpio0 27 GPIO_ACTIVE_HIGH>;
 			chain-length = <8>;
-			color-mapping = <1 2 3>;
 			reset-delay = <280>;
+			color-mapping = <LED_COLOR_ID_RED LED_COLOR_ID_GREEN LED_COLOR_ID_BLUE LED_COLOR_ID_WHITE>;
 			// frequency = <400000>;//ws2811
 			frequency = <800000>;//ws2812
 		};

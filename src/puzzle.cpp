@@ -117,7 +117,7 @@ int Puzzle:: relayOperation(char *command, const gpio_dt_spec *relay, bool momen
 
 struct led_rgb Puzzle:: retrieveColors(char *str)
 {
-    struct led_rgb rgb;
+    struct led_rgb rgbw;
     char buf[4]={0};
     uint8_t i = 1;
     uint8_t j = 0;
@@ -128,7 +128,7 @@ struct led_rgb Puzzle:: retrieveColors(char *str)
         j++;
     }
     buf[j] = '\0';
-    rgb.g = atoi(buf); // g is r
+    rgbw.g = atoi(buf); // g is r
     memset(buf, 0, 4);
     j=0;
     i++;
@@ -139,10 +139,21 @@ struct led_rgb Puzzle:: retrieveColors(char *str)
         j++;
     }
     buf[j] = '\0'; 
-    rgb.r = atoi(buf); // r is g
+    rgbw.r = atoi(buf); // r is g
     memset(buf, 0, 4);
     j=0;
     i++;
+    while(str[i] != 'W')
+    {
+        buf[j] = str[i];
+        i++;
+        j++;
+    }
+    buf[j] = '\0'; 
+    rgbw.b = atoi(buf); // r is g
+    memset(buf, 0, 4);
+    j=0;
+    i++;    
     while(i != strlen(str))
     {
         buf[j] = str[i];
@@ -150,8 +161,8 @@ struct led_rgb Puzzle:: retrieveColors(char *str)
         j++;
     }
     buf[j] = '\0';
-    rgb.b = atoi(buf);
-    return rgb;
+    rgbw.w = atoi(buf);
+    return rgbw;
 
 }
 
