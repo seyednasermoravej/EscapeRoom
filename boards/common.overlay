@@ -7,10 +7,10 @@
 	chosen{
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
-		zephyr,console = &uart0;
-		zephyr,shell-uart = &uart0;
-		// zephyr,console = &cdc_acm_uart0;
-		// zephyr,shell-uart = &cdc_acm_uart0;
+		// zephyr,console = &uart0;
+		// zephyr,shell-uart = &uart0;
+		zephyr,console = &cdc_acm_uart0;
+		zephyr,shell-uart = &cdc_acm_uart0;
 	};
 
 	aliases{
@@ -970,7 +970,7 @@
 
 
 &spi1 {
-	clock-frequency = <DT_FREQ_M(8)>;
+	clock-frequency = <DT_FREQ_M(20)>;
 	status = "okay";
 	pinctrl-0 = <&spi1_default>;
 	pinctrl-names = "default";
@@ -1508,5 +1508,5 @@ pico_spi: &spi0 {};
 	};
 };
 &uart0 {
-	// status = "disabled";
+	status = "disabled";
 };

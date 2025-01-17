@@ -100,12 +100,15 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is ventilator.");
         deviceSpecified = true;
     }
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#else
     else if(strcmp(type, "fridge") == 0)
     {
         puzzle = new Fridge("codeRed", "fridge");
         LOG_INF("Puzzle type is fridge.");
         deviceSpecified = true;
     }
+#endif
     else if(strcmp(type, "blinds") == 0)
     {
         puzzle = new Blinds("codeRed", "blinds");

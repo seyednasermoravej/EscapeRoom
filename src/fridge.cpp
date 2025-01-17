@@ -45,83 +45,11 @@ static const char *disk_mount_pt = DISK_MOUNT_PT;
 
 
 #define DISPLAY_NODE          DT_CHOSEN(zephyr_display)
-#define DISPLAY_WIDTH  DT_PROP(DISPLAY_NODE, width)
-#define DISPLAY_HEIGHT DT_PROP(DISPLAY_NODE, height)
-
 
 static lv_display_t *display;
 static struct lvgl_disp_data disp_data = {0};
 
-static int lvgl_allocate_rendering_buffers(lv_display_t *display)
-{
-	void *buf0 = NULL;
-	void *buf1 = NULL;
-	uint16_t buf_nbr_pixels;
-	uint32_t buf_size;
-	struct lvgl_disp_data *data = (struct lvgl_disp_data *)lv_display_get_user_data(display);
-	uint16_t hor_res = lv_display_get_horizontal_resolution(display);
-	uint16_t ver_res = lv_display_get_vertical_resolution(display);
 
-	buf_nbr_pixels = (CONFIG_LV_Z_VDB_SIZE * hor_res * ver_res) / 100;
-	/* one horizontal line is the minimum buffer requirement for lvgl */
-	if (buf_nbr_pixels < hor_res) {
-		buf_nbr_pixels = hor_res;
-	}
-
-	switch (data->cap.current_pixel_format) {
-	case PIXEL_FORMAT_ARGB_8888:
-		buf_size = 4 * buf_nbr_pixels;
-		break;
-	case PIXEL_FORMAT_RGB_888:
-		buf_size = 3 * buf_nbr_pixels;
-		break;
-	case PIXEL_FORMAT_RGB_565:
-		buf_size = 2 * buf_nbr_pixels;
-		break;
-	case PIXEL_FORMAT_MONO01:
-	case PIXEL_FORMAT_MONO10:
-		buf_size = buf_nbr_pixels / 8 + 8;
-		buf_size += (buf_nbr_pixels % 8) == 0 ? 0 : 1;
-		break;
-	default:
-		return -ENOTSUP;
-	}
-
-	buf0 = lv_malloc(buf_size);
-	if (buf0 == NULL) {
-		LOG_ERR("Failed to allocate memory for rendering buffer");
-		return -ENOMEM;
-	}
-
-
-	buf1 = lv_malloc(buf_size);
-	if (buf1 == NULL) {
-		lv_free(buf0);
-		LOG_ERR("Failed to allocate memory for rendering buffer");
-		return -ENOMEM;
-	}
-
-
-	lv_display_set_buffers(display, buf0, buf1, buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
-	return 0;
-}
-
-
-
-
-
-// void check_lvgl_memory(void)
-// {
-//     lv_mem_monitor_t mem_mon;
-//     lv_mem_monitor(&mem_mon);
-
-//     LOG_DBG("LVGL Memory Statistics:\n");
-//     LOG_DBG("  Total memory:   %zu bytes\n", mem_mon.total_size);
-//     // printk("  Used memory:    %zu bytes\n", mem_mon.used_size);
-//     LOG_DBG("  Free memory:    %zu bytes\n", mem_mon.free_size);
-//     LOG_DBG("  Largest free block: %zu bytes\n", mem_mon.free_biggest_size);
-//     // printk("  Memory fragmentation: %u%%\n", mem_mon.frag_percent);
-// }
 extern int lvgl_init();
 static uint32_t count;
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
@@ -231,12 +159,12 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
                 lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
                 LOG_INF("from sd card");
             }
-            else if(strcmp(msg->msg, "internal bram") == 0)
+            else if(strcmp(msg->msg, "brami") == 0)
             {
                 lv_image_set_src(my_screen, &bram);
                 LOG_INF("from internal memory");
             }
-            else if(strcmp(msg->msg, "sd Bram") == 0)
+            else if(strcmp(msg->msg, "brams") == 0)
             {
                 lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
                 LOG_INF("from sd card");
@@ -262,10 +190,8 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
             lv_task_handler();
             display_blanking_off(display_dev);
 
-            // while (1) {
-                lv_task_handler();
-                // k_sleep(K_MSEC(10));
-            // }
+            lv_task_handler();
+
         }
         else if(strstr(command, "relay") != NULL)
         {
