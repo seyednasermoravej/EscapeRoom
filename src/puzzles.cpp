@@ -308,6 +308,7 @@ int Puzzles:: nvsInit()
 void Puzzles:: readInfosFromMemory()
 {
     // nvs_delete(fs, 0);
+    // abort();
         // #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         // #else
         //     gpio_pin_set_dt(&builtInLed, 1);
@@ -427,6 +428,7 @@ void puzzleEntryPoint(void *, void *, void *)
 #endif
     //test();
     // char serverName[] = "test.mosquitto.org";
+
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
 
     memset(msg, 0, sizeof(struct MqttMsg));

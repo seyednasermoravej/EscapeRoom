@@ -152,38 +152,11 @@ void Fridge:: messageHandler(struct MqttMsg *msg)
         if(strcmp(command, "display") == 0)
         {
 
-            LV_IMAGE_DECLARE(bram);
             lv_obj_t * my_screen = lv_image_create(lv_scr_act());
-            if(strcmp(msg->msg, "sd bram") == 0)
-            {
-                lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
-                LOG_INF("from sd card");
-            }
-            else if(strcmp(msg->msg, "brami") == 0)
-            {
-                lv_image_set_src(my_screen, &bram);
-                LOG_INF("from internal memory");
-            }
-            else if(strcmp(msg->msg, "brams") == 0)
-            {
-                lv_image_set_src(my_screen, DISK_MOUNT_PT"/bram.bin");
-                LOG_INF("from sd card");
-            }
-            else if(strcmp(msg->msg, "lion") == 0)
-            {
-                lv_image_set_src(my_screen, DISK_MOUNT_PT"/lion.bin");
-                LOG_INF("from sd card");
-            }
-            else if(strcmp(msg->msg, "rainbow") == 0)
-            {
-                lv_image_set_src(my_screen, DISK_MOUNT_PT"/rainbow.bin");
-                LOG_INF("from sd card");
-            }
-            else if(strcmp(msg->msg, "raspbbery") == 0)
-            {
-                lv_image_set_src(my_screen, DISK_MOUNT_PT"/raspbbery.bin");
-                LOG_INF("from sd card");
-            }
+            char address[64] = {0};
+            sprintf(address, "%s/%s%s", DISK_MOUNT_PT, msg->msg, ".bin");
+            LOG_INF("printing %s", address);
+            lv_image_set_src(my_screen, address);
             lv_obj_align(my_screen, LV_ALIGN_CENTER, 0, 0);
             lv_obj_set_size(my_screen,320,480);
 
