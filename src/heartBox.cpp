@@ -64,7 +64,9 @@ void HeartBox:: creatingMqttList(uint16_t _mqttCount)
         sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
         mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i] = *createMqttTopic(topic);
     }
-    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays;
+    sprintf(topic, "%spassword", mqttCommand);
+    mqttList[wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays] = *createMqttTopic(topic);
+    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays + 1;
 }
 
 
@@ -123,6 +125,11 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
         {
             LOG_INF("Display2");
             display8->displayStr(msg->msg);
+        }
+        else if(strcmp(command, "password") == 0)
+        {
+            strcpy(password, msg->msg);
+            passwordSet = true;
         }
         else
         {

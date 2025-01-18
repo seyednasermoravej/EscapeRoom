@@ -32,6 +32,8 @@ private:
     LedStrip *ledStrip;
     Display4 *display4;
     Display8 *display8;
+    char password[9];
+    bool passwordSet = false;
     
 };
 

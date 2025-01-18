@@ -12,6 +12,7 @@ Puzzle:: Puzzle(const char* room, const char* type)
     puzzleTypeName = new char[strlen(type) + 1];
     strcpy(puzzleTypeName, type);
     sprintf(mqttCommand, "%s/%s/", roomName, puzzleTypeName);
+    // mqttList[0] = *createMqttTopic("erase");
     k_timer_init(&aliveTimer, Puzzle:: alive, NULL);
     k_timer_start(&aliveTimer, K_SECONDS(4), K_SECONDS(4));
 }

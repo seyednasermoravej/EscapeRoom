@@ -25,13 +25,13 @@ void Keypad34:: handler(struct input_event *val)
             {
                 sprintf(msg.topic, "%skeypad0", prefix);
             }
-            if(val->code == 55)
+            if(val->code == INPUT_KEY_ENTER)
             {
-                sprintf(msg.topic, "%skeypad*", prefix);
+                sprintf(msg.topic, "%skeypadEnter", prefix);
             }
-            if(val->code == INPUT_KEY_E)
+            if(val->code == INPUT_KEY_ESC)
             {
-                sprintf(msg.topic, "%skeypadHashtag", prefix);
+                sprintf(msg.topic, "%skeypadEsc", prefix);
             }
             sprintf(msg.msg, "true");
             LOG_INF("%s",msg.topic);
