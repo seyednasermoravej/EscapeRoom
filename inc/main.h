@@ -25,7 +25,7 @@
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
-#define POURYA 
+#define NASER 
 
 // #define WATCH_DOG
 /*

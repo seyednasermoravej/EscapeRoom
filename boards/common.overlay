@@ -15,7 +15,8 @@
 
 	aliases{
 		hintbutton = &button0;
-		keypad = &kbd_matrix;
+		keypad43 = &kbd_matrix43;
+		keypad34 = &kbd_matrix34;
 	};
 	console
 	{
@@ -391,6 +392,12 @@
 			status ="okay";
 			zephyr,deferred-init;
 		};
+		power_panel_relays: power-panel-relays
+		{
+			compatible = "power-switch";
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+
+		};
 		power_panel_switches: power-panel-switches
 		{
 			compatible = "gpio-keys";
@@ -533,146 +540,146 @@
 			zephyr,deferred-init;
 			switch_position1: switch-position1
 			{
-				gpios = <&expander1 0 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 0 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x100>;
 			};
 
 			switch_position2: switch-position2
 			{
-				gpios = <&expander1 1 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 1 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x101>;
 			};
 
 			switch_position3: switch-position3
 			{
-				gpios = <&expander1 2 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 2 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x102>;
 			};
 
 			switch_position4: switch-position4
 			{
-				gpios = <&expander1 3 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 3 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x103>;
 			};
 
 			switch_position5: switch-position5
 			{
-				gpios = <&expander1 4 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 4 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x104>;
 			};
 
 			switch_position6: switch-position6
 			{
-				gpios = <&expander1 5 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 5 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x105>;
 			};
 
 			switch_position7: switch-position7
 			{
-				gpios = <&expander1 6 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 6 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x106>;
 			};
 
 			switch_position8: switch-position8
 			{
-				gpios = <&expander1 7 (GPIO_ACTIVE_LOW)>;
+				gpios = <&expander1 7 (GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x107>;
 			};
 
 			switch_position9: switch-position9
 			{
-				gpios = <&gpio0 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 0 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x108>;
 			};
 
 			switch_position10: switch-position10
 			{
-				gpios = <&gpio0 1 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 1 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x109>;
 			};
 
 			switch_position11: switch-position11
 			{
-				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10A>;
 			};
 
 			switch_position12: switch-position12
 			{
-				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10B>;
 			};
 
 			switch_position13: switch-position13
 			{
-				gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10C>;
 			};
 
 			switch_position14: switch-position14
 			{
-				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10D>;
 			};
 
 			switch_position15: switch-position15
 			{
-				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10E>;
 			};
 
 			switch_position16: switch-position16
 			{
-				gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x10F>;
 			};
 			switch_position17: switch-position17
 			{
-				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x110>;
 			};
 
 			switch_position18: switch-position18
 			{
-				gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x111>;
 			};
 
 			switch_position19: switch-position19
 			{
-				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x112>;
 			};
 
 			switch_position20: switch-position20
 			{
-				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x113>;
 			};
 
 			switch_position21: switch-position21
 			{
-				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x114>;
 			};
 			switch_position22: switch-position22
 			{
-				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x115>;
 			};
 			switch_position23: switch-position32
 			{
-				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x116>;
 			};
 			switch_position24: switch-position24
 			{
-				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x117>;
 			};
 			switch_position25: switch-position25
 			{
-				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 				zephyr,code = <0x118>;
 			};
 		};
@@ -922,8 +929,49 @@
 	// };
 
 	
+	kbd_matrix34: kbd-matrix34
+	{
+		compatible = "gpio-kbd-matrix";
+		row-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			    // <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			
+		col-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>,
+			    <&gpio0 6 GPIO_ACTIVE_LOW>,
+			    <&gpio0 7 GPIO_ACTIVE_LOW>,
+			    <&gpio0 8 GPIO_ACTIVE_LOW>;
+		// col-drive-inactive;
+		// zephyr-code = <0 1 2 4>;		
+		no-ghostkey-check;
+		keypad34: keymap34{
+			compatible = "input-keymap";
+			keymap = <
+			        MATRIX_KEY(0, 0, INPUT_KEY_1)
+					MATRIX_KEY(0, 1, INPUT_KEY_2)
+					MATRIX_KEY(0, 2, INPUT_KEY_3)
+					MATRIX_KEY(0, 3, INPUT_KEY_ESC)
+					MATRIX_KEY(1, 0, INPUT_KEY_4)
+					MATRIX_KEY(1, 1, INPUT_KEY_5)
+					MATRIX_KEY(1, 2, INPUT_KEY_6)
+					MATRIX_KEY(1, 3, INPUT_KEY_0)
+					MATRIX_KEY(2, 0, INPUT_KEY_7)
+					MATRIX_KEY(2, 1, INPUT_KEY_8)
+					MATRIX_KEY(2, 2, INPUT_KEY_9)
+					MATRIX_KEY(2, 3, INPUT_KEY_ENTER)
+					// MATRIX_KEY(3, 0, INPUT_KEY_KPASTERISK)
+					// MATRIX_KEY(3, 1, INPUT_KEY_0)
+					// MATRIX_KEY(3, 2, INPUT_KEY_E)
+					// MATRIX_KEY(3, 3, INPUT_KEY_D)
+			>;
+			row-size = <3>;
+			col-size = <4>;
+		};
+		zephyr,deferred-init;
 
-	kbd_matrix: kbd-matrix
+	};
+
+	kbd_matrix43: kbd-matrix43
 	{
 		compatible = "gpio-kbd-matrix";
 		row-gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
@@ -938,7 +986,7 @@
 		// col-drive-inactive;
 		// zephyr-code = <0 1 2 4>;		
 		no-ghostkey-check;
-		keypad: keymap{
+		keypad43: keymap43{
 			compatible = "input-keymap";
 			keymap = <
 			        MATRIX_KEY(0, 0, INPUT_KEY_1)

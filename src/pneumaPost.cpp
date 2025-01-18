@@ -65,7 +65,7 @@ void PneumaPost:: creatingMqttList(uint16_t _mqttCount)
         sprintf(topic, "%s/%s/relay%d", roomName, puzzleTypeName, i + 1);
         mqttList[i] = *createMqttTopic(topic);
     }
-    mqttCount = _mqttCount;
+    mqttCount = ARRAY_SIZE(allRelays);
 
 }
 

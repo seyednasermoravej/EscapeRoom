@@ -15,6 +15,9 @@ static const struct pwm_dt_spec allServos[] = {
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 
+static const struct gpio_dt_spec allRelays[] = {
+    DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_relays), gpios, DT_SPEC_AND_COMMA_GATE)
+};
 const struct gpio_dt_spec display1_8[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(power_panel_display24), gpios, DT_SPEC_AND_COMMA_GATE)
 };
@@ -48,6 +51,17 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 
     device_init(switches);
     INPUT_CALLBACK_DEFINE(switches, switchesHandlerWrapper, (void *)this);
+    int ret;
+
+    for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
+        if (!device_is_ready(allRelays[i].port)) {
+		    // return -1;
+	    }
+        ret = gpio_pin_configure_dt(&allRelays[i], GPIO_OUTPUT_INACTIVE);
+	    if (ret < 0) {
+		    // return -1;
+	    }
+    }
 
     creatingMqttList(17);
 }
@@ -79,7 +93,12 @@ void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
         sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
         mqttList[ARRAY_SIZE(allServos) + i] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allServos) + numOfDisplays;
+    for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
+    {
+        sprintf(topic, "%srelay%d", mqttCommand, i + 1);
+        mqttList[ARRAY_SIZE(allServos) + numOfDisplays] = *createMqttTopic(topic);
+    }
+    mqttCount = ARRAY_SIZE(allServos) + numOfDisplays + ARRAY_SIZE(allRelays);
 }
 
 
@@ -132,6 +151,24 @@ void PowerPanel:: messageHandler(struct MqttMsg *msg)
                 else
                 {
                     display24->displayStr(msg->msg, fieldIdx);
+                }
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
+        else if(strstr(command, "relay") != NULL)
+        {
+            char field[] = "relay";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t relayIdx = commandIdx - 1;
+            if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
+            {
+                if(commandIdx == 1)
+                {
+                    relayOperation(msg->msg, &allRelays[relayIdx], true);
                 }
             }
             else

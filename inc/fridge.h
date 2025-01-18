@@ -16,7 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "keypad.h"
+#include "keypad43.h"
 
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
@@ -53,7 +53,7 @@ public:
     void creatingMqttList(uint16_t) override;
 
 private:
-    Keypad *keypad;
+    Keypad43 *keypad;
     LedStrip *ledStrip;
     const struct device *display_dev;
 

@@ -67,13 +67,8 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 		// return 0;
 	}
     lvgl_init();
-
-
     device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc0)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
-
-
-
 
 	mp.mnt_point = disk_mount_pt;
 	int res = fs_mount(&mp);
@@ -83,15 +78,6 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 	else {
 		printk("Error mounting disk.\n");
 	}
-
-
-
-
-
-
-
-
-
 
 
     device_init(pio1_dev);
@@ -107,7 +93,7 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    keypad = new Keypad(mqttCommand);
+    keypad = new Keypad43(mqttCommand);
 
 
     creatingMqttList(11);

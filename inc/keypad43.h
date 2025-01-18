@@ -1,5 +1,5 @@
-#ifndef __KEYPAD__H__
-#define __KEYPAD__H__
+#ifndef __KEYPAD43__H__
+#define __KEYPAD43__H__
 
 
 #include <zephyr/kernel.h>
@@ -10,10 +10,10 @@
 #include "messageQueues.h"
 
 
-class Keypad
+class Keypad43
 {
 public:
-    Keypad(const char * _prefix);
+    Keypad43(const char * _prefix);
     void static handlerWrapper(struct input_event *val, void*);
     void handler(struct input_event*);
 private:

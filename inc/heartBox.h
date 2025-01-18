@@ -16,7 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
-#include "keypad.h"
+#include "keypad34.h"
 #include "ledStrip.h"
 #include "display4ht16k33.h"
 #include "display8ht16k33.h"
@@ -28,7 +28,7 @@ public:
     void messageHandler(struct MqttMsg *msg) override;
     void creatingMqttList(uint16_t) override;
 private:
-    Keypad *keypad;
+    Keypad34 *keypad;
     LedStrip *ledStrip;
     Display4 *display4;
     Display8 *display8;
