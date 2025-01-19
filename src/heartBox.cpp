@@ -14,7 +14,7 @@ static const uint8_t wsChainLength = DT_PROP(DT_NODELABEL(ws2812), chain_length)
 #else
 #error Unable to determine length of LED strip
 #endif
-
+static HeartBox *instance = nullptr;
 HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
@@ -31,7 +31,8 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)), true);
     creatingMqttList(11);
 
-    keypad = new Keypad34(mqttCommand);
+    device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix34)));
+    INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(keypad34)), keypadHandlerWrapper, (void*)this);
 
     static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
     // device_init(strip); 
@@ -41,6 +42,8 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     ledStrip = new LedStrip(strip, wsChainLength);
 
     display8 = new Display8(DEVICE_DT_GET(DT_NODELABEL(display8)));
+
+    instance = this;
 }
 
 void HeartBox:: creatingMqttList(uint16_t _mqttCount)
@@ -138,4 +141,93 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
     }
     else
         LOG_INF("the command is not valid");
+}
+
+void HeartBox:: keypadHandler(struct input_event *val)
+{
+    if (val->type == INPUT_EV_KEY) 
+    {
+        if(val->value)
+        {
+            if(passwordSet)
+            {
+                struct MqttMsg msg = {0};
+                if((val->code < INPUT_KEY_0))
+                {
+                    sprintf(msg.topic, "%skeypad%d", mqttCommand, val->code - INPUT_KEY_1 + 1);
+                    puzzleSolver(val->code - INPUT_KEY_1 + '0');
+                }
+                if(val->code == INPUT_KEY_0)
+                {
+                    sprintf(msg.topic, "%skeypad0", mqttCommand);
+                    puzzleSolver('0');
+                }
+                if(val->code == INPUT_KEY_ENTER)
+                {
+                    sprintf(msg.topic, "%skeypadEnter", mqttCommand);
+                }
+                if(val->code == INPUT_KEY_ESC)
+                {
+                    sprintf(msg.topic, "%skeypadEsc", mqttCommand);
+                }
+                sprintf(msg.msg, "true");
+                LOG_INF("%s",msg.topic);
+                k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+            }
+        }
+    }
+}
+
+void HeartBox:: keypadHandlerWrapper(struct input_event *val, void *userData)
+{
+
+    instance->keypadHandler(val);
+    // ((HeartBox *)userData)->keypadHandler(val);
+}
+
+void HeartBox:: puzzleSolver(char input)
+{
+    if(passwordSet)
+    {
+        static uint8_t pos = 0;
+        static char guess[PUZZLE_DISPLAY_LEN + 1];
+        memset(guess, 32, PUZZLE_DISPLAY_LEN);
+        guess[PUZZLE_DISPLAY_LEN] = '\0';
+        if(input == password[pos])
+        {
+            guess[pos] = input;
+            display8->displayStr(guess);
+            pos++;
+            if(pos == PUZZLE_DISPLAY_LEN)
+            {
+                pos = 0;
+            }
+
+        }
+        {
+            memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
+            guess[PUZZLE_DISPLAY_LEN] = ' ';
+            pos = 0;
+
+            char display[PUZZLE_DISPLAY_LEN + 1] = {0};
+            display[PUZZLE_DISPLAY_LEN] = ' ';
+
+            memset(display, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
+            display8->displayStr(display);
+            k_msleep(1000);
+
+            memset(display, 32, PUZZLE_DISPLAY_LEN);
+            display8->displayStr(display);
+            k_msleep(1000);
+
+            memset(display, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
+            display8->displayStr(display);
+            k_msleep(1000);
+
+            memset(display, 32, PUZZLE_DISPLAY_LEN);
+            display8->displayStr(display);
+            k_msleep(1000);
+        }
+
+    }
 }

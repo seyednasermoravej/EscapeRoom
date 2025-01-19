@@ -263,42 +263,42 @@
 			door_keypad_button1: door-keypad-button1
 			{
 				gpios = <&gpio0	2	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_0>;
+				zephyr,code = <INPUT_BTN_1>;
 			};
 			door_keypad_button2: door-keypad-button2
 			{
 				gpios = <&gpio0	3	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_1>;
+				zephyr,code = <INPUT_BTN_2>;
 			};
 			door_keypad_button3: door-keypad-button3
 			{
 				gpios = <&gpio0	4	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_2>;
+				zephyr,code = <INPUT_BTN_3>;
 			};
 			door_keypad_button4: door-keypad-button4
 			{
 				gpios = <&gpio0	5	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_3>;
+				zephyr,code = <INPUT_BTN_4>;
 			};
 			door_keypad_button5: door-keypad-button5
 			{
 				gpios = <&gpio0	6	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_4>;
+				zephyr,code = <INPUT_BTN_5>;
 			};
 			door_keypad_button6: door-keypad-button6
 			{
 				gpios = <&gpio0	7	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_5>;
+				zephyr,code = <INPUT_BTN_6>;
 			};
 			door_keypad_button7: door-keypad-button7
 			{
 				gpios = <&gpio0	8	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_6>;
+				zephyr,code = <INPUT_BTN_7>;
 			};
 			door_keypad_button8: door-keypad-button8
 			{
 				gpios = <&gpio0	9	(GPIO_PULL_UP |GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_7>;
+				zephyr,code = <INPUT_BTN_8>;
 			};
 			zephyr,deferred-init;
 		};

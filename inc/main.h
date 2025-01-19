@@ -27,6 +27,7 @@
 #include <zephyr/sys/sys_heap.h>
 #define BRAM 
 
+#define PUZZLE_DISPLAY_LEN 8 
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
