@@ -19,7 +19,7 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
 
         if(val->value)
         {
-            sprintf(msg.topic, "%sbutton%d", instance ->mqttCommand, (val->code - INPUT_BTN_0) + 1);
+            sprintf(msg.topic, "%sbutton%d", instance ->mqttCommand, (val->code - INPUT_BTN_0));
             sprintf(msg.msg, "true");
             puzzleSolver('0' + (val->code - INPUT_BTN_0));
             LOG_INF("%s, %s", msg.topic, msg.msg);
@@ -98,6 +98,8 @@ void DoorKeypad:: puzzleSolver(char input)
                 sprintf(msg.msg, "true");
                 k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
                 LOG_INF("topic: %s, msg: %s", msg.topic, msg.msg);
+                passwordSet = false;
+                displaySet = false;
             }
         }
         else
