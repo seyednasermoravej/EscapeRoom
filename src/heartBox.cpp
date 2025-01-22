@@ -190,8 +190,6 @@ void HeartBox:: puzzleSolver(char input)
     if(passwordSet)
     {
         static uint8_t pos = 0;
-        static char guess[PUZZLE_DISPLAY_LEN + 1];
-        memset(guess, 32, PUZZLE_DISPLAY_LEN);
         guess[PUZZLE_DISPLAY_LEN] = '\0';
         if(input == password[pos])
         {
@@ -206,32 +204,31 @@ void HeartBox:: puzzleSolver(char input)
                 sprintf(msg.msg, "true");
                 k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
                 LOG_INF("topic: %s, msg: %s", msg.topic, msg.msg);
+                passwordSet = false;
 
             }
 
         }
         {
+            pos = 0;
             memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
             guess[PUZZLE_DISPLAY_LEN] = '\0';
-            pos = 0;
 
-            char display[PUZZLE_DISPLAY_LEN + 1] = {0};
-            display[PUZZLE_DISPLAY_LEN] = '\0';
 
-            memset(display, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
-            display8->displayStr(display);
-            k_msleep(1000);
+            memset(guess, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
+            display8->displayStr(guess);
+            k_msleep(200);
 
-            memset(display, 32, PUZZLE_DISPLAY_LEN);
-            display8->displayStr(display);
-            k_msleep(1000);
+            memset(guess, 32, PUZZLE_DISPLAY_LEN);
+            display8->displayStr(guess);
+            k_msleep(200);
 
-            memset(display, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
-            display8->displayStr(display);
-            k_msleep(1000);
+            memset(guess, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
+            display8->displayStr(guess);
+            k_msleep(200);
 
-            memset(display, 32, PUZZLE_DISPLAY_LEN);
-            display8->displayStr(display);
+            memset(guess, 32, PUZZLE_DISPLAY_LEN);
+            display8->displayStr(guess);
 
             struct MqttMsg msg = {0};
             sprintf(msg.topic, "%ssolved", mqttCommand);

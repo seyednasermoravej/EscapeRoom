@@ -35,6 +35,7 @@ private:
     Display4 *display4;
     Display8 *display8;
     char password[PUZZLE_DISPLAY_LEN + 1];
+    char guess[PUZZLE_DISPLAY_LEN + 1] = {0};
     bool passwordSet = false;
     
 };
