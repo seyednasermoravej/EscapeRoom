@@ -376,7 +376,7 @@ void puzzleEntryPoint(void *, void *, void *)
     #endif
 #elif defined(BRAM)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.1.2";
+        char serverIpAddress[] = "172.21.10.11";
     #else
         char serverIpAddress[] = "172.21.10.11";
     #endif
