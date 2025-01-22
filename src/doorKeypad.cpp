@@ -109,23 +109,23 @@ void DoorKeypad:: puzzleSolver(char input)
 
             display8->displayStr(guess);
             display[PUZZLE_DISPLAY_LEN] = '\0';
-            k_msleep(1000);
+            k_msleep(200);
 
             memset(guess, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
             display8->displayStr(guess);
-            k_msleep(1000);
+            k_msleep(200);
 
             memset(guess, 32, PUZZLE_DISPLAY_LEN);
             display8->displayStr(guess);
-            k_msleep(1000);
+            k_msleep(200);
 
             memset(guess, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
             display8->displayStr(guess);
-            k_msleep(1000);
+            k_msleep(200);
 
             memset(guess, 32, PUZZLE_DISPLAY_LEN);
             display8->displayStr(guess);
-            k_msleep(1000);
+            k_msleep(200);
 
             strcpy(guess, display);
             display8->displayStr(guess);

@@ -375,9 +375,14 @@ void puzzleEntryPoint(void *, void *, void *)
         char serverIpAddress[] = "192.168.1.2";
     #endif
 #elif defined(BRAM)
+    #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+        char serverIpAddress[] = "192.168.1.2";
+    #else
+        char serverIpAddress[] = "172.21.10.11";
+    #endif
+#else
     char serverName[] = "mqtt-1";
     char serverIpAddress[128] = {0};
-#else
 #endif
     //test();
     // char serverName[] = "test.mosquitto.org";
@@ -399,8 +404,10 @@ void puzzleEntryPoint(void *, void *, void *)
 #elif defined(POURYA)
             dhcpClient("not specified");
 #elif defined(BRAM)
-            dnsResolver("not specified", serverName, serverIpAddress);
+            dhcpClient("not specified");
+
 #else
+        dnsResolver("not specified", serverName, serverIpAddress);
 #endif
             mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
             mqtt = true;
@@ -421,8 +428,10 @@ void puzzleEntryPoint(void *, void *, void *)
             dhcpClient("not specified");
 #elif defined(POURYA)
             dhcpClient("not specified");
+#elif defined(BRAM)
+            dhcpClient("not specified");
 #else
-            dnsResolver("not specified", serverName, serverIpAddress);
+            // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     while(1)
