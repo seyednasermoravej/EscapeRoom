@@ -16,6 +16,7 @@ void test(void) {
 // struct mqtt_topic deviceId_topic = {0};
 extern void puzzleThreadCreate();
 char deviceId[17]; // Each byte is 2 hex digits, plus null terminator
+uint8_t devId[8];
 char deviceIdPub[32];
 void readingHWinfo(char *idStr);
 
@@ -142,16 +143,15 @@ void i2cScanner()
 
 void readingHWinfo(char *idStr)
 {
-    uint8_t id[8];
     ssize_t length;
 
-    length = hwinfo_get_device_id(id, sizeof(id));
+    length = hwinfo_get_device_id(devId, sizeof(devId));
 
     if (length > 0) {
         // LOG_PRINTK("Device ID: ");
         for (int i = 0; i < length; i++) {
             // LOG_PRINTK("%02x", id[i]);
-            sprintf(&idStr[i * 2], "%02x", id[i]);
+            sprintf(&idStr[i * 2], "%02x", devId[i]);
         }
         idStr[2 * length] = '\0';
         // LOG_PRINTK("\n");

@@ -70,7 +70,8 @@
 			"exitdoor.h": "c",
 			"dnsresolver.h": "c",
 			"compare": "cpp",
-			"cstring": "cpp"
+			"cstring": "cpp",
+			"printk.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
 		"cortex-debug.variableUseNaturalFormat": true

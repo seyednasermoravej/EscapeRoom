@@ -33,7 +33,6 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
 
 DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
 {
-    LOG_INF("%s/%s", room, type);
     LOG_INF("%s/%s", roomName, puzzleTypeName);
     creatingMqttList(1);
     device_init(buttons);

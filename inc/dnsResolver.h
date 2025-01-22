@@ -19,6 +19,11 @@
 #include <zephyr/net/wifi.h>
 #include <zephyr/net/wifi_mgmt.h>
 #include "main.h"
+
+#define WIZNET_OUI_B0	0x00
+#define WIZNET_OUI_B1	0x08
+#define WIZNET_OUI_B2	0xdc
+
 #ifdef __cplusplus
 extern "C" {
 #endif

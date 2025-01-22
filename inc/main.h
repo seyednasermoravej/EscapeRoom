@@ -90,7 +90,8 @@ extern const struct device *const wdt;
 
 
 
-extern char deviceId[17]; 
+extern char deviceId[17];
+extern uint8_t devId[8];
 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif

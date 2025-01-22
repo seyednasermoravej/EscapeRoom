@@ -393,7 +393,7 @@ int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress)
     strcpy(serverName, queryName);
 	struct net_if *iface = net_if_get_default();
 
-	#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 		struct wifi_connect_req_params connect_params = {
 #ifdef NASER
         .ssid = "Safineh-2",
@@ -410,7 +410,18 @@ int dnsResolver(const char *deviceName, char *queryName, char *serverIpAddress)
 		.security = WIFI_SECURITY_TYPE_PSK,
     };	
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
-	#endif
+
+#else
+	// uint8_t mac[6];
+	// memcpy(mac, devId, 6);
+	// net_if_set_link_addr(iface, mac, sizeof(mac), NET_LINK_ETHERNET);
+	// const struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
+    // const uint8_t *mac = link_addr->addr;
+
+    // LOG_INF("MAC Address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    //        mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+#endif
 	LOG_INF("Starting DNS resolve sample");
 #ifdef WATCH_DOG
 		wdt_feed(wdt, wdt_channel_id);

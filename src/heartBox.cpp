@@ -201,16 +201,22 @@ void HeartBox:: puzzleSolver(char input)
             if(pos == PUZZLE_DISPLAY_LEN)
             {
                 pos = 0;
+                struct MqttMsg msg = {0};
+                sprintf(msg.topic, "%ssolved", mqttCommand);
+                sprintf(msg.msg, "true");
+                k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
+                LOG_INF("topic: %s, msg: %s", msg.topic, msg.msg);
+
             }
 
         }
         {
             memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
-            guess[PUZZLE_DISPLAY_LEN] = ' ';
+            guess[PUZZLE_DISPLAY_LEN] = '\0';
             pos = 0;
 
             char display[PUZZLE_DISPLAY_LEN + 1] = {0};
-            display[PUZZLE_DISPLAY_LEN] = ' ';
+            display[PUZZLE_DISPLAY_LEN] = '\0';
 
             memset(display, 56, PUZZLE_DISPLAY_LEN);//56 = char 8
             display8->displayStr(display);
@@ -226,7 +232,12 @@ void HeartBox:: puzzleSolver(char input)
 
             memset(display, 32, PUZZLE_DISPLAY_LEN);
             display8->displayStr(display);
-            k_msleep(1000);
+
+            struct MqttMsg msg = {0};
+            sprintf(msg.topic, "%ssolved", mqttCommand);
+            sprintf(msg.msg, "false");
+            k_msgq_put(&msqSendToMQTT, &msg, K_FOREVER);
+            LOG_INF("topic: %s, msg: %s", msg.topic, msg.msg);
         }
 
     }

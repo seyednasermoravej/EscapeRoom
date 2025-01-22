@@ -25,7 +25,7 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 	net_hostname_set((const char*)user_data, strlen((const char*)user_data));
 	LOG_INF("Start on %s: index=%d", net_if_get_device(iface)->name,
 	net_if_get_by_iface(iface));
-	#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 		struct wifi_connect_req_params connect_params = {
         // .ssid = "Naser",
         // .ssid_length = strlen("Naser"),
@@ -38,7 +38,20 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 		.security = WIFI_SECURITY_TYPE_PSK,
     };	
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
-	#endif
+#else
+	// uint8_t mac0[6];
+	// mac0[0] = WIZNET_OUI_B0;
+	// mac0[1] = WIZNET_OUI_B1;
+	// mac0[2] = WIZNET_OUI_B2;
+	// memcpy(&mac0[3], &devId[5], 3);
+
+	// struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
+    // memcpy(link_addr->addr, mac0, 6);
+	// link_addr->len = 6;
+
+    // LOG_INF("MAC Address in start: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    //        link_addr->addr[0], link_addr->addr[1], link_addr->addr[2], link_addr->addr[3], link_addr->addr[4], link_addr->addr[5]);
+#endif
 	net_dhcpv4_start(iface);
 }
 
