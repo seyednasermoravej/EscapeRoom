@@ -6,7 +6,7 @@
 #include <zephyr/tracing/tracing.h>
 #include <zephyr/drivers/hwinfo.h>
 
-#include "dnsResolver.h"
+// #include "dnsResolver.h"
 #include "zephyr/drivers/gpio.h"
 #include "messageQueues.h"
 #include "dhcpClient.h"

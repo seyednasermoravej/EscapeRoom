@@ -16,7 +16,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/devicetree.h>
 
-#include "dnsResolver.h"
+// #include "dnsResolver.h"
 
 #include <zephyr/sys/reboot.h>
 #include <zephyr/device.h>

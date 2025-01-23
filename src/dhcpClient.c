@@ -25,25 +25,27 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 	net_hostname_set((const char*)user_data, strlen((const char*)user_data));
 	LOG_INF("Start on %s: index=%d", net_if_get_device(iface)->name,
 	net_if_get_by_iface(iface));
-#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#ifdef CONFIG_BOARD_RPI_PICO_RP2040_W
 		struct wifi_connect_req_params connect_params = {
-// #ifdef NASER
-//         // .ssid = "Naser",
-//         // .ssid_length = strlen("Naser"),
-//         // .psk = "nasimore",
-//         // .psk_length = strlen("nasimore"),
-//         .ssid = "SAFINE-3-2.4G",
-//         .ssid_length = strlen("SAFINE-3-2.4G"),
-//         .psk = "EYE7GLQB73",
-//         .psk_length = strlen("EYE7GLQB73"),
-// #elif defined(BRAM)
+#ifdef NASER
+        // .ssid = "Naser",
+        // .ssid_length = strlen("Naser"),
+        // .psk = "nasimore",
+        // .psk_length = strlen("nasimore"),
+        .ssid = "SAFINE-3-2.4G",
+        .ssid_length = strlen("SAFINE-3-2.4G"),
+        .psk = "EYE7GLQB73",
+        .psk_length = strlen("EYE7GLQB73"),
+#elif defined(POURYA)
+	
+#elif defined(BRAM)
         .ssid = "D21CONTROL",
         .ssid_length = strlen("D21CONTROL"),
         .psk = "District21!",
         .psk_length = strlen("District21!"),
-// #else
+#else
 
-// #endif 
+#endif 
 		.security = WIFI_SECURITY_TYPE_PSK,
     };	
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));

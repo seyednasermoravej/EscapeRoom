@@ -14,7 +14,7 @@
 #include <zephyr/net/net_context.h>
 #include <zephyr/net/net_mgmt.h>
 #include <semaphore.h>
-
+#include "main.h"
 
 #include <zephyr/net/wifi.h>
 #include <zephyr/net/wifi_mgmt.h>
