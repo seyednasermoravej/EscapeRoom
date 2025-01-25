@@ -1,0 +1,60 @@
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/input/keymap.h>
+#include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/display/ili9xxx.h>
+
+
+
+// /delete-node/ &code_partition;
+&flash0 {
+     reg = <0x10000000 DT_SIZE_M(2)>; /* 2 MB total flash */
+
+     partitions {
+         compatible = "fixed-partitions";
+         #address-cells = <1>;
+         #size-cells = <1>;
+
+         /* Second-stage bootloader (mandatory for RP2040) */
+         second_stage_bootloader: partition@0 {
+             label = "second_stage_bootloader";
+             reg = <0x00000000 0x1000>; /* 4 KB */
+             read-only;
+         };
+		
+         /* Bootloader partition */
+         boot_partition: partition@1000 {
+             label = "mcuboot";
+             reg = <0x00001000 0x8000>; /* 32 KB */
+             read-only;
+         };
+
+         /* Primary application image */
+         slot0_partition: partition@9000 {
+             label = "image-0";
+             reg = <0x00009000 0xF3000>; /* 972 KB */
+         };
+
+         /* Secondary application image */
+         slot1_partition: partition@fc000 {
+             label = "image-1";
+             reg = <0x000FC000 0xF3000>; /* 972 KB */
+         };
+
+         /* Scratch space */
+         scratch_partition: partition@1ef000 {
+             label = "image-scratch";
+             reg = <0x001EF000 0x10000>; /* 64 KB */
+         };
+
+         /* Storage partition */
+         storage_partition: partition@1ff000 {
+             label = "storage";
+             reg = <0x001FF000 0x1000>; /* 4 KB */
+         };
+     };
+ };
+
+
+
+
+
