@@ -25,7 +25,7 @@
 				// "nrf52840dk_nrf52840"
 				// "stm32f4_disco",
 				"rpi_pico",
-				"--sysbuild",
+				// "--sysbuild",
 				"--",
 				// "-DRPI_PICO_DEBUG_ADAPTER=jlink"
 				"-DRPI_PICO_DEBUG_ADAPTER=minimodule-swd",
@@ -67,7 +67,7 @@
 				// "nrf52840dk_nrf52840"
 				// "stm32f4_disco",
 				"rpi_pico/rp2040/w",
-				"--sysbuild",
+				// "--sysbuild",
 				"--",
 				// "-DRPI_PICO_DEBUG_ADAPTER=jlink"
 				"-DRPI_PICO_DEBUG_ADAPTER=minimodule-swd",
