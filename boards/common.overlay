@@ -1467,6 +1467,7 @@ pico_spi: &spi0 {};
 
 };
 /delete-node/ &code_partition;
+// /delete-node/ &second_stage_bootloader;
 // &flash0 {
 // 	partitions {
 // 		compatible = "fixed-partitions";
@@ -1500,6 +1501,7 @@ pico_spi: &spi0 {};
             read-only;
         };
 		
+
         /* Bootloader partition */
         boot_partition: partition@1000 {
             label = "mcuboot";
