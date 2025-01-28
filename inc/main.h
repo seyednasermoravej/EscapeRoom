@@ -27,7 +27,8 @@
 #include <zephyr/sys/sys_heap.h>
 #define NASER 
 
-#define PUZZLE_DISPLAY_LEN 8 
+#define PUZZLE_DISPLAY_LEN 8
+#define FIRMWARE_VERSION    "1.0" 
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.

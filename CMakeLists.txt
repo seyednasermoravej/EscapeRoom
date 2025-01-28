@@ -34,3 +34,8 @@ include(${ZEPHYR_BASE}/samples/subsys/usb/common/common.cmake)
 
 add_subdirectory(drivers)
 #end rgb driver
+
+#begin mcuboot
+# set(mcuboot_DTC_OVERLAY_FILE ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD}.overlay)
+# zephyr_include_directories(${ZEPHYR_BASE}/subsys/dfu)
+#end mcuboot

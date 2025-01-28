@@ -298,10 +298,10 @@ int Puzzles:: nvsInit()
 		return 0;
 	}
 	fs->sector_size = info.size;
-	fs->sector_count = 3U;
+	fs->sector_count = 2U;
     rc = nvs_mount(fs);
 	if (rc) {
-        flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, 0x100000);
+        flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, 0x2000);
         rc = nvs_mount(fs);
         if (rc) {
             printk("Flash Init failed, rc=%d\n", rc);
@@ -313,13 +313,13 @@ int Puzzles:: nvsInit()
 
 void Puzzles:: readInfosFromMemory()
 {
-    // nvs_delete(fs, 0);
-    // abort();
-        // #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        // #else
-        //     gpio_pin_set_dt(&builtInLed, 1);
-        // #endif
-    // while(1);
+//     nvs_delete(fs, 0);
+// #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+// #else
+//     gpio_pin_set_dt(&builtInLed, 1);
+// #endif
+//     LOG_INF("Flash erased");
+//     while(1);
 
 
 
@@ -388,7 +388,6 @@ void puzzleEntryPoint(void *, void *, void *)
     // char serverName[] = "test.mosquitto.org";
 
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
-
     memset(msg, 0, sizeof(struct MqttMsg));
     puzzles = new Puzzles(&fileSystem);
     bool mqtt = false;
@@ -433,6 +432,12 @@ void puzzleEntryPoint(void *, void *, void *)
 #else
             // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
+    Ota *ota = new Ota(serverIpAddress);
+    ota->upgrade("/zephyr.signed.bin");
+    while(1)
+    {
+        LOG_INF("This is no ota");
+    }
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     while(1)
     {

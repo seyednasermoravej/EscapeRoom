@@ -7,6 +7,14 @@
 #include <zephyr/net/socket.h>
 #include <zephyr/net/tls_credentials.h>
 #include <zephyr/net/http/client.h>
+#include <zephyr/drivers/flash.h>
+#include <zephyr/storage/flash_map.h>
+#include <zephyr/fs/nvs.h>
+#include <zephyr/dfu/flash_img.h>
+#include <zephyr/dfu/mcuboot.h>
+
+
+#include <zephyr/sys/reboot.h>
 
 // #include "ca_certificate.h"
 
@@ -25,12 +33,21 @@
 #define SERVER_ADDR4 ""
 #endif
 
+#define MAX_RECV_BUF_LEN 512
+#define SLOT_SIZE FIXED_PARTITION_SIZE(slot1_partition)
+enum otaResponse
+{
+    HTTP_OTA_OK,
+    HTTP_OTA_ERROR,
+};
+
+
 
 class Ota
 {
 public:
     Ota(const char *_serverIp);
-    int upgrade();
+    int upgrade(const char *fileAddress);
 
 private:
     int setup_socket(sa_family_t family, const char *server, int port,

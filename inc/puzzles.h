@@ -53,6 +53,9 @@
 #include "heartBox.h"
 #include "heart.h"
 
+
+#include "ota.h"
+
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #else
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
@@ -74,6 +77,7 @@ public:
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
     Puzzle *puzzle;
+    Ota *ota;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     int enableWatchDog();
 
