@@ -382,8 +382,10 @@ void puzzleEntryPoint(void *, void *, void *)
 #elif defined(BRAM)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         char serverIpAddress[] = "172.21.10.11";
+        char serverIpAddressOTA[] = "172.21.10.10";
     #else
         char serverIpAddress[] = "172.21.10.11";
+        char serverIpAddressOTA[] = "172.21.10.10";
     #endif
 #else
     char serverName[] = "mqtt-1";
@@ -437,7 +439,8 @@ void puzzleEntryPoint(void *, void *, void *)
 #else
             // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
-    Ota *ota = new Ota(serverIpAddress);
+
+    Ota *ota = new Ota(serverIpAddressOTA);
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     char command[32] = {0};
 

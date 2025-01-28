@@ -25,10 +25,10 @@
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
-#define NASER 
+#define BRAM 
 
 #define PUZZLE_DISPLAY_LEN 8
-#define FIRMWARE_VERSION    "1.0" 
+#define FIRMWARE_VERSION    "1.1" 
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
