@@ -80,6 +80,7 @@ public:
     Ota *ota;
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     int enableWatchDog();
+    void eraseStorage();
 
 private:
 

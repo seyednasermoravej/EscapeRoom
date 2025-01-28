@@ -23,7 +23,7 @@ class ExitDoor: public Puzzle
 public:
     ExitDoor(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     struct k_timer wiegandTimer;
     static void wiegandTimerHandler(struct k_timer *timer);
 

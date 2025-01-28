@@ -25,7 +25,7 @@ class HeartBox: public Puzzle
 public:
     HeartBox(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     void keypadHandler(struct input_event *val);
     static void keypadHandlerWrapper(struct input_event *val, void *userData);
     void puzzleSolver(char input);

@@ -22,7 +22,7 @@ class colorTubes: public Puzzle
 public:
     colorTubes(const char * room, const char *type, uint8_t numRGBsensors);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
 
     struct k_timer rgbSensorTimer;
     struct k_work rgbSensorWork;

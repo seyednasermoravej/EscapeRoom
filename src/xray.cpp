@@ -40,16 +40,16 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 #endif
 		k_msleep(10);
 	}
-	createMqttTopic(0);
+	creatingMqttList();
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
     k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(1));
 }
 
 
-void Xray:: creatingMqttList(uint16_t _mqttCount)
+void Xray:: creatingMqttList()
 {
-    mqttCount = _mqttCount;
+    mqttCount = systemTopicsNo;
 }
 void Xray:: messageHandler(struct MqttMsg *msg)
 {

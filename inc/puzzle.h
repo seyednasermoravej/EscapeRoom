@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <zephyr/drivers/led_strip.h>
+#include "main.h"
 
 
 class Puzzle 
@@ -28,17 +29,17 @@ protected:
     char *puzzleTypeName;
     struct mqtt_topic mqttList[20];
     uint16_t mqttCount = 0;
-    virtual void creatingMqttList(uint16_t mqttCount) = 0;
+    virtual void creatingMqttList(void) = 0;
     virtual void test();
     struct k_timer aliveTimer;
     mqtt_topic *createMqttTopic(const char *topicName);
-    char mqttCommand[128];
-    int validTopic(char *topic, char *command);
+    char mqttCommand[100];
     int peripheralIdx(const char *field, char *command);
     int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
     struct led_rgb retrieveColors(char *str);
     int activateI2c0Mux0Channels();
     int activateI2c0Mux1Channels();
+    int systemTopicsNo = 2;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName
@@ -49,6 +50,7 @@ public:
     // Common method for all subclasses
     static void alive(struct k_timer *);
     virtual void messageHandler(MqttMsg *msg) = 0;
+    int validTopic(char *topic, char *command);
 
     uint16_t getMqttCount();
     struct mqtt_topic *getMqttList();

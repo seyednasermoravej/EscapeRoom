@@ -20,19 +20,19 @@ Blinds:: Blinds(const char *room, const char *type): Puzzle(room, type)
     servos->move(2, 90);
     servos->move(3, 90);
 
-    creatingMqttList(4);
+    creatingMqttList();
 }
 
-void Blinds:: creatingMqttList(uint16_t _mqttCount)
+void Blinds:: creatingMqttList()
 {
 
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
     {
         sprintf(topic, "%sservo%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allServos);
+    mqttCount = ARRAY_SIZE(allServos) + systemTopicsNo;
 }
 
 

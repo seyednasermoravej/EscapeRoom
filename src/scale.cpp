@@ -3,7 +3,7 @@
 LOG_MODULE_REGISTER(scale, LOG_LEVEL_INF);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
-static const struct gpio_dt_spec relays[] = {
+static const struct gpio_dt_spec allRelays[] = {
     DT_FOREACH_PROP_ELEM(DT_NODELABEL(scale_relays), gpios, DT_SPEC_AND_COMMA_GATE)
 };
 
@@ -12,16 +12,16 @@ const struct device *hx711_dev = DEVICE_DT_GET(DT_NODELABEL(scale_loadcell));
 Scale:: Scale(const char *room, const char *type): Puzzle(room, type)
 {
     int ret;
-    for(unsigned int i = 0; i < ARRAY_SIZE(relays); i++){
-        if (!device_is_ready(relays[i].port)) {
+    for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
+        if (!device_is_ready(allRelays[i].port)) {
 		    // return -1;
 	    }
-        ret = gpio_pin_configure_dt(&relays[i], GPIO_OUTPUT_INACTIVE);
+        ret = gpio_pin_configure_dt(&allRelays[i], GPIO_OUTPUT_INACTIVE);
 	    if (ret < 0) {
 		    // return -1;
 	    }
     }
-    creatingMqttList(1);
+    creatingMqttList();
     hx711 = new Hx711(hx711_dev);
     weight = hx711->measure();
     k_timer_init(&loadcellTimer, loadcellTimerHandler, NULL);
@@ -36,41 +36,45 @@ void Scale:: loadcellTimerHandler(struct k_timer *timer)
     if(newWeight.val1 != instance->weight.val1)
     {
         struct MqttMsg msg = {0};
-        sprintf(msg.topic,"%s/%s/loadcell", instance->roomName, instance->puzzleTypeName);
+        sprintf(msg.topic,"%sloadcell", instance->mqttCommand);
         sprintf(msg.msg, "%d", newWeight.val1);
         instance->weight.val1 = newWeight.val1;
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
         
     }
 }
-void Scale:: creatingMqttList(uint16_t _mqttCount)
+void Scale:: creatingMqttList()
 {
-
-	mqttList[0] = codeRed_scale_relay1_topic;
-    mqttCount = _mqttCount;
+    
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
+    {
+        sprintf(topic, "%srelay%d", mqttCommand, i + 1);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
+    }
+    mqttCount = ARRAY_SIZE(allRelays) + systemTopicsNo;
 
 }
 
 void Scale:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, CODE_RED_SCALE_RELAY1_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        if(strcmp(msg->msg, "on") == 0)
+        char field[] = "relay";
+        int commandIdx = peripheralIdx(field, command);
+        int relayIdx = commandIdx - 1;
+        if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
         {
-            gpio_pin_set_dt(&relays[0], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&relays[0], 0);
+            relayOperation(msg->msg, &allRelays[relayIdx], false);
         }
         else
         {
-            LOG_INF("The command is not valid");
+            LOG_ERR("Not a valid index");
         }
     }
-    else
-        LOG_INF("the command is not valid");
 }
 
 

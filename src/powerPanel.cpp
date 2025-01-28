@@ -63,7 +63,7 @@ PowerPanel:: PowerPanel(const char *room, const char *type): Puzzle(room, type)
 	    }
     }
 
-    creatingMqttList(17);
+    creatingMqttList();
 }
 
 void PowerPanel:: switchesHandlerWrapper(struct input_event *val, void *userData)
@@ -80,25 +80,25 @@ void PowerPanel:: switchesHandler(struct input_event *val)
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
 }
-void PowerPanel:: creatingMqttList(uint16_t _mqttCount)
+void PowerPanel:: creatingMqttList()
 {
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allServos); i++)
     {
         sprintf(topic, "%sservo%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
     for(uint8_t i = 0; i < numOfDisplays; i++)
     {
         sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
-        mqttList[ARRAY_SIZE(allServos) + i] = *createMqttTopic(topic);
+        mqttList[ARRAY_SIZE(allServos) + i + systemTopicsNo] = *createMqttTopic(topic);
     }
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[ARRAY_SIZE(allServos) + numOfDisplays] = *createMqttTopic(topic);
+        mqttList[ARRAY_SIZE(allServos) + numOfDisplays+ systemTopicsNo] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allServos) + numOfDisplays + ARRAY_SIZE(allRelays);
+    mqttCount = ARRAY_SIZE(allServos) + numOfDisplays + ARRAY_SIZE(allRelays)+ systemTopicsNo;
 }
 
 

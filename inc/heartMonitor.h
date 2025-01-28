@@ -23,7 +23,7 @@ class HeartMonitor: public Puzzle
 public:
     HeartMonitor(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     uint16_t readAdc(uint8_t channel);
     struct k_timer analogTimer;
     void updateAnalog();

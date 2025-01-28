@@ -23,7 +23,7 @@ class Xray: public Puzzle
 public:
     Xray(const char * room, const char *type, uint8_t numRfids);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     struct k_timer cardsReaderTimer;
     struct k_work cardsReaderWork;
     static void cardsReaderTimerHandler(struct k_timer *timer);

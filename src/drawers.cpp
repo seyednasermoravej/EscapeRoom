@@ -40,22 +40,22 @@ Drawers:: Drawers(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList(8);
+    creatingMqttList();
     instance = this;
     device_init(buttons);
 
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 }
 
-void Drawers:: creatingMqttList(uint16_t _mqttCount)
+void Drawers:: creatingMqttList()
 {
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allRelays);
+    mqttCount = ARRAY_SIZE(allRelays) + systemTopicsNo;
 
 }
 

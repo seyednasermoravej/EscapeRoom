@@ -23,7 +23,7 @@ class Ventilator: public Puzzle
 public:
     Ventilator(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     uint16_t readAdc(uint8_t channel);
     struct k_timer analogTimer;
     static void analogTimerHandler(struct k_timer *timer);

@@ -15,18 +15,18 @@ static const uint32_t servoMaxPulse = DT_PROP(DT_NODELABEL(heart_servos), max_pu
 static const uint16_t servoMaxDegrees = DT_PROP(DT_NODELABEL(heart_servos), max_degrees);
 Heart:: Heart(const char *room, const char *type): Puzzle(room, type)
 {
-    creatingMqttList(1);
+    creatingMqttList();
     servos = new Servos(allServos, 1, servoMinPulse, servoMaxPulse, servoMaxDegrees);
     servos->move(0, 90);
 }
 
-void Heart:: creatingMqttList(uint16_t _mqttCount)
+void Heart:: creatingMqttList()
 { 
     char topic[128] = {0};
-    sprintf(topic, "%s/%s/servo", roomName, puzzleTypeName);
+    sprintf(topic, "%sservo", mqttCommand);
 
-	mqttList[0] = *createMqttTopic(topic);
-    mqttCount = _mqttCount;
+	mqttList[0 + systemTopicsNo] = *createMqttTopic(topic);
+    mqttCount = 1 + systemTopicsNo;
 
 }
 

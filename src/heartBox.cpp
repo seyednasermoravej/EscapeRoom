@@ -29,7 +29,7 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     }
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)), true);
-    creatingMqttList(11);
+    creatingMqttList();
 
     device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix34)));
     INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(keypad34)), keypadHandlerWrapper, (void*)this);
@@ -46,30 +46,30 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     instance = this;
 }
 
-void HeartBox:: creatingMqttList(uint16_t _mqttCount)
+void HeartBox:: creatingMqttList()
 {
     uint8_t numOfDisplays = 2;
     char topic[128] = {0};
     for(uint8_t i = 0; i < wsChainLength; i++) /// chain length in overlay
     {
         sprintf(topic, "%sws2811_%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
 
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[wsChainLength + i] = *createMqttTopic(topic);
+        mqttList[wsChainLength + i + systemTopicsNo] = *createMqttTopic(topic);
     }
 
     for(uint8_t i = 0; i < numOfDisplays; i++)
     {
         sprintf(topic, "%sdisplay%d", mqttCommand, i + 1);
-        mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i] = *createMqttTopic(topic);
+        mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i + systemTopicsNo] = *createMqttTopic(topic);
     }
     sprintf(topic, "%spassword", mqttCommand);
-    mqttList[wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays] = *createMqttTopic(topic);
-    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays + 1;
+    mqttList[wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays + systemTopicsNo] = *createMqttTopic(topic);
+    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays + 1 + systemTopicsNo;
 }
 
 

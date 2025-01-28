@@ -33,24 +33,24 @@ void Console:: buttonsHandler(struct input_event *val)
         struct MqttMsg msg = {0};
         if(val->code == INPUT_BTN_6)
         {
-            sprintf(msg.topic, "%s/%s/switch1", roomName, puzzleTypeName);
+            sprintf(msg.topic, "%sswitch1", instance->mqttCommand);
             val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
         }
         else if((val->code == INPUT_BTN_7) && (val->value))
         {
-            sprintf(msg.topic, "%s/%s/langButton", roomName, puzzleTypeName);
+            sprintf(msg.topic, "%slangButton", instance->mqttCommand);
             sprintf(msg.msg, "true");
         }
         else if((val->code == INPUT_BTN_8) && (val->value))
         {
-            sprintf(msg.topic, "%s/%s/roomButton", roomName, puzzleTypeName);
+            sprintf(msg.topic, "%sroomButton", instance->mqttCommand);
             sprintf(msg.msg, "true");
         }
         else
         {
             if(val->value)
             {
-                sprintf(msg.topic, "%s/%s/button%d", roomName, puzzleTypeName, (val->code - 0x100) + 1);
+                sprintf(msg.topic, "%sbutton%d", mqttCommand, (val->code - 0x100) + 1);
                 sprintf(msg.msg, "true");
             }
         }
@@ -68,7 +68,7 @@ void Console:: qdecLangHandler(struct input_event *val)
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        sprintf(msg.topic, "%s/%s/langEncoder", roomName, puzzleTypeName);
+        sprintf(msg.topic, "%slangEncoder", mqttCommand);
         // strcpy(msg.topic, (char *)topic);
         if(val->code == INPUT_REL_WHEEL)
         {
@@ -97,7 +97,7 @@ void Console:: qdecRoomHandler(struct input_event *val)
     if (val->type == INPUT_EV_REL)
     {
         struct MqttMsg msg = {0};
-        sprintf(msg.topic, "%s/%s/roomEncoder", roomName, puzzleTypeName);
+        sprintf(msg.topic, "%sroomEncoder", mqttCommand);
         if(val->code == INPUT_REL_WHEEL)
         {
             if(val->value == 1)
@@ -128,7 +128,7 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 	lcd2 = new Lcd(DEVICE_DT_GET(LCD2_NODE), 0, 2, 3, 4, 5, 6, 7);
     lcd2->firstLine("      Room      ");
 
-    creatingMqttList(2);
+    creatingMqttList();
 
 
     device_init(qdecLang);
@@ -157,12 +157,15 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
 }
 
-void Console:: creatingMqttList(uint16_t _mqttCount)
+void Console:: creatingMqttList()
 {
-    
-    mqttList[0] = introRoom_console_lcd1_topic;
-    mqttList[1] = introRoom_console_lcd2_topic;
-    mqttCount = _mqttCount;
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < 2; i++)
+    {
+        sprintf(topic, "%slcd%d", mqttCommand, i + 1);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
+    }
+    mqttCount = 2 + systemTopicsNo;
 }
 
 

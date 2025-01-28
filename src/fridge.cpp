@@ -96,10 +96,10 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     keypad = new Keypad43(mqttCommand);
 
 
-    creatingMqttList(11);
+    creatingMqttList();
 }
 
-void Fridge:: creatingMqttList(uint16_t _mqttCount)
+void Fridge:: creatingMqttList()
 {
     uint8_t numOfDisplays = 1;
 
@@ -107,12 +107,12 @@ void Fridge:: creatingMqttList(uint16_t _mqttCount)
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
     for(uint8_t i = 0; i < wsChainLength; i++) /// chain length in overlay
     {
         sprintf(topic, "%sws2811_%d", mqttCommand, i + 1);
-        mqttList[i + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
     }
 
     // for(uint8_t i = 0; i < numOfDisplays; i++)
@@ -121,9 +121,9 @@ void Fridge:: creatingMqttList(uint16_t _mqttCount)
     //     mqttList[wsChainLength + ARRAY_SIZE(allRelays) + i] = *createMqttTopic(topic);
     // }
     sprintf(topic, "%sdisplay", mqttCommand);
-    mqttList[wsChainLength + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
+    mqttList[systemTopicsNo + wsChainLength + ARRAY_SIZE(allRelays)] = *createMqttTopic(topic);
 
-    mqttCount = wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays;
+    mqttCount = systemTopicsNo + wsChainLength + ARRAY_SIZE(allRelays) + numOfDisplays;
 }
 
 

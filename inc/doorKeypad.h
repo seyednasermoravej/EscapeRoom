@@ -26,7 +26,7 @@ class DoorKeypad: public Puzzle
 public:
     DoorKeypad(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     void buttonsHandler(struct input_event *val);
     static void buttonsHandlerWrapper(struct input_event *val, void *userData);
     void puzzleSolver(char input);

@@ -311,14 +311,19 @@ int Puzzles:: nvsInit()
     return 0;
 }
 
+void Puzzles:: eraseStorage()
+{
+    nvs_delete(fs, 0);
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#else
+    gpio_pin_set_dt(&builtInLed, 1);
+#endif
+    LOG_INF("Flash erased");
+}
+
+
 void Puzzles:: readInfosFromMemory()
 {
-//     nvs_delete(fs, 0);
-// #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-// #else
-//     gpio_pin_set_dt(&builtInLed, 1);
-// #endif
-//     LOG_INF("Flash erased");
 //     while(1);
 
 
@@ -433,16 +438,31 @@ void puzzleEntryPoint(void *, void *, void *)
             // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
     Ota *ota = new Ota(serverIpAddress);
-    ota->upgrade("/zephyr.signed.bin");
-    while(1)
-    {
-        LOG_INF("This is no ota");
-    }
     mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
+    char command[32] = {0};
+
     while(1)
     {
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
         {
+            if(puzzles->puzzle->validTopic(msg->topic, command) == 0)
+            {
+                if(!strcmp("upgrade", command))
+                {
+                    LOG_INF("upgrading to file: %s", msg->msg);
+                    ota->upgrade(msg->msg);
+                }
+                if(!strcmp("erase", command))
+                {
+                    if(!strcmp("true", msg->msg))
+                    {
+                        LOG_INF("eraseing storage");
+                        puzzles->eraseStorage();
+                        sys_reboot(0);
+                    }
+
+                }
+            }
             puzzles -> messageHandler(msg); 
         }
         // counter++;

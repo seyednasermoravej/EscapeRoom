@@ -50,7 +50,7 @@ class Fridge: public Puzzle
 public:
     Fridge(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
 
 private:
     Keypad43 *keypad;

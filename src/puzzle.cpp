@@ -12,7 +12,11 @@ Puzzle:: Puzzle(const char* room, const char* type)
     puzzleTypeName = new char[strlen(type) + 1];
     strcpy(puzzleTypeName, type);
     sprintf(mqttCommand, "%s/%s/", roomName, puzzleTypeName);
-    // mqttList[0] = *createMqttTopic("erase");
+    char topic[128]; 
+    sprintf(topic, "%supgrade", mqttCommand);
+    mqttList[0] = *createMqttTopic(topic);
+    sprintf(topic, "%serase", mqttCommand);
+    mqttList[1] = *createMqttTopic(topic);
     k_timer_init(&aliveTimer, Puzzle:: alive, NULL);
     k_timer_start(&aliveTimer, K_SECONDS(4), K_SECONDS(4));
 }
@@ -21,8 +25,8 @@ Puzzle:: Puzzle(const char* room, const char* type)
 void Puzzle:: alive(struct k_timer *timer)
 {
     MqttMsg msg = {0}; // Initialize the message structure
-    sprintf(msg.topic, "%s/%s/alive", instance->roomName, instance->puzzleTypeName);
-    sprintf(msg.msg, "true");
+    sprintf(msg.topic, "%salive", instance->mqttCommand);
+    sprintf(msg.msg, "%s", FIRMWARE_VERSION);
     k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT); // Assuming k_msgq_put is defined elsewhere
 }
 

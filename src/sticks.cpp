@@ -19,7 +19,7 @@ static Sticks *instance = nullptr;
 Sticks:: Sticks(const char *room, const char *type): Puzzle(room, type)
 {
     // int ret;
-    // creatingMqttList(25);
+    creatingMqttList();
     instance = this;
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(expander1)));
@@ -54,9 +54,9 @@ void Sticks:: buttonsHandler(struct input_event *val)
 }
 
 
-void Sticks:: creatingMqttList(uint16_t _mqttCount)
+void Sticks:: creatingMqttList()
 {
-    mqttCount = 0;
+    mqttCount = systemTopicsNo;
 }
 
 

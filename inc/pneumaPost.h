@@ -22,7 +22,7 @@ class PneumaPost: public Puzzle
 public:
     PneumaPost(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     static void buttonsHandlerWrapper(struct input_event *val, void* userData);
     void buttonsHandler(struct input_event *val);
 

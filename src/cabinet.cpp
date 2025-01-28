@@ -55,89 +55,46 @@ Cabinet:: Cabinet(const char * room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList(4);
+    creatingMqttList();
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
 }
 
-void Cabinet:: creatingMqttList(uint16_t _mqttCount)
+void Cabinet:: creatingMqttList()
 {
 
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
         sprintf(topic, "%srelay%d", mqttCommand, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allRelays);
+    mqttCount = ARRAY_SIZE(allRelays) + systemTopicsNo;
 }
 void Cabinet:: messageHandler(struct MqttMsg *msg)
 {
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-    if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY1_TOPIC) == 0)
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
     {
-        if(strcmp(msg->msg, "on") == 0)
+        char field[] = "relay";
+        int commandIdx = peripheralIdx(field, command);
+        int relayIdx = commandIdx - 1;
+        if((commandIdx > 0 ) && (relayIdx < ARRAY_SIZE(allRelays)))
         {
-            gpio_pin_set_dt(&allRelays[0], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[0], 0);
+            if((commandIdx == 1) || (commandIdx == 2))
+            {
+                relayOperation(msg->msg, &allRelays[relayIdx], false);
+            }
+            else
+            {
+                relayOperation(msg->msg, &allRelays[relayIdx], true);
+            }
         }
         else
         {
-            LOG_INF("The command is not valid");
+            LOG_ERR("Not a valid index");
         }
     }
-    else if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY2_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[1], 1);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[1], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
-    }
-    else if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY3_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[2], 1);
-            k_msleep(1000);
-            gpio_pin_set_dt(&allRelays[2], 0);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[2], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
-    }
-    else if(strcmp(msg->topic, INTRO_ROOM_CABINET_RELAY4_TOPIC) == 0)
-    {
-        if(strcmp(msg->msg, "on") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[3], 1);
-            k_msleep(1000);
-            gpio_pin_set_dt(&allRelays[3], 0);
-        }
-        else if(strcmp(msg->msg, "off") == 0)
-        {
-            gpio_pin_set_dt(&allRelays[3], 0);
-        }
-        else
-        {
-            LOG_INF("The command is not valid");
-        }
-    }
-    else
-        LOG_INF("the command is not valid");
 }

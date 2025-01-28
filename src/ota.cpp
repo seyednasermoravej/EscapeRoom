@@ -439,7 +439,7 @@ int Ota:: upgrade(const char *fileAddress)
 
 	while (retry)
 	{
-		connect_socket(AF_INET, "10.42.0.1", port, &ota_context.sock, (struct sockaddr *)&addr4, sizeof(addr4));
+		connect_socket(AF_INET, serverIp, port, &ota_context.sock, (struct sockaddr *)&addr4, sizeof(addr4));
 		// connect_socket(AF_INET, serverIp, port, &ota_context.sock, (struct sockaddr *)&addr4, sizeof(addr4));
 
 		if(ota_context.sock < 0)
@@ -453,10 +453,10 @@ int Ota:: upgrade(const char *fileAddress)
 			struct http_request req;
 			memset(&req, 0, sizeof(req));
 			req.method = HTTP_GET;
-			// req.url = fileAddress;
-			// req.host = serverIp;
-			req.url = "/zephyr.signed.bin";
-			req.host = "10.42.0.1";
+			req.url = fileAddress;
+			req.host = serverIp;
+			// req.url = "/zephyr.signed.bin";
+			// req.host = "10.42.0.1";
 			req.protocol = "HTTP/1.1";
 			req.response = response_cb;
 			req.recv_buf = ota_context.recv_buf;

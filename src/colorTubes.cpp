@@ -40,9 +40,9 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 }
 
 
-void colorTubes:: creatingMqttList(uint16_t _mqttCount)
+void colorTubes:: creatingMqttList()
 {
-    mqttCount = _mqttCount;
+    mqttCount = systemTopicsNo;
 }
 void colorTubes:: messageHandler(struct MqttMsg *msg)
 {

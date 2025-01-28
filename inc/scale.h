@@ -26,7 +26,7 @@ class Scale: public Puzzle
 public:
     Scale(const char * room, const char *type);
     void messageHandler(struct MqttMsg *msg) override;
-    void creatingMqttList(uint16_t) override;
+    void creatingMqttList() override;
     struct k_timer loadcellTimer;
     static void loadcellTimerHandler(struct k_timer *timer);
     struct sensor_value weight;

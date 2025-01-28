@@ -34,7 +34,7 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
 DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
 {
     LOG_INF("%s/%s", roomName, puzzleTypeName);
-    creatingMqttList(1);
+    creatingMqttList();
     device_init(buttons);
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
@@ -42,16 +42,16 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     display8 = new Display8(DEVICE_DT_GET(DT_NODELABEL(display8)));
 
 }
-void DoorKeypad:: creatingMqttList(uint16_t _mqttCount)
+void DoorKeypad:: creatingMqttList()
 {
     char topic[128] = {0};
     sprintf(topic, "%sdisplay", mqttCommand);
-    mqttList[0] = *createMqttTopic(topic);
+    mqttList[0 + systemTopicsNo] = *createMqttTopic(topic);
     sprintf(topic, "%spassword", mqttCommand);
-    mqttList[1] = *createMqttTopic(topic);
+    mqttList[1 + systemTopicsNo] = *createMqttTopic(topic);
     sprintf(topic, "%scode", mqttCommand);
-    mqttList[2] = *createMqttTopic(topic);
-    mqttCount = 3;
+    mqttList[2 + systemTopicsNo] = *createMqttTopic(topic);
+    mqttCount = 3 + systemTopicsNo;
 }
 void DoorKeypad:: messageHandler(struct MqttMsg *msg)
 {

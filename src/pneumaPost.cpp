@@ -50,22 +50,22 @@ PneumaPost:: PneumaPost(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    creatingMqttList(2);
+    creatingMqttList();
     instance = this;
     device_init(buttons);
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 }
 
-void PneumaPost:: creatingMqttList(uint16_t _mqttCount)
+void PneumaPost:: creatingMqttList()
 {
 
     char topic[128] = {0};
     for(uint8_t i = 0; i < ARRAY_SIZE(allRelays); i++)
     {
-        sprintf(topic, "%s/%s/relay%d", roomName, puzzleTypeName, i + 1);
-        mqttList[i] = *createMqttTopic(topic);
+        sprintf(topic, "relay%d", mqttCommand, i + 1);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
     }
-    mqttCount = ARRAY_SIZE(allRelays);
+    mqttCount = ARRAY_SIZE(allRelays) + systemTopicsNo;
 
 }
 
