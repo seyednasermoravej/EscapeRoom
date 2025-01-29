@@ -464,6 +464,7 @@ void mqttEntryPoint(void * serverIpAddress, void *mqttList, void *mqttCount)
 		while(k_msgq_get(&msqSendToMQTT, &msg, K_NO_WAIT) == 0) {
 			mqtt->publisher(msg.msg, msg.topic);
 			memset(&msg, 0, sizeof(struct MqttMsg));
+			LOG_INF("new message published");
 		}
 		int rc = 0;
 

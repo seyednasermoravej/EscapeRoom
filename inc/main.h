@@ -25,7 +25,7 @@
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
-#define BRAM 
+#define NASER 
 
 #define PUZZLE_DISPLAY_LEN 8
 #define FIRMWARE_VERSION    "1.1" 

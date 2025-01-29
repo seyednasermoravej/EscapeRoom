@@ -143,7 +143,7 @@ static void response_cb(struct http_response *rsp,
 	}
 	if(ota_context.content_length == 0)
 	{
-		LOG_DBG("content length is zero");
+		// LOG_DBG("content length is zero");
 		body_data = rsp->body_frag_start;
 		body_len = rsp->data_len;
 		body_len -= (rsp-> body_frag_start - rsp->recv_buf);
@@ -163,7 +163,7 @@ static void response_cb(struct http_response *rsp,
 	}
 	if(body_data != NULL)
 	{
-		LOG_DBG("body is not null");
+		LOG_DBG("wrote to flash %d bytes", body_len);
 		ret = flash_img_buffered_write(&ota_context.flash_ctx, body_data, body_len, false);
 		if(ret < 0)
 		{
