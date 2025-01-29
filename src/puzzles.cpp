@@ -369,23 +369,25 @@ void puzzleEntryPoint(void *, void *, void *)
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         // char serverIpAddress[] = "192.168.175.142";
-        char serverIpAddress[] = "192.168.1.11";
+        char serverIpAddressMqtt[] = "192.168.1.101";
+        char serverIpAddressOta[] = "192.168.1.101";
     #else
-        char serverIpAddress[] = "10.42.0.1";
+        char serverIpAddressMqtt[] = "10.42.0.1";
+        char serverIpAddressOta[] = "10.42.0.1";
     #endif
 #elif defined(POURYA)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "192.168.1.2";
+        char serverIpAddressMqtt[] = "192.168.1.2";
     #else
-        char serverIpAddress[] = "192.168.1.2";
+        char serverIpAddressMqtt[] = "192.168.1.2";
     #endif
 #elif defined(BRAM)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        char serverIpAddress[] = "172.21.10.11";
-        char serverIpAddressOTA[] = "172.21.10.10";
+        char serverIpAddressMqtt[] = "172.21.10.11";
+        char serverIpAddressOta[] = "172.21.10.10";
     #else
-        char serverIpAddress[] = "172.21.10.11";
-        char serverIpAddressOTA[] = "172.21.10.10";
+        char serverIpAddressMqtt[] = "172.21.10.11";
+        char serverIpAddressOta[] = "172.21.10.10";
     #endif
 #else
     char serverName[] = "mqtt-1";
@@ -415,7 +417,7 @@ void puzzleEntryPoint(void *, void *, void *)
 #else
         dnsResolver("not specified", serverName, serverIpAddress);
 #endif
-            mqttThreadCreate((char*)serverIpAddress, &puzzleType_topic, 1);
+            mqttThreadCreate((char*)serverIpAddressMqtt, &puzzleType_topic, 1);
             mqtt = true;
         }
         if(k_msgq_get(&msqReceivedFromMQTT, msg, K_NO_WAIT) == 0)
@@ -440,8 +442,8 @@ void puzzleEntryPoint(void *, void *, void *)
             // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
 
-    Ota *ota = new Ota(serverIpAddressOTA);
-    mqttThreadCreate((char*)serverIpAddress, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
+    Ota *ota = new Ota(serverIpAddressOta);
+    mqttThreadCreate((char*)serverIpAddressMqtt, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     char command[32] = {0};
 
     while(1)

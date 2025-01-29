@@ -8,7 +8,7 @@
 #include <zephyr/linker/sections.h>
 #include <errno.h>
 #include <stdio.h>
-
+#include <zephyr/net/ethernet.h>
 #include <zephyr/net/net_if.h>
 #include <zephyr/net/net_core.h>
 #include <zephyr/net/net_context.h>
