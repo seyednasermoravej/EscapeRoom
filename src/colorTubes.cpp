@@ -74,16 +74,16 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
         	colorTemp = instance->rgbsensors[i]->calculateColorTemperature_dn40(r, g, b, c);
         	lux = instance->rgbsensors[i]->calculateLux(r, g, b);
 
-			r8 = (uint8_t)(r >>8 );//& 0xFF); // استخراج 8 بیت بالا
-			g8 = (uint8_t)(g >>8 );//& 0xFF);  // استخراج 8 بیت بالا
-			b8 = (uint8_t)(b >>8 );//& 0xFF);  // استخراج 8 بیت بالا
-			c8 = (uint8_t)(c >>8 );//& 0xFF);  // استخراج 8 بیت بالا
-			lux8 = (uint8_t)(lux >>8 );//& 0xFF);  // استخراج 8 بیت بالا
-			colorTemp8 = (uint8_t)(colorTemp >>8 );//& 0xFF);  // استخراج 8 بیت بالا
+			// r8 = (uint8_t)(r >>8 );//& 0xFF); // استخراج 8 بیت بالا
+			// g8 = (uint8_t)(g >>8 );//& 0xFF);  // استخراج 8 بیت بالا
+			// b8 = (uint8_t)(b >>8 );//& 0xFF);  // استخراج 8 بیت بالا
+			// c8 = (uint8_t)(c >>8 );//& 0xFF);  // استخراج 8 بیت بالا
+			// lux8 = (uint8_t)(lux >>8 );//& 0xFF);  // استخراج 8 بیت بالا
+			// colorTemp8 = (uint8_t)(colorTemp >>8 );//& 0xFF);  // استخراج 8 بیت بالا
 
-			sprintf(instance->msgReader.topic, "%s/%s/colorPosition%d", instance->roomName, instance->puzzleTypeName, i + 1);
-			sprintf(instance->msgReader.msg, "R%uG%uB%u", r8, g8, b8);
-			LOG_INF("The rgb Sensor %d is : r= %u , g= %u, b= %u", i + 1, r8, g8, b8);
+			sprintf(instance->msgReader.topic, "%scolorPosition%d", instance->mqttCommand, i + 1);
+			sprintf(instance->msgReader.msg, "R%uG%uB%uC%uL%uT%u", r, g, b, c, lux, colorTemp);
+			LOG_INF("The rgb Sensor %d is : r= %u , g= %u, b= %u, c= %u", i + 1, r, g, b, c, lux, colorTemp);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
 	
 			k_msleep(10);
