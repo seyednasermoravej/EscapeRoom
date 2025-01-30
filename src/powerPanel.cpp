@@ -74,9 +74,12 @@ void PowerPanel:: switchesHandler(struct input_event *val)
 {
     if (val->type == INPUT_EV_KEY)
     {
+        LOG_INF("button %d pressed", val->code - INPUT_BTN_0);
         struct MqttMsg msg = {0};
-        sprintf(msg.topic, "%sswitch%d", mqttCommand, val->code - INPUT_BTN_0 + 1);
+        sprintf(msg.topic, "%sswitch%d", mqttCommand, val->code - INPUT_BTN_0);
+        LOG_DBG("topic is: %s", msg.topic);
         val->value ? sprintf(msg.msg, "true"): sprintf(msg.msg, "false");
+        LOG_DBG("msg is: %s", msg.msg);
         k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
     }
 }

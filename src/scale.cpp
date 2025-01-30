@@ -11,6 +11,7 @@ const struct device *hx711_dev = DEVICE_DT_GET(DT_NODELABEL(scale_loadcell));
 
 Scale:: Scale(const char *room, const char *type): Puzzle(room, type)
 {
+    device_init(hx711_dev);
     int ret;
     for(unsigned int i = 0; i < ARRAY_SIZE(allRelays); i++){
         if (!device_is_ready(allRelays[i].port)) {
