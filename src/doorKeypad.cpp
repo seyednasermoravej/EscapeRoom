@@ -16,7 +16,6 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
     if (val->type == INPUT_EV_KEY)
     {
         struct MqttMsg msg = {0};
-
         if(val->value)
         {
             sprintf(msg.topic, "%sbutton%d", instance ->mqttCommand, (val->code - INPUT_BTN_0));
@@ -24,10 +23,8 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
             puzzleSolver('0' + (val->code - INPUT_BTN_0));
             LOG_INF("%s, %s", msg.topic, msg.msg);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        }
-      
+        } 
     }
-
 }
 
 

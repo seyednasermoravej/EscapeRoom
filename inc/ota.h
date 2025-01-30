@@ -33,7 +33,7 @@
 #define SERVER_ADDR4 ""
 #endif
 
-#define MAX_RECV_BUF_LEN 512
+#define MAX_RECV_BUF_LEN 1024 
 #define SLOT_SIZE FIXED_PARTITION_SIZE(slot1_partition)
 enum otaResponse
 {

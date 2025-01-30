@@ -71,7 +71,6 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 	Xray *instance = CONTAINER_OF(work, Xray, cardsReaderWork);
 	for(uint8_t i = 0; i < instance->numRfids; i++)
 	{
-	// uint8_t i = 0;
 		instance->rfids[i]->begin();
 		read = instance->rfids[i]->readCard(buff, 200);
 		if(read)

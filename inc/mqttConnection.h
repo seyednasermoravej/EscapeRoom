@@ -24,20 +24,18 @@
 #include "main.h"
 
 #define APP_CONNECT_TIMEOUT_MS	3000
-#define APP_SLEEP_MSECS		500
+#define APP_SLEEP_MSECS		50
 
 #define APP_CONNECT_TRIES	10
 
-#define APP_MQTT_BUFFER_SIZE    600	
+#define APP_MQTT_BUFFER_SIZE    1024	
 
 #define MQTT_USERNAME       "District21"
 #define MQTT_PASSWORD       "District21!"
 
-#define MQTT_STACK_SIZE     3072 
+#define MQTT_STACK_SIZE     4096 
 #define MQTT_PRIORITY      8 
-// #define SERVER_IP_ADDRESS    "192.168.100.169"
-#define SERVER_IP_ADDRESS    "5.196.78.28"
-// #define SERVER_IP_ADDRESS    "91.121.93.94"
+
 
 #if defined(CONFIG_USERSPACE)
 #include <zephyr/app_memory/app_memdomain.h>

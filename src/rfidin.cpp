@@ -146,6 +146,8 @@ bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
   uint32_t versiondata = getFirmwareVersion();
     if (! versiondata) {
     LOG_INF("Didn't find PN53x board");
+
+
     while (1)// halt
     {
       begin();
@@ -155,6 +157,11 @@ bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
         break;
       }
     } 
+
+
+
+
+
   }
   success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, timeout);
 
