@@ -432,6 +432,7 @@ void puzzleEntryPoint(void *, void *, void *)
 
     }
 
+    Ota *ota = new Ota(serverIpAddressOta);
 #ifdef NASER
             dhcpClient("not specified");
 #elif defined(POURYA)
@@ -442,7 +443,6 @@ void puzzleEntryPoint(void *, void *, void *)
             // dnsResolver("not specified", serverName, serverIpAddress);
 #endif
 
-    Ota *ota = new Ota(serverIpAddressOta);
     mqttThreadCreate((char*)serverIpAddressMqtt, puzzles->puzzle->getMqttList(), puzzles->puzzle->getMqttCount());
     char command[32] = {0};
 

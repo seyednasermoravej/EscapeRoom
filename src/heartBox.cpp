@@ -1,6 +1,6 @@
 #include "heartBox.h"
 
-LOG_MODULE_REGISTER(heartBox, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(heartBox, LOG_LEVEL_DBG);
 #define DT_SPEC_AND_COMMA_GATE(node_id, prop, idx) \
  	GPIO_DT_SPEC_GET_BY_IDX(node_id, prop, idx),
 static const struct gpio_dt_spec allRelays[] = {
@@ -155,7 +155,7 @@ void HeartBox:: keypadHandler(struct input_event *val)
                 if((val->code < INPUT_KEY_0))
                 {
                     sprintf(msg.topic, "%skeypad%d", mqttCommand, val->code - INPUT_KEY_1 + 1);
-                    puzzleSolver(val->code - INPUT_KEY_1 + '0');
+                    puzzleSolver(val->code - INPUT_KEY_1 + '1');
                 }
                 if(val->code == INPUT_KEY_0)
                 {
@@ -191,6 +191,7 @@ void HeartBox:: puzzleSolver(char input)
     {
         static uint8_t pos = 0;
         guess[PUZZLE_DISPLAY_LEN] = '\0';
+        LOG_DBG("The password is: %c, the input is: %c", password[pos], input);
         if(input == password[pos])
         {
             guess[pos] = input;
@@ -209,6 +210,7 @@ void HeartBox:: puzzleSolver(char input)
             }
 
         }
+        else
         {
             pos = 0;
             memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
