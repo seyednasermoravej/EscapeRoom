@@ -33,7 +33,7 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 		rgbsensors[i] = new Adafruit_TCS34725(&i2c_specs[i],TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
 		k_msleep(10);
 	}
-	createMqttTopic(0);
+	creatingMqttList();
     k_work_init(&rgbSensorWork, rgbSensorWorkHandler);
     k_timer_init(&rgbSensorTimer, rgbSensorTimerHandler, NULL);
     k_timer_start(&rgbSensorTimer, K_SECONDS(4), K_SECONDS(1));
@@ -61,7 +61,6 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
 	bool read = false;
 	char buff[17];
     uint16_t r, g, b, c, colorTemp, lux;
-	uint8_t r8, g8, b8, c8, colorTemp8, lux8;
 	LOG_DBG("Enterd rgb Sensor work");
 	colorTubes *instance = CONTAINER_OF(work, colorTubes, rgbSensorWork);
 	for(uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
