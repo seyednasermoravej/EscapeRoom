@@ -247,7 +247,7 @@
 			pixel-format = <ILI9XXX_PIXEL_FORMAT_RGB888>;
 			width = <320>;
 			height = <480>;
-			rotation = <0>;
+			rotation = <90>;
 			frmctr1 = [a0 11];
 			pwctrl1 = [17 15];
 			pwctrl2 = [41];
