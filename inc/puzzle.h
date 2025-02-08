@@ -38,7 +38,7 @@ protected:
     int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
     struct led_rgb retrieveColors(char *str);
     int activateI2c0Mux0Channels();
-    int activateI2c0Mux1Channels();
+    int activateI2c1Mux0Channels();
     int systemTopicsNo = 2;
 
 public:

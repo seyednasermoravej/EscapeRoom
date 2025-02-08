@@ -17,7 +17,8 @@ static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14))
+	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14)),
+	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor15))
 };
 
 
@@ -25,7 +26,7 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 {
 
 	activateI2c0Mux0Channels();
-	activateI2c0Mux1Channels();
+	activateI2c1Mux0Channels();
 	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
 	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++) 
 	{
@@ -63,7 +64,7 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
     uint16_t r, g, b, c, colorTemp, lux;
 	LOG_DBG("Enterd rgb Sensor work");
 	colorTubes *instance = CONTAINER_OF(work, colorTubes, rgbSensorWork);
-	for(uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
+	for(uint8_t i = 0; i < ARRAY_SIZE(i2c_specs) - 1; i++)
 	{
 	// uint8_t i = 0;
         if (instance->rgbsensors[i]->begin()) {

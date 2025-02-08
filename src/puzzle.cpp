@@ -205,22 +205,22 @@ int Puzzle:: activateI2c0Mux0Channels()
     }
 }
 
-int Puzzle:: activateI2c0Mux1Channels()
+int Puzzle:: activateI2c1Mux0Channels()
 {
 
 	int ret;
-	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
-	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1)));
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+	ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0)));
     // Array of devices for all mux0 channels
     const struct device *channels[] = {
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel0)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel1)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel2)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel3)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel4)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel5)),
-        DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel6)),
-        // DEVICE_DT_GET(DT_NODELABEL(i2c0_mux1_channel7)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel0)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel1)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel2)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel3)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel4)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel5)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel6)),
+        DEVICE_DT_GET(DT_NODELABEL(i2c1_mux0_channel7)),
     };
 
     for (uint8_t i = 0; i < ARRAY_SIZE(channels); i++) {

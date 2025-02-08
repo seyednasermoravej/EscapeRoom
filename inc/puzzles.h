@@ -49,6 +49,7 @@
 #include "entranceDoor.h"
 #include "exitDoor.h"
 #include "pneumaPost.h"
+#include "defib.h"
 #include "drawers.h"
 #include "heartBox.h"
 #include "heart.h"

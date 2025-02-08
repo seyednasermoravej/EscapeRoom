@@ -157,6 +157,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is pneumaPost");
         deviceSpecified = true;
     }
+    else if(strcmp(type, "defib") == 0)
+    {
+        puzzle = new Defib("codeRed", "defib");
+        LOG_INF("Puzzle type is defib");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "drawers") == 0)
     {
         puzzle = new Drawers("codeRed", "drawers");

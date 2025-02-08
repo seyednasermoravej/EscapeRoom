@@ -25,17 +25,17 @@
 #include <zephyr/sys/printk.h>
 #include <stdbool.h>
 #include <zephyr/sys/sys_heap.h>
-#define BRAM 
+#define NASER 
 
 #define PUZZLE_DISPLAY_LEN 8
-#define FIRMWARE_VERSION    "1.3" 
+#define FIRMWARE_VERSION    "1.4" 
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
  */
 #if DT_HAS_COMPAT_STATUS_OKAY(st_stm32_window_watchdog)
 #define WDT_MAX_WINDOW  100U
-#elif DT_HAS_COMPAT_STATUS_OKAY(nordic_nrf_wdt)
+
 /* Nordic supports a callback, but it has 61.2 us to complete before
  * the reset occurs, which is too short for this sample to do anything
  * useful.  Explicitly disallow use of the callback.
