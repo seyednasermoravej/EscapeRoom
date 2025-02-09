@@ -51,41 +51,41 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
 
 #else
-// 	uint8_t mac0[6];
-// 	mac0[0] = WIZNET_OUI_B0;
-// 	mac0[1] = WIZNET_OUI_B1;
-// 	mac0[2] = WIZNET_OUI_B2;
-// 	memcpy(&mac0[3], &devId[5], 3);
+	uint8_t mac0[6];
+	mac0[0] = WIZNET_OUI_B0;
+	mac0[1] = WIZNET_OUI_B1;
+	mac0[2] = WIZNET_OUI_B2;
+	memcpy(&mac0[3], &devId[5], 3);
 
-// 	struct ethernet_api *eth_api;
-// 	struct ethernet_config config;
+	struct ethernet_api *eth_api;
+	struct ethernet_config config;
 
-// 	    eth_api = (struct ethernet_api *)net_if_get_device(iface)->api;
-//     if (!eth_api || !eth_api->set_config) {
-//         LOG_ERR("Ethernet set_config not supported!\n");
-//         return;
-//     }
-// 	LOG_INF("befor");
-//     /* Set the desired configuration */
-//     memcpy(config.mac_address.addr, mac0, 6);
-// 	LOG_INF("after");
-// 	const struct device *dev = net_if_get_device(iface);
-//     /* Apply the configuration */
-//     if (eth_api->set_config(dev, ETHERNET_CONFIG_TYPE_MAC_ADDRESS, &config) < 0) {
-//         LOG_ERR("Failed to set Ethernet configuration\n");
-//     } else {
-//         LOG_ERR("Ethernet configuration updated successfully\n");
-//     }
-// 	LOG_DBG("before reagin link add");
-// 	struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
+	    eth_api = (struct ethernet_api *)net_if_get_device(iface)->api;
+    if (!eth_api || !eth_api->set_config) {
+        LOG_ERR("Ethernet set_config not supported!\n");
+        return;
+    }
+	LOG_INF("befor");
+    /* Set the desired configuration */
+    memcpy(config.mac_address.addr, mac0, 6);
+	LOG_INF("after");
+	const struct device *dev = net_if_get_device(iface);
+    /* Apply the configuration */
+    if (eth_api->set_config(dev, ETHERNET_CONFIG_TYPE_MAC_ADDRESS, &config) < 0) {
+        LOG_ERR("Failed to set Ethernet configuration\n");
+    } else {
+        LOG_ERR("Ethernet configuration updated successfully\n");
+    }
+	LOG_DBG("before reagin link add");
+	struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
 
-//     // LOG_INF("MAC Address in at the begingin: %02x:%02x:%02x:%02x:%02x:%02x\n",
-//     //        link_addr->addr[0], link_addr->addr[1], link_addr->addr[2], link_addr->addr[3], link_addr->addr[4], link_addr->addr[5]);
-//     // memcpy(link_addr->addr, mac0, 6);
-// 	// link_addr->len = 6;
+    // LOG_INF("MAC Address in at the begingin: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    //        link_addr->addr[0], link_addr->addr[1], link_addr->addr[2], link_addr->addr[3], link_addr->addr[4], link_addr->addr[5]);
+    // memcpy(link_addr->addr, mac0, 6);
+	// link_addr->len = 6;
 
-//     LOG_INF("MAC Address in start: %02x:%02x:%02x:%02x:%02x:%02x\n",
-//            link_addr->addr[0], link_addr->addr[1], link_addr->addr[2], link_addr->addr[3], link_addr->addr[4], link_addr->addr[5]);
+    LOG_INF("MAC Address in start: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           link_addr->addr[0], link_addr->addr[1], link_addr->addr[2], link_addr->addr[3], link_addr->addr[4], link_addr->addr[5]);
 #endif
 	net_dhcpv4_start(iface);
 }

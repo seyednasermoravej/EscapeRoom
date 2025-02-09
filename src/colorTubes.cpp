@@ -86,9 +86,12 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
 			LOG_INF("The rgb Sensor %d is : r= %u , g= %u, b= %u, c= %u", i + 1, r, g, b, c, lux, colorTemp);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
 	
-			k_msleep(10);
+			// k_msleep(10);
         } else {
             LOG_INF("No TCS34725 number%d found ... check your connections", i+1);
+			// sprintf(instance->msgReader.topic, "%scolorPosition%d", instance->mqttCommand, i + 1);
+			// sprintf(instance->msgReader.msg, "hi from sensor %d", i + 1);
+			// k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
         }
 		
 
