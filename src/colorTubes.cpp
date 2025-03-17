@@ -28,7 +28,7 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 	activateI2c0Mux0Channels();
 	activateI2c1Mux0Channels();
 	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
-	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++) 
+	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
 	{
 		LOG_INF("Initializing RGB_Sensor %d", i + 1);
 		rgbsensors[i] = new Adafruit_TCS34725(&i2c_specs[i],TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
@@ -85,7 +85,7 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
 			sprintf(instance->msgReader.msg, "R%uG%uB%uC%uL%uT%u", r, g, b, c, lux, colorTemp);
 			LOG_INF("The rgb Sensor %d is : r= %u , g= %u, b= %u, c= %u", i + 1, r, g, b, c, lux, colorTemp);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
-	
+
 			// k_msleep(10);
         } else {
             LOG_INF("No TCS34725 number%d found ... check your connections", i+1);
@@ -93,7 +93,7 @@ void colorTubes:: rgbSensorWorkHandler(struct k_work *work)
 			// sprintf(instance->msgReader.msg, "hi from sensor %d", i + 1);
 			// k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
         }
-		
+
 
 	}
 

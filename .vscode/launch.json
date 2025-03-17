@@ -1,7 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
- 
+
         {
             "name": "flash w6100-evb-pico",
             "cwd": "${workspaceFolder}",
@@ -19,7 +19,7 @@
             "showDevDebugOutput": "raw",
             "rtos": "Zephyr",
             // "breakAfterReset": true
-        }, 
+        },
         {
             "name": "flash rpi-pico-w",
             "cwd": "${workspaceFolder}",
@@ -36,8 +36,8 @@
             "showDevDebugOutput": "raw",
             "rtos": "Zephyr",
             // "breakAfterReset": true
-        }, 
- 
- 
+        },
+
+
     ]
 }

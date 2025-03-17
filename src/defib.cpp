@@ -12,6 +12,8 @@ static const struct gpio_dt_spec allRelays[] = {
 
 static const struct device *const buttons = DEVICE_DT_GET(DT_NODELABEL(defib_buttons));
 
+static const struct device *const tof = DEVICE_DT_GET_ONE(st_vl6180x);
+
 static Defib *instance = nullptr;
 
 void Defib:: buttonsHandlerWrapper(struct input_event *val, void *userData)
@@ -29,7 +31,7 @@ void Defib:: buttonsHandler(struct input_event *val)
             sprintf(msg.msg, "true");
             LOG_INF("%s, %s", msg.topic, msg.msg);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        } 
+        }
     }
 }
 Defib:: Defib(const char *room, const char *type): Puzzle(room, type)
@@ -49,6 +51,19 @@ Defib:: Defib(const char *room, const char *type): Puzzle(room, type)
     device_init(buttons);
 
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
+
+    ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    device_init(tof);
+
+	if (!device_is_ready(tof)) {
+		LOG_DBG("sensor: device not ready.\n");
+		return;
+	}
+
+    k_work_init(&tofSensorWork, tofSensorWorkHandler);
+    k_timer_init(&tofSensorTimer, tofSensorTimerHandler, NULL);
+    k_timer_start(&tofSensorTimer, K_SECONDS(4), K_SECONDS(1));
+
 }
 
 void Defib:: creatingMqttList()
@@ -94,4 +109,37 @@ void Defib:: messageHandler(struct MqttMsg *msg)
     }
     else
         LOG_INF("the command is not valid");
+}
+
+void Defib:: tofSensorTimerHandler(struct k_timer *timer)
+{
+	LOG_DBG("Enterd tof Sensor timer");
+	Defib *instance = CONTAINER_OF(timer, Defib, tofSensorTimer);
+	k_work_submit(&instance->tofSensorWork);
+}
+
+void Defib:: tofSensorWorkHandler(struct k_work *work)
+{
+	int ret = sensor_sample_fetch(tof);
+	if (ret) {
+		LOG_DBG("sensor_sample_fetch failed ret %d\n", ret);
+		return;
+	}
+	struct sensor_value value;
+
+	ret = sensor_channel_get(tof, SENSOR_CHAN_PROX, &value);
+	// LOG_DBG("prox is %d\n", value.val1);
+
+	ret = sensor_channel_get(tof,
+					SENSOR_CHAN_DISTANCE,
+					&value);
+	LOG_DBG("distance is %.1fcm\n", sensor_value_to_double(&value) * 100);
+	Defib *instance = CONTAINER_OF(work, Defib, tofSensorWork);
+
+	struct MqttMsg msg = {0};
+
+	sprintf(msg.topic, "%stof", instance->mqttCommand);
+	sprintf(msg.msg, "%.1f", sensor_value_to_double(&value) * 100);
+	k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
+
 }

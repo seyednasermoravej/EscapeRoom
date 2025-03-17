@@ -74,5 +74,9 @@
 			"printk.h": "c"
 		},
 		"git.ignoreLimitWarning": true,
-		"cortex-debug.variableUseNaturalFormat": true
+		"cortex-debug.variableUseNaturalFormat": true,
+		"idf.pythonInstallPath": "/usr/bin/python3",
+		"editor.detectIndentation": false,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
 }

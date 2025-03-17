@@ -54,17 +54,17 @@
 				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_5>;
 			};
-			sw0: sw_0 
+			sw0: sw_0
 			{
 				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_6>;
 			};
-			lang_button: rotary_0 
+			lang_button: rotary_0
 			{
 				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_7>;
 			};
-			room_button: rotary_1 
+			room_button: rotary_1
 			{
 				gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_8>;
@@ -103,7 +103,7 @@
 					<&expander1 5 (GPIO_ACTIVE_LOW)>,
 					<&expander1 6 (GPIO_ACTIVE_LOW)>,
 					<&expander1 7 (GPIO_ACTIVE_LOW)>;
-			
+
 		};
 	};
 
@@ -138,7 +138,7 @@
 		platform_relays:relays
 		{
 			compatible = "power-switch";
-			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>, 
+			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>, <&gpio0 8 (GPIO_ACTIVE_HIGH)>,
 					<&gpio0 9 (GPIO_ACTIVE_HIGH)>, <&gpio0 10 (GPIO_ACTIVE_HIGH)>;
 		};
 			platform_servos_control_input
@@ -155,9 +155,9 @@
 				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_KEY_T>;
 			};
-	
+
 			zephyr,deferred-init;
-		};	
+		};
 		platform_servo_control_output
 		{
 			platform_stepper_enable: stepper-enable{
@@ -221,7 +221,7 @@
 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>;
 		};
 	};
-	
+
 	shelf
 	{
 
@@ -229,11 +229,11 @@
 
 	display_mipi_dbi: display-mipi-dbi{
 		compatible = "zephyr,mipi-dbi-spi";
-		
+
 		dc-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>; /* D7 */
 		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>; /* D10 */
 
-		spi-dev = <&spi1>;	
+		spi-dev = <&spi1>;
 		write-only;
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -312,7 +312,7 @@
 		xray_rfid2: rfid2;
 		xray_rfid3: rfid3;
 		xray_rfid4: rfid4;
-		
+
 	};
 
 	heart_monitor
@@ -331,8 +331,8 @@
 		};
 
 	};
-	
-	ventilator	
+
+	ventilator
 	{
 		ventilator_analog_multiplexer: ventilator-analog-multiplexer
 		{
@@ -453,7 +453,7 @@
 				<&sevensegments24 6 GPIO_ACTIVE_HIGH>, <&sevensegments24 7 GPIO_ACTIVE_HIGH>, <&sevensegments24 8 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 9 GPIO_ACTIVE_HIGH>, <&sevensegments24 10 GPIO_ACTIVE_HIGH>, <&sevensegments24 11 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 12 GPIO_ACTIVE_HIGH>, <&sevensegments24 13 GPIO_ACTIVE_HIGH>, <&sevensegments24 14 GPIO_ACTIVE_HIGH>,
-				<&sevensegments24 15 GPIO_ACTIVE_HIGH>, 
+				<&sevensegments24 15 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 16 GPIO_ACTIVE_HIGH>, <&sevensegments24 17 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 18 GPIO_ACTIVE_HIGH>, <&sevensegments24 19 GPIO_ACTIVE_HIGH>, <&sevensegments24 20 GPIO_ACTIVE_HIGH>,
 				<&sevensegments24 21 GPIO_ACTIVE_HIGH>, <&sevensegments24 22 GPIO_ACTIVE_HIGH>, <&sevensegments24 23 GPIO_ACTIVE_HIGH>,
@@ -719,9 +719,9 @@
 
 	};
 
-	pneuma_post	
-	{	
-		pneuma_post_relays: pneuma-post-relays	
+	pneuma_post
+	{
+		pneuma_post_relays: pneuma-post-relays
 		{
 			compatible = "power-switch";
 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>, <&gpio0 4 GPIO_ACTIVE_LOW>;
@@ -778,9 +778,9 @@
 		};
 	};
 
-	drawers	
-	{	
-		drawers_relays: drawers-relays	
+	drawers
+	{
+		drawers_relays: drawers-relays
 		{
 			compatible = "power-switch";
 			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>, <&gpio0 3 GPIO_ACTIVE_LOW>,
@@ -855,7 +855,7 @@
 	{
 		heart_box_keypad: heart_box_keypad
 		{
-			
+
 		};
 		heart_box_display1: heart-box-display1
 		{
@@ -865,11 +865,11 @@
 		{
 			compatible = "power-switch";
 			gpios = <&gpio0 26 GPIO_ACTIVE_LOW>;
-			
+
 		};
 		heart_box_ws: heart-box-ws
 		{
-			
+
 		};
 	};
 
@@ -890,21 +890,21 @@
 			gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 stb pin";
 			zephyr,code = <INPUT_KEY_0>;
-		};				
+		};
 		tmclk: tm_clk {
 			gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
 			label = "tm1638 clock pin";
 			zephyr,code = <INPUT_KEY_0>;
-		};	
+		};
 		tmdo: tm_do {
 			gpios = <&gpio0 8 (GPIO_ACTIVE_HIGH)>;
-			label = "tm1638 do pin";	
+			label = "tm1638 do pin";
 			zephyr,code = <INPUT_KEY_0>;
 		};
 		zephyr,deferred-init;
 	};
 
-	out-rfid	
+	out-rfid
 	{
 		compatible = "gpio-leds";
 		rfidled: rfid_led {
@@ -919,7 +919,7 @@
 	// {
 	// 	// compatible = "gpio-keys";
 	// 	// addresses: switchs{
-	// 	// 	gpios = <&expander 0 (GPIO_ACTIVE_LOW)>, <&expander 1 (GPIO_ACTIVE_LOW)>, 
+	// 	// 	gpios = <&expander 0 (GPIO_ACTIVE_LOW)>, <&expander 1 (GPIO_ACTIVE_LOW)>,
 	// 	// 	<&expander 2 (GPIO_ACTIVE_LOW)>, <&expander 3 (GPIO_ACTIVE_LOW)>,
 	// 	// 	<&expander 4 (GPIO_ACTIVE_LOW)>, <&expander 5 (GPIO_ACTIVE_LOW)>;
 	// 		// label = "Device address";
@@ -946,7 +946,7 @@
 	{
 		compatible = "power-switch";
 		gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
-		
+
 	};
 	zephyr,user
 	{
@@ -964,7 +964,7 @@
 	// 	zephyr,keyboard-scan = &keypad;
 	// };
 
-	
+
 	kbd_matrix34: kbd-matrix34
 	{
 		compatible = "gpio-kbd-matrix";
@@ -972,13 +972,13 @@
 			    <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			    // <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			
+
 		col-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>,
 			    <&gpio0 6 GPIO_ACTIVE_LOW>,
 			    <&gpio0 7 GPIO_ACTIVE_LOW>,
 			    <&gpio0 8 GPIO_ACTIVE_LOW>;
 		// col-drive-inactive;
-		// zephyr-code = <0 1 2 4>;		
+		// zephyr-code = <0 1 2 4>;
 		no-ghostkey-check;
 		keypad34: keymap34{
 			compatible = "input-keymap";
@@ -1014,13 +1014,13 @@
 			    <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 			    <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
 			    <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			
+
 		col-gpios = <&gpio0 6 GPIO_ACTIVE_LOW>,
 			    <&gpio0 7 GPIO_ACTIVE_LOW>,
 			    <&gpio0 8 GPIO_ACTIVE_LOW>;
 			    // <&gpio0 10 GPIO_ACTIVE_LOW>;
 		// col-drive-inactive;
-		// zephyr-code = <0 1 2 4>;		
+		// zephyr-code = <0 1 2 4>;
 		no-ghostkey-check;
 		keypad43: keymap43{
 			compatible = "input-keymap";
@@ -1081,7 +1081,7 @@
 		reg = <2>;
 		// ngpios = <32>;
 		ngpios = <192>;
-		#gpio-cells = <2>; 
+		#gpio-cells = <2>;
 		gpio-controller;
 		spi-max-frequency = <1000000>;
 		zephyr,deferred-init;
@@ -1341,16 +1341,23 @@ pico_spi: &spi0 {};
 		compatible = "nxp,pca9685-pwm";
         reg = <0x40>;        // I2C address of the PCA9685
         #pwm-cells = <2>;    // Two cells: channel and duty cycle
-		status = "okay"; 
+		status = "okay";
 		zephyr,deferred-init;
 	};
+	// tof: vl53l0x@29
+	// {
+	// 	compatible = "st,vl53l0x";
+	// 	reg = <0x29>;
+	// 	status = "okay";
+	// 	zephyr,deferred-init;
+	// };
 };
 
 
 
 &i2c1{
 	status = "okay";
-	pinctrl-0 = <&i2c1_default>;	
+	pinctrl-0 = <&i2c1_default>;
 	clock-frequency = <I2C_BITRATE_STANDARD>;
 	zephyr,deferred-init;
 	lcd1: pcf857x@27
@@ -1381,6 +1388,14 @@ pico_spi: &spi0 {};
 		#gpio-cells = <2>;
 		ngpios = <8>;
 		int-gpios = <&gpio0 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		zephyr,deferred-init;
+	};
+	tof: vl6180x@29
+	{
+		compatible = "st,vl6180x";
+		reg = <0x29>;
+		status = "okay";
+		xshut-gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH)>;
 		zephyr,deferred-init;
 	};
 	display4: ht16k33@70
@@ -1548,7 +1563,7 @@ pico_spi: &spi0 {};
             reg = <0x00000000 0x1000>; /* 4 KB */
             read-only;
         };
-		
+
 
         /* Bootloader partition */
         boot_partition: partition@1000 {

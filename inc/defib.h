@@ -17,7 +17,10 @@
 #include <zephyr/devicetree.h>
 #include "puzzle.h"
 
-class Defib: public Puzzle 
+#include <zephyr/drivers/sensor.h>
+
+
+class Defib: public Puzzle
 {
 public:
     Defib(const char * room, const char *type);
@@ -26,11 +29,14 @@ public:
     static void buttonsHandlerWrapper(struct input_event *val, void* userData);
     void buttonsHandler(struct input_event *val);
 
+    struct k_timer tofSensorTimer;
+    struct k_work tofSensorWork;
+    static void tofSensorTimerHandler(struct k_timer *timer);
+    static void tofSensorWorkHandler(struct k_work *work);
+
 private:
     size_t startRelaysCommand;
 
-
-
 };
 
-#endif 
+#endif
