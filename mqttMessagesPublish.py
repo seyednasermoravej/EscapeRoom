@@ -9,11 +9,15 @@ password = "your_password"  # رمز عبور (اگر نیاز باشد)
 
 # لیست تاپیک‌ها و پیام‌ها
 topics = [
+    "codeRed/powerPanel/display1", "codeRed/powerPanel/display2", "codeRed/powerPanel/display3", "codeRed/powerPanel/display4",
+    "codeRed/powerPanel/display5", "codeRed/powerPanel/display6", "codeRed/powerPanel/display7", "codeRed/powerPanel/display8",
     "codeRed/powerPanel/servo1", "codeRed/powerPanel/servo2", "codeRed/powerPanel/servo3", "codeRed/powerPanel/servo4",
     "codeRed/powerPanel/servo5", "codeRed/powerPanel/servo6", "codeRed/powerPanel/servo7", "codeRed/powerPanel/servo8"
 ]
 messages = [
-    "-67", "-45", "-22", "0",
+    "999", "999", "999", "999",
+    "999", "999", "999", "999",
+       "-67", "-45", "-22", "0",
     "22", "45", "67", "90"
 ]
 
@@ -22,21 +26,21 @@ def publish_message(topic, message):
     client = mqtt.Client()
     client.username_pw_set(username, password)  # If authentication is required
     client.connect(broker, port, 60)
-    
+
     # Publish the message with QoS 2
     result = client.publish(topic, message, qos=2)
-    
+
     # Check if the message was published successfully
     if result.rc == mqtt.MQTT_ERR_SUCCESS:
         print(f"Sent to {topic} (QoS 2): {message}")
     else:
         print(f"Failed to send to {topic}: {result.rc}")
-    
+
     client.disconnect()
 
 # ایجاد و اجرای Threadها برای ارسال همزمان
 threads = []
-for i in range(8):
+for i in range(16):
     thread = threading.Thread(target=publish_message, args=(topics[i], messages[i]))
     threads.append(thread)
     thread.start()

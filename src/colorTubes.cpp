@@ -31,7 +31,7 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
 	{
 		LOG_INF("Initializing RGB_Sensor %d", i + 1);
-		rgbsensors[i] = new Adafruit_TCS34725(&i2c_specs[i],TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
+		rgbsensors[i] = new Adafruit_TCS34725(&i2c_specs[i],TCS34725_INTEGRATIONTIME_24MS, TCS34725_GAIN_1X);
 		k_msleep(10);
 	}
 	creatingMqttList();

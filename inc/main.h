@@ -28,7 +28,7 @@
 #define BRAM
 
 #define PUZZLE_DISPLAY_LEN 8
-#define FIRMWARE_VERSION    "1.5"
+#define FIRMWARE_VERSION    "1.5.1"
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
