@@ -25,6 +25,7 @@ class Display4
 public:
     Display4(const struct device *const _display, bool blink);
     void displayStr(char *);
+    void displayClock(char *);
     void setBrightness();
     void displayChar(char c, uint8_t pos);
 
@@ -37,7 +38,8 @@ public:
 private:
     const struct device *display;
     bool blink = false;
-    
+    char clockStr[5];
+
 };
 
-#endif 
+#endif

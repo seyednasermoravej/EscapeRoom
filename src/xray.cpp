@@ -28,19 +28,20 @@ static const struct gpio_dt_spec gpio_specs[] = {
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
     activateI2c0Mux0Channels();
-	
+
 	k_msleep(1);
 	rfids = new Adafruit_PN532 * [numRfids];
-	for (uint8_t i = 0; i < numRfids; i++) 
+	for (uint8_t i = 0; i < numRfids; i++)
 	{
 		LOG_INF("Initializing RFID %d", i + 1);
-		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]); 
+		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]);
 #ifdef WATCH_DOG
         wdt_feed(wdt, wdt_channel_id);
 #endif
 		k_msleep(10);
 	}
 	creatingMqttList();
+    nvs_read(&fileSystem, NVS_RFID_TAGS, tags, MAX_NUM_RFIDS * MAX_RFID_TAGS_LEN);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
     k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(1));
@@ -49,12 +50,47 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 
 void Xray:: creatingMqttList()
 {
-    mqttCount = systemTopicsNo;
+    char topic[128] = {0};
+    for(uint8_t i = 0; i < numRfids; i++)
+    {
+        sprintf(topic, "%stag%d", mqttCommand, i + 1);
+        mqttList[i + systemTopicsNo] = *createMqttTopic(topic);
+    }
+    mqttCount = numRfids + systemTopicsNo;
 }
+
+
 void Xray:: messageHandler(struct MqttMsg *msg)
 {
+    int rc;
     LOG_INF("Command received: topic: %s, msg: %s",msg->topic, msg->msg);
-	LOG_INF("the command is not valid");
+    char command[16] = {0};
+    int ret = validTopic(msg->topic, command);
+    if(!ret)
+    {
+        if(strstr(command, "tag") != NULL)
+        {
+            char field[] = "tag";
+            int commandIdx = peripheralIdx(field, command);
+            uint8_t tagIdx = commandIdx - 1;
+            if((commandIdx > 0 ) && (tagIdx < numRfids))
+            {
+		strcpy(tags[tagIdx], msg->msg);
+		nvs_write(&fileSystem, NVS_RFID_TAGS, tags, MAX_NUM_RFIDS * MAX_RFID_TAGS_LEN);
+            }
+            else
+            {
+                LOG_ERR("Not a valid index");
+            }
+
+        }
+        else
+        {
+            LOG_INF("the command is not valid");
+        }
+    }
+    else
+        LOG_INF("the command is not valid");
 }
 
 void Xray:: cardsReaderTimerHandler(struct k_timer *timer)
@@ -66,6 +102,7 @@ void Xray:: cardsReaderTimerHandler(struct k_timer *timer)
 void Xray:: cardsReaderWorkHandler(struct k_work *work)
 {
 	bool read = false;
+	bool correct = true;
 	char buff[17];
 	LOG_DBG("Enterd card reader work");
 	Xray *instance = CONTAINER_OF(work, Xray, cardsReaderWork);
@@ -75,10 +112,12 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 		read = instance->rfids[i]->readCard(buff, 200);
 		if(read)
 		{
+			(strcmp(instance->tags[i], buff) ? (correct &= false): (correct &= true));
 			sprintf(instance->msgReader.topic, "%srfid%d", instance->mqttCommand, i + 1);
 			sprintf(instance->msgReader.msg, "%s", buff);
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
+			LOG_INF("%s", (correct ? "Tag is matched": "Tag is not matched"));
 		}
 		k_msleep(10);
 

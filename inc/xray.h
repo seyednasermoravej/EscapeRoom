@@ -17,8 +17,14 @@
 #include "puzzle.h"
 #include "rfidIn.h"
 #include "main.h"
+#include <zephyr/drivers/flash.h>
+#include <zephyr/storage/flash_map.h>
+#include <zephyr/fs/nvs.h>
 
-class Xray: public Puzzle 
+#define MAX_NUM_RFIDS		7
+#define MAX_RFID_TAGS_LEN	8
+
+class Xray: public Puzzle
 {
 public:
     Xray(const char * room, const char *type, uint8_t numRfids);
@@ -32,10 +38,11 @@ public:
     struct MqttMsg msgReader = {0};
 private:
     Adafruit_PN532 **rfids;
-    uint8_t numRfids; 
+    uint8_t numRfids;
+    char tags[MAX_NUM_RFIDS][MAX_RFID_TAGS_LEN];
 
 
 
 };
 
-#endif 
+#endif

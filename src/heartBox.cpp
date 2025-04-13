@@ -34,11 +34,11 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
     device_init(DEVICE_DT_GET(DT_NODELABEL(kbd_matrix34)));
     INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(DT_NODELABEL(keypad34)), keypadHandlerWrapper, (void*)this);
 
-    static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);  
-    // device_init(strip); 
+    static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
+    // device_init(strip);
 	if (!device_is_ready(strip)) {
 		LOG_ERR("strip Device not ready, aborting test");
-	}    
+	}
     ledStrip = new LedStrip(strip, wsChainLength);
 
     display8 = new Display8(DEVICE_DT_GET(DT_NODELABEL(display8)));
@@ -83,7 +83,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
     {
         if(strcmp(command, "display1") == 0)
         {
-            display4->displayStr(msg->msg);
+            display4->displayClock(msg->msg);
         }
         else if(strstr(command, "relay") != NULL)
         {
@@ -145,7 +145,7 @@ void HeartBox:: messageHandler(struct MqttMsg *msg)
 
 void HeartBox:: keypadHandler(struct input_event *val)
 {
-    if (val->type == INPUT_EV_KEY) 
+    if (val->type == INPUT_EV_KEY)
     {
         if(val->value)
         {
@@ -213,7 +213,7 @@ void HeartBox:: puzzleSolver(char input)
         else
         {
             pos = 0;
-            memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
+            memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space
             guess[PUZZLE_DISPLAY_LEN] = '\0';
 
 

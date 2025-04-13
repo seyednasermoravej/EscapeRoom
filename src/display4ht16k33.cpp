@@ -1,7 +1,7 @@
 #include "display4ht16k33.h"
 
 #define DOUBLE_DOTS 33//16 + 16 + 1
-LOG_MODULE_REGISTER(display4ht16k33, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(display4ht16k33, LOG_LEVEL_DBG);
 
 Display4:: Display4(const device *_display, bool _blink): display(_display), blink(_blink)
 {
@@ -28,6 +28,24 @@ void Display4:: blinkWorkHandler(k_work *work)
 {
     static bool blinking = false;
     Display4 *instance = CONTAINER_OF(work, Display4, blinkWork);
+    uint16_t clock = atoi(instance->clockStr);
+    uint8_t sec = clock % 100;
+    LOG_DBG("sec is: %d", sec);
+    sec++;
+    LOG_DBG("sec is: %d", sec);
+    uint8_t min = clock / 100;
+    LOG_DBG("min is: %d, sec is: %d", min, sec);
+    min += (sec / 60);
+    LOG_DBG("min is: %d, sec is: %d", min, sec);
+    sec %= 60;
+    min %= 60;
+    LOG_DBG("min is: %d, sec is: %d", min, sec);
+    clock = (min * 100) + sec;
+    LOG_DBG("min is: %d, sec is: %d", min, sec);
+    sprintf(instance->clockStr, "%04d", clock);
+    LOG_DBG("clock str is:%s", instance->clockStr);
+    instance->displayStr(instance->clockStr);
+
     if(blinking)
     {
         led_on(instance->display, DOUBLE_DOTS);
@@ -37,16 +55,20 @@ void Display4:: blinkWorkHandler(k_work *work)
         led_off(instance->display, DOUBLE_DOTS);
     }
     blinking = !blinking;
-    
+
 
 }
 
+
+void Display4:: displayClock(char *text)
+{
+	strcpy(clockStr, text);
+	k_timer_start(&blinkTimer, K_SECONDS(1), K_SECONDS(1));
+}
+
+
 void Display4:: displayStr(char *text)
 {
-    if(blink)
-    {
-        k_timer_start(&blinkTimer, K_SECONDS(1), K_SECONDS(1));
-    }
     for (uint8_t i = 0; i < 128; i++) {
         if(i == DOUBLE_DOTS)
         {
@@ -55,7 +77,7 @@ void Display4:: displayStr(char *text)
         led_off(display, i);
         // k_sleep(K_MSEC(100));
     }
-    for(uint8_t i = 0; i < strlen(text); i++)    
+    for(uint8_t i = 0; i < strlen(text); i++)
     {
         if(i == 4)
         {

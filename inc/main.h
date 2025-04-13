@@ -28,7 +28,7 @@
 #define BRAM
 
 #define PUZZLE_DISPLAY_LEN 8
-#define FIRMWARE_VERSION    "1.5.1"
+#define FIRMWARE_VERSION    "1.5.2"
 // #define WATCH_DOG
 /*
  * To use this sample the devicetree's /aliases must have a 'watchdog0' property.
@@ -93,6 +93,14 @@ extern const struct device *const wdt;
 
 extern char deviceId[17];
 extern uint8_t devId[8];
+
+extern struct nvs_fs fileSystem;
+
+enum nvsPages
+{
+	NVS_PUZZLE_TYPE = 0,
+	NVS_RFID_TAGS,
+};
 
 #define ADDR_NODE	DT_ALIAS(addr)
 #endif

@@ -13,7 +13,7 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 							      {0});
 #endif
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
-static struct nvs_fs fileSystem;
+struct nvs_fs fileSystem;
 
 
 
@@ -250,9 +250,9 @@ void Puzzles:: messageHandler(struct MqttMsg *msg)
     }
     else
     {
-        
+
         if(strcmp(msg->topic, BUILT_IN_LED_TOPIC) == 0)
-        {   
+        {
             if(strncmp("0", msg->msg, 1) == 0)
             {
         #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
@@ -304,7 +304,7 @@ int Puzzles:: nvsInit()
 		return 0;
 	}
 	fs->sector_size = info.size;
-	fs->sector_count = 2U;
+	fs->sector_count = 4U;
     rc = nvs_mount(fs);
 	if (rc) {
         flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, 0x2000);
@@ -319,7 +319,7 @@ int Puzzles:: nvsInit()
 
 void Puzzles:: eraseStorage()
 {
-    nvs_delete(fs, 0);
+    nvs_delete(fs, NVS_PUZZLE_TYPE);
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #else
     gpio_pin_set_dt(&builtInLed, 1);
@@ -336,7 +336,7 @@ void Puzzles:: readInfosFromMemory()
 
 
     int rc = 0;
-    rc = nvs_read(fs, 0, &name, PUZZLE_TYPE_NAME_MAX_LEN);
+    rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
     if(rc > 0)
     {
         // deviceSpecified = true;
@@ -370,13 +370,12 @@ int Puzzles:: builtIntLedInit()
 
 void puzzleEntryPoint(void *, void *, void *)
 {
-    
+
 #ifdef NASER
 
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        // char serverIpAddress[] = "192.168.175.142";
-        char serverIpAddressMqtt[] = "192.168.1.101";
-        char serverIpAddressOta[] = "192.168.1.101";
+        char serverIpAddressMqtt[] = "192.168.1.147";
+        char serverIpAddressOta[] = "192.168.1.147";
     #else
         char serverIpAddressMqtt[] = "10.42.0.1";
         char serverIpAddressOta[] = "10.42.0.1";
@@ -412,7 +411,7 @@ void puzzleEntryPoint(void *, void *, void *)
     while(!puzzles->deviceSpecified)
     {
         if(!mqtt)
-        { 
+        {
 #ifdef NASER
             dhcpClient("not specified");
 #elif defined(POURYA)
@@ -432,7 +431,7 @@ void puzzleEntryPoint(void *, void *, void *)
             memset(msg, 0, sizeof(struct MqttMsg));
             if(puzzles->deviceSpecified)
                 sys_reboot(0);
-        
+
         }
         k_msleep(1000);
 
@@ -474,12 +473,12 @@ void puzzleEntryPoint(void *, void *, void *)
 
                 }
             }
-            puzzles -> messageHandler(msg); 
+            puzzles -> messageHandler(msg);
         }
         // counter++;
         // if(counter > 5)
         // {
-        //     puzzles -> alive();  
+        //     puzzles -> alive();
         //     counter = 0;
         // }
         k_msleep(1000);
@@ -491,7 +490,7 @@ int Puzzles:: writeDeviceName(char *name)
     char buf[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     // char buf2[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     strcpy(buf, name);
-    return nvs_write(fs, 0, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
+    return nvs_write(fs, NVS_PUZZLE_TYPE, &buf, PUZZLE_TYPE_NAME_MAX_LEN + 1);
     // nvs_read(fs, 0, &buf2, PUZZLE_TYPE_NAME_MAX_LEN);
 }
 
