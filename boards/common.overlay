@@ -1587,13 +1587,13 @@ pico_spi: &spi0 {};
         /* Scratch space */
         scratch_partition: partition@1ef000 {
             label = "image-scratch";
-            reg = <0x001EF000 0xf000>; /* 64 KB */
+            reg = <0x001EF000 0xf000>; /* 60 KB */
         };
 
         /* Storage partition */
         storage_partition: partition@1fe000 {
             label = "storage";
-            reg = <0x001Fe000 0x2000>; /* 4 KB */
+            reg = <0x001Fe000 0x2000>; /* 8 KB */
         };
     };
 };

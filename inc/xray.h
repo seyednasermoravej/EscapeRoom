@@ -22,7 +22,7 @@
 #include <zephyr/fs/nvs.h>
 
 #define MAX_NUM_RFIDS		7
-#define MAX_RFID_TAGS_LEN	8
+#define MAX_RFID_TAGS_LEN	16
 
 class Xray: public Puzzle
 {
@@ -39,7 +39,7 @@ public:
 private:
     Adafruit_PN532 **rfids;
     uint8_t numRfids;
-    char tags[MAX_NUM_RFIDS][MAX_RFID_TAGS_LEN];
+    char **tags;
 
 
 

@@ -133,7 +133,7 @@ Adafruit_PN532::Adafruit_PN532(const struct i2c_dt_spec* i2cDev, const struct gp
 
 bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
 {
-  
+
   LOG_DBG("Waiting for an ISO14443A card");
   bool success  = false;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };	// Buffer to store the returned UID
@@ -156,7 +156,7 @@ bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
       {
         break;
       }
-    } 
+    }
 
 
 
@@ -179,7 +179,7 @@ bool Adafruit_PN532::readCard(char *buff, uint16_t timeout)
     // PN532 probably timed out waiting for a card
     LOG_DBG("Timed out waiting for a card");
   }
-  return success; 
+  return success;
 }
 /**************************************************************************/
 /*!

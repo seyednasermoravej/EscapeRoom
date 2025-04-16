@@ -1,7 +1,7 @@
 #include "puzzles.h"
 #include "topics.h"
 
-LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(puzzles, LOG_LEVEL_DBG);
 
 K_THREAD_STACK_DEFINE(puzzleStackArea, PUZZLE_STACK_SIZE);
 
@@ -304,10 +304,11 @@ int Puzzles:: nvsInit()
 		return 0;
 	}
 	fs->sector_size = info.size;
-	fs->sector_count = 4U;
+	LOG_DBG("The page size is: %d", info.size);
+	fs->sector_count = 2U;
     rc = nvs_mount(fs);
 	if (rc) {
-        flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, 0x2000);
+        flash_erase(fs->flash_device, NVS_PARTITION_OFFSET, fs->sector_count * fs->sector_size);
         rc = nvs_mount(fs);
         if (rc) {
             printk("Flash Init failed, rc=%d\n", rc);

@@ -128,14 +128,14 @@ void Mqtt:: mqtt_evt_handler(const struct mqtt_evt *evt)
         }
 	}
         break;
-	
+
     case MQTT_EVT_PUBCOMP: {
         if (evt->result != 0) {
             LOG_ERR("MQTT PUBCOMP error %d", evt->result);
             break;
         }
 
-		
+
         break;
     }
 
@@ -259,8 +259,8 @@ void Mqtt:: client_init()
 
 	client->password = NULL;
 
-	// struct mqtt_utf8 password;		
-	// struct mqtt_utf8 username;	
+	// struct mqtt_utf8 password;
+	// struct mqtt_utf8 username;
 	// username.utf8 = (uint8_t *)MQTT_USERNAME;
 	// username.size = strlen(MQTT_USERNAME);
 	// password.utf8 = (uint8_t *)MQTT_PASSWORD;

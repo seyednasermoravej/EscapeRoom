@@ -25,23 +25,31 @@ static const struct gpio_dt_spec gpio_specs[] = {
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid6), reset_gpios, {0}),
     GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfid7), reset_gpios, {0})
 };
+
+
+
 Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room, type), numRfids(_numRfids)
 {
     activateI2c0Mux0Channels();
 
 	k_msleep(1);
 	rfids = new Adafruit_PN532 * [numRfids];
+	tags = new char * [numRfids];
 	for (uint8_t i = 0; i < numRfids; i++)
 	{
 		LOG_INF("Initializing RFID %d", i + 1);
 		rfids[i] = new Adafruit_PN532(&i2c_specs[i], &gpio_specs[i]);
+		tags[i] = new char[MAX_RFID_TAGS_LEN];
 #ifdef WATCH_DOG
         wdt_feed(wdt, wdt_channel_id);
 #endif
 		k_msleep(10);
 	}
 	creatingMqttList();
-    nvs_read(&fileSystem, NVS_RFID_TAGS, tags, MAX_NUM_RFIDS * MAX_RFID_TAGS_LEN);
+    LOG_DBG("The page size is: %d", fileSystem.sector_size);
+    LOG_DBG("sizeof char is: %d", sizeof(char));
+    nvs_read(&fileSystem, NVS_RFID_TAGS, tags, sizeof(char) * numRfids * MAX_RFID_TAGS_LEN);
+//     exit(0);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
     k_timer_start(&cardsReaderTimer, K_SECONDS(4), K_SECONDS(1));
@@ -117,7 +125,8 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 			sprintf(instance->msgReader.msg, "%s", buff);
 			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
-			LOG_INF("%s", (correct ? "Tag is matched": "Tag is not matched"));
+			LOG_INF("%s tag id: %d", (instance->tags[i], buff) ? "Tag is not matched": "Tag is matched", i + 1);
+			LOG_DBG("tags number %d is: %s", i + 1);
 		}
 		k_msleep(10);
 
