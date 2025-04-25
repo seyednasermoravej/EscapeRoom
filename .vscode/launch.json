@@ -5,8 +5,8 @@
         {
             "name": "flash w6100-evb-pico",
             "cwd": "${workspaceFolder}",
-            "executable": "build/EscapeRoom/zephyr/zephyr.elf",
-            // "executable": "build/zephyr/zephyr.elf",
+            // "executable": "build/EscapeRoom/zephyr/zephyr.elf",
+            "executable": "build/zephyr/zephyr.elf",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",

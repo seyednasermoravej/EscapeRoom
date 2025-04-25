@@ -1,4 +1,5 @@
 #include "ota.h"
+#if(CONFIG_BOOTLOADER_MCUBOOT)
 #define CONFIG_SIMPLE_HTTP_OTA_DOWNLOAD_TIMEOUT	30
 
 #define HTTP_TIMEOUT (1000 * CONFIG_SIMPLE_HTTP_OTA_DOWNLOAD_TIMEOUT * MSEC_PER_SEC)
@@ -500,3 +501,6 @@ int Ota:: upgrade(const char *fileAddress)
 	retry = false;
 	return ret;
 }
+
+
+#endif

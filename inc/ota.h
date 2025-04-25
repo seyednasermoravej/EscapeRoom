@@ -1,3 +1,5 @@
+#if(CONFIG_BOOTLOADER_MCUBOOT)
+
 #ifndef __OTA__H__
 #define __OTA__H__
 
@@ -33,7 +35,7 @@
 #define SERVER_ADDR4 ""
 #endif
 
-#define MAX_RECV_BUF_LEN 1024 
+#define MAX_RECV_BUF_LEN 1024
 #define SLOT_SIZE FIXED_PARTITION_SIZE(slot1_partition)
 enum otaResponse
 {
@@ -61,6 +63,7 @@ private:
 
 };
 
+#endif
 #endif
 
 

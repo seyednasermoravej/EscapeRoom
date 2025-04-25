@@ -66,7 +66,7 @@
 #endif
 
 #define PUZZLE_STACK_SIZE                  4096
-#define PUZZLE_PRIORITY                    9 
+#define PUZZLE_PRIORITY                    9
 #define PUZZLE_TYPE_NAME_MAX_LEN           128
 
 class Puzzles
@@ -78,7 +78,9 @@ public:
     void puzzleTypeSelection(char *type);
     int  writeDeviceName(char *name);
     Puzzle *puzzle;
+#if(CONFIG_BOOTLOADER_MCUBOOT)
     Ota *ota;
+#endif
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     int enableWatchDog();
     void eraseStorage();

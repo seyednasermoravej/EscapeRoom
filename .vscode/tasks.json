@@ -12,8 +12,8 @@
 				"command": "bash",
 				"args": [
 					"-c",
-					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b rpi_pico  -- -DRPI_PICO_DEBUG_ADAPTER=minimodule-swd -DOPENOCD=/usr/bin/openocd -DOPENOCD_DEFAULT_PATH=~/openocd/tcl -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/rpi_pico.conf"
-					"source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b rpi_pico --sysbuild -- -DRPI_PICO_DEBUG_ADAPTER=minimodule-swd -DOPENOCD=/usr/bin/openocd -DOPENOCD_DEFAULT_PATH=~/openocd/tcl -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/rpi_pico.conf"
+					"source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b rpi_pico  -- -DRPI_PICO_DEBUG_ADAPTER=minimodule-swd -DOPENOCD=/usr/bin/openocd -DOPENOCD_DEFAULT_PATH=~/openocd/tcl -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/rpi_pico.conf"
+					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b rpi_pico --sysbuild -- -DRPI_PICO_DEBUG_ADAPTER=minimodule-swd -DOPENOCD=/usr/bin/openocd -DOPENOCD_DEFAULT_PATH=~/openocd/tcl -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/rpi_pico.conf"
 				]
 			},
 			"windows": {

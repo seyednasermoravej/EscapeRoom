@@ -438,7 +438,9 @@ void puzzleEntryPoint(void *, void *, void *)
 
     }
 
+#if(CONFIG_BOOTLOADER_MCUBOOT)
     Ota *ota = new Ota(serverIpAddressOta);
+#endif
 #ifdef NASER
             dhcpClient("not specified");
 #elif defined(POURYA)
@@ -458,11 +460,14 @@ void puzzleEntryPoint(void *, void *, void *)
         {
             if(puzzles->puzzle->validTopic(msg->topic, command) == 0)
             {
+
+#if(CONFIG_BOOTLOADER_MCUBOOT)
                 if(!strcmp("upgrade", command))
                 {
                     LOG_INF("upgrading to file: %s", msg->msg);
                     ota->upgrade(msg->msg);
                 }
+#endif
                 if(!strcmp("erase", command))
                 {
                     if(!strcmp("true", msg->msg))
