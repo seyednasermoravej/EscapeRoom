@@ -37,7 +37,7 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
         .psk = "EYE7GLQB73",
         .psk_length = strlen("EYE7GLQB73"),
 #elif defined(POURYA)
-	
+
 #elif defined(BRAM)
         .ssid = "D21CONTROL",
         .ssid_length = strlen("D21CONTROL"),
@@ -45,9 +45,9 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
         .psk_length = strlen("District21!"),
 #else
 
-#endif 
+#endif
 		.security = WIFI_SECURITY_TYPE_PSK,
-    };	
+    };
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
 
 #else
@@ -74,7 +74,7 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
     if (eth_api->set_config(dev, ETHERNET_CONFIG_TYPE_MAC_ADDRESS, &config) < 0) {
         LOG_ERR("Failed to set Ethernet configuration\n");
     } else {
-        LOG_ERR("Ethernet configuration updated successfully\n");
+        LOG_INF("Ethernet configuration updated successfully\n");
     }
 	LOG_DBG("before reagin link add");
 	struct net_linkaddr *link_addr = net_if_get_link_addr(iface);
@@ -159,7 +159,7 @@ int dhcpClient(const char *deviceName)
 	net_dhcpv4_init_option_callback(&dhcp_cb, option_handler,
 					DHCP_OPTION_NTP, ntp_server,
 					sizeof(ntp_server));
-	
+
 	net_dhcpv4_add_option_callback(&dhcp_cb);
 	LOG_DBG("before dhcp start");
 	net_if_foreach(start_dhcpv4_client, deviceName);
