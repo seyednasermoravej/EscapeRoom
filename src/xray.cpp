@@ -46,9 +46,14 @@ Xray:: Xray(const char * room, const char *type, uint8_t _numRfids): Puzzle(room
 		k_msleep(10);
 	}
 	creatingMqttList();
-    LOG_DBG("The page size is: %d", fileSystem.sector_size);
-    LOG_DBG("sizeof char is: %d", sizeof(char));
-    nvs_read(&fileSystem, NVS_RFID_TAGS, tags, sizeof(char) * numRfids * MAX_RFID_TAGS_LEN);
+	char *tempBuffer = new char[numRfids * MAX_RFID_TAGS_LEN];
+
+    nvs_read(fileSystem, NVS_RFID_TAGS, tempBuffer, sizeof(char) * numRfids * MAX_RFID_TAGS_LEN);
+    for (uint8_t i = 0; i < numRfids; i++)
+    {
+        memcpy(tags[i], tempBuffer + i * MAX_RFID_TAGS_LEN, MAX_RFID_TAGS_LEN);
+    }
+    delete[] tempBuffer;
 //     exit(0);
     k_work_init(&cardsReaderWork, cardsReaderWorkHandler);
     k_timer_init(&cardsReaderTimer, cardsReaderTimerHandler, NULL);
@@ -84,7 +89,15 @@ void Xray:: messageHandler(struct MqttMsg *msg)
             if((commandIdx > 0 ) && (tagIdx < numRfids))
             {
 		strcpy(tags[tagIdx], msg->msg);
-		nvs_write(&fileSystem, NVS_RFID_TAGS, tags, MAX_NUM_RFIDS * MAX_RFID_TAGS_LEN);
+		    // Copy tags to the temporary buffer for NVS write
+
+		char *tempBuffer = new char[numRfids * MAX_RFID_TAGS_LEN];
+		for (uint8_t i = 0; i < numRfids; i++)
+		{
+			memcpy(tempBuffer + i * MAX_RFID_TAGS_LEN, tags[i], MAX_RFID_TAGS_LEN);
+		}
+		nvs_write(fileSystem, NVS_RFID_TAGS, tempBuffer, sizeof(char) * numRfids * MAX_RFID_TAGS_LEN);
+		delete[] tempBuffer;
             }
             else
             {
@@ -120,12 +133,22 @@ void Xray:: cardsReaderWorkHandler(struct k_work *work)
 		read = instance->rfids[i]->readCard(buff, 200);
 		if(read)
 		{
-			(strcmp(instance->tags[i], buff) ? (correct &= false): (correct &= true));
+			LOG_INF("The card rfid %d is : %s", i + 1, buff);
+			LOG_INF("The card tag %d is : %s", i + 1, instance->tags[i]);
+			if(strcmp(instance->tags[i], buff) != 0)
+			{
+				correct = false;
+				LOG_INF("Tag is not matched, tag id: %d", i + 1);
+			}
+			else
+			{
+				correct = true;
+				LOG_INF("Tag is matched, tag id: %d", i + 1);
+			}
+			// (strcmp(instance->tags[i], buff) ? (correct &= false): (correct &= true));
 			sprintf(instance->msgReader.topic, "%srfid%d", instance->mqttCommand, i + 1);
 			sprintf(instance->msgReader.msg, "%s", buff);
-			LOG_INF("The card rfid %d is : %s", i + 1, buff);
 			k_msgq_put(&msqSendToMQTT, &instance->msgReader, K_NO_WAIT);
-			LOG_INF("%s tag id: %d", (instance->tags[i], buff) ? "Tag is not matched": "Tag is matched", i + 1);
 			LOG_DBG("tags number %d is: %s", i + 1);
 		}
 		k_msleep(10);

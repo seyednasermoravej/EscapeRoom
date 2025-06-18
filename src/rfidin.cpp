@@ -244,8 +244,8 @@ bool Adafruit_PN532::begin() {
   //   // no interface specified
   //   return false;
   // }
-  reset(); // HW reset - put in known state
-  k_msleep(10);
+//   reset(); // HW reset - put in known state
+//   k_msleep(10);
   // delay(100);
   wakeup(); // hey! wakeup!
   return true;

@@ -13,7 +13,7 @@ static const struct gpio_dt_spec builtInLed = GPIO_DT_SPEC_GET_OR(BUILT_IN_NODE,
 							      {0});
 #endif
 extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttCount);
-struct nvs_fs fileSystem;
+struct nvs_fs *fileSystem = nullptr;
 
 
 
@@ -403,8 +403,9 @@ void puzzleEntryPoint(void *, void *, void *)
     // char serverName[] = "test.mosquitto.org";
 
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
+    fileSystem = (struct nvs_fs *)k_malloc(sizeof(struct nvs_fs));
     memset(msg, 0, sizeof(struct MqttMsg));
-    puzzles = new Puzzles(&fileSystem);
+    puzzles = new Puzzles(fileSystem);
     bool mqtt = false;
 #ifdef WATCH_DOG
     puzzles->enableWatchDog();

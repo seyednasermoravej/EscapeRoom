@@ -94,7 +94,7 @@ extern const struct device *const wdt;
 extern char deviceId[17];
 extern uint8_t devId[8];
 
-extern struct nvs_fs fileSystem;
+extern struct nvs_fs *fileSystem;
 
 enum nvsPages
 {
