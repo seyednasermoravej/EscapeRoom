@@ -31,9 +31,9 @@
 
 
 #include "main.h"
-#include "servos.h"
+#include "puzzle.h"
 #include "console.h"
-#include "fridge.h"
+// #include "fridge.h"
 #include "platform.h"
 #include "cabinet.h"
 #include "door.h"
@@ -42,8 +42,8 @@
 #include "ventilator.h"
 #include "heartMonitor.h"
 #include "blinds.h"
-#include "powerPanel.h"
-#include "scale.h"
+// #include "powerPanel.h"
+// #include "scale.h"
 #include "colorTubes.h"
 #include "sticks.h"
 #include "entranceDoor.h"
@@ -51,13 +51,14 @@
 #include "pneumaPost.h"
 #include "defib.h"
 #include "drawers.h"
-#include "heartBox.h"
+// #include "heartBox.h"
 #include "heart.h"
 
 
 #include "ota.h"
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
 #else
 #define BUILT_IN_NODE	DT_ALIAS(built_in_led)
 #if !DT_NODE_HAS_STATUS(BUILT_IN_NODE, okay)

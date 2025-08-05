@@ -22,7 +22,7 @@
 #include "main.h"
 
 
-class Puzzle 
+class Puzzle
 {
 protected:
     char *roomName;
@@ -38,7 +38,7 @@ protected:
     int relayOperation(char *command, const gpio_dt_spec *relay, bool momentry);
     struct led_rgb retrieveColors(char *str);
     int activateI2c0Mux0Channels();
-    int activateI2c1Mux0Channels();
+    int activateI2c0Mux1Channels();
     int systemTopicsNo = 2;
 
 public:
@@ -55,9 +55,9 @@ public:
     uint16_t getMqttCount();
     struct mqtt_topic *getMqttList();
     // Virtual destructor for proper cleanup of derived classes
-    virtual ~Puzzle(); 
+    virtual ~Puzzle();
 
-    
+
 };
 
 #endif

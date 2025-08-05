@@ -84,7 +84,7 @@ void Console:: qdecLangHandler(struct input_event *val)
     else
     {
         LOG_INF("lang nof of theem");
-    } 
+    }
 }
 
 void Console:: qdecRoomHandlerWrapper(struct input_event *val, void* topic)
@@ -112,13 +112,13 @@ void Console:: qdecRoomHandler(struct input_event *val)
     else
     {
         LOG_INF("room nof of theem");
-    } 
+    }
 }
 
 Console:: Console(const char * room, const char *type): Puzzle(room, type)
 {
 
-	device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+	device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
     instance = this;
 	device_init(DEVICE_DT_GET(LCD1_NODE));
 	lcd1 = new Lcd(DEVICE_DT_GET(LCD1_NODE), 0, 2, 3, 4, 5, 6, 7);
@@ -133,7 +133,7 @@ Console:: Console(const char * room, const char *type): Puzzle(room, type)
 
     device_init(qdecLang);
     device_init(qdecRoom);
-    
+
     INPUT_CALLBACK_DEFINE(qdecLang, qdecLangHandlerWrapper, (void *)this);
     INPUT_CALLBACK_DEFINE(qdecRoom, qdecRoomHandlerWrapper, (void *)this);
 
@@ -199,7 +199,7 @@ void Console:: messageHandler(struct MqttMsg *msg)
     //     int val = atoi(msg->msg);
     //     val ? gpio_pin_set_dt(&config_puzzle_relays[2], 1): gpio_pin_set_dt(&config_puzzle_relays[2], 0);
     // }
-    
+
     // else if (strcmp(msg->topic, "sub/relay3") == 0)
     // {
     //     int val = atoi(msg->msg);

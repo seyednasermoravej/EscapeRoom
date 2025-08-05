@@ -23,7 +23,7 @@ void DoorKeypad:: buttonsHandler(struct input_event *val)
             puzzleSolver('0' + (val->code - INPUT_BTN_0));
             LOG_INF("%s, %s", msg.topic, msg.msg);
             k_msgq_put(&msqSendToMQTT, &msg, K_NO_WAIT);
-        } 
+        }
     }
 }
 
@@ -35,7 +35,7 @@ DoorKeypad:: DoorKeypad(const char * room, const char *type): Puzzle(room, type)
     device_init(buttons);
     instance = this;
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void*)this);
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
     display8 = new Display8(DEVICE_DT_GET(DT_NODELABEL(display8)));
 
 }
@@ -81,7 +81,7 @@ void DoorKeypad:: puzzleSolver(char input)
 {
     if(passwordSet && displaySet)
     {
-        static uint8_t pos = 0;        
+        static uint8_t pos = 0;
         if(input == password[pos])
         {
             guess[pos] = ' ';
@@ -102,7 +102,7 @@ void DoorKeypad:: puzzleSolver(char input)
         else
         {
             pos = 0;
-            memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space 
+            memset(guess, 32, PUZZLE_DISPLAY_LEN);//32 = char space
 
             guess[PUZZLE_DISPLAY_LEN] = '\0';
 

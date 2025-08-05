@@ -30,7 +30,6 @@ struct mqtt_topic erase_topic = {
     .qos = MQTT_QOS_2_EXACTLY_ONCE};
 
 
-////////////////////intro room console begin\\\\\\\\\\
 
 struct mqtt_topic introRoom_console_lcd1_topic = {
     .topic =
@@ -49,10 +48,8 @@ struct mqtt_topic introRoom_console_lcd2_topic = {
             .size = strlen(INTRO_ROOM_CONSOLE_LCD2_TOPIC)
         },
     .qos = MQTT_QOS_2_EXACTLY_ONCE};
-////////////////////intro room console end\\\\\\\\\\
 
 
-//////////////////////code red dfib begin///////////
 struct mqtt_topic codeRed_defib_display1_topic = {
     .topic =
     {
@@ -61,4 +58,3 @@ struct mqtt_topic codeRed_defib_display1_topic = {
     },
     .qos = MQTT_QOS_2_EXACTLY_ONCE
 };
-//////////////////////code red dfib end///////////

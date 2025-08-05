@@ -1,6 +1,6 @@
 menu "Escape Room"
 config INPUT_KBD_DRIVE_COLUMN_HOOK
-	default n 
+	default n
 
 config MQTT_SUB_TOPIC
 	string "MQTT subscribe topic"
@@ -27,7 +27,7 @@ config SHIELD_BUYDISPLAY_3_5_TFT_TOUCH_ARDUINO
 	def_bool $(shields_list_contains,buydisplay_3_5_tft_touch_arduino)
 
 endmenu
-source "samples/subsys/usb/common/Kconfig.sample_usbd"
+# source "samples/subsys/usb/common/Kconfig.sample_usbd"
 source "Kconfig.zephyr"
 rsource "drivers/Kconfig"
 # source "drivers/tcs34725/Kconfig"

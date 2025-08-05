@@ -63,6 +63,22 @@
 			"problemMatcher": ["$gcc"]
 		},
 		{
+			"label": "West Build esp32s3",
+			"type": "shell",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"linux": {
+				"command": "bash",
+				"args": [
+					"-c",
+					"source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu  -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
+				]
+			},
+			"problemMatcher": ["$gcc"]
+		},
+		{
 			"label": "West Flash",
 			"type": "shell",
 			"linux": {
@@ -103,7 +119,15 @@
 				"West Build rpi-pico-w",
 				"West Flash"
 			]
-		}
+		},
+		{
+			"label": "esp32s3 build flash",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"West Build esp32s3",
+				"West Flash"
+			]
+		},
 	],
 	"inputs": [
 		{

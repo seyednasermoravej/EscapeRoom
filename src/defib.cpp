@@ -52,7 +52,7 @@ Defib:: Defib(const char *room, const char *type): Puzzle(room, type)
 
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);
 
-    ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    ret = device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
     device_init(tof);
 
 	if (!device_is_ready(tof)) {

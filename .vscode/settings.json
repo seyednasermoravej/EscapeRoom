@@ -78,5 +78,6 @@
 		"idf.pythonInstallPath": "/usr/bin/python3",
 		"editor.detectIndentation": false,
         "editor.tabSize": 4,
-        "editor.insertSpaces": true
-}
+        "editor.insertSpaces": true,
+        "editor.indentSize": 4
+

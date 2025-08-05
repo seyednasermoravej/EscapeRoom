@@ -102,12 +102,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
     }
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #else
-    else if(strcmp(type, "fridge") == 0)
-    {
-        puzzle = new Fridge("codeRed", "fridge");
-        LOG_INF("Puzzle type is fridge.");
-        deviceSpecified = true;
-    }
+//     else if(strcmp(type, "fridge") == 0)
+//     {
+//         puzzle = new Fridge("codeRed", "fridge");
+//         LOG_INF("Puzzle type is fridge.");
+//         deviceSpecified = true;
+//     }
 #endif
     else if(strcmp(type, "blinds") == 0)
     {
@@ -115,18 +115,18 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is blinds");
         deviceSpecified = true;
     }
-    else if(strcmp(type, "powerPanel") == 0)
-    {
-        puzzle = new PowerPanel("codeRed", "powerPanel");
-        LOG_INF("Puzzle type is powerPanel");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "scale") == 0)
-    {
-        puzzle = new Scale("codeRed", "scale");
-        LOG_INF("Puzzle type is scale");
-        deviceSpecified = true;
-    }
+//     else if(strcmp(type, "powerPanel") == 0)
+//     {
+//         puzzle = new PowerPanel("codeRed", "powerPanel");
+//         LOG_INF("Puzzle type is powerPanel");
+//         deviceSpecified = true;
+//     }
+//     else if(strcmp(type, "scale") == 0)
+//     {
+//         puzzle = new Scale("codeRed", "scale");
+//         LOG_INF("Puzzle type is scale");
+//         deviceSpecified = true;
+//     }
     else if(strcmp(type, "colorTubes") == 0)
     {
         puzzle = new colorTubes("codeRed", "colorTubes", 15);
@@ -169,30 +169,30 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is drawers");
         deviceSpecified = true;
     }
-    else if(strcmp(type, "heartBox1") == 0)
-    {
-        puzzle = new HeartBox("codeRed", "heartBox1");
-        LOG_INF("Puzzle type is heartBox1");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "heartBox2") == 0)
-    {
-        puzzle = new HeartBox("codeRed", "heartBox2");
-        LOG_INF("Puzzle type is heartBox2");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "heartBox3") == 0)
-    {
-        puzzle = new HeartBox("codeRed", "heartBox3");
-        LOG_INF("Puzzle type is heartBox3");
-        deviceSpecified = true;
-    }
-    else if(strcmp(type, "heartBox4") == 0)
-    {
-        puzzle = new HeartBox("codeRed", "heartBox4");
-        LOG_INF("Puzzle type is heartBox4");
-        deviceSpecified = true;
-    }
+//     else if(strcmp(type, "heartBox1") == 0)
+//     {
+//         puzzle = new HeartBox("codeRed", "heartBox1");
+//         LOG_INF("Puzzle type is heartBox1");
+//         deviceSpecified = true;
+//     }
+//     else if(strcmp(type, "heartBox2") == 0)
+//     {
+//         puzzle = new HeartBox("codeRed", "heartBox2");
+//         LOG_INF("Puzzle type is heartBox2");
+//         deviceSpecified = true;
+//     }
+//     else if(strcmp(type, "heartBox3") == 0)
+//     {
+//         puzzle = new HeartBox("codeRed", "heartBox3");
+//         LOG_INF("Puzzle type is heartBox3");
+//         deviceSpecified = true;
+//     }
+//     else if(strcmp(type, "heartBox4") == 0)
+//     {
+//         puzzle = new HeartBox("codeRed", "heartBox4");
+//         LOG_INF("Puzzle type is heartBox4");
+//         deviceSpecified = true;
+//     }
     else if(strcmp(type, "heart1") == 0)
     {
         puzzle = new Heart("codeRed", "heart1");

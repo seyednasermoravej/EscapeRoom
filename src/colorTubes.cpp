@@ -4,21 +4,21 @@ LOG_MODULE_REGISTER(colorTubes, LOG_LEVEL_DBG);
 
 static const struct i2c_dt_spec i2c_specs[] = {
     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor0)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
-    I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14)),
-	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor15))
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor1)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor2)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor3)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor4)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor5)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor6)),
+// 	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor7)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor8)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor9)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor10)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor11)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor12)),
+//     I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor13)),
+// 	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor14)),
+// 	I2C_DT_SPEC_GET(DT_NODELABEL(rgb_sensor15))
 };
 
 
@@ -26,7 +26,7 @@ colorTubes:: colorTubes(const char * room, const char *type, uint8_t _numRGBsens
 {
 
 	activateI2c0Mux0Channels();
-	activateI2c1Mux0Channels();
+	activateI2c0Mux1Channels();
 	rgbsensors = new Adafruit_TCS34725 * [ARRAY_SIZE(i2c_specs)];
 	for (uint8_t i = 0; i < ARRAY_SIZE(i2c_specs); i++)
 	{

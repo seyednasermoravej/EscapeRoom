@@ -21,17 +21,17 @@ Sticks:: Sticks(const char *room, const char *type): Puzzle(room, type)
     // int ret;
     creatingMqttList();
     instance = this;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(expander1)));
 
-    const struct device *i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
+    const struct device *i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
     uint8_t buffer[1] = {0x00};
 
 // static const struct i2c_dt_spec i2c_specs[] = {
 //     I2C_DT_SPEC_GET(DT_NODELABEL(i2c1)),
 // };
     i2c_write(i2c_dev,buffer, 1, 0x20);
-    
+
     device_init(buttons);
 
     INPUT_CALLBACK_DEFINE(buttons, buttonsHandlerWrapper, (void *)this);

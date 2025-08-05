@@ -48,32 +48,16 @@ const struct device *const wdt = DEVICE_DT_GET(DT_ALIAS(watchdog0));
 
 
 int main()
-{ 
-    // const struct device *const dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
-// 	uint32_t dtr = 0;
-
-// #if defined(CONFIG_USB_DEVICE_STACK_NEXT)
-// 	if (enable_usb_device_next()) {
-// 		return 0;
-// 	}
-// #endif
-    //performing new update on firmware
-    // sys_trace_sys_init_enter();
+{
     LOG_INF("besme allah");
     readingHWinfo(deviceId);
     LOG_INF("Device ID: %s", deviceId);
 //    test();
 
- 
+
 
     puzzleThreadCreate();
 
-    // while(1)
-    // {
-    //     k_sleep(K_SECONDS(120));
-    //     // sprintf(send->msg, "escape room %d", sys_clock_cycle_get_32());
-    //     // k_msgq_put(&msqSendToMQTT, send, K_NO_WAIT);
-    // }
 }
 
 void i2cScanner()
@@ -82,8 +66,8 @@ void i2cScanner()
     const struct device *i2c_dev;
     uint8_t addr;
     int ret;
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
-    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c0)));
+    i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
     if (!i2c_dev) {
         printf("Error: I2C device not found\n");
         return;

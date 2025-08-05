@@ -37,6 +37,42 @@
             "rtos": "Zephyr",
             // "breakAfterReset": true
         },
+        {
+            "name": "ESP32S3",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "interface": "jtag",
+            "svdFile": "${workspaceFolder}/esp_svd/esp32s3.svd",
+            "preLaunchTask": "esp32s3 build flash",
+            "serverpath": "/home/naser/openocd-esp32/src/openocd",
+            // "serverpath": "/home/naser/openocd-esp32/bin/openocd",
+            "gdbPath": "/home/naser/zephyr-sdk-0.17.2/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
+            "toolchainPrefix": "xtensa-espressif_esp32s3_zephyr-elf",
+            "searchDir": ["/home/naser/openocd-esp32/tcl"],
+            // "searchDir": ["/home/naser/openocd-esp32/share/openocd/scripts"],
+            "showDevDebugOutput": "raw",
+            "rtos": "Zephyr",
+            "openOCDLaunchCommands": [
+                "init",
+                "reset halt",
+                "esp appimage_offset 0x0"
+            ],
+            "configFiles": [
+                "board/esp32s3-builtin.cfg"
+            ],
+            "overrideAttachCommands": [
+                "mon reset halt",
+                "maintenance flush register-cache",
+                "set remotetimeout 6000"
+            ],
+            "overrideRestartCommands": [
+                "mon reset halt",
+                "maintenance flush register-cache",
+            ],
+        }
 
 
     ]
