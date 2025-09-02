@@ -22,7 +22,7 @@ static struct net_dhcpv4_option_callback dhcp_cb;
 static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 {
 	// ARG_UNUSED(user_data);
-	net_hostname_set((const char*)user_data, strlen((const char*)user_data));
+	net_hostname_set((char*)user_data, strlen((const char*)user_data));
 	LOG_INF("Start on %s: index=%d", net_if_get_device(iface)->name,
 	net_if_get_by_iface(iface));
 #ifdef CONFIG_BOARD_RPI_PICO_RP2040_W
@@ -50,6 +50,34 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
     };
 	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
 
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
+		struct wifi_connect_req_params connect_params = {
+#ifdef NASER
+        // .ssid = "Naser",
+        // .ssid_length = strlen("Naser"),
+        // .psk = "nasimore",
+        // .psk_length = strlen("nasimore"),
+        .ssid = "Naser.wifi",
+        .ssid_length = strlen("Naser.wifi"),
+        .psk = "1020151515",
+        .psk_length = strlen("1020151515"),
+        // .ssid = "SAFINE-3-2.4G",
+        // .ssid_length = strlen("SAFINE-3-2.4G"),
+        // .psk = "EYE7GLQB73",
+        // .psk_length = strlen("EYE7GLQB73"),
+#elif defined(POURYA)
+
+#elif defined(BRAM)
+        .ssid = "D21CONTROL",
+        .ssid_length = strlen("D21CONTROL"),
+        .psk = "District21!",
+        .psk_length = strlen("District21!"),
+#else
+
+#endif
+	.security = WIFI_SECURITY_TYPE_PSK,
+    };
+	net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &connect_params, sizeof(connect_params));
 #else
 	uint8_t mac0[6];
 	mac0[0] = WIZNET_OUI_B0;
@@ -91,7 +119,7 @@ static void start_dhcpv4_client(struct net_if *iface, void *user_data)
 }
 
 static void handler(struct net_mgmt_event_callback *cb,
-		    uint32_t mgmt_event,
+		    uint64_t mgmt_event,
 		    struct net_if *iface)
 {
 	int i = 0;
@@ -162,7 +190,7 @@ int dhcpClient(const char *deviceName)
 
 	net_dhcpv4_add_option_callback(&dhcp_cb);
 	LOG_DBG("before dhcp start");
-	net_if_foreach(start_dhcpv4_client, deviceName);
+	net_if_foreach(start_dhcpv4_client, (char*)deviceName);
 	LOG_DBG("before wait");
 	sem_wait(&dhcpActive);
 

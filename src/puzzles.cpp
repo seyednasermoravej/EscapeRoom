@@ -16,12 +16,19 @@ extern void mqttThreadCreate(char *, struct mqtt_topic *mqttList, uint16_t mqttC
 struct nvs_fs *fileSystem = nullptr;
 
 
+#if defined(CONFIG_FAT_FILESYSTEM_ELM)
+#define FS_RET_OK FR_OK
+#else
+#define FS_RET_OK 0
+#endif
+
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
 #else
     builtIntLedInit();
 #endif
@@ -115,12 +122,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is blinds");
         deviceSpecified = true;
     }
-//     else if(strcmp(type, "powerPanel") == 0)
-//     {
-//         puzzle = new PowerPanel("codeRed", "powerPanel");
-//         LOG_INF("Puzzle type is powerPanel");
-//         deviceSpecified = true;
-//     }
+    else if(strcmp(type, "powerPanel") == 0)
+    {
+        puzzle = new PowerPanel("codeRed", "powerPanel");
+        LOG_INF("Puzzle type is powerPanel");
+        deviceSpecified = true;
+    }
 //     else if(strcmp(type, "scale") == 0)
 //     {
 //         puzzle = new Scale("codeRed", "scale");
@@ -169,30 +176,30 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is drawers");
         deviceSpecified = true;
     }
-//     else if(strcmp(type, "heartBox1") == 0)
-//     {
-//         puzzle = new HeartBox("codeRed", "heartBox1");
-//         LOG_INF("Puzzle type is heartBox1");
-//         deviceSpecified = true;
-//     }
-//     else if(strcmp(type, "heartBox2") == 0)
-//     {
-//         puzzle = new HeartBox("codeRed", "heartBox2");
-//         LOG_INF("Puzzle type is heartBox2");
-//         deviceSpecified = true;
-//     }
-//     else if(strcmp(type, "heartBox3") == 0)
-//     {
-//         puzzle = new HeartBox("codeRed", "heartBox3");
-//         LOG_INF("Puzzle type is heartBox3");
-//         deviceSpecified = true;
-//     }
-//     else if(strcmp(type, "heartBox4") == 0)
-//     {
-//         puzzle = new HeartBox("codeRed", "heartBox4");
-//         LOG_INF("Puzzle type is heartBox4");
-//         deviceSpecified = true;
-//     }
+    else if(strcmp(type, "heartBox1") == 0)
+    {
+        puzzle = new HeartBox("codeRed", "heartBox1");
+        LOG_INF("Puzzle type is heartBox1");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heartBox2") == 0)
+    {
+        puzzle = new HeartBox("codeRed", "heartBox2");
+        LOG_INF("Puzzle type is heartBox2");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heartBox3") == 0)
+    {
+        puzzle = new HeartBox("codeRed", "heartBox3");
+        LOG_INF("Puzzle type is heartBox3");
+        deviceSpecified = true;
+    }
+    else if(strcmp(type, "heartBox4") == 0)
+    {
+        puzzle = new HeartBox("codeRed", "heartBox4");
+        LOG_INF("Puzzle type is heartBox4");
+        deviceSpecified = true;
+    }
     else if(strcmp(type, "heart1") == 0)
     {
         puzzle = new Heart("codeRed", "heart1");
@@ -220,19 +227,21 @@ void Puzzles:: puzzleTypeSelection(char *type)
 
     if(deviceSpecified)
     {
-        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        #else
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
+#else
             gpio_pin_set_dt(&builtInLed, 1);
-        #endif
+#endif
     }
     else
     {
         deviceSpecified = false;
         LOG_INF("Puzzle type is not recognized.");
-        #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
-        #else
+#if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
+#else
             gpio_pin_set_dt(&builtInLed, 0);
-        #endif
+#endif
     }
 }
 
@@ -322,6 +331,7 @@ void Puzzles:: eraseStorage()
 {
     nvs_delete(fs, NVS_PUZZLE_TYPE);
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
 #else
     gpio_pin_set_dt(&builtInLed, 1);
 #endif
@@ -335,7 +345,7 @@ void Puzzles:: readInfosFromMemory()
 
 
 
-
+	eraseStorage();
     int rc = 0;
     rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
     if(rc > 0)
@@ -346,6 +356,7 @@ void Puzzles:: readInfosFromMemory()
 }
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
+#elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
 #else
 
 int Puzzles:: builtIntLedInit()
@@ -377,6 +388,9 @@ void puzzleEntryPoint(void *, void *, void *)
     #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
         char serverIpAddressMqtt[] = "192.168.1.147";
         char serverIpAddressOta[] = "192.168.1.147";
+    #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
+        char serverIpAddressMqtt[] = "192.168.1.4";
+        char serverIpAddressOta[] = "192.168.1.4";
     #else
         char serverIpAddressMqtt[] = "10.42.0.1";
         char serverIpAddressOta[] = "10.42.0.1";
@@ -402,9 +416,13 @@ void puzzleEntryPoint(void *, void *, void *)
     //test();
     // char serverName[] = "test.mosquitto.org";
 
+//     while(1)
+//     {
+	play_wav("/SD:/OUTPUT.WAV");
+//     }
     struct MqttMsg *msg = (struct MqttMsg *)k_malloc(sizeof(struct MqttMsg));
-    fileSystem = (struct nvs_fs *)k_malloc(sizeof(struct nvs_fs));
     memset(msg, 0, sizeof(struct MqttMsg));
+    fileSystem = (struct nvs_fs *)k_malloc(sizeof(struct nvs_fs));
     puzzles = new Puzzles(fileSystem);
     bool mqtt = false;
 #ifdef WATCH_DOG
@@ -545,5 +563,285 @@ int Puzzles:: enableWatchDog()
 		return 0;
 	}
     wdt_feed(wdt, wdt_channel_id);
+}
+
+
+
+
+
+
+
+
+
+#define MOUNT_POINT "SD"
+
+
+#define PWM_PERIOD_NS 25000  /* 40kHz carrier */
+#define SAMPLE_RATE_HZ 16000 /* WAV playback rate */
+
+static FATFS fat_fs_data;
+
+static struct fs_mount_t sd_mnt = {
+    .type = FS_FATFS,
+    .fs_data = &fat_fs_data,
+};
+
+/* WAV header is 44 bytes */
+struct wav_header {
+    char riff[4];       /* "RIFF" */
+    uint32_t chunk_size;
+    char wave[4];       /* "WAVE" */
+    char fmt[4];        /* "fmt " */
+    uint32_t subchunk1_size;
+    uint16_t audio_format;
+    uint16_t num_channels;
+    uint32_t sample_rate;
+    uint32_t byte_rate;
+    uint16_t block_align;
+    uint16_t bits_per_sample;
+    char data[4];       /* "data" */
+    uint32_t data_size;
+};
+
+static int mount_sd(void)
+{
+    int ret = fs_mount(&sd_mnt);
+    if (ret < 0) {
+        LOG_ERR("Failed to mount SD (%d)", ret);
+        return ret;
+    }
+    LOG_INF("SD mounted at %s", MOUNT_POINT);
+    return 0;
+}
+
+
+
+
+
+
+
+static const struct pwm_dt_spec speaker = PWM_DT_SPEC_GET(DT_NODELABEL(motherboard_audio_speaker));
+static const char *disk_mount_pt = DISK_MOUNT_PT;
+
+
+
+
+
+
+static int lsdir(const char *path)
+{
+        int res;
+        struct fs_dir_t dirp;
+        static struct fs_dirent entry;
+        int count = 0;
+
+        fs_dir_t_init(&dirp);
+
+        /* Verify fs_opendir() */
+        res = fs_opendir(&dirp, path);
+        if (res) {
+                printk("Error opening dir %s [%d]\n", path, res);
+                return res;
+        }
+
+        printk("\nListing dir %s ...\n", path);
+        for (;;) {
+                /* Verify fs_readdir() */
+                res = fs_readdir(&dirp, &entry);
+
+                /* entry.name[0] == 0 means end-of-dir */
+                if (res || entry.name[0] == 0) {
+                        break;
+                }
+
+                if (entry.type == FS_DIR_ENTRY_DIR) {
+                        printk("[DIR ] %s\n", entry.name);
+                } else {
+                        printk("[FILE] %s (size = %zu)\n",
+                                entry.name, entry.size);
+                }
+                count++;
+        }
+
+        /* Verify fs_closedir() */
+        fs_closedir(&dirp);
+        if (res == 0) {
+                res = count;
+        }
+
+        return res;
+}
+
+
+
+#define MIN_PERIOD PWM_SEC(1U) / 128U
+#define MAX_PERIOD PWM_SEC(1U)
+
+
+void play_wav(const char *filepath)
+{
+	// uint32_t max_period;
+	// uint32_t period;
+	// uint8_t dir = 0U;
+	int ret;
+	// pwmInit(&speaker, "speaker is not working");
+
+	// printk("Calibrating for channel %d...\n", speaker.channel);
+	// max_period = MAX_PERIOD;
+	// while (pwm_set_dt(&speaker, max_period, max_period / 2U)) {
+	// 	max_period /= 2U;
+	// 	if (max_period < (4U * MIN_PERIOD)) {
+	// 		printk("Error: PWM device "
+	// 		       "does not support a period at least %lu\n",
+	// 		       4U * MIN_PERIOD);
+	// 		// return 0;
+	// 	}
+	// }
+
+	// printk("Done calibrating; maximum/minimum periods %u/%lu nsec\n",
+	//        max_period, MIN_PERIOD);
+
+	// period = max_period;
+	// while (1) {
+	// 	ret = pwm_set_dt(&speaker, period, period / 2U);
+	// 	if (ret) {
+	// 		printk("Error %d: failed to set pulse width\n", ret);
+	// 		// return 0;
+	// 	}
+	// 	printk("Using period %d\n", period);
+
+	// 	period = dir ? (period * 2U) : (period / 2U);
+	// 	if (period > max_period) {
+	// 		period = max_period / 2U;
+	// 		dir = 0U;
+	// 	} else if (period < MIN_PERIOD) {
+	// 		period = MIN_PERIOD * 2U;
+	// 		dir = 1U;
+	// 	}
+
+	// 	k_sleep(K_SECONDS(4U));
+	// }
+        do {
+                static const char *disk_pdrv = DISK_DRIVE_NAME;
+                uint64_t memory_size_mb;
+                uint32_t block_count;
+                uint32_t block_size;
+
+                if (disk_access_ioctl(disk_pdrv,
+                                DISK_IOCTL_CTRL_INIT, NULL) != 0) {
+                        LOG_ERR("Storage init ERROR!");
+                        break;
+                }
+
+                if (disk_access_ioctl(disk_pdrv,
+                                DISK_IOCTL_GET_SECTOR_COUNT, &block_count)) {
+                        LOG_ERR("Unable to get sector count");
+                        break;
+                }
+                LOG_INF("Block count %u", block_count);
+
+                if (disk_access_ioctl(disk_pdrv,
+                                DISK_IOCTL_GET_SECTOR_SIZE, &block_size)) {
+                        LOG_ERR("Unable to get sector size");
+                        break;
+                }
+                printk("Sector size %u\n", block_size);
+
+                memory_size_mb = (uint64_t)block_count * block_size;
+                printk("Memory Size(MB) %u\n", (uint32_t)(memory_size_mb >> 20));
+
+                if (disk_access_ioctl(disk_pdrv,
+                                DISK_IOCTL_CTRL_DEINIT, NULL) != 0) {
+                        LOG_ERR("Storage deinit ERROR!");
+                        break;
+                }
+        } while (0);
+
+        sd_mnt.mnt_point = disk_mount_pt;
+
+        int res = fs_mount(&sd_mnt);
+
+        if (res == FS_RET_OK) {
+                printk("Disk mounted.\n");
+                /* Try to unmount and remount the disk */
+                res = fs_unmount(&sd_mnt);
+                if (res != FS_RET_OK) {
+                        printk("Error unmounting disk\n");
+                        // return res;
+                }
+                res = fs_mount(&sd_mnt);
+                if (res != FS_RET_OK) {
+                        printk("Error remounting disk\n");
+                        // return res;
+                }
+
+                if (lsdir(disk_mount_pt) == 0) {
+#ifdef CONFIG_FS_SAMPLE_CREATE_SOME_ENTRIES
+                        if (create_some_entries(disk_mount_pt)) {
+                                lsdir(disk_mount_pt);
+                        }
+#endif
+                }
+        } else {
+                printk("Error mounting disk.\n");
+        }
+
+        // fs_unmount(&sd_mnt);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    struct fs_file_t file;
+    fs_file_t_init(&file);
+
+    ret = fs_open(&file, filepath, FS_O_READ);
+    if (ret < 0) {
+        LOG_ERR("Failed to open %s (%d)", filepath, ret);
+        return;
+    }
+
+    /* Skip 44-byte header */
+    uint8_t header[44];
+    fs_read(&file, header, sizeof(header));
+
+    uint8_t buf[512];
+    uint32_t usec_per_sample = 1000000 / 16000; /* ~62 µs per sample */
+    pwmInit(&speaker, "SPEAKER is not working");
+    while ((ret = fs_read(&file, buf, sizeof(buf))) > 0) {
+        for (int i = 0; i < ret; i++) {
+            uint8_t sample = buf[i]; /* already 0–255 unsigned */
+            uint32_t pulse = (PWM_PERIOD_NS * sample) / 255;
+        //     pwm_set_pulse_dt(&speaker,PWM_USEC(2500));
+            pwm_set_dt(&speaker, PWM_PERIOD_NS, pulse);
+            k_busy_wait(usec_per_sample);
+        }
+    }
+
+    fs_close(&file);
+    LOG_INF("Finished playback");
 }
 

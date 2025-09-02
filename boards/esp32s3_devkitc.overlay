@@ -12,6 +12,8 @@
 		// zephyr,tracing-uart = &uart0;
 		zephyr,display = &ili9488_buydisplay_3_5_tft_touch_arduino;
 		zephyr,code-partition = &slot0_partition;
+		// zephyr,console = &uart0;
+		// zephyr,shell-uart = &uart0;
 		zephyr,console = &usb_serial;
 		zephyr,shell-uart = &usb_serial;
 	};
@@ -20,6 +22,25 @@
 		hintbutton = &button0;
 		keypad43 = &kbd_matrix43;
 		keypad34 = &kbd_matrix34;
+	};
+	motherboard
+	{
+		motherboard_audio: motherboard_audio
+		{
+			compatible = "pwm-leds";
+			status = "okay";
+			motherboard_audio_speaker: motherboard_audio_speaker
+			{
+				pwms = <&ledc0 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			};
+		};
+		motherboard_relays:relays
+		{
+			compatible = "power-switch";
+			gpios = <&expander0 0 (GPIO_ACTIVE_HIGH)>,
+					<&expander0 1 (GPIO_ACTIVE_HIGH)>;
+		};
+
 	};
 	console
 	{
@@ -361,9 +382,9 @@
 		blinds_servos: blinds-servos
 		{
 			compatible = "pwm-servo";
-			pwms = <&ledc0 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-			 <&ledc0 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-					<&ledc0 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&ledc0 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			pwms = <&ledc0 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+			 <&ledc0 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+					<&ledc0 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&ledc0 4 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			min-pulse = <PWM_USEC(600)>;
 			max-pulse = <PWM_USEC(2500)>;
 			max-degrees = <180>;
@@ -635,23 +656,19 @@
 	};
 	power_panel
 	{
-		// power_panel_servos: power-panel-servos
-		// {
-		// 	compatible = "pwm-servo";
-		// 	pwms = <&servo_driver 0 PWM_MSEC(20)>, <&servo_driver 1 PWM_MSEC(20)>,
-		// 			<&servo_driver 2 PWM_MSEC(20)>, <&servo_driver 3 PWM_MSEC(20)>,
-		// 			<&servo_driver 4 PWM_MSEC(20)>, <&servo_driver 5 PWM_MSEC(20)>,
-		// 			<&servo_driver 6 PWM_MSEC(20)>, <&servo_driver 7 PWM_MSEC(20)>;
-		// 	// pwms = <&servo_driver 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-		// 	// 		<&servo_driver 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-		// 	// 		<&servo_driver 4 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 5 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
-		// 	// 		<&servo_driver 6 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 7 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
-		// 	min-pulse = <PWM_USEC(600)>;
-		// 	max-pulse = <PWM_USEC(2700)>;
-		// 	max-degrees = <180>;
-		// 	status ="okay";
-		// 	zephyr,deferred-init;
-		// };
+		power_panel_servos: power-panel-servos
+		{
+			compatible = "pwm-servo";
+			pwms = <&servo_driver 0 PWM_MSEC(20)>, <&servo_driver 1 PWM_MSEC(20)>,
+					<&servo_driver 2 PWM_MSEC(20)>, <&servo_driver 3 PWM_MSEC(20)>,
+					<&servo_driver 4 PWM_MSEC(20)>, <&servo_driver 5 PWM_MSEC(20)>,
+					<&servo_driver 6 PWM_MSEC(20)>, <&servo_driver 7 PWM_MSEC(20)>;
+			min-pulse = <PWM_USEC(600)>;
+			max-pulse = <PWM_USEC(2700)>;
+			max-degrees = <180>;
+			status ="okay";
+			zephyr,deferred-init;
+		};
 		power_panel_relays: power-panel-relays
 		{
 			compatible = "power-switch";
@@ -1044,7 +1061,7 @@
 			row-size = <4>;
 			col-size = <3>;
 		};
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 
 	};
 
@@ -1070,6 +1087,7 @@
                 group1 {
                         pinmux = <SPIM3_MISO_GPIO5>,
                                  <SPIM3_SCLK_GPIO7>,
+                                //  <SPIM3_CSEL_GPIO3>;
                                  <SPIM3_CSEL_GPIO42>;
                 };
                 group2 {
@@ -1085,31 +1103,32 @@
 			pinmux = <LEDC_CH0_GPIO41>,
 				<LEDC_CH1_GPIO40>,
 				<LEDC_CH2_GPIO39>,
-				<LEDC_CH3_GPIO38>;
+				<LEDC_CH3_GPIO38>,
+				<LEDC_CH4_GPIO21>;
 			output-enable;
 		};
 	};
 
 };
 
-&spi2 {
-	clock-frequency = <DT_FREQ_M(8)>;
-	status = "okay";
-	pinctrl-0 = <&spim2_t_eth_lite>;
-	pinctrl-names = "default";
-	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+// &spi2 {
+// 	clock-frequency = <DT_FREQ_M(8)>;
+// 	status = "okay";
+// 	pinctrl-0 = <&spim2_t_eth_lite>;
+// 	pinctrl-names = "default";
+// 	cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
-	ethernet: w5500@0 {
-		compatible = "wiznet,w5500";
-		reg = <0x0>;
-		spi-max-frequency = <50000000>;
-		int-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-		reset-gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
-		// local-mac-address = [00 00 00 01 02 03];
-		zephyr,random-mac-address;
-		status = "okay";
-	};
-};
+// 	ethernet: w5500@0 {
+// 		compatible = "wiznet,w5500";
+// 		reg = <0x0>;
+// 		spi-max-frequency = <50000000>;
+// 		int-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+// 		reset-gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
+// 		// local-mac-address = [00 00 00 01 02 03];
+// 		zephyr,random-mac-address;
+// 		status = "okay";
+// 	};
+// };
 
 
 &spi3 {
@@ -1117,21 +1136,29 @@
 	status = "okay";
 	pinctrl-0 = <&spim3_t_eth_lite>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
-	zephyr,deferred-init;
+	// cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>,<&gpio0 9 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+	// cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
+	// zephyr,deferred-init;
 	sdhc3: sdhc@0
 	{
 		compatible = "zephyr,sdhc-spi-slot";
 		reg = <0>;
 		status = "okay";
-		zephyr,deferred-init;
+		// zephyr,deferred-init;
 		mmc: mmc{
 			compatible = "zephyr,sdmmc-disk";
 			disk-name = "SD";
 			status = "okay";
-			zephyr,deferred-init;
+			// zephyr,deferred-init;
 		};
 		spi-max-frequency = <24000000>;
+	};
+	telephone_spi:si3050@1
+	{
+		reg = <1>;
+		zephyr,deferred-init;
+		status = "okay";
 	};
 	sevensegments24: shift-expander@2
 	{
@@ -1177,6 +1204,16 @@
 	status = "okay";
 	pinctrl-0 = <&i2c0_default>;
 	zephyr,deferred-init;
+	expander0: pcf857x@24
+	{
+		compatible = "nxp,pcf857x";
+		status = "okay";
+		reg = <0x24>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <8>;
+		zephyr,deferred-init;
+	};
 	expander1: pcf857x@25
 	{
 		compatible = "nxp,pcf857x";
@@ -1244,7 +1281,7 @@
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&expander0 2 GPIO_ACTIVE_LOW>;
 		zephyr,deferred-init;
 		i2c0_mux0_channel0: mux0-i2c@0 {
 			compatible = "ti,tca9548a-channel";
@@ -1406,7 +1443,7 @@
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		reset-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&expander0 3 GPIO_ACTIVE_LOW>;
 		zephyr,deferred-init;
 		i2c0_mux1_channel0: mux1-i2c@0 {
 			compatible = "ti,tca9548a-channel";
@@ -1535,4 +1572,73 @@
 
 // &uart0 {
 // 	// status = "disabled";
+// };
+
+// &i2s0_default {
+//         group1 {
+//                 pinmux = <I2S0_O_SD_GPIO38>;
+//                 output-enable;
+//         };
+// };
+
+&i2s0_default {
+        group1 {
+                pinmux = <I2S0_O_WS_GPIO41>,
+                                <I2S0_O_BCK_GPIO40>,
+                                <I2S0_O_SD_GPIO39>;
+                output-enable;
+        };
+        group2 {
+                pinmux = <I2S0_I_SD_GPIO38>;
+                input-enable;
+        };
+};
+
+&i2s0
+{
+	status = "okay";
+        dmas = <&dma 2>, <&dma 3>;
+        dma-names = "rx", "tx";
+
+	zephyr,deferred-init;
+        ws2812: ws2812@0 {
+                compatible = "worldsemi,ws2812-i2s";
+
+                reg = <0>;
+                chain-length = <8>;
+		// i2s-dev = <&i2s0>;
+                color-mapping = <LED_COLOR_ID_RED
+                                 LED_COLOR_ID_GREEN
+                                 LED_COLOR_ID_BLUE
+				 LED_COLOR_ID_WHITE>;
+
+                reset-delay = <500>;
+		zephyr,deferred-init;
+        };
+
+};
+
+&dma
+{
+	status = "okay";
+};
+
+&uart1 {
+        status = "okay";
+	zephyr,deferred-init;
+	pinctrl-0 = < &uart1_default >;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+
+	modbus0
+	{
+                compatible = "zephyr,modbus-serial";
+                status = "okay";
+                de-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;        /* D9 */
+		zephyr,deferred-init;
+        };
+};
+// &wifi
+// {
+// 	status = "disabled";
 // };

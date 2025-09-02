@@ -58,7 +58,9 @@ extern int lvgl_init();
 static uint32_t count;
 Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
 {
-    device_init(DEVICE_DT_GET(DT_NODELABEL(spi1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(spi3)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2s0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(ws2812)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
 
@@ -74,7 +76,7 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     lvgl_init();
     k_work_init(&puzzleSolverWork, puzzleSolverWorkHandler);
 
-    device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc3)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
 
 	mp.mnt_point = disk_mount_pt;

@@ -30,10 +30,43 @@
 #define NVS_PARTITION_OFFSET	FIXED_PARTITION_OFFSET(NVS_PARTITION)
 
 
+
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
+#include <zephyr/storage/disk_access.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/fs/fs.h>
+
+#if defined(CONFIG_FAT_FILESYSTEM_ELM)
+
+#include <ff.h>
+
+/*
+ *  Note the fatfs library is able to mount only strings inside _VOLUME_STRS
+ *  in ffconf.h
+ */
+#if defined(CONFIG_DISK_DRIVER_MMC)
+#define DISK_DRIVE_NAME "SD2"
+#else
+#define DISK_DRIVE_NAME "SD"
+#endif
+
+// #define DISK_MOUNT_PT "/SD:"
+#define DISK_MOUNT_PT "/"DISK_DRIVE_NAME":"
+
+#endif
+
+#if defined(CONFIG_FAT_FILESYSTEM_ELM)
+#define FS_RET_OK FR_OK
+#else
+#define FS_RET_OK 0
+#endif
+
+
 #include "main.h"
 #include "puzzle.h"
 #include "console.h"
-// #include "fridge.h"
+#include "fridge.h"
 #include "platform.h"
 #include "cabinet.h"
 #include "door.h"
@@ -42,7 +75,7 @@
 #include "ventilator.h"
 #include "heartMonitor.h"
 #include "blinds.h"
-// #include "powerPanel.h"
+#include "powerPanel.h"
 // #include "scale.h"
 #include "colorTubes.h"
 #include "sticks.h"
@@ -51,7 +84,7 @@
 #include "pneumaPost.h"
 #include "defib.h"
 #include "drawers.h"
-// #include "heartBox.h"
+#include "heartBox.h"
 #include "heart.h"
 
 
@@ -66,10 +99,12 @@
 #endif
 #endif
 
-#define PUZZLE_STACK_SIZE                  4096
+#define PUZZLE_STACK_SIZE                  2 * 8192
+// #define PUZZLE_STACK_SIZE                  4096
 #define PUZZLE_PRIORITY                    9
 #define PUZZLE_TYPE_NAME_MAX_LEN           128
 
+void play_wav(const char *path);
 class Puzzles
 {
 public:

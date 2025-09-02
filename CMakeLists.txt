@@ -14,9 +14,9 @@ target_sources(app PRIVATE ${app_sources})
 # target_sources(app PRIVATE src/usart.c src/queues.c)
 
 #optimizain disable begin
-add_library(set-app-flags INTERFACE)
-target_compile_options(set-app-flags INTERFACE -O0)
-target_link_libraries(app PRIVATE set-app-flags)
+# add_library(set-app-flags INTERFACE)
+# target_compile_options(set-app-flags INTERFACE -O0)
+# target_link_libraries(app PRIVATE set-app-flags)
 #optimizain disable end
 
 #begin for dns resolver

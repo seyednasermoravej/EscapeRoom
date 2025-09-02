@@ -66,11 +66,15 @@
             "overrideAttachCommands": [
                 "mon reset halt",
                 "maintenance flush register-cache",
-                "set remotetimeout 6000"
+                "set remotetimeout 6000",
+                "tbreak main",
+                "continue"
             ],
             "overrideRestartCommands": [
                 "mon reset halt",
                 "maintenance flush register-cache",
+                "tbreak main",
+                "continue"
             ],
         }
 

@@ -27,7 +27,8 @@ HeartBox:: HeartBox(const char *room, const char *type): Puzzle(room, type)
 		    // return -1;
 	    }
     }
-    device_init(DEVICE_DT_GET(DT_NODELABEL(i2c1)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(i2s0)));
+    device_init(DEVICE_DT_GET(DT_NODELABEL(ws2812)));
     display4 = new Display4(DEVICE_DT_GET(DT_NODELABEL(display4)), true);
     creatingMqttList();
 
