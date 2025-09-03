@@ -1136,21 +1136,19 @@
 	status = "okay";
 	pinctrl-0 = <&spim3_t_eth_lite>;
 	pinctrl-names = "default";
-	// cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>,<&gpio0 9 GPIO_ACTIVE_LOW>;
-	cs-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-	// cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 22 GPIO_ACTIVE_LOW>;
-	// zephyr,deferred-init;
+	cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 21 GPIO_ACTIVE_LOW>;
+	zephyr,deferred-init;
 	sdhc3: sdhc@0
 	{
 		compatible = "zephyr,sdhc-spi-slot";
 		reg = <0>;
 		status = "okay";
-		// zephyr,deferred-init;
+		zephyr,deferred-init;
 		mmc: mmc{
 			compatible = "zephyr,sdmmc-disk";
 			disk-name = "SD";
 			status = "okay";
-			// zephyr,deferred-init;
+			zephyr,deferred-init;
 		};
 		spi-max-frequency = <24000000>;
 	};

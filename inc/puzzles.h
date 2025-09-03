@@ -132,4 +132,7 @@ private:
 
 
 };
+    void playWav(const char *filepath);
+    void sdCardInit();
 #endif
+
