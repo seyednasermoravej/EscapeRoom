@@ -34,8 +34,6 @@ Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
     builtIntLedInit();
 #endif
     readInfosFromMemory();
-    // puzzleTypeSelection("config");
-    // puzzleTypeSelection("rotating platform");
 }
 
 
@@ -566,14 +564,6 @@ int Puzzles:: enableWatchDog()
     wdt_feed(wdt, wdt_channel_id);
 }
 
-
-
-
-
-
-
-
-
 #define MOUNT_POINT "SD"
 
 
@@ -615,19 +605,8 @@ static int mount_sd(void)
     return 0;
 }
 
-
-
-
-
-
-
 static const struct pwm_dt_spec speaker = PWM_DT_SPEC_GET(DT_NODELABEL(motherboard_audio_speaker));
 static const char *disk_mount_pt = DISK_MOUNT_PT;
-
-
-
-
-
 
 static int lsdir(const char *path)
 {
@@ -673,18 +652,11 @@ static int lsdir(const char *path)
         return res;
 }
 
-
-
-#define MIN_PERIOD PWM_SEC(1U) / 128U
-#define MAX_PERIOD PWM_SEC(1U)
-
-
 void Puzzles:: sdCardInit()
 {
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi3)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc3)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
-	int ret;
         do {
                 static const char *disk_pdrv = DISK_DRIVE_NAME;
                 uint64_t memory_size_mb;
@@ -754,7 +726,6 @@ void Puzzles:: sdCardInit()
 }
 
 
-// void playWav(const char *filepath)
 void Puzzles:: playWav(const char *filepath)
 {
     struct fs_file_t file;
@@ -777,7 +748,6 @@ void Puzzles:: playWav(const char *filepath)
         for (int i = 0; i < ret; i++) {
             uint8_t sample = buf[i]; /* already 0–255 unsigned */
             uint32_t pulse = (PWM_PERIOD_NS * sample) / 255;
-        //     pwm_set_pulse_dt(&speaker,PWM_USEC(2500));
             pwm_set_dt(&speaker, PWM_PERIOD_NS, pulse);
             k_busy_wait(usec_per_sample);
         }
