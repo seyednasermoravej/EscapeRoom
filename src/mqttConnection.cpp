@@ -8,7 +8,7 @@
 
 Mqtt *mqtt = nullptr;
 
-LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(net_mqtt_publisher_sample, LOG_LEVEL_INF);
 
 int Mqtt:: subscribe()
 {
