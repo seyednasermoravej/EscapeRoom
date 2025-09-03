@@ -205,22 +205,22 @@
 			compatible = "gpio-keys";
 			cabinet_button0: cabinet_button_0
 			{
-				gpios = <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_0>;
 			};
 			cabinet_button1: cabinet_button_1
 			{
-				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_1>;
 			};
 			cabinet_button2: cabinet_button_2
 			{
-				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_2>;
 			};
 			cabinet_button3: cabinet_button_3
 			{
-				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_3>;
 			};
 			zephyr,deferred-init;
@@ -230,8 +230,8 @@
 			compatible = "power-switch";
 				gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>,
 						<&gpio0 4 (GPIO_ACTIVE_LOW)>,
-						<&gpio0 5 (GPIO_ACTIVE_LOW)>,
-						<&gpio0 6 (GPIO_ACTIVE_LOW)>;
+						<&gpio0 14 (GPIO_ACTIVE_LOW)>,
+						<&gpio0 21 (GPIO_ACTIVE_LOW)>;
 
 		};
 	};

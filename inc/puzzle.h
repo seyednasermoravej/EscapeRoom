@@ -39,7 +39,7 @@ protected:
     struct led_rgb retrieveColors(char *str);
     int activateI2c0Mux0Channels();
     int activateI2c0Mux1Channels();
-    int systemTopicsNo = 2;
+    int systemTopicsNo = 3;
 
 public:
     // Constructor to initialize roomName and puzzleTypeName

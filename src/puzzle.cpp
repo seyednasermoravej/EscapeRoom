@@ -17,6 +17,8 @@ Puzzle:: Puzzle(const char* room, const char* type)
     mqttList[0] = *createMqttTopic(topic);
     sprintf(topic, "%serase", mqttCommand);
     mqttList[1] = *createMqttTopic(topic);
+    sprintf(topic, "%splay", mqttCommand);
+    mqttList[2] = *createMqttTopic(topic);
     k_timer_init(&aliveTimer, Puzzle:: alive, NULL);
     k_timer_start(&aliveTimer, K_SECONDS(4), K_SECONDS(4));
 }

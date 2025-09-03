@@ -388,8 +388,8 @@ void puzzleEntryPoint(void *, void *, void *)
         char serverIpAddressMqtt[] = "192.168.1.147";
         char serverIpAddressOta[] = "192.168.1.147";
     #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
-        char serverIpAddressMqtt[] = "192.168.1.4";
-        char serverIpAddressOta[] = "192.168.1.4";
+        char serverIpAddressMqtt[] = "192.168.1.8";
+        char serverIpAddressOta[] = "192.168.1.8";
     #else
         char serverIpAddressMqtt[] = "10.42.0.1";
         char serverIpAddressOta[] = "10.42.0.1";
@@ -422,7 +422,6 @@ void puzzleEntryPoint(void *, void *, void *)
     memset(msg, 0, sizeof(struct MqttMsg));
     fileSystem = (struct nvs_fs *)k_malloc(sizeof(struct nvs_fs));
     puzzles = new Puzzles(fileSystem);
-    puzzles->playWav("/SD:/OUTPUT.WAV");
     bool mqtt = false;
 #ifdef WATCH_DOG
     puzzles->enableWatchDog();
@@ -496,6 +495,10 @@ void puzzleEntryPoint(void *, void *, void *)
                     }
 
                 }
+		if(!strcmp("play", command))
+		{
+    		    puzzles->playWav("/SD:/OUTPUT.WAV");
+		}
             }
             puzzles -> messageHandler(msg);
         }
