@@ -120,6 +120,7 @@ public:
     char name[PUZZLE_TYPE_NAME_MAX_LEN] = {0};
     int enableWatchDog();
     void eraseStorage();
+    void playWav(const char *filepath);
 
 private:
 
@@ -128,11 +129,10 @@ private:
     int builtIntLedInit();
     int nvsInit();
     void readInfosFromMemory();
+    void sdCardInit();
 
 
 
 };
-    void playWav(const char *filepath);
-    void sdCardInit();
 #endif
 

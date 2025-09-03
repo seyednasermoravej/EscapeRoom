@@ -678,8 +678,8 @@ static int lsdir(const char *path)
 #define MAX_PERIOD PWM_SEC(1U)
 
 
-void sdCardInit()
-// void Puzzles:: sdCardInit()
+// void sdCardInit()
+void Puzzles:: sdCardInit()
 {
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi3)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc3)));
@@ -755,8 +755,8 @@ void sdCardInit()
 }
 
 
-void playWav(const char *filepath)
-// void Puzzles:: playWav(const char *filepath)
+// void playWav(const char *filepath)
+void Puzzles:: playWav(const char *filepath)
 {
     struct fs_file_t file;
     fs_file_t_init(&file);
