@@ -424,6 +424,7 @@ void puzzleEntryPoint(void *, void *, void *)
     memset(msg, 0, sizeof(struct MqttMsg));
     fileSystem = (struct nvs_fs *)k_malloc(sizeof(struct nvs_fs));
     puzzles = new Puzzles(fileSystem);
+    puzzles->playWav("/SD:/OUTPUT.WAV");
     bool mqtt = false;
 #ifdef WATCH_DOG
     puzzles->enableWatchDog();
@@ -678,7 +679,6 @@ static int lsdir(const char *path)
 #define MAX_PERIOD PWM_SEC(1U)
 
 
-// void sdCardInit()
 void Puzzles:: sdCardInit()
 {
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi3)));
@@ -750,7 +750,6 @@ void Puzzles:: sdCardInit()
                 printk("Error mounting disk.\n");
         }
 
-    playWav("/SD:/OUTPUT.WAV");
         // fs_unmount(&sd_mnt);
 }
 
