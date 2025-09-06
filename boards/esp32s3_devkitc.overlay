@@ -3,7 +3,29 @@
 #include <zephyr/dt-bindings/led/led.h>
 #include <zephyr/dt-bindings/display/ili9xxx.h>
 #include <zephyr/dt-bindings/pwm/pwm.h>
+/*
+available pins are:
+0
+1
+2
+3
+4
+8
+15
+16
+17
+18
+21
+38
+39
+40
+41
+45
+46
+47
+48
 
+*/
 #define RELAY0	0
 #define RELAY1	1
 /delete-node/ &button0;
@@ -205,22 +227,22 @@
 			compatible = "gpio-keys";
 			cabinet_button0: cabinet_button_0
 			{
-				gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 1 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_0>;
 			};
 			cabinet_button1: cabinet_button_1
 			{
-				gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_1>;
 			};
 			cabinet_button2: cabinet_button_2
 			{
-				gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_2>;
 			};
 			cabinet_button3: cabinet_button_3
 			{
-				gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_3>;
 			};
 			zephyr,deferred-init;
@@ -228,10 +250,10 @@
 		cabinet_relays: cabinet-relays
 		{
 			compatible = "power-switch";
-				gpios = <&gpio0 3 (GPIO_ACTIVE_LOW)>,
-						<&gpio0 4 (GPIO_ACTIVE_LOW)>,
-						<&gpio0 14 (GPIO_ACTIVE_LOW)>,
-						<&gpio0 21 (GPIO_ACTIVE_LOW)>;
+				gpios = <&gpio0 8 (GPIO_ACTIVE_LOW)>,
+						<&gpio0 15 (GPIO_ACTIVE_LOW)>,
+						<&gpio0 16 (GPIO_ACTIVE_LOW)>,
+						<&gpio0 17 (GPIO_ACTIVE_LOW)>;
 
 		};
 	};
@@ -1087,7 +1109,6 @@
                 group1 {
                         pinmux = <SPIM3_MISO_GPIO5>,
                                  <SPIM3_SCLK_GPIO7>,
-                                //  <SPIM3_CSEL_GPIO3>;
                                  <SPIM3_CSEL_GPIO42>;
                 };
                 group2 {
@@ -1136,7 +1157,8 @@
 	status = "okay";
 	pinctrl-0 = <&spim3_t_eth_lite>;
 	pinctrl-names = "default";
-	cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 9 GPIO_ACTIVE_LOW>, <&gpio0 21 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+	// cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>, <&gpio0 18 GPIO_ACTIVE_LOW>, <&gpio0 21 GPIO_ACTIVE_LOW>;
 	zephyr,deferred-init;
 	sdhc3: sdhc@0
 	{

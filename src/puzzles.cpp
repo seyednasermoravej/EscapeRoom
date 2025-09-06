@@ -25,8 +25,8 @@ struct nvs_fs *fileSystem = nullptr;
 
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
-    sdCardInit();
     nvsInit();
+    sdCardInit();
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
@@ -345,9 +345,10 @@ void Puzzles:: readInfosFromMemory()
 
 
 	// eraseStorage();
-    int rc = 0;
-    rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
-	// strcpy(name, "powerPanel");
+    int rc = 1;
+//     int rc = 0;
+//     rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
+	strcpy(name, "cabinet");
     if(rc > 0)
     {
         // deviceSpecified = true;
