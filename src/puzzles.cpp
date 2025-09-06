@@ -347,6 +347,7 @@ void Puzzles:: readInfosFromMemory()
 	// eraseStorage();
     int rc = 0;
     rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
+	// strcpy(name, "powerPanel");
     if(rc > 0)
     {
         // deviceSpecified = true;
@@ -388,8 +389,8 @@ void puzzleEntryPoint(void *, void *, void *)
         char serverIpAddressMqtt[] = "192.168.1.147";
         char serverIpAddressOta[] = "192.168.1.147";
     #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
-        char serverIpAddressMqtt[] = "192.168.1.8";
-        char serverIpAddressOta[] = "192.168.1.8";
+        char serverIpAddressMqtt[] = "192.168.1.4";
+        char serverIpAddressOta[] = "192.168.1.4";
     #else
         char serverIpAddressMqtt[] = "10.42.0.1";
         char serverIpAddressOta[] = "10.42.0.1";

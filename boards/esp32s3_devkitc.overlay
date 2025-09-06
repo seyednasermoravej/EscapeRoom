@@ -689,36 +689,36 @@
 				gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 				zephyr,code = <INPUT_BTN_2>;
 			};
-			power_panel_sw3: power-panel-sw3
-			{
-				gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_3>;
-			};
-			power_panel_sw4: power-panel-sw4
-			{
-				gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_4>;
-			};
-			power_panel_sw5: power-panel-sw5
-			{
-				gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_5>;
-			};
-			power_panel_sw6: power-panel-sw6
-			{
-				gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_6>;
-			};
-			power_panel_sw7: power-panel-sw7
-			{
-				gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_7>;
-			};
-			power_panel_sw8: power-panel-sw8
-			{
-				gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-				zephyr,code = <INPUT_BTN_8>;
-			};
+			// power_panel_sw3: power-panel-sw3
+			// {
+			// 	gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_3>;
+			// };
+			// power_panel_sw4: power-panel-sw4
+			// {
+			// 	gpios = <&gpio0 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_4>;
+			// };
+			// power_panel_sw5: power-panel-sw5
+			// {
+			// 	gpios = <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_5>;
+			// };
+			// power_panel_sw6: power-panel-sw6
+			// {
+			// 	gpios = <&gpio0 26 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_6>;
+			// };
+			// power_panel_sw7: power-panel-sw7
+			// {
+			// 	gpios = <&gpio0 27 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_7>;
+			// };
+			// power_panel_sw8: power-panel-sw8
+			// {
+			// 	gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			// 	zephyr,code = <INPUT_BTN_8>;
+			// };
 
 		};
 		power_panel_display24: power-panel-display-24
@@ -1587,7 +1587,7 @@
                 output-enable;
         };
         group2 {
-                pinmux = <I2S0_I_SD_GPIO38>;
+                pinmux = <I2S0_I_SD_GPIO48>;
                 input-enable;
         };
 };
