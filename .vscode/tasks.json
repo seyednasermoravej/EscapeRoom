@@ -73,9 +73,9 @@
 				"command": "bash",
 				"args": [
 					"-c",
-					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu -S flash-16M -S psram-8M -S psram-wifi -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3_devkitc.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
+					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu -S psram-8M -S psram-wifi -S flash-16M -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3_devkitc.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
 					"source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu -S flash-16M -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3_devkitc.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
-					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu -S psram-2M -S psram-wifi -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3_devkitc.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
+					// "source ${userHome}/zephyrproject/.venv/bin/activate && west build -p auto -b esp32s3_devkitc/esp32s3/procpu -S psram-2M -S psram-wifi -S flash-8M -- -DCONF_FILE=prj.conf -DOVERLAY_CONFIG=boards/esp32s3_devkitc.conf -DDTC_OVERLAY_FILE=boards/esp32s3_devkitc.overlay"
 				]
 			},
 			"problemMatcher": ["$gcc"]

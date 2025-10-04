@@ -26,7 +26,7 @@ struct nvs_fs *fileSystem = nullptr;
 Puzzles::Puzzles(struct nvs_fs *_fs): fs(_fs)
 {
     nvsInit();
-    sdCardInit();
+//     sdCardInit();
 
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
@@ -108,12 +108,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
     }
 #if defined(CONFIG_BOARD_RPI_PICO_RP2040_W)
 #else
-//     else if(strcmp(type, "fridge") == 0)
-//     {
-//         puzzle = new Fridge("codeRed", "fridge");
-//         LOG_INF("Puzzle type is fridge.");
-//         deviceSpecified = true;
-//     }
+    else if(strcmp(type, "fridge") == 0)
+    {
+        puzzle = new Fridge("codeRed", "fridge");
+        LOG_INF("Puzzle type is fridge.");
+        deviceSpecified = true;
+    }
 #endif
     else if(strcmp(type, "blinds") == 0)
     {
@@ -163,12 +163,12 @@ void Puzzles:: puzzleTypeSelection(char *type)
         LOG_INF("Puzzle type is pneumaPost");
         deviceSpecified = true;
     }
-    else if(strcmp(type, "defib") == 0)
-    {
-        puzzle = new Defib("codeRed", "defib");
-        LOG_INF("Puzzle type is defib");
-        deviceSpecified = true;
-    }
+//     else if(strcmp(type, "defib") == 0)
+//     {
+//         puzzle = new Defib("codeRed", "defib");
+//         LOG_INF("Puzzle type is defib");
+//         deviceSpecified = true;
+//     }
     else if(strcmp(type, "drawers") == 0)
     {
         puzzle = new Drawers("codeRed", "drawers");
@@ -345,13 +345,10 @@ void Puzzles:: readInfosFromMemory()
 
 
 	// eraseStorage();
-    int rc = 1;
-//     int rc = 0;
-//     rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
-	strcpy(name, "cabinet");
+    int rc = 0;
+    rc = nvs_read(fs, NVS_PUZZLE_TYPE, &name, PUZZLE_TYPE_NAME_MAX_LEN);
     if(rc > 0)
     {
-        // deviceSpecified = true;
         puzzleTypeSelection(name);
     }
 }
@@ -390,8 +387,8 @@ void puzzleEntryPoint(void *, void *, void *)
         char serverIpAddressMqtt[] = "192.168.1.147";
         char serverIpAddressOta[] = "192.168.1.147";
     #elif defined(CONFIG_BOARD_ESP32S3_DEVKITC)
-        char serverIpAddressMqtt[] = "192.168.1.4";
-        char serverIpAddressOta[] = "192.168.1.4";
+        char serverIpAddressMqtt[] = "192.168.1.6";
+        char serverIpAddressOta[] = "192.168.1.6";
     #else
         char serverIpAddressMqtt[] = "10.42.0.1";
         char serverIpAddressOta[] = "10.42.0.1";
@@ -499,7 +496,7 @@ void puzzleEntryPoint(void *, void *, void *)
                 }
 		if(!strcmp("play", command))
 		{
-    		    puzzles->playWav("/SD:/OUTPUT.WAV");
+    		//     puzzles->playWav("/SD:/OUTPUT.WAV");
 		}
             }
             puzzles -> messageHandler(msg);

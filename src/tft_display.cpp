@@ -104,5 +104,5 @@ void Display_tft::displayStr(char *str)
 // 		k_sleep(K_MSEC(5000));
 //         my_screen->displayPass(my_screen->displaying_pass);
 //     }
-    
+
 //  }

@@ -61,35 +61,35 @@ Fridge:: Fridge(const char *room, const char *type): Puzzle(room, type)
     device_init(DEVICE_DT_GET(DT_NODELABEL(spi3)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(i2s0)));
     device_init(DEVICE_DT_GET(DT_NODELABEL(ws2812)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
+//     device_init(DEVICE_DT_GET(DT_NODELABEL(display_mipi_dbi)));
+//     device_init(DEVICE_DT_GET(DT_NODELABEL(ili9488_buydisplay_3_5_tft_touch_arduino)));
 
 
     int err = 0;
 
-    display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-	if (!device_is_ready(display_dev)) {
-		LOG_ERR("Device not ready, aborting test");
-		// return 0;
-	}
+//     display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+// 	if (!device_is_ready(display_dev)) {
+// 		LOG_ERR("Device not ready, aborting test");
+// 		// return 0;
+// 	}
 
-    lvgl_init();
+//     lvgl_init();
     k_work_init(&puzzleSolverWork, puzzleSolverWorkHandler);
 
-    device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc3)));
-    device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
+//     device_init(DEVICE_DT_GET(DT_NODELABEL(sdhc3)));
+//     device_init(DEVICE_DT_GET(DT_NODELABEL(mmc)));
 
-	mp.mnt_point = disk_mount_pt;
-	int res = fs_mount(&mp);
-	if (res == FS_RET_OK) {
-		printk("Disk mounted.\n");
-		}
-	else {
-		printk("Error mounting disk.\n");
-	}
+// 	mp.mnt_point = disk_mount_pt;
+// 	int res = fs_mount(&mp);
+// 	if (res == FS_RET_OK) {
+// 		printk("Disk mounted.\n");
+// 		}
+// 	else {
+// 		printk("Error mounting disk.\n");
+// 	}
 
-    displayTft = new Display_tft(DEVICE_DT_GET(DT_CHOSEN(zephyr_display)));
-    memset(guess, 0, PASS_LEN_FRIDGE + 1);
+//     displayTft = new Display_tft(DEVICE_DT_GET(DT_CHOSEN(zephyr_display)));
+//     memset(guess, 0, PASS_LEN_FRIDGE + 1);
 
 //     device_init(pio1_dev);
     ledStrip = new LedStrip(DEVICE_DT_GET(STRIP_NODE), wsChainLength);
