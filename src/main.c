@@ -18,6 +18,12 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 void i2cScanner();
 
 void test(void) {
+	    struct net_if *iface = net_if_get_default();
+    if (iface) {
+        printk("Default iface: %s\n", iface->if_dev->dev->name);
+    } else {
+        printk("No default interface found!\n");
+    }
    	// uint32_t max_period;
 	// uint32_t period;
 	// uint8_t dir = 0U;

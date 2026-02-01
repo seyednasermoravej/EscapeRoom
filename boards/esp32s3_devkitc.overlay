@@ -681,10 +681,14 @@ available pins are:
 		power_panel_servos: power-panel-servos
 		{
 			compatible = "pwm-servo";
-			pwms = <&servo_driver 0 PWM_MSEC(20)>, <&servo_driver 1 PWM_MSEC(20)>,
-					<&servo_driver 2 PWM_MSEC(20)>, <&servo_driver 3 PWM_MSEC(20)>,
-					<&servo_driver 4 PWM_MSEC(20)>, <&servo_driver 5 PWM_MSEC(20)>,
-					<&servo_driver 6 PWM_MSEC(20)>, <&servo_driver 7 PWM_MSEC(20)>;
+			// pwms = <&servo_driver 0 PWM_MSEC(20)>, <&servo_driver 1 PWM_MSEC(20)>,
+			// 		<&servo_driver 2 PWM_MSEC(20)>, <&servo_driver 3 PWM_MSEC(20)>,
+			// 		<&servo_driver 4 PWM_MSEC(20)>, <&servo_driver 5 PWM_MSEC(20)>,
+			// 		<&servo_driver 6 PWM_MSEC(20)>, <&servo_driver 7 PWM_MSEC(20)>;
+			pwms = <&servo_driver 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+					<&servo_driver 2 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 3 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+					<&servo_driver 4 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 5 PWM_MSEC(20) PWM_POLARITY_NORMAL>,
+					<&servo_driver 6 PWM_MSEC(20) PWM_POLARITY_NORMAL>, <&servo_driver 7 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
 			min-pulse = <PWM_USEC(600)>;
 			max-pulse = <PWM_USEC(2700)>;
 			max-degrees = <180>;
@@ -1275,7 +1279,7 @@ available pins are:
 	{
 		compatible = "nxp,pca9685-pwm";
 		reg = <0x40>;        // I2C address of the PCA9685
-		#pwm-cells = <2>;    // Two cells: channel and duty cycle
+		#pwm-cells = <3>;    // Two cells: channel and duty cycle
 		status = "okay";
 		zephyr,deferred-init;
 	};

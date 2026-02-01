@@ -168,7 +168,7 @@ struct led_rgb Puzzle:: retrieveColors(char *str)
         j++;
     }
     buf[j] = '\0';
-    rgbw.w = atoi(buf);
+//     rgbw.w = atoi(buf);
     return rgbw;
 
 }

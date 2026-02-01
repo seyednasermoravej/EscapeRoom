@@ -49,7 +49,7 @@
             "preLaunchTask": "esp32s3 build flash",
             "serverpath": "/home/naser/openocd-esp32/src/openocd",
             // "serverpath": "/home/naser/openocd-esp32/bin/openocd",
-            "gdbPath": "/home/naser/zephyr-sdk-0.17.2/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
+            "gdbPath": "/home/naser/zephyr-sdk-0.17.4/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
             "toolchainPrefix": "xtensa-espressif_esp32s3_zephyr-elf",
             "searchDir": ["/home/naser/openocd-esp32/tcl"],
             // "searchDir": ["/home/naser/openocd-esp32/share/openocd/scripts"],
